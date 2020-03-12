@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "317104895670",
+    "firebase_url": "https://qmhb-b432b.firebaseio.com",
+    "project_id": "qmhb-b432b",
+    "storage_bucket": "qmhb-b432b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317104895670:android:1aed07e3d12a94fbb35817",
+        "android_client_info": {
+          "package_name": "com.templetech.qmhb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317104895670-u12dg16l7m3prv5ef7sacrb2a0jqop6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2MvzAi7PD9IkUm6bJ1RquFE0jz9aCiNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317104895670-u12dg16l7m3prv5ef7sacrb2a0jqop6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
