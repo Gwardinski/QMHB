@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/question_summary.dart';
+import 'package:qmhb/shared/widgets/summarys/question_summary.dart';
 
 class QuestionsScreen extends StatefulWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/screens/explore_screen/explore_screen.dart';
 import 'package:qmhb/screens/library/library_screen.dart';
 import 'package:qmhb/screens/play/play_screen.dart';
-import 'package:qmhb/screens/questions/questions_page.dart';
 import 'package:qmhb/services/database.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Widget> pages = [
     LibraryScreen(),
-    QuestionsScreen(),
+    ExploreScreen(),
     PlayScreen(),
   ];
 
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MultiProvider(
       providers: [
         StreamProvider(
-          create: (BuildContext context) => DatabaseService().questions,
+          create: (BuildContext context) => DatabaseService().getAllQuestions(),
         ),
       ],
       child: DefaultTabController(
@@ -43,11 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                title: Text('Home'),
+                title: Text('Library'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.library_books),
-                title: Text('Questions'),
+                icon: Icon(Icons.search),
+                title: Text('Explore'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.play_arrow),
