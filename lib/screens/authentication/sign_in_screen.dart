@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/authentication_state_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -95,8 +95,8 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
         password: _password.trim(),
       );
       if (userModel != null) {
-        final authenticationStateModel = Provider.of<AuthenticationStateModel>(context);
-        authenticationStateModel.updateCurrentUser(userModel);
+        final userDataStateModel = Provider.of<UserDataStateModel>(context);
+        userDataStateModel.updateCurrentUser(userModel);
       } else {
         _updateError('Failed to log in');
         _updateIsLoading(false);

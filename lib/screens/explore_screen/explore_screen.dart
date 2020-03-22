@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/authentication_state_model.dart';
-import 'package:qmhb/models/user_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/screens/questions/questions_page.dart';
 import 'package:qmhb/screens/quizzes/quizzes_page.dart';
+import 'package:qmhb/screens/rounds/rounds_page.dart';
 import 'package:qmhb/shared/widgets/summarys/question_row.dart';
-import 'package:qmhb/shared/widgets/summarys/quiz_row.dart';
-import 'package:qmhb/shared/widgets/summarys/round_row.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_header.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({
@@ -15,7 +12,6 @@ class ExploreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<AuthenticationStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: Text('Explore'),
@@ -27,9 +23,39 @@ class ExploreScreen extends StatelessWidget {
             Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 8)),
-                QuizRow(),
-                RoundRow(),
-                QuestionRow(),
+                // QuizRow(
+                //   headerTitle: "Featured Quizzes",
+                //   headerButtonText: "Search All Quizzes",
+                //   headerButtonFunction: () {
+                //     // Navigator.of(context).push(
+                //     //   MaterialPageRoute(
+                //     //     builder: (context) => QuizzesScreen(),
+                //     //   ),
+                //     // );
+                //   },
+                // ),
+                // RoundRow(
+                //   headerTitle: "Featured Rounds",
+                //   headerButtonText: "Search All Rounds",
+                //   headerButtonFunction: () {
+                //     // Navigator.of(context).push(
+                //     //   MaterialPageRoute(
+                //     //     builder: (context) => RoundsScreen(),
+                //     //   ),
+                //     // );
+                //   },
+                // ),
+                // QuestionRow(
+                //   headerTitle: "Featured Questions",
+                //   headerButtonText: "Search All Questions",
+                //   headerButtonFunction: () {
+                //     // Navigator.of(context).push(
+                //     //   MaterialPageRoute(
+                //     //     builder: (context) => QuestionsScreen(),
+                //     //   ),
+                //     // );
+                //   },
+                // ),
               ],
             ),
           ],

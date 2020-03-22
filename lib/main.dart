@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/authentication_state_model.dart';
-import 'package:qmhb/screens/home/auth_wrapper.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/screens/home/home_screen.dart';
+import 'package:qmhb/services/database.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,14 +11,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthenticationStateModel>(
-          create: (BuildContext context) => AuthenticationStateModel(),
+        ChangeNotifierProvider<UserDataStateModel>(
+          create: (BuildContext context) => UserDataStateModel(),
+        ),
+        Provider<DatabaseService>(
+          create: (BuildContext context) => DatabaseService(),
         ),
       ],
       child: MaterialApp(
         title: 'QMHB Demo',
         theme: ThemeData.dark(),
-        home: AuthWrapper(),
+        home: HomeScreen(),
       ),
     );
   }

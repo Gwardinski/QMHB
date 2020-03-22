@@ -32,7 +32,7 @@ class _QuestionsPageState extends State<QuestionsScreen> {
         itemCount: questions.length,
         itemBuilder: (context, index) {
           return QuestionSummary(
-            question: questions[index],
+            questionModel: questions[index],
             onAddQuestion: (QuestionModel question) {
               _addQuestionBottomSheet();
             },

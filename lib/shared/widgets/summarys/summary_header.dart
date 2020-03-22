@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
 
 class SummaryRowHeader extends StatelessWidget {
-  final String title;
-  final String buttonText;
-  final Function buttonFunction;
+  final String headerTitle;
+  final String headerButtonText;
+  final Function headerButtonFunction;
 
   const SummaryRowHeader({
     Key key,
-    @required this.title,
-    @required this.buttonText,
-    @required this.buttonFunction,
+    @required this.headerTitle,
+    @required this.headerButtonText,
+    @required this.headerButtonFunction,
   }) : super(key: key);
 
   @override
@@ -20,11 +20,11 @@ class SummaryRowHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title),
+          Text(headerTitle),
           ButtonText(
-            text: buttonText,
+            text: headerButtonText,
             onTap: () {
-              buttonFunction();
+              headerButtonFunction();
             },
           ),
         ],

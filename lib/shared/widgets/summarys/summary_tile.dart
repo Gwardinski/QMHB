@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/shared/widgets/star_rating.dart';
 
-class QuizSummary extends StatelessWidget {
-  const QuizSummary({
+class SummaryTile extends StatelessWidget {
+  final String line1;
+  final String line2;
+  final String line3;
+  final int starValue;
+  final int numberValue;
+
+  const SummaryTile({
     Key key,
+    @required this.line1,
+    @required this.line2,
+    @required this.line3,
+    @required this.starValue,
+    @required this.numberValue,
   }) : super(key: key);
 
   @override
@@ -17,24 +28,17 @@ class QuizSummary extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Expanded(child: Text("Quiz Name")),
+            Expanded(child: Text(line1)),
             Column(
               children: <Widget>[
-                Text("Difficulty"),
-                StarRatingRow(
-                  rating: 4,
-                ),
+                Text(line2),
+                StarRatingRow(rating: starValue),
               ],
             ),
             Column(
               children: <Widget>[
-                Text("Rounds"),
-                Text(
-                  "5",
-                  style: TextStyle(
-                    color: Color(0xffFFA630),
-                  ),
-                ),
+                Text(line3),
+                Text(numberValue.toString(), style: TextStyle(color: Color(0xffFFA630))),
               ],
             ),
           ],

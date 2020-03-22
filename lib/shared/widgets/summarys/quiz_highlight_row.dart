@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/shared/widgets/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/summarys/summary_tile.dart';
 
-class QuestionRow extends StatelessWidget {
+class QuizHighlightRow extends StatelessWidget {
   final String headerTitle;
   final String headerButtonText;
   final Function headerButtonFunction;
-  final List<String> questionIds;
+  final List<String> quizIds;
 
-  const QuestionRow({
+  const QuizHighlightRow({
     Key key,
     @required this.headerTitle,
     @required this.headerButtonText,
     @required this.headerButtonFunction,
-    @required this.questionIds,
+    @required this.quizIds,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final questions = Provider.of<UserDataStateModel>(context).recentQuestions;
+    final quizzes = Provider.of<UserDataStateModel>(context).recentQuizzes;
     return Column(
       children: [
         SummaryRowHeader(
@@ -29,8 +30,8 @@ class QuestionRow extends StatelessWidget {
           headerButtonText: headerButtonText,
           headerButtonFunction: headerButtonFunction,
         ),
-        SummaryQuestionRowContent(
-          questions: questions,
+        SummaryContentQuiz(
+          quizzes: quizzes,
         ),
         SummaryRowFooter(),
       ],
@@ -38,11 +39,11 @@ class QuestionRow extends StatelessWidget {
   }
 }
 
-class SummaryQuestionRowContent extends StatelessWidget {
-  final List<QuestionModel> questions;
-  const SummaryQuestionRowContent({
+class SummaryContentQuiz extends StatelessWidget {
+  final List<QuizModel> quizzes;
+  const SummaryContentQuiz({
     Key key,
-    @required this.questions,
+    @required this.quizzes,
   }) : super(key: key);
 
   @override
@@ -50,7 +51,7 @@ class SummaryQuestionRowContent extends StatelessWidget {
     return Container(
       height: 120,
       child: ListView.separated(
-        itemCount: questions?.length ?? 0,
+        itemCount: quizzes?.length ?? 0,
         scrollDirection: Axis.horizontal,
         separatorBuilder: (BuildContext context, int index) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
@@ -61,9 +62,13 @@ class SummaryQuestionRowContent extends StatelessWidget {
               : index == (10 - 1) ? EdgeInsets.only(right: 16) : EdgeInsets.all(0);
           return Padding(
             padding: padding,
-            // child: QuestionSummary(
-            //   questionModel: questions[index],
-            // ),
+            child: SummaryTile(
+              line1: quizzes[index].title,
+              line2: "Difficulty",
+              line3: "Rounds",
+              numberValue: 5,
+              starValue: 5,
+            ),
           );
         },
       ),

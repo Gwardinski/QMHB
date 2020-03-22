@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/authentication_state_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
 
@@ -8,9 +8,8 @@ class AccountPage extends StatelessWidget {
   final AuthenticationService _authenticationService = AuthenticationService();
   @override
   Widget build(BuildContext context) {
-    final authenticationStateModel = Provider.of<AuthenticationStateModel>(context);
-    UserModel user = authenticationStateModel.user;
-    print(user.toString());
+    final userDataStateModel = Provider.of<UserDataStateModel>(context);
+    UserModel user = userDataStateModel.user;
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
@@ -20,7 +19,7 @@ class AccountPage extends StatelessWidget {
             child: Text("Sign Out"),
             onPressed: () async {
               await _authenticationService.signOut();
-              authenticationStateModel.removeCurrentUser();
+              userDataStateModel.removeCurrentUser();
               Navigator.of(context).pop();
             },
           ),

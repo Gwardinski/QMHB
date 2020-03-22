@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 
 class QuestionSummary extends StatelessWidget {
-  final QuestionModel question;
   final Function(QuestionModel) onSummaryTap;
   final Function(QuestionModel) onAddQuestion;
+  final QuestionModel questionModel;
 
   QuestionSummary({
     Key key,
-    @required this.question,
     @required this.onSummaryTap,
     @required this.onAddQuestion,
+    @required this.questionModel,
   }) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class QuestionSummary extends StatelessWidget {
     bool revealAnswer = false;
     return GestureDetector(
       onTap: () {
-        onSummaryTap(question);
+        onSummaryTap(questionModel);
       },
       child: Container(
         height: 80,
@@ -32,7 +32,7 @@ class QuestionSummary extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      revealAnswer == true ? question.answer : question.question,
+                      revealAnswer == true ? questionModel.answer : questionModel.question,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       textAlign: TextAlign.start,
@@ -69,7 +69,7 @@ class QuestionSummary extends StatelessWidget {
                         children: <Widget>[
                           Text("Catagory: "),
                           Text(
-                            question.category,
+                            questionModel.category,
                             style: TextStyle(
                               color: Color(0xffFFA630),
                             ),
@@ -83,7 +83,7 @@ class QuestionSummary extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Text("Points: "),
-                        Text(question.points.toString()),
+                        Text(questionModel.points.toString()),
                       ],
                     ),
                   ),
@@ -94,7 +94,7 @@ class QuestionSummary extends StatelessWidget {
                       child: Icon(Icons.add),
                     ),
                     onTap: () {
-                      onAddQuestion(question);
+                      onAddQuestion(questionModel);
                     },
                   )
                 ],

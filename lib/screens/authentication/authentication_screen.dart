@@ -39,7 +39,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         ),
       ),
     );
-    ;
   }
 
   _setTab(i) {
