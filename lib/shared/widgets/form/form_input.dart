@@ -32,27 +32,28 @@ class FormInput extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-            labelText: labelText,
-            labelStyle: TextStyle(
-              color: Colors.white,
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: Colors.white,
+          ),
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(
+              width: 2.0,
             ),
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(
-                width: 2.0,
-              ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderSide: BorderSide(
+              width: 2.0,
+              color: Color(0xffFFA630),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(
-                width: 2.0,
-                color: Color(0xffFFA630),
-              ),
-            ),
-            errorStyle: TextStyle(
-              fontSize: 12.0,
-            )),
+          ),
+          errorStyle: TextStyle(
+            fontSize: 12.0,
+          ),
+        ),
       ),
     );
   }

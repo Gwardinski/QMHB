@@ -63,10 +63,10 @@ class SummaryContentQuiz extends StatelessWidget {
             padding: padding,
             child: SummaryTile(
               line1: quizModel.title,
-              line2: "Difficulty",
-              starValue: quizModel.rating,
-              line3: "Rounds",
-              numberValue: quizModel.roundIds.length,
+              line2: "Rounds",
+              line2Value: quizModel.roundIds.length,
+              line3: "Total Points",
+              line3Value: quizModel.totalPoints,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

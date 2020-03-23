@@ -6,6 +6,7 @@ class QuizModel {
   String description;
   int rating;
   int difficulty;
+  double totalPoints;
   List<String> roundIds;
   List<String> questionIds;
 
@@ -15,6 +16,7 @@ class QuizModel {
     this.description,
     this.rating,
     this.difficulty,
+    this.totalPoints,
     this.roundIds,
     this.questionIds,
   });
@@ -24,6 +26,7 @@ class QuizModel {
     this.title = document.data['title'] ?? '';
     this.rating = document.data['rating'] ?? 0;
     this.difficulty = document.data['difficulty'] ?? 0;
+    this.totalPoints = document.data['totalPoints'] ?? 0;
     this.description = document.data['description'] ?? '';
     roundIds = List<String>();
     if (document['roundIds'] != null) {

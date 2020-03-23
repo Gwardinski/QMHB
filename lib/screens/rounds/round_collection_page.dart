@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/rounds/round_details_page.dart';
 import 'package:qmhb/screens/rounds/round_list_item.dart';
+import 'package:qmhb/screens/rounds/round_add_page.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -17,7 +17,13 @@ class RoundCollectionPage extends StatelessWidget {
         actions: <Widget>[
           FlatButton(
             child: Text('Create New Round'),
-            onPressed: () async {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => RoundAddPage(),
+                ),
+              );
+            },
           ),
         ],
       ),

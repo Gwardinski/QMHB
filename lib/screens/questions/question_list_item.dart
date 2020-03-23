@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/screens/questions/question_details_page.dart';
+import 'package:qmhb/screens/questions/question_round_selector_page.dart';
 
 class QuestionListItem extends StatefulWidget {
   final QuestionModel questionModel;
@@ -108,7 +109,13 @@ class _QuestionListItemState extends State<QuestionListItem> {
                       child: Icon(Icons.add),
                     ),
                     onTap: () {
-                      print('add question');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QuestionToRoundSelectorPage(
+                            questionId: widget.questionModel.uid,
+                          ),
+                        ),
+                      );
                     },
                   )
                 ],
@@ -120,154 +127,3 @@ class _QuestionListItemState extends State<QuestionListItem> {
     );
   }
 }
-
-// _filterQuestionsBottomSheet() {
-//   showModalBottomSheet(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return Container(
-//         height: 400,
-//         child: Column(
-//           children: <Widget>[
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 Expanded(
-//                   child: FlatButton(
-//                     child: Text("Category"),
-//                     onPressed: () {},
-//                   ),
-//                 ),
-//                 Expanded(
-//                   child: FlatButton(
-//                     child: Text("Difficulty"),
-//                     onPressed: () {},
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             Expanded(
-//               child: ListView.builder(
-//                 itemCount: 8,
-//                 itemBuilder: (context, index) {
-//                   return CheckboxListTile(
-//                     title: Text('Category Name $index'),
-//                     value: false,
-//                     onChanged: (val) => {},
-//                   );
-//                 },
-//               ),
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
-
-// void _openQuestionSummary(QuestionModel question) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return SimpleDialog(
-//         children: <Widget>[
-//           Container(
-//             padding: EdgeInsets.symmetric(horizontal: 12),
-//             child: Column(
-//               children: <Widget>[
-//                 Text(question.question),
-//                 Padding(padding: EdgeInsets.only(top: 16)),
-//                 Text(
-//                   question.answer,
-//                   style: TextStyle(
-//                     color: Color(0xffFFA630),
-//                   ),
-//                 ),
-//                 Padding(padding: EdgeInsets.only(top: 4)),
-//                 Divider(),
-//                 Padding(padding: EdgeInsets.only(top: 8)),
-//                 Text(question.category),
-//                 Padding(padding: EdgeInsets.only(top: 8)),
-//                 Text(question.points.toString()),
-//                 Padding(padding: EdgeInsets.only(top: 8)),
-//                 Text("Uploader"),
-//                 Padding(padding: EdgeInsets.only(top: 8)),
-//                 Text("Something else"),
-//                 Padding(padding: EdgeInsets.only(top: 8)),
-//                 Text("Something else"),
-//               ],
-//             ),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
-
-// void _addQuestionBottomSheet() {
-//   showModalBottomSheet(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return Container(
-//         height: 400,
-//         child: Column(
-//           children: <Widget>[
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 Expanded(
-//                   child: FlatButton.icon(
-//                     icon: Icon(Icons.arrow_drop_down),
-//                     label: Text("By Recent"),
-//                     onPressed: () {},
-//                   ),
-//                 ),
-//                 Expanded(
-//                   child: FlatButton.icon(
-//                     icon: Icon(Icons.arrow_drop_down),
-//                     label: Text("By Title"),
-//                     onPressed: () {},
-//                   ),
-//                 ),
-//                 Expanded(
-//                   child: FlatButton(
-//                     color: Color(0xffFFA630),
-//                     child: Text(
-//                       "New Round",
-//                       style: TextStyle(color: Colors.black),
-//                     ),
-//                     onPressed: () {},
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             Expanded(
-//               child: ListView.builder(
-//                 itemCount: 20,
-//                 itemBuilder: (context, index) {
-//                   return CheckboxListTile(
-//                     activeColor: Color(0xffFFA630),
-//                     checkColor: Colors.grey[900],
-//                     value: index != 2 ? false : true,
-//                     title: Text('My Round $index'),
-//                     onChanged: (val) => {},
-//                   );
-//                 },
-//               ),
-//             ),
-//             Container(
-//               height: 60,
-//               width: double.infinity,
-//               child: FlatButton(
-//                 onPressed: () {},
-//                 child: Text(
-//                   "Update Selected Rounds with Question",
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }

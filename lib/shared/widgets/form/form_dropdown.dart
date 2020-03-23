@@ -25,26 +25,30 @@ class _FormDropdownState extends State<FormDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        DropdownButton<String>(
-          value: dropdownValue,
-          icon: Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.arrow_downward)),
-          style: TextStyle(color: Color(0xffFFA630)),
-          onChanged: (String newValue) {
-            setState(() {
-              dropdownValue = newValue;
-              widget.onSelect(newValue);
-            });
-          },
-          items: acceptedCategories.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value ?? 'err',
-              child: Text(value ?? 'err'),
-            );
-          }).toList(),
-        ),
-      ],
+    return Container(
+      height: 90,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          DropdownButton<String>(
+            value: dropdownValue,
+            icon: Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.arrow_downward)),
+            style: TextStyle(color: Color(0xffFFA630)),
+            onChanged: (String newValue) {
+              setState(() {
+                dropdownValue = newValue;
+                widget.onSelect(newValue);
+              });
+            },
+            items: acceptedCategories.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value ?? 'err',
+                child: Text(value ?? 'err'),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,46 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
-import 'package:qmhb/shared/widgets/form/form_dropdown.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class QuestionEditPage extends StatefulWidget {
-  final QuestionModel questionModel;
+class RoundEditPage extends StatefulWidget {
+  final RoundModel roundModel;
 
-  QuestionEditPage({this.questionModel});
+  RoundEditPage({this.roundModel});
   @override
-  _QuestionEditPageState createState() => _QuestionEditPageState();
+  _RoundEditPageState createState() => _RoundEditPageState();
 }
 
-class _QuestionEditPageState extends State<QuestionEditPage> {
+class _RoundEditPageState extends State<RoundEditPage> {
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _error = '';
-  String _question = '';
-  String _answer = '';
-  String _category;
-  double _points = 1;
+  String _title = '';
+  String _description = '';
 
   @override
   void initState() {
     super.initState();
-    _question = widget.questionModel.question;
-    _answer = widget.questionModel.answer;
-    _category = widget.questionModel.category;
-    _points = widget.questionModel.points;
+    _title = widget.roundModel.title;
+    _description = widget.roundModel.description;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Question"),
+        title: Text("Edit Round"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -50,42 +45,22 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
             child: Column(
               children: <Widget>[
                 FormInput(
-                  initialValue: _question,
+                  initialValue: _title,
                   validate: validateForm,
-                  labelText: "Question",
+                  labelText: "Title",
                   onChanged: (val) {
                     setState(() {
-                      _question = val;
+                      _title = val;
                     });
                   },
                 ),
                 FormInput(
-                  initialValue: _answer,
+                  initialValue: _description,
                   validate: validateForm,
-                  labelText: "Answer",
+                  labelText: "Description",
                   onChanged: (val) {
                     setState(() {
-                      _answer = val;
-                    });
-                  },
-                ),
-                FormInput(
-                  initialValue: _points.toString(),
-                  validate: validateNumber,
-                  keyboardType: TextInputType.number,
-                  labelText: "Points",
-                  onChanged: (val) {
-                    setState(() {
-                      _points = val;
-                    });
-                  },
-                ),
-                FormDropdown(
-                  initialValue: _category,
-                  onSelect: (String val) {
-                    setState(() {
-                      print(val);
-                      _category = val;
+                      _description = val;
                     });
                   },
                 ),
@@ -119,16 +94,14 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
       _updateIsLoading(true);
       final databaseService = Provider.of<DatabaseService>(context);
       final user = Provider.of<UserDataStateModel>(context).user;
-      QuestionModel newQuestionModel = QuestionModel(
-        uid: widget.questionModel.uid,
-        question: _question,
-        answer: _answer,
-        points: _points,
-        category: _category,
+      RoundModel newRoundModel = RoundModel(
+        uid: widget.roundModel.uid,
+        title: _title,
+        description: _description,
         isPublished: false,
       );
       try {
-        await databaseService.editQuestionOnFirebase(newQuestionModel, user);
+        await databaseService.editRoundOnFirebase(newRoundModel, user);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);

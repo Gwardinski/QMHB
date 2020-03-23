@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/shared/text_with_title.dart';
 
 class QuestionDetailsWidget extends StatelessWidget {
   final QuestionModel questionModel;
@@ -13,12 +12,33 @@ class QuestionDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
-    print(user.lastUpdated);
-    return Column(
-      children: [
-        Text(questionModel.question),
-      ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextWithTitle(
+              title: "Question",
+              text: questionModel.question,
+            ),
+            TextWithTitle(
+              title: "Answer",
+              text: questionModel.answer,
+            ),
+            TextWithTitle(
+              title: "Points",
+              text: questionModel.points.toString(),
+              highlighText: true,
+            ),
+            TextWithTitle(
+              title: "Category",
+              text: questionModel.category,
+              highlighText: true,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/shared/widgets/star_rating.dart';
 
 class SummaryTile extends StatelessWidget {
   final String line1;
   final String line2;
   final String line3;
-  final int starValue;
-  final int numberValue;
+  final int line2Value;
+  final double line3Value;
   final Function onTap;
 
   const SummaryTile({
@@ -14,8 +13,8 @@ class SummaryTile extends StatelessWidget {
     @required this.line1,
     @required this.line2,
     @required this.line3,
-    @required this.starValue,
-    @required this.numberValue,
+    @required this.line2Value,
+    @required this.line3Value,
     @required this.onTap,
   }) : super(key: key);
 
@@ -32,22 +31,43 @@ class SummaryTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(child: Text(line1)),
-              Column(
-                children: <Widget>[
-                  Text(line2),
-                  StarRatingRow(rating: starValue),
-                ],
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        line1,
+                        maxLines: 3,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(line3),
                   Text(
-                    numberValue.toString(),
+                    line2Value.toString(),
                     style: TextStyle(
                       color: Color(0xffFFA630),
                     ),
                   ),
+                  Text(line2),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    line3Value.toString(),
+                    style: TextStyle(
+                      color: Color(0xffFFA630),
+                    ),
+                  ),
+                  Text(line3),
                 ],
               ),
             ],

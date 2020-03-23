@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/questions/question_details_widget.dart';
 import 'package:qmhb/screens/questions/question_edit_page.dart';
 
@@ -14,7 +12,6 @@ class QuestionDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     print("QuestionDetailsPage");
     return Scaffold(
       appBar: AppBar(

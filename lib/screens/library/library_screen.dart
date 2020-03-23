@@ -50,7 +50,7 @@ class LibraryScreen extends StatelessWidget {
               children: [
                 Padding(padding: EdgeInsets.only(top: 8)),
                 // RecentQuizzesRow(
-                //   headerTitle: "Your Recent Quizzes",
+                //   headerTitle: "Your Quizzes",
                 //   headerButtonText: "See All",
                 //   headerButtonFunction: () {
                 //     Navigator.of(context).push(
@@ -60,19 +60,19 @@ class LibraryScreen extends StatelessWidget {
                 //     );
                 //   },
                 // ),
-                // RecentRoundsRow(
-                //   headerTitle: "Your Recent Rounds",
-                //   headerButtonText: "See All",
-                //   headerButtonFunction: () {
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (context) => RoundCollectionPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
+                RecentRoundsRow(
+                  headerTitle: "Your Rounds",
+                  headerButtonText: "See All",
+                  headerButtonFunction: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RoundCollectionPage(),
+                      ),
+                    );
+                  },
+                ),
                 RecentQuestionsRow(
-                  headerTitle: "Your Recent Questions",
+                  headerTitle: "Your Questions",
                   headerButtonText: "See All",
                   headerButtonFunction: () {
                     Navigator.of(context).push(

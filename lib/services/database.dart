@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/quiz_model.dart';
@@ -46,7 +44,7 @@ class DatabaseService {
     for (var id in roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
       try {
-        RoundModel round = RoundModel.fromFirebase(fbround);
+        RoundModel round = RoundModel.fromFirebase(fbround, id);
         rounds.add(round);
       } catch (e) {
         print("failed to find round with ID of $id");
@@ -70,37 +68,6 @@ class DatabaseService {
     return questions;
   }
 
-  // Get all data from Firebase
-  // Stream<List<QuizModel>> getAllQuizzes() {
-  //   return _quizzesCollection.snapshots().map(_quizModelListFromSnapshot);
-  // }
-
-  // Stream<List<RoundModel>> getAllRounds() {
-  //   return _roundsCollection.snapshots().map(_roundModelListFromSnapshot);
-  // }
-
-  // Stream<List<QuestionModel>> getAllQuestions() {
-  //   return _questionsCollection.snapshots().map(_questionModelListFromSnapshot);
-  // }
-  // Convert Firebase data to App Models
-  // List<QuizModel> _quizModelListFromSnapshot(QuerySnapshot snapshot) {
-  //   return snapshot.documents.map((DocumentSnapshot document) {
-  //     return QuizModel.fromFirebase(document);
-  //   }).toList();
-  // }
-
-  // List<RoundModel> _roundModelListFromSnapshot(QuerySnapshot snapshot) {
-  //   return snapshot.documents.map((DocumentSnapshot document) {
-  //     return RoundModel.fromFirebase(document);
-  //   }).toList();
-  // }
-
-  // List<QuestionModel> _questionModelListFromSnapshot(QuerySnapshot snapshot) {
-  //   return snapshot.documents.map((DocumentSnapshot document) {
-  //     return QuestionModel.fromFirebase(document);
-  //   }).toList();
-  // }
-
   // Update user on Firebase
   Future updateUserData(UserModel userModel) async {
     return await _usersCollection.document(userModel.uid).setData({
@@ -117,29 +84,62 @@ class DatabaseService {
     });
   }
 
+  // Rounds
+
+  addRoundToFirebase(RoundModel roundModel, UserModel userModel) async {
+    DocumentReference doc = await _addRoundToFirebaseCollection(roundModel, userModel.uid);
+    userModel.roundIds.add(doc.documentID);
+    _updateUserRecentRounds(userModel, doc.documentID);
+    await updateUserData(userModel);
+  }
+
+  Future _addRoundToFirebaseCollection(RoundModel roundModel, String userId) async {
+    print('yo');
+    print(roundModel.questionIds.toString());
+    return await _roundsCollection.add({
+      "title": roundModel.title,
+      "description": roundModel.description,
+      "questionIds": roundModel.questionIds,
+      "isPublished": false,
+      "userId": userId,
+    });
+  }
+
+  editRoundOnFirebase(RoundModel roundModel, UserModel userModel) async {
+    await _editRoundOnFirebaseCollection(roundModel, userModel.uid);
+    _updateUserRecentRounds(userModel, roundModel.uid);
+    await updateUserData(userModel);
+  }
+
+  Future<void> _editRoundOnFirebaseCollection(RoundModel roundModel, String userId) async {
+    return await _roundsCollection.document(roundModel.uid).setData({
+      "title": roundModel.title,
+      "description": roundModel.description,
+      "questionIds": roundModel.questionIds,
+      "isPublished": false,
+      "userId": userId,
+    });
+  }
+
+  _updateUserRecentRounds(UserModel userModel, String roundId) {
+    List<String> roundIds = userModel.recentRoundIds;
+    roundIds.remove(roundId);
+    roundIds.add(roundId);
+    if (roundIds.length > 9) {
+      //TODO - this may not work
+      roundIds = roundIds.sublist(0, 9);
+    }
+    userModel.recentRoundIds = roundIds;
+    return userModel;
+  }
+
+  // Questions
+
   addQuestionToFirebase(QuestionModel questionModel, UserModel userModel) async {
     DocumentReference doc = await _addQuestionToFirebaseCollection(questionModel, userModel.uid);
     userModel.questionIds.add(doc.documentID);
     _updateUserRecentQuestions(userModel, doc.documentID);
     await updateUserData(userModel);
-  }
-
-  editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
-    await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
-    _updateUserRecentQuestions(userModel, questionModel.uid);
-    await updateUserData(userModel);
-  }
-
-  _updateUserRecentQuestions(UserModel userModel, String questionId) {
-    List<String> questionIds = userModel.recentQuestionIds;
-    questionIds.remove(questionId);
-    questionIds.add(questionId);
-    if (questionIds.length > 9) {
-      //TODO - this may not work
-      questionIds = questionIds.sublist(0, 9);
-    }
-    userModel.recentQuestionIds = questionIds;
-    return userModel;
   }
 
   Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String userId) async {
@@ -154,6 +154,12 @@ class DatabaseService {
     });
   }
 
+  editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
+    await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
+    _updateUserRecentQuestions(userModel, questionModel.uid);
+    await updateUserData(userModel);
+  }
+
   Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String userId) async {
     return await _questionsCollection.document(questionModel.uid).setData({
       "question": questionModel.question,
@@ -164,5 +170,17 @@ class DatabaseService {
       "isPublished": questionModel.isPublished,
       "userId": userId,
     });
+  }
+
+  _updateUserRecentQuestions(UserModel userModel, String questionId) {
+    List<String> questionIds = userModel.recentQuestionIds;
+    questionIds.remove(questionId);
+    questionIds.add(questionId);
+    if (questionIds.length > 9) {
+      //TODO - this may not work
+      questionIds = questionIds.sublist(0, 9);
+    }
+    userModel.recentQuestionIds = questionIds;
+    return userModel;
   }
 }

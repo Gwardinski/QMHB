@@ -63,10 +63,10 @@ class SummaryContentRound extends StatelessWidget {
             padding: padding,
             child: SummaryTile(
               line1: roundModel.title,
-              line2: "Difficulty",
-              starValue: roundModel.rating,
-              line3: "Questions",
-              numberValue: roundModel.questionIds.length,
+              line2: "Questions",
+              line2Value: roundModel.questionIds.length,
+              line3: "Total Points",
+              line3Value: roundModel.totalPoints,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
