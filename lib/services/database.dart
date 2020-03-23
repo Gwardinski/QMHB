@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/quiz_model.dart';
@@ -29,8 +31,12 @@ class DatabaseService {
     List<QuizModel> quizzes = [];
     for (var id in quizIds) {
       DocumentSnapshot fbquiz = await _quizzesCollection.document(id).get();
-      QuizModel quiz = QuizModel.fromFirebase(fbquiz);
-      quizzes.add(quiz);
+      try {
+        QuizModel quiz = QuizModel.fromFirebase(fbquiz);
+        quizzes.add(quiz);
+      } catch (e) {
+        print("failed to find quiz with ID of $id");
+      }
     }
     return quizzes;
   }
@@ -39,8 +45,12 @@ class DatabaseService {
     List<RoundModel> rounds = [];
     for (var id in roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
-      RoundModel round = RoundModel.fromFirebase(fbround);
-      rounds.add(round);
+      try {
+        RoundModel round = RoundModel.fromFirebase(fbround);
+        rounds.add(round);
+      } catch (e) {
+        print("failed to find round with ID of $id");
+      }
     }
     return rounds;
   }
@@ -49,8 +59,13 @@ class DatabaseService {
     List<QuestionModel> questions = [];
     for (var id in questionIds) {
       DocumentSnapshot fbquestion = await _questionsCollection.document(id).get();
-      QuestionModel question = QuestionModel.fromFirebase(fbquestion);
-      questions.add(question);
+      try {
+        // add id in here ?
+        QuestionModel question = QuestionModel.fromFirebase(fbquestion, id);
+        questions.add(question);
+      } catch (e) {
+        print("failed to find question with ID of $id");
+      }
     }
     return questions;
   }
@@ -92,8 +107,62 @@ class DatabaseService {
       "uid": userModel.uid,
       "displayName": userModel.displayName,
       "email": userModel.email,
-      "quizIds": ["4Jv01fxpFzcTkPztl7bT"],
+      "quizIds": userModel.quizIds,
+      "roundIds": userModel.roundIds,
+      "questionIds": userModel.questionIds,
+      "recentQuizIds": userModel.recentQuizIds,
+      "recentRoundIds": userModel.recentRoundIds,
+      "recentQuestionIds": userModel.recentQuestionIds,
       "lastUpdated": DateTime.now().toString(),
+    });
+  }
+
+  addQuestionToFirebase(QuestionModel questionModel, UserModel userModel) async {
+    DocumentReference doc = await _addQuestionToFirebaseCollection(questionModel, userModel.uid);
+    userModel.questionIds.add(doc.documentID);
+    _updateUserRecentQuestions(userModel, doc.documentID);
+    await updateUserData(userModel);
+  }
+
+  editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
+    await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
+    _updateUserRecentQuestions(userModel, questionModel.uid);
+    await updateUserData(userModel);
+  }
+
+  _updateUserRecentQuestions(UserModel userModel, String questionId) {
+    List<String> questionIds = userModel.recentQuestionIds;
+    questionIds.remove(questionId);
+    questionIds.add(questionId);
+    if (questionIds.length > 9) {
+      //TODO - this may not work
+      questionIds = questionIds.sublist(0, 9);
+    }
+    userModel.recentQuestionIds = questionIds;
+    return userModel;
+  }
+
+  Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String userId) async {
+    return await _questionsCollection.add({
+      "question": questionModel.question,
+      "answer": questionModel.answer,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+      "isPublished": false,
+      "userId": userId,
+    });
+  }
+
+  Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String userId) async {
+    return await _questionsCollection.document(questionModel.uid).setData({
+      "question": questionModel.question,
+      "answer": questionModel.answer,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+      "isPublished": questionModel.isPublished,
+      "userId": userId,
     });
   }
 }

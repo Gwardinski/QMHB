@@ -13,3 +13,7 @@ String validateForm(String value, {String name}) {
   name = name ?? "a value";
   return value.isEmpty ? "Please provide $name" : null;
 }
+
+String validateNumber(String value) {
+  return double.parse(value) == null ? "Please provide number" : null;
+}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/questions/question_edit_page.dart';
+import 'package:qmhb/screens/questions/question_add_page.dart';
 import 'package:qmhb/screens/questions/question_list_item.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -10,6 +10,7 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 class QuestionCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("QuestionCollectionPage");
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
@@ -20,7 +21,7 @@ class QuestionCollectionPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => QuestionEditPage(),
+                  builder: (context) => QuestionAddPage(),
                 ),
               );
             },

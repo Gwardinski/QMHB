@@ -105,16 +105,16 @@ class _UserListenerState extends State<UserListener> {
   }
 
   _updateRecentActivity({UserModel newUserModel, UserModel currentUserModel}) async {
-    if (newUserModel.recentQuizIds != currentUserModel.recentQuizIds) {
-      _userDataStateModel.recentQuizzes = await _databaseService.getQuizzesByIds(
-        newUserModel.recentQuizIds,
-      );
-    }
-    if (newUserModel.recentRoundIds != currentUserModel.recentRoundIds) {
-      _userDataStateModel.recentRounds = await _databaseService.getRoundsByIds(
-        newUserModel.recentRoundIds,
-      );
-    }
+    // if (newUserModel.recentQuizIds != currentUserModel.recentQuizIds) {
+    //   _userDataStateModel.recentQuizzes = await _databaseService.getQuizzesByIds(
+    //     newUserModel.recentQuizIds,
+    //   );
+    // }
+    // if (newUserModel.recentRoundIds != currentUserModel.recentRoundIds) {
+    //   _userDataStateModel.recentRounds = await _databaseService.getRoundsByIds(
+    //     newUserModel.recentRoundIds,
+    //   );
+    // }
     if (newUserModel.recentQuestionIds != currentUserModel.recentQuestionIds) {
       _userDataStateModel.recentQuestions = await _databaseService.getQuestionsByIds(
         newUserModel.recentQuestionIds,

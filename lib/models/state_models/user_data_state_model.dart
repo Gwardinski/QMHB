@@ -14,6 +14,11 @@ class UserDataStateModel extends ChangeNotifier {
   List<RoundModel> _recentRounds;
   List<QuestionModel> _recentQuestions;
 
+  //TODO store loaded data from network in here
+  List<QuizModel> loadedQuizzes;
+  List<RoundModel> loadedRounds;
+  List<QuestionModel> loadedQuestions;
+
   UserModel get user => _userModel;
   bool get isAuthenticated => _isAuthenticated;
   bool get hasInitialised => _hasInitialised;
