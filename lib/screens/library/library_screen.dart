@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/account/account_page.dart';
-import 'package:qmhb/screens/questions/questions_page.dart';
-import 'package:qmhb/screens/quizzes/quizzes_page.dart';
-import 'package:qmhb/screens/rounds/rounds_page.dart';
+import 'package:qmhb/screens/library/recent_questions_row.dart';
+import 'package:qmhb/screens/library/recent_quizzes_row.dart';
+import 'package:qmhb/screens/library/recent_rounds_row.dart';
+import 'package:qmhb/screens/questions/question_collection_page.dart';
+import 'package:qmhb/screens/quizzes/quiz_collection_page.dart';
+import 'package:qmhb/screens/rounds/round_collection_page.dart';
 import 'package:qmhb/screens/settings/settings_page.dart';
-import 'package:qmhb/shared/widgets/summarys/question_row.dart';
-import 'package:qmhb/shared/widgets/summarys/quiz_highlight_row.dart';
-import 'package:qmhb/shared/widgets/summarys/round_highlight_row.dart';
+import 'package:qmhb/shared/widgets/highlights/question_highlight_row.dart';
 
 class LibraryScreen extends StatelessWidget {
   @override
@@ -48,38 +49,35 @@ class LibraryScreen extends StatelessWidget {
             Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 8)),
-                QuizHighlightRow(
-                  quizIds: user.recentQuizIds,
+                RecentQuizzesRow(
                   headerTitle: "Your Recent Quizzes",
                   headerButtonText: "See All",
                   headerButtonFunction: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => QuizzesScreen(),
+                        builder: (context) => QuizCollectionPage(),
                       ),
                     );
                   },
                 ),
-                RoundHighlightRow(
-                  roundIds: user.recentRoundIds,
+                RecentRoundsRow(
                   headerTitle: "Your Recent Rounds",
                   headerButtonText: "See All",
                   headerButtonFunction: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => RoundsScreen(),
+                        builder: (context) => RoundCollectionPage(),
                       ),
                     );
                   },
                 ),
-                QuestionRow(
-                  questionIds: user.recentQuestionIds,
+                RecentQuestionsRow(
                   headerTitle: "Your Recent Questions",
                   headerButtonText: "See All",
                   headerButtonFunction: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => QuestionsScreen(),
+                        builder: (context) => QuestionCollectionPage(),
                       ),
                     );
                   },

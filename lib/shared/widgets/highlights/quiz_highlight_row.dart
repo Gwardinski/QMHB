@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_footer.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_header.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_tile.dart';
+import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/screens/quizzes/quiz_details_page.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
-class RoundHighlightRow extends StatelessWidget {
+class QuizHighlightRow extends StatelessWidget {
   final String headerTitle;
   final String headerButtonText;
   final Function headerButtonFunction;
-  final List<String> roundIds;
+  final List<QuizModel> quizzes;
 
-  const RoundHighlightRow({
+  const QuizHighlightRow({
     Key key,
     @required this.headerTitle,
     @required this.headerButtonText,
     @required this.headerButtonFunction,
-    @required this.roundIds,
+    @required this.quizzes,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final rounds = Provider.of<UserDataStateModel>(context).recentRounds;
     return Column(
       children: [
         SummaryRowHeader(
@@ -30,8 +28,8 @@ class RoundHighlightRow extends StatelessWidget {
           headerButtonText: headerButtonText,
           headerButtonFunction: headerButtonFunction,
         ),
-        SummaryContentRound(
-          rounds: rounds,
+        SummaryContentQuiz(
+          quizzes: quizzes,
         ),
         SummaryRowFooter(),
       ],
@@ -39,11 +37,11 @@ class RoundHighlightRow extends StatelessWidget {
   }
 }
 
-class SummaryContentRound extends StatelessWidget {
-  final List<RoundModel> rounds;
-  const SummaryContentRound({
+class SummaryContentQuiz extends StatelessWidget {
+  final List<QuizModel> quizzes;
+  const SummaryContentQuiz({
     Key key,
-    @required this.rounds,
+    @required this.quizzes,
   }) : super(key: key);
 
   @override
@@ -51,7 +49,7 @@ class SummaryContentRound extends StatelessWidget {
     return Container(
       height: 120,
       child: ListView.separated(
-        itemCount: rounds?.length ?? 0,
+        itemCount: quizzes?.length ?? 0,
         scrollDirection: Axis.horizontal,
         separatorBuilder: (BuildContext context, int index) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
@@ -60,14 +58,24 @@ class SummaryContentRound extends StatelessWidget {
           EdgeInsets padding = index == 0
               ? EdgeInsets.only(left: 16)
               : index == (10 - 1) ? EdgeInsets.only(right: 16) : EdgeInsets.all(0);
+          QuizModel quizModel = quizzes[index];
           return Padding(
             padding: padding,
             child: SummaryTile(
-              line1: rounds[index].title,
+              line1: quizModel.title,
               line2: "Difficulty",
+              starValue: quizModel.rating,
               line3: "Rounds",
-              numberValue: 5,
-              starValue: 5,
+              numberValue: quizModel.roundIds.length,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => QuizDetailsPage(
+                      quizModel: quizModel,
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },

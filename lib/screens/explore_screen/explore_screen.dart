@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/questions/questions_page.dart';
-import 'package:qmhb/screens/quizzes/quizzes_page.dart';
-import 'package:qmhb/screens/rounds/rounds_page.dart';
-import 'package:qmhb/shared/widgets/summarys/question_row.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({

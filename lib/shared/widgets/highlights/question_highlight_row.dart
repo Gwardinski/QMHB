@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_footer.dart';
-import 'package:qmhb/shared/widgets/summarys/summary_header.dart';
+import 'package:qmhb/screens/questions/question_list_item.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
-class QuestionRow extends StatelessWidget {
+class QuestionHighlightRow extends StatelessWidget {
   final String headerTitle;
   final String headerButtonText;
   final Function headerButtonFunction;
-  final List<String> questionIds;
+  final List<QuestionModel> questions;
 
-  const QuestionRow({
+  const QuestionHighlightRow({
     Key key,
     @required this.headerTitle,
     @required this.headerButtonText,
     @required this.headerButtonFunction,
-    @required this.questionIds,
+    @required this.questions,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final questions = Provider.of<UserDataStateModel>(context).recentQuestions;
     return Column(
       children: [
         SummaryRowHeader(
@@ -48,22 +46,13 @@ class SummaryQuestionRowContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
-      child: ListView.separated(
+      height: 400,
+      child: ListView.builder(
         itemCount: questions?.length ?? 0,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (BuildContext context, int index) => Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-        ),
+        scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
-          EdgeInsets padding = index == 0
-              ? EdgeInsets.only(left: 16)
-              : index == (10 - 1) ? EdgeInsets.only(right: 16) : EdgeInsets.all(0);
-          return Padding(
-            padding: padding,
-            // child: QuestionSummary(
-            //   questionModel: questions[index],
-            // ),
+          return QuestionListItem(
+            questionModel: questions[index],
           );
         },
       ),

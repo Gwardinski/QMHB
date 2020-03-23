@@ -39,8 +39,8 @@ class DatabaseService {
     List<RoundModel> rounds = [];
     for (var id in roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
-      RoundModel quiz = RoundModel.fromFirebase(fbround);
-      rounds.add(quiz);
+      RoundModel round = RoundModel.fromFirebase(fbround);
+      rounds.add(round);
     }
     return rounds;
   }
@@ -49,8 +49,8 @@ class DatabaseService {
     List<QuestionModel> questions = [];
     for (var id in questionIds) {
       DocumentSnapshot fbquestion = await _questionsCollection.document(id).get();
-      QuestionModel quiz = QuestionModel.fromFirebase(fbquestion);
-      questions.add(quiz);
+      QuestionModel question = QuestionModel.fromFirebase(fbquestion);
+      questions.add(question);
     }
     return questions;
   }

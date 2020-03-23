@@ -16,7 +16,7 @@ class StarRatingRow extends StatelessWidget {
           child: Container(
             height: 20,
             child: ListView.builder(
-              itemCount: rating,
+              itemCount: rating ?? 1,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return Icon(

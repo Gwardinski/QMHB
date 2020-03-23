@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/shared/widgets/button_primary.dart';
 
 class PlayScreen extends StatefulWidget {
   @override
@@ -13,8 +14,20 @@ class _PlayScreenState extends State<PlayScreen> {
         title: Text("Play"),
       ),
       body: Container(
-        child: Center(
-          child: Text("Play Quiz"),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ButtonPrimary(
+              onPressed: () {},
+              child: Text("Join Quiz"),
+            ),
+            ButtonPrimary(
+              onPressed: () {},
+              child: Text("Host Quiz"),
+            ),
+          ],
         ),
       ),
     );

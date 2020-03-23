@@ -6,8 +6,8 @@ class ButtonPrimary extends StatelessWidget {
 
   const ButtonPrimary({
     Key key,
-    this.child,
-    this.onPressed,
+    @required this.child,
+    @required this.onPressed,
   }) : super(key: key);
 
   @override

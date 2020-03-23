@@ -81,6 +81,7 @@ class _UserListenerState extends State<UserListener> {
     _databaseService = Provider.of<DatabaseService>(context);
     UserModel userModel = _userDataStateModel.user;
     String lastUpdated = _userDataStateModel.lastUpdated;
+    bool hasInitialised = _userDataStateModel.hasInitialised;
     return StreamBuilder(
       stream: DatabaseService().getUserStream(userModel.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -88,7 +89,7 @@ class _UserListenerState extends State<UserListener> {
           UserModel newUserModel = snapshot.data;
           UserModel currentUserModel = _userDataStateModel.user;
           bool hasUpdated = newUserModel.lastUpdated != lastUpdated;
-          if (hasUpdated) {
+          if (hasUpdated || !hasInitialised) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _updateRecentActivity(
                 newUserModel: newUserModel,
@@ -97,7 +98,6 @@ class _UserListenerState extends State<UserListener> {
               _userDataStateModel.updateCurrentUser(newUserModel);
             });
           }
-          // call _updateRecentActivity on first time loading app ?
         }
         return widget.child;
       },

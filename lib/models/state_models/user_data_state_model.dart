@@ -7,6 +7,7 @@ import 'package:qmhb/models/user_model.dart';
 class UserDataStateModel extends ChangeNotifier {
   static const String UserKey = 'user';
   bool _isAuthenticated = false;
+  bool _hasInitialised = false;
   UserModel _userModel;
   String _lastUpdated;
   List<QuizModel> _recentQuizzes;
@@ -15,6 +16,7 @@ class UserDataStateModel extends ChangeNotifier {
 
   UserModel get user => _userModel;
   bool get isAuthenticated => _isAuthenticated;
+  bool get hasInitialised => _hasInitialised;
   String get lastUpdated => _lastUpdated;
   List<QuizModel> get recentQuizzes => _recentQuizzes;
   List<RoundModel> get recentRounds => _recentRounds;
@@ -22,16 +24,19 @@ class UserDataStateModel extends ChangeNotifier {
 
   set recentQuizzes(List<QuizModel> quizzes) {
     _recentQuizzes = quizzes;
+    _hasInitialised = true;
     notifyListeners();
   }
 
   set recentRounds(List<RoundModel> rounds) {
     _recentRounds = rounds;
+    _hasInitialised = true;
     notifyListeners();
   }
 
   set recentQuestions(List<QuestionModel> questions) {
     _recentQuestions = questions;
+    _hasInitialised = true;
     notifyListeners();
   }
 
@@ -51,6 +56,7 @@ class UserDataStateModel extends ChangeNotifier {
   void removeCurrentUser() {
     _userModel = null;
     _isAuthenticated = false;
+    _hasInitialised = false;
     notifyListeners();
   }
 }
