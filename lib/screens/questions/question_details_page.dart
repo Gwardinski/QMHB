@@ -15,7 +15,7 @@ class QuestionDetailsPage extends StatelessWidget {
     print("QuestionDetailsPage");
     return Scaffold(
       appBar: AppBar(
-        title: Text("Question"),
+        title: Text("Question Details"),
         actions: <Widget>[
           FlatButton(
             child: Text('Edit Question'),

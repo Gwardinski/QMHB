@@ -30,7 +30,7 @@ class DatabaseService {
     for (var id in quizIds) {
       DocumentSnapshot fbquiz = await _quizzesCollection.document(id).get();
       try {
-        QuizModel quiz = QuizModel.fromFirebase(fbquiz);
+        QuizModel quiz = QuizModel.fromFirebase(fbquiz, id);
         quizzes.add(quiz);
       } catch (e) {
         print("failed to find quiz with ID of $id");
@@ -84,6 +84,53 @@ class DatabaseService {
     });
   }
 
+  // Quizzes
+
+  addQuizToFirebase(QuizModel quizModel, UserModel userModel) async {
+    DocumentReference doc = await _addQuizToFirebaseCollection(quizModel, userModel.uid);
+    userModel.quizIds.add(doc.documentID);
+    _updateUserRecentQuizzes(userModel, doc.documentID);
+    await updateUserData(userModel);
+  }
+
+  Future _addQuizToFirebaseCollection(QuizModel quizModel, String userId) async {
+    return await _quizzesCollection.add({
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "roundIds": quizModel.roundIds,
+      "isPublished": false,
+      "userId": userId,
+    });
+  }
+
+  editQuizOnFirebase(QuizModel quizModel, UserModel userModel) async {
+    await _editQuizOnFirebaseCollection(quizModel, userModel.uid);
+    _updateUserRecentQuizzes(userModel, quizModel.uid);
+    await updateUserData(userModel);
+  }
+
+  Future<void> _editQuizOnFirebaseCollection(QuizModel quizModel, String userId) async {
+    return await _quizzesCollection.document(quizModel.uid).setData({
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "roundIds": quizModel.roundIds,
+      "isPublished": false,
+      "userId": userId,
+    });
+  }
+
+  _updateUserRecentQuizzes(UserModel userModel, String quizId) {
+    List<String> quizIds = userModel.recentQuizIds;
+    quizIds.remove(quizId);
+    quizIds.add(quizId);
+    if (quizIds.length > 9) {
+      //TODO - this may not work
+      quizIds = quizIds.sublist(0, 9);
+    }
+    userModel.recentQuizIds = quizIds;
+    return userModel;
+  }
+
   // Rounds
 
   addRoundToFirebase(RoundModel roundModel, UserModel userModel) async {
@@ -94,8 +141,6 @@ class DatabaseService {
   }
 
   Future _addRoundToFirebaseCollection(RoundModel roundModel, String userId) async {
-    print('yo');
-    print(roundModel.questionIds.toString());
     return await _roundsCollection.add({
       "title": roundModel.title,
       "description": roundModel.description,

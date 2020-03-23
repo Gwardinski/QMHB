@@ -49,17 +49,17 @@ class LibraryScreen extends StatelessWidget {
             Column(
               children: [
                 Padding(padding: EdgeInsets.only(top: 8)),
-                // RecentQuizzesRow(
-                //   headerTitle: "Your Quizzes",
-                //   headerButtonText: "See All",
-                //   headerButtonFunction: () {
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (context) => QuizCollectionPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
+                RecentQuizzesRow(
+                  headerTitle: "Your Quizzes",
+                  headerButtonText: "See All",
+                  headerButtonFunction: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => QuizCollectionPage(),
+                      ),
+                    );
+                  },
+                ),
                 RecentRoundsRow(
                   headerTitle: "Your Rounds",
                   headerButtonText: "See All",

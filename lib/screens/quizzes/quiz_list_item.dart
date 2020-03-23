@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/screens/quizzes/quiz_details_page.dart';
+import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class QuizListItem extends StatelessWidget {
   const QuizListItem({
@@ -26,85 +27,36 @@ class QuizListItem extends StatelessWidget {
       },
       child: Container(
         height: 120,
-        padding: EdgeInsets.all(8),
-        color: isEven ? Color(0xff6D6D6D) : Color(0xff656565),
+        color: isEven ? Color(0xff3b3b3b) : Color(0xff545454),
         child: Row(
           children: [
-            Container(
-              height: 104,
-              width: 104,
-              color: Colors.blue,
+            SummaryTile(
+              line1: "",
+              line2: "Rounds",
+              line2Value: quizModel.roundIds.length,
+              line3: "Total Points",
+              line3Value: quizModel.totalPoints,
+              onTap: () {},
             ),
             Padding(padding: EdgeInsets.only(right: 8)),
             Expanded(
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      child: Text(
-                        quizModel.title,
-                        maxLines: 2,
-                      ),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    width: double.infinity,
+                    child: Text(
+                      quizModel.title,
+                      maxLines: 2,
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          quizModel.roundIds.length.toString(),
-                                          maxLines: 1,
-                                        ),
-                                        Text(
-                                          " Rounds",
-                                          maxLines: 1,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          quizModel.questionIds.length.toString(),
-                                          maxLines: 1,
-                                        ),
-                                        Text(
-                                          " Questions",
-                                          maxLines: 1,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text(
-                                  quizModel.description ?? '',
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    width: double.infinity,
+                    child: Text(
+                      quizModel.description,
+                      maxLines: 2,
                     ),
                   ),
                 ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -9,15 +9,15 @@ import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class RoundEditPage extends StatefulWidget {
-  final RoundModel roundModel;
+class QuizEditPage extends StatefulWidget {
+  final QuizModel quizModel;
 
-  RoundEditPage({this.roundModel});
+  QuizEditPage({this.quizModel});
   @override
-  _RoundEditPageState createState() => _RoundEditPageState();
+  _QuizEditPageState createState() => _QuizEditPageState();
 }
 
-class _RoundEditPageState extends State<RoundEditPage> {
+class _QuizEditPageState extends State<QuizEditPage> {
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _error = '';
@@ -27,15 +27,15 @@ class _RoundEditPageState extends State<RoundEditPage> {
   @override
   void initState() {
     super.initState();
-    _title = widget.roundModel.title;
-    _description = widget.roundModel.description;
+    _title = widget.quizModel.title;
+    _description = widget.quizModel.description;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Round"),
+        title: Text("Edit Quiz"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -94,18 +94,18 @@ class _RoundEditPageState extends State<RoundEditPage> {
       _updateIsLoading(true);
       final databaseService = Provider.of<DatabaseService>(context);
       final user = Provider.of<UserDataStateModel>(context).user;
-      RoundModel newRoundModel = RoundModel(
-        uid: widget.roundModel.uid,
+      QuizModel newQuizModel = QuizModel(
+        uid: widget.quizModel.uid,
         title: _title,
         description: _description,
         isPublished: false,
       );
       try {
-        await databaseService.editRoundOnFirebase(newRoundModel, user);
+        await databaseService.editQuizOnFirebase(newQuizModel, user);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);
-        _updateError('Failed to edit Round');
+        _updateError('Failed to edit Quiz');
       } finally {
         _updateIsLoading(false);
       }
