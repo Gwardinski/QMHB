@@ -27,21 +27,25 @@ class UserDataStateModel extends ChangeNotifier {
   List<RoundModel> get recentRounds => _recentRounds;
   List<QuestionModel> get recentQuestions => _recentQuestions;
 
-  set recentQuizzes(List<QuizModel> quizzes) {
-    _recentQuizzes = quizzes;
-    _hasInitialised = true;
+  set hasInitialised(val) {
+    _hasInitialised = val;
     notifyListeners();
   }
 
-  set recentRounds(List<RoundModel> rounds) {
-    _recentRounds = rounds;
-    _hasInitialised = true;
-    notifyListeners();
-  }
-
-  set recentQuestions(List<QuestionModel> questions) {
-    _recentQuestions = questions;
-    _hasInitialised = true;
+  updateRecentActivity({
+    List<QuizModel> quizzes,
+    List<RoundModel> rounds,
+    List<QuestionModel> questions,
+  }) {
+    if (quizzes != null) {
+      _recentQuizzes = quizzes;
+    }
+    if (rounds != null) {
+      _recentRounds = rounds;
+    }
+    if (questions != null) {
+      _recentQuestions = questions;
+    }
     notifyListeners();
   }
 

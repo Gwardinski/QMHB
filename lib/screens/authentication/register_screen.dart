@@ -39,19 +39,31 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
               children: <Widget>[
                 FormInput(
                   validate: validateForm,
-                  onChanged: _updateName,
                   labelText: "Display Name",
+                  onChanged: (String val) {
+                    setState(() {
+                      _displayName = val;
+                    });
+                  },
                 ),
                 FormInput(
                   validate: validateEmail,
-                  onChanged: _updateEmail,
                   labelText: "Email",
+                  onChanged: (String val) {
+                    setState(() {
+                      _email = val;
+                    });
+                  },
                 ),
                 FormInput(
                   validate: validatePassword,
-                  onChanged: _updatePassword,
                   labelText: "Password",
                   obscureText: true,
+                  onChanged: (String val) {
+                    setState(() {
+                      _password = val;
+                    });
+                  },
                 ),
                 ButtonPrimary(
                   child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
@@ -64,24 +76,6 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
         ),
       ),
     );
-  }
-
-  _updateName(String val) {
-    setState(() {
-      _displayName = val;
-    });
-  }
-
-  _updateEmail(String val) {
-    setState(() {
-      _email = val;
-    });
-  }
-
-  _updatePassword(String val) {
-    setState(() {
-      _password = val;
-    });
   }
 
   _updateError(String val) {

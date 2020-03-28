@@ -69,7 +69,7 @@ class DatabaseService {
   }
 
   // Update user on Firebase
-  Future updateUserData(UserModel userModel) async {
+  Future updateUserDataOnFirebase(UserModel userModel) async {
     return await _usersCollection.document(userModel.uid).setData({
       "uid": userModel.uid,
       "displayName": userModel.displayName,
@@ -90,7 +90,7 @@ class DatabaseService {
     DocumentReference doc = await _addQuizToFirebaseCollection(quizModel, userModel.uid);
     userModel.quizIds.add(doc.documentID);
     _updateUserRecentQuizzes(userModel, doc.documentID);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future _addQuizToFirebaseCollection(QuizModel quizModel, String userId) async {
@@ -106,7 +106,7 @@ class DatabaseService {
   editQuizOnFirebase(QuizModel quizModel, UserModel userModel) async {
     await _editQuizOnFirebaseCollection(quizModel, userModel.uid);
     _updateUserRecentQuizzes(userModel, quizModel.uid);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future<void> _editQuizOnFirebaseCollection(QuizModel quizModel, String userId) async {
@@ -137,7 +137,7 @@ class DatabaseService {
     DocumentReference doc = await _addRoundToFirebaseCollection(roundModel, userModel.uid);
     userModel.roundIds.add(doc.documentID);
     _updateUserRecentRounds(userModel, doc.documentID);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future _addRoundToFirebaseCollection(RoundModel roundModel, String userId) async {
@@ -153,7 +153,7 @@ class DatabaseService {
   editRoundOnFirebase(RoundModel roundModel, UserModel userModel) async {
     await _editRoundOnFirebaseCollection(roundModel, userModel.uid);
     _updateUserRecentRounds(userModel, roundModel.uid);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future<void> _editRoundOnFirebaseCollection(RoundModel roundModel, String userId) async {
@@ -184,7 +184,7 @@ class DatabaseService {
     DocumentReference doc = await _addQuestionToFirebaseCollection(questionModel, userModel.uid);
     userModel.questionIds.add(doc.documentID);
     _updateUserRecentQuestions(userModel, doc.documentID);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String userId) async {
@@ -202,7 +202,7 @@ class DatabaseService {
   editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
     await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
     _updateUserRecentQuestions(userModel, questionModel.uid);
-    await updateUserData(userModel);
+    await updateUserDataOnFirebase(userModel);
   }
 
   Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String userId) async {

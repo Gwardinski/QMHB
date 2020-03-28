@@ -27,14 +27,30 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             onTap: _setTab,
             tabs: [
               Tab(text: 'Log In'),
-              Tab(text: 'Register'),
+              Tab(text: 'Sign up'),
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            SignInScreen(),
-            RegisterScreen(),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                (activeTab == 0 ? "Log in to view " : "Sign up to create ") +
+                    "your library of Quizzes, Rounds and Questions",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  SignInScreen(),
+                  RegisterScreen(),
+                ],
+              ),
+            ),
           ],
         ),
       ),

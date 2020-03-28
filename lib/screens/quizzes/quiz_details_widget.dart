@@ -58,11 +58,9 @@ class QuizDetailsWidget extends StatelessWidget {
               return ListView.builder(
                 itemCount: roundSnapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isEven = index.isEven;
                   RoundModel round = roundSnapshot.data[index];
                   return RoundListItem(
                     roundModel: round,
-                    isEven: isEven,
                   );
                 },
               );

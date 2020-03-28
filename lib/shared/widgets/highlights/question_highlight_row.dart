@@ -50,6 +50,7 @@ class SummaryQuestionRowContent extends StatelessWidget {
       child: ListView.builder(
         itemCount: questions?.length ?? 0,
         scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return QuestionListItem(
             questionModel: questions[index],

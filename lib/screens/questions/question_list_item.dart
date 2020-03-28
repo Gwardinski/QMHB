@@ -30,9 +30,9 @@ class _QuestionListItemState extends State<QuestionListItem> {
         );
       },
       child: Container(
-        height: 80,
-        color: Color(0xff6D6D6D),
-        padding: EdgeInsets.only(left: 8),
+        height: 96,
+        color: Colors.transparent,
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             Container(
@@ -48,12 +48,15 @@ class _QuestionListItemState extends State<QuestionListItem> {
                       maxLines: 1,
                       textAlign: TextAlign.start,
                       textDirection: TextDirection.ltr,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   GestureDetector(
                     child: Container(
-                      width: 40,
                       height: 40,
+                      padding: EdgeInsets.only(left: 10),
                       child: Icon(
                         Icons.remove_red_eye,
                         color: Color(0xffFFA630),
@@ -77,6 +80,20 @@ class _QuestionListItemState extends State<QuestionListItem> {
               height: 40,
               child: Row(
                 children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Row(
+                      children: <Widget>[
+                        Text("Points: "),
+                        Text(
+                          widget.questionModel.points.toString(),
+                          style: TextStyle(
+                            color: Color(0xffFFA630),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Flexible(
                     flex: 2,
                     child: Container(
@@ -93,20 +110,13 @@ class _QuestionListItemState extends State<QuestionListItem> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Row(
-                      children: <Widget>[
-                        Text("Points: "),
-                        Text(widget.questionModel.points.toString()),
-                      ],
-                    ),
-                  ),
                   GestureDetector(
                     child: Container(
-                      width: 40,
                       height: 40,
-                      child: Icon(Icons.add),
+                      padding: EdgeInsets.only(left: 10),
+                      child: Icon(
+                        Icons.add,
+                      ),
                     ),
                     onTap: () {
                       Navigator.of(context).push(

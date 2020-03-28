@@ -49,6 +49,7 @@ class _QuestionAddPageState extends State<QuestionAddPage> {
                   initialValue: _question,
                   validate: validateForm,
                   labelText: "Question",
+                  keyboardType: TextInputType.multiline,
                   onChanged: (val) {
                     setState(() {
                       _question = val;
@@ -59,6 +60,7 @@ class _QuestionAddPageState extends State<QuestionAddPage> {
                   initialValue: _answer,
                   validate: validateForm,
                   labelText: "Answer",
+                  keyboardType: TextInputType.multiline,
                   onChanged: (val) {
                     setState(() {
                       _answer = val;

@@ -17,22 +17,24 @@ class FormInput extends StatelessWidget {
     @required this.labelText,
     this.obscureText = false,
     this.disabled = false,
-    this.keyboardType = TextInputType.text,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      height: keyboardType == TextInputType.multiline ? 180 : 90,
       child: TextFormField(
         initialValue: initialValue,
         enabled: disabled != true,
         validator: validate,
+        maxLines: keyboardType == TextInputType.multiline ? 5 : 1,
         onChanged: onChanged,
         obscureText: obscureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: labelText,
+          alignLabelWithHint: true,
           labelStyle: TextStyle(
             color: Colors.white,
           ),

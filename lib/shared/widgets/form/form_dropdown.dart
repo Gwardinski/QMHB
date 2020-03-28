@@ -30,22 +30,29 @@ class _FormDropdownState extends State<FormDropdown> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          DropdownButton<String>(
-            value: dropdownValue,
-            icon: Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.arrow_downward)),
-            style: TextStyle(color: Color(0xffFFA630)),
-            onChanged: (String newValue) {
-              setState(() {
-                dropdownValue = newValue;
-                widget.onSelect(newValue);
-              });
-            },
-            items: acceptedCategories.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value ?? 'err',
-                child: Text(value ?? 'err'),
-              );
-            }).toList(),
+          Expanded(
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              isExpanded: true,
+              icon: Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Icon(Icons.arrow_downward),
+              ),
+              iconSize: 28,
+              style: TextStyle(color: Color(0xffFFA630), fontSize: 18),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                  widget.onSelect(newValue);
+                });
+              },
+              items: acceptedCategories.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value ?? 'err',
+                  child: Text(value ?? 'err'),
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),

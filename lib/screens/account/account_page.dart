@@ -36,14 +36,14 @@ class AccountPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    user.displayName ?? '',
+                    user?.displayName ?? '',
                     textAlign: TextAlign.center,
                   ),
                   Container(
-                    child: Text(user.email ?? ''),
+                    child: Text(user?.email ?? ''),
                   ),
                   Container(
-                    child: Text(user.uid ?? ''),
+                    child: Text(user?.uid ?? ''),
                   ),
                 ],
               ),

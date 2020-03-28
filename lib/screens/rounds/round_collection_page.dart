@@ -43,12 +43,11 @@ class RoundCollectionPage extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data.length ?? 0,
             scrollDirection: Axis.vertical,
+            padding: EdgeInsets.only(top: 16),
             itemBuilder: (BuildContext context, int index) {
-              bool isEven = index.isEven;
               RoundModel roundModel = snapshot.data[index];
               return RoundListItem(
                 roundModel: roundModel,
-                isEven: isEven,
               );
             },
           );

@@ -32,7 +32,7 @@ class TextWithTitle extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 18,
               color: highlighText ? Color(0xffFFA630) : Colors.white,
             ),
           ),

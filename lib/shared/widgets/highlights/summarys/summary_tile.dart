@@ -25,9 +25,12 @@ class SummaryTile extends StatelessWidget {
       child: Container(
         height: 120,
         width: 120,
-        color: Color(0xff6D6D6D),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          border: Border.all(color: Color(0xffFFA630)),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

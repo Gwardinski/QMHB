@@ -44,6 +44,7 @@ class QuestionCollectionPage extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data.length ?? 0,
             scrollDirection: Axis.vertical,
+            padding: EdgeInsets.only(top: 8),
             itemBuilder: (BuildContext context, int index) {
               QuestionModel questionModel = snapshot.data[index];
               return QuestionListItem(

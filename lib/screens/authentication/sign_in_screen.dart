@@ -39,16 +39,24 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
               children: <Widget>[
                 FormInput(
                   validate: validateEmail,
-                  onChanged: _updateEmail,
                   labelText: "Email",
                   disabled: _isLoading,
+                  onChanged: (String val) {
+                    setState(() {
+                      _email = val;
+                    });
+                  },
                 ),
                 FormInput(
                   validate: validateEmail,
-                  onChanged: _updatePassword,
                   labelText: "Password",
                   obscureText: true,
                   disabled: _isLoading,
+                  onChanged: (String val) {
+                    setState(() {
+                      _password = val;
+                    });
+                  },
                 ),
                 ButtonPrimary(
                   child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
@@ -61,18 +69,6 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
         ),
       ),
     );
-  }
-
-  _updateEmail(String val) {
-    setState(() {
-      _email = val;
-    });
-  }
-
-  _updatePassword(String val) {
-    setState(() {
-      _password = val;
-    });
   }
 
   _updateError(String val) {

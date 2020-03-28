@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class UserModel {
   String uid;
   String email;
@@ -11,12 +13,31 @@ class UserModel {
   String lastUpdated;
 
   UserModel({
-    this.uid,
-    this.email,
-    this.displayName,
+    @required this.uid,
+    @required this.email,
+    @required this.displayName,
     this.quizIds,
+    this.roundIds,
+    this.questionIds,
+    this.recentQuizIds,
+    this.recentRoundIds,
+    this.recentQuestionIds,
     this.lastUpdated,
   });
+
+  UserModel.registerNewUser({
+    @required this.uid,
+    @required this.email,
+    @required this.displayName,
+  }) {
+    lastUpdated = DateTime.now().toString();
+    quizIds = List<String>();
+    roundIds = List<String>();
+    questionIds = List<String>();
+    recentQuizIds = List<String>();
+    recentRoundIds = List<String>();
+    recentQuestionIds = List<String>();
+  }
 
   UserModel.fromFirebase(data) {
     uid = data['uid'];

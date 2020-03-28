@@ -13,15 +13,14 @@ class AuthenticationService {
     String displayName,
   }) async {
     try {
-      FirebaseUser user = await _firebaseCreateUserWithEmailAndPassword(email, password);
-      UserModel userModel = UserModel(
+      FirebaseUser fbUser = await _firebaseCreateUserWithEmailAndPassword(email, password);
+      UserModel newUser = UserModel.registerNewUser(
         email: email,
         displayName: displayName,
-        uid: user.uid,
-        quizIds: ["4Jv01fxpFzcTkPztl7bT"],
+        uid: fbUser.uid,
       );
-      _databaseService.updateUserData(userModel);
-      return userModel;
+      await _databaseService.updateUserDataOnFirebase(newUser);
+      return newUser;
     } catch (e) {
       print(e.toString());
       return null;
@@ -33,9 +32,9 @@ class AuthenticationService {
     String password,
   }) async {
     try {
-      FirebaseUser user = await _firebaseGetUserFromEmailAndPassword(email, password);
+      FirebaseUser fbUser = await _firebaseGetUserFromEmailAndPassword(email, password);
       DocumentSnapshot firebaseData = await _databaseService.getUserFromUsersCollectionUsingUID(
-        user.uid,
+        fbUser.uid,
       );
       return UserModel.fromFirebase(firebaseData);
     } catch (e) {
