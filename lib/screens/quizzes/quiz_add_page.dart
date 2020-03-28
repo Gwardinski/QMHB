@@ -90,14 +90,14 @@ class _QuizAddPageState extends State<QuizAddPage> {
       _updateIsLoading(true);
       final databaseService = Provider.of<DatabaseService>(context);
       final user = Provider.of<UserDataStateModel>(context).user;
-      List<String> questionIds = List<String>();
+      List<String> roundIds = List<String>();
       if (widget.initialRoundId != null) {
-        questionIds.add(widget.initialRoundId);
+        roundIds.add(widget.initialRoundId);
       }
       QuizModel quizModel = QuizModel(
         title: _title,
         description: _description,
-        questionIds: questionIds,
+        roundIds: roundIds,
         isPublished: false,
       );
       try {

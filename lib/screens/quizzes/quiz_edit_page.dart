@@ -35,7 +35,7 @@ class _QuizEditPageState extends State<QuizEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Quiz"),
+        title: Text("Edit Quiz Details"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -58,6 +58,7 @@ class _QuizEditPageState extends State<QuizEditPage> {
                   initialValue: _description,
                   validate: validateForm,
                   labelText: "Description",
+                  keyboardType: TextInputType.multiline,
                   onChanged: (val) {
                     setState(() {
                       _description = val;

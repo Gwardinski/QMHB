@@ -17,7 +17,7 @@ class QuizDetailsPage extends StatelessWidget {
         title: Text("Quiz Details"),
         actions: <Widget>[
           FlatButton(
-            child: Text('Edit Quiz'),
+            child: Text('Edit'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

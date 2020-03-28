@@ -14,7 +14,8 @@ class QuizListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 32),
+      color: Colors.transparent,
+      padding: EdgeInsets.all(16),
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -26,16 +27,19 @@ class QuizListItem extends StatelessWidget {
           );
         },
         child: Container(
+          color: Colors.transparent,
           height: 120,
           child: Row(
             children: [
-              SummaryTile(
-                line1: "",
-                line2: "Rounds",
-                line2Value: quizModel.roundIds.length,
-                line3: "Total Points",
-                line3Value: quizModel.totalPoints,
-                onTap: () {},
+              IgnorePointer(
+                child: SummaryTile(
+                  line1: "",
+                  line2: "Rounds",
+                  line2Value: quizModel.roundIds.length,
+                  line3: "Total Points",
+                  line3Value: quizModel.totalPoints,
+                  onTap: () {},
+                ),
               ),
               Padding(padding: EdgeInsets.only(right: 8)),
               Expanded(

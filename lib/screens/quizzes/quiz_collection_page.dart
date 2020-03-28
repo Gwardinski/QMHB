@@ -53,7 +53,6 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
           return ListView.builder(
             itemCount: snapshot.data.length ?? 0,
             scrollDirection: Axis.vertical,
-            padding: EdgeInsets.only(top: 16),
             itemBuilder: (BuildContext context, int index) {
               QuizModel quizModel = snapshot.data[index];
               return QuizListItem(

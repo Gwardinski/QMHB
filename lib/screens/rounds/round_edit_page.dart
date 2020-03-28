@@ -35,7 +35,7 @@ class _RoundEditPageState extends State<RoundEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Round"),
+        title: Text("Edit Round Details"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -58,6 +58,7 @@ class _RoundEditPageState extends State<RoundEditPage> {
                   initialValue: _description,
                   validate: validateForm,
                   labelText: "Description",
+                  keyboardType: TextInputType.multiline,
                   onChanged: (val) {
                     setState(() {
                       _description = val;

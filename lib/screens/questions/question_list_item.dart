@@ -110,24 +110,24 @@ class _QuestionListItemState extends State<QuestionListItem> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    child: Container(
-                      height: 40,
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
-                        Icons.add,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => QuestionToRoundSelectorPage(
-                            questionId: widget.questionModel.uid,
-                          ),
-                        ),
-                      );
-                    },
-                  )
+                  // GestureDetector(
+                  //   child: Container(
+                  //     height: 40,
+                  //     padding: EdgeInsets.only(left: 10),
+                  //     child: Icon(
+                  //       Icons.add,
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => QuestionToRoundSelectorPage(
+                  //           questionId: widget.questionModel.uid,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // )
                 ],
               ),
             ),
