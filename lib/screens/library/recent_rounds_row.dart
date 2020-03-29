@@ -17,7 +17,7 @@ class RecentRoundsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rounds = Provider.of<UserDataStateModel>(context).recentRounds;
+    final rounds = Provider.of<RecentActivityStateModel>(context).recentRounds;
     return RoundHighlightRow(
       headerTitle: headerTitle,
       headerButtonText: headerButtonText,

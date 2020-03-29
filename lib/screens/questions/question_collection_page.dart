@@ -16,8 +16,9 @@ class QuestionCollectionPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Your Questions"),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Create New Question'),
+          FlatButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('New'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

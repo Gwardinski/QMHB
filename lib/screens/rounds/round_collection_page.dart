@@ -15,8 +15,9 @@ class RoundCollectionPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Your Rounds"),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Create New Round'),
+          FlatButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('New'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

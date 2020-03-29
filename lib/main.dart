@@ -14,6 +14,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UserDataStateModel>(
           create: (BuildContext context) => UserDataStateModel(),
         ),
+        ChangeNotifierProvider<RecentActivityStateModel>(
+          create: (BuildContext context) => RecentActivityStateModel(),
+        ),
         Provider<DatabaseService>(
           create: (BuildContext context) => DatabaseService(),
         ),

@@ -114,6 +114,7 @@ class DatabaseService {
       "title": quizModel.title,
       "description": quizModel.description,
       "roundIds": quizModel.roundIds,
+      "totalPoints": quizModel.totalPoints,
       "isPublished": false,
       "userId": userId,
     });
@@ -161,6 +162,7 @@ class DatabaseService {
       "title": roundModel.title,
       "description": roundModel.description,
       "questionIds": roundModel.questionIds,
+      "totalPoints": roundModel.totalPoints,
       "isPublished": false,
       "userId": userId,
     });
@@ -227,5 +229,31 @@ class DatabaseService {
     }
     userModel.recentQuestionIds = questionIds;
     return userModel;
+  }
+
+  deleteQuestion(UserModel user, QuestionModel question) async {
+    await _removeQuestionFromAllRounds(user, question);
+    await _removeQuestionUser(user, question);
+    await _questionsCollection.document(question.uid).delete();
+  }
+
+  _removeQuestionFromAllRounds(UserModel user, QuestionModel question) async {
+    for (var id in user.roundIds) {
+      DocumentSnapshot fbround = await _roundsCollection.document(id).get();
+      try {
+        RoundModel round = RoundModel.fromFirebase(fbround, id);
+        round.questionIds.remove(question.uid);
+        round.totalPoints -= question.points;
+        await _editRoundOnFirebaseCollection(round, user.uid);
+      } catch (e) {
+        print("failed to find round with ID of $id");
+      }
+    }
+  }
+
+  _removeQuestionUser(UserModel user, QuestionModel question) async {
+    user.questionIds.remove(question.uid);
+    user.recentQuestionIds.remove(question.uid);
+    await updateUserDataOnFirebase(user);
   }
 }

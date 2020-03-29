@@ -8,10 +8,12 @@ import 'package:qmhb/services/database.dart';
 class RoundSelector extends StatefulWidget {
   final RoundModel roundModel;
   final String questionId;
+  final double questionPoints;
 
-  const RoundSelector({
+  RoundSelector({
     @required this.roundModel,
     @required this.questionId,
+    @required this.questionPoints,
   });
 
   @override
@@ -41,8 +43,10 @@ class _RoundSelectorState extends State<RoundSelector> {
       UserModel userModel = Provider.of<UserDataStateModel>(context).user;
       if (_roundContainsQuestion(roundModel)) {
         roundModel.questionIds.remove(widget.questionId);
+        roundModel.totalPoints -= widget.questionPoints;
       } else {
         roundModel.questionIds.add(widget.questionId);
+        roundModel.totalPoints += widget.questionPoints;
       }
       await databaseService.editRoundOnFirebase(roundModel, userModel);
     } catch (e) {

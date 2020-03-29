@@ -18,23 +18,25 @@ class RoundDetailsPage extends StatelessWidget {
         title: Text("Round"),
         actions: <Widget>[
           FlatButton(
-            child: Text('Edit'),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RoundEditPage(roundModel: roundModel),
-                ),
-              );
-            },
-          ),
-          FlatButton(
             child: Text('Add to'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => RoundToQuizSelectorPage(
                     roundId: roundModel.uid,
+                    roundPoints: roundModel.totalPoints,
                   ),
+                ),
+              );
+            },
+          ),
+          FlatButton.icon(
+            icon: Icon(Icons.edit),
+            label: Text('Edit'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => RoundEditPage(roundModel: roundModel),
                 ),
               );
             },

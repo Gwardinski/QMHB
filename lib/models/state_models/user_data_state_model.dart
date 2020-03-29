@@ -6,13 +6,8 @@ import 'package:qmhb/models/user_model.dart';
 
 class UserDataStateModel extends ChangeNotifier {
   static const String UserKey = 'user';
-  bool _isAuthenticated = false;
-  bool _hasInitialised = false;
   UserModel _userModel;
-  String _lastUpdated;
-  List<QuizModel> _recentQuizzes;
-  List<RoundModel> _recentRounds;
-  List<QuestionModel> _recentQuestions;
+  bool _isAuthenticated = false;
 
   //TODO store loaded data from network in here
   List<QuizModel> loadedQuizzes;
@@ -21,16 +16,34 @@ class UserDataStateModel extends ChangeNotifier {
 
   UserModel get user => _userModel;
   bool get isAuthenticated => _isAuthenticated;
-  bool get hasInitialised => _hasInitialised;
-  String get lastUpdated => _lastUpdated;
+
+  updateCurrentUser(UserModel updatedUser) {
+    try {
+      _userModel = updatedUser;
+      _isAuthenticated = true;
+    } catch (error) {
+      print(error.toString());
+      _isAuthenticated = false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  void removeCurrentUser() {
+    _userModel = null;
+    _isAuthenticated = false;
+    notifyListeners();
+  }
+}
+
+class RecentActivityStateModel extends ChangeNotifier {
+  List<QuizModel> _recentQuizzes;
+  List<RoundModel> _recentRounds;
+  List<QuestionModel> _recentQuestions;
+
   List<QuizModel> get recentQuizzes => _recentQuizzes;
   List<RoundModel> get recentRounds => _recentRounds;
   List<QuestionModel> get recentQuestions => _recentQuestions;
-
-  set hasInitialised(val) {
-    _hasInitialised = val;
-    notifyListeners();
-  }
 
   updateRecentActivity({
     List<QuizModel> quizzes,
@@ -46,26 +59,6 @@ class UserDataStateModel extends ChangeNotifier {
     if (questions != null) {
       _recentQuestions = questions;
     }
-    notifyListeners();
-  }
-
-  updateCurrentUser(UserModel updatedUser) {
-    try {
-      _userModel = updatedUser;
-      _lastUpdated = updatedUser.lastUpdated;
-      _isAuthenticated = true;
-    } catch (error) {
-      print(error.toString());
-      _isAuthenticated = false;
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  void removeCurrentUser() {
-    _userModel = null;
-    _isAuthenticated = false;
-    _hasInitialised = false;
     notifyListeners();
   }
 }

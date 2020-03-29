@@ -9,9 +9,11 @@ import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
 class RoundToQuizSelectorPage extends StatefulWidget {
   final String roundId;
+  final double roundPoints;
 
   RoundToQuizSelectorPage({
     @required this.roundId,
+    @required this.roundPoints,
   });
 
   @override
@@ -57,6 +59,7 @@ class _RoundToQuizSelectorPageState extends State<RoundToQuizSelectorPage> {
                 return QuizSelectorWidget(
                   quizzes: snapshot.data,
                   roundId: widget.roundId,
+                  roundPoints: widget.roundPoints,
                 );
               },
             ),

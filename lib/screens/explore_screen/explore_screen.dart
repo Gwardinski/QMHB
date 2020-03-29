@@ -10,7 +10,6 @@ class ExploreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Explore'),
-        elevation: 0.0,
       ),
       body: SingleChildScrollView(
         child: Column(

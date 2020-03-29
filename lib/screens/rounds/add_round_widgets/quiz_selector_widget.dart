@@ -5,9 +5,12 @@ import 'package:qmhb/screens/rounds/add_round_widgets/quiz_selector.dart';
 class QuizSelectorWidget extends StatefulWidget {
   final List<QuizModel> quizzes;
   final String roundId;
+  final double roundPoints;
+
   QuizSelectorWidget({
     @required this.quizzes,
     @required this.roundId,
+    @required this.roundPoints,
   });
 
   @override
@@ -25,6 +28,7 @@ class _QuizSelectorWidgetState extends State<QuizSelectorWidget> {
           return QuizSelector(
             quizModel: quizModel,
             roundId: widget.roundId,
+            roundPoints: widget.roundPoints,
           );
         },
       ),

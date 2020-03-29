@@ -18,23 +18,24 @@ class UserListener extends StatefulWidget {
 }
 
 class _UserListenerState extends State<UserListener> {
+  bool _hasInitiated = false;
+
   UserDataStateModel _userDataStateModel;
   @override
   Widget build(BuildContext context) {
     _userDataStateModel = Provider.of<UserDataStateModel>(context);
-    UserModel userModel = _userDataStateModel.user;
-    String lastUpdated = _userDataStateModel.lastUpdated;
-    bool hasInitialised = _userDataStateModel.hasInitialised;
+    UserModel currentUserModel = _userDataStateModel.user;
     return StreamBuilder(
-      stream: DatabaseService().getUserStream(userModel.uid),
+      stream: DatabaseService().getUserStream(currentUserModel.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           UserModel newUserModel = snapshot.data;
-          UserModel currentUserModel = _userDataStateModel.user;
-          bool hasUpdated = newUserModel.lastUpdated != lastUpdated;
-          if (hasUpdated || !hasInitialised) {
+          bool hasUpdated = newUserModel.lastUpdated != currentUserModel.lastUpdated;
+          if (hasUpdated || !_hasInitiated) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              _userDataStateModel.hasInitialised = true;
+              setState(() {
+                _hasInitiated = true;
+              });
               _updateRecentActivity(
                 newUserModel: newUserModel,
                 currentUserModel: currentUserModel,
@@ -51,28 +52,15 @@ class _UserListenerState extends State<UserListener> {
   _updateRecentActivity({UserModel newUserModel, UserModel currentUserModel}) async {
     print("_updateRecentActivity");
     final databaseService = Provider.of<DatabaseService>(context);
+    final recentActivity = Provider.of<RecentActivityStateModel>(context);
     List<QuizModel> recentQuizzes;
     List<RoundModel> recentRounds;
     List<QuestionModel> recentQuestions;
-    if (newUserModel.recentQuizIds != currentUserModel.recentQuizIds) {
-      print('get recent quizzes');
-      recentQuizzes = await databaseService.getQuizzesByIds(
-        newUserModel.recentQuizIds,
-      );
-    }
-    if (newUserModel.recentRoundIds != currentUserModel.recentRoundIds) {
-      print('get recent rounds');
-      recentRounds = await databaseService.getRoundsByIds(
-        newUserModel.recentRoundIds,
-      );
-    }
-    if (newUserModel.recentQuestionIds != currentUserModel.recentQuestionIds) {
-      print('get recent questions');
-      recentQuestions = await databaseService.getQuestionsByIds(
-        newUserModel.recentQuestionIds,
-      );
-    }
-    _userDataStateModel.updateRecentActivity(
+    recentQuizzes = await databaseService.getQuizzesByIds(newUserModel.recentQuizIds);
+    recentRounds = await databaseService.getRoundsByIds(newUserModel.recentRoundIds);
+    recentQuestions = await databaseService.getQuestionsByIds(newUserModel.recentQuestionIds);
+
+    recentActivity.updateRecentActivity(
       quizzes: recentQuizzes,
       rounds: recentRounds,
       questions: recentQuestions,

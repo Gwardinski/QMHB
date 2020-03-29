@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
+import 'package:qmhb/shared/text_with_title.dart';
 
 class AccountPage extends StatelessWidget {
   final AuthenticationService _authenticationService = AuthenticationService();
@@ -13,7 +14,6 @@ class AccountPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
-        elevation: 0.0,
         actions: <Widget>[
           FlatButton(
             child: Text("Sign Out"),
@@ -26,27 +26,33 @@ class AccountPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        width: double.infinity,
+        padding: EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Text(
-                    user?.displayName ?? '',
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    child: Text(user?.email ?? ''),
-                  ),
-                  Container(
-                    child: Text(user?.uid ?? ''),
-                  ),
-                ],
-              ),
+            TextWithTitle(
+              title: "Name",
+              text: user.displayName,
+            ),
+            TextWithTitle(
+              title: "Email",
+              text: user.email,
+            ),
+            TextWithTitle(
+              title: "Questions Created",
+              text: user.questionIds.length.toString(),
+              highlighText: true,
+            ),
+            TextWithTitle(
+              title: "Rounds Created",
+              text: user.roundIds.length.toString(),
+              highlighText: true,
+            ),
+            TextWithTitle(
+              title: "Quizzes Created",
+              text: user.quizIds.length.toString(),
+              highlighText: true,
             ),
           ],
         ),

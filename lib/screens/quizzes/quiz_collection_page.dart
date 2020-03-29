@@ -25,8 +25,9 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
       appBar: AppBar(
         title: Text("Your Quizzes"),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Create New Quiz'),
+          FlatButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('New'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

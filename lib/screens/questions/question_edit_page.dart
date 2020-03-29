@@ -41,6 +41,15 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Question"),
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(Icons.delete),
+            label: Text('Delete'),
+            onPressed: () {
+              _asyncConfirmDialog();
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -139,5 +148,41 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
         _updateIsLoading(false);
       }
     }
+  }
+
+  Future _asyncConfirmDialog() async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Question'),
+          content: const Text('Are you sure you wish to delete your question?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: const Text('Delete'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                await _deleteQuestion();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  _deleteQuestion() async {
+    final user = Provider.of<UserDataStateModel>(context).user;
+    final databaseService = Provider.of<DatabaseService>(context);
+    await databaseService.deleteQuestion(user, widget.questionModel);
   }
 }

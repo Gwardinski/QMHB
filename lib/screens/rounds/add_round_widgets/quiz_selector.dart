@@ -8,10 +8,12 @@ import 'package:qmhb/services/database.dart';
 class QuizSelector extends StatefulWidget {
   final QuizModel quizModel;
   final String roundId;
+  final double roundPoints;
 
   const QuizSelector({
     @required this.quizModel,
     @required this.roundId,
+    @required this.roundPoints,
   });
 
   @override
@@ -41,8 +43,10 @@ class _QuizSelectorState extends State<QuizSelector> {
       UserModel userModel = Provider.of<UserDataStateModel>(context).user;
       if (_quizContainsRound(quizModel)) {
         quizModel.roundIds.remove(widget.roundId);
+        quizModel.totalPoints -= widget.roundPoints;
       } else {
         quizModel.roundIds.add(widget.roundId);
+        quizModel.totalPoints += widget.roundPoints;
       }
       await databaseService.editQuizOnFirebase(quizModel, userModel);
     } catch (e) {

@@ -5,9 +5,11 @@ import 'package:qmhb/screens/questions/add_question_widgets/round_selector.dart'
 class RoundSelectorWidget extends StatefulWidget {
   final List<RoundModel> rounds;
   final String questionId;
+  final double questionPoints;
   RoundSelectorWidget({
     @required this.rounds,
     @required this.questionId,
+    @required this.questionPoints,
   });
 
   @override
@@ -25,6 +27,7 @@ class _RoundSelectorWidgetState extends State<RoundSelectorWidget> {
           return RoundSelector(
             roundModel: roundModel,
             questionId: widget.questionId,
+            questionPoints: widget.questionPoints,
           );
         },
       ),

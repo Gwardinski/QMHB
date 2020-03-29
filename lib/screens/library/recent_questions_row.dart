@@ -17,7 +17,7 @@ class RecentQuestionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questions = Provider.of<UserDataStateModel>(context).recentQuestions;
+    final questions = Provider.of<RecentActivityStateModel>(context).recentQuestions;
     return QuestionHighlightRow(
       headerTitle: headerTitle,
       headerButtonText: headerButtonText,

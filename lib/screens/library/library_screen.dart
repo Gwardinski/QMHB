@@ -16,6 +16,7 @@ import 'package:qmhb/screens/settings/settings_page.dart';
 class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('LibraryScreen');
     bool isAuthenticated = Provider.of<UserDataStateModel>(context).isAuthenticated;
     UserModel user = Provider.of<UserDataStateModel>(context).user;
     return !isAuthenticated
@@ -24,7 +25,6 @@ class LibraryScreen extends StatelessWidget {
             child: Scaffold(
               appBar: AppBar(
                 title: Text('Library'),
-                elevation: 0.0,
                 actions: <Widget>[
                   FlatButton(
                     child: Text(user?.displayName ?? 'Account'),
