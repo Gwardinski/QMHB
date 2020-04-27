@@ -16,7 +16,6 @@ import 'package:qmhb/screens/settings/settings_page.dart';
 class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('LibraryScreen');
     bool isAuthenticated = Provider.of<UserDataStateModel>(context).isAuthenticated;
     UserModel user = Provider.of<UserDataStateModel>(context).user;
     return !isAuthenticated
@@ -55,7 +54,7 @@ class LibraryScreen extends StatelessWidget {
                       children: [
                         Padding(padding: EdgeInsets.only(top: 8)),
                         RecentQuizzesRow(
-                          headerTitle: "Your Quizzes",
+                          headerTitle: "Recent Quizzes",
                           headerButtonText: "See All",
                           headerButtonFunction: () {
                             Navigator.of(context).push(
@@ -66,7 +65,7 @@ class LibraryScreen extends StatelessWidget {
                           },
                         ),
                         RecentRoundsRow(
-                          headerTitle: "Your Rounds",
+                          headerTitle: "Recent Rounds",
                           headerButtonText: "See All",
                           headerButtonFunction: () {
                             Navigator.of(context).push(
@@ -77,7 +76,7 @@ class LibraryScreen extends StatelessWidget {
                           },
                         ),
                         RecentQuestionsRow(
-                          headerTitle: "Your Questions",
+                          headerTitle: "Recent Questions",
                           headerButtonText: "See All",
                           headerButtonFunction: () {
                             Navigator.of(context).push(

@@ -7,10 +7,15 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Settings"),
       ),
-      body: Column(
-        children: [
-          Container(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 8)),
+            Center(
+              child: Text("Settings do not yet exist."),
+            )
+          ],
+        ),
       ),
     );
   }

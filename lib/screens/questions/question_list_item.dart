@@ -59,8 +59,8 @@ class _QuestionListItemState extends State<QuestionListItem> {
                         height: 40,
                         padding: EdgeInsets.only(left: 10),
                         child: Icon(
-                          revealAnswer ? Icons.label : Icons.label_outline,
-                          color: Color(0xffFFA630),
+                          Icons.remove_red_eye,
+                          color: revealAnswer ? Color(0xffFFA630) : Colors.white,
                         ),
                       ),
                       onTap: () {

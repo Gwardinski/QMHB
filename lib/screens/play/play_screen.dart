@@ -13,20 +13,13 @@ class _PlayScreenState extends State<PlayScreen> {
       appBar: AppBar(
         title: Text("Play"),
       ),
-      body: Container(
-        width: double.infinity,
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ButtonPrimary(
-              onPressed: () {},
-              child: Text("Join Quiz"),
-            ),
-            ButtonPrimary(
-              onPressed: () {},
-              child: Text("Host Quiz"),
-            ),
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 8)),
+            Center(
+              child: Text("Play services are currently down for maintenance."),
+            )
           ],
         ),
       ),
