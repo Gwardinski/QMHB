@@ -52,7 +52,6 @@ class LibraryScreen extends StatelessWidget {
                   children: <Widget>[
                     Column(
                       children: [
-                        Padding(padding: EdgeInsets.only(top: 8)),
                         RecentQuizzesRow(
                           headerTitle: "Recent Quizzes",
                           headerButtonText: "See All",

@@ -57,7 +57,7 @@ class SummaryContentQuiz extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           EdgeInsets padding = index == 0
               ? EdgeInsets.only(left: 16)
-              : index == (10 - 1) ? EdgeInsets.only(right: 16) : EdgeInsets.all(0);
+              : index == (quizzes.length - 1) ? EdgeInsets.only(right: 16) : EdgeInsets.all(0);
           QuizModel quizModel = quizzes[index];
           return Padding(
             padding: padding,

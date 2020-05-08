@@ -14,11 +14,18 @@ class ButtonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Color(0xffFFA630),
-          decoration: TextDecoration.underline,
+      child: Container(
+        color: Colors.transparent,
+        height: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Color(0xffFFA630),
+              decoration: TextDecoration.underline,
+            ),
+          ),
         ),
       ),
     );

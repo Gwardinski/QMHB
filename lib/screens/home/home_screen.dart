@@ -11,9 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Widget> pages = [
-    LibraryScreen(),
     ExploreScreen(),
     PlayScreen(),
+    LibraryScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -34,16 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: _onItemTapped,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Library'),
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.search),
               title: Text('Explore'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.play_arrow),
               title: Text('Play'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Library'),
             ),
           ],
         ),

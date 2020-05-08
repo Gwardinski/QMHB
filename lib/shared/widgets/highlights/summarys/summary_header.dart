@@ -16,11 +16,15 @@ class SummaryRowHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.0, 8, 16, 16),
+      height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(headerTitle),
+          Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Text(headerTitle),
+          ),
           ButtonText(
             text: headerButtonText,
             onTap: () {
