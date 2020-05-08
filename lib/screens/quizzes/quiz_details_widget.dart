@@ -4,7 +4,7 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/rounds/round_list_item.dart';
 import 'package:qmhb/services/database.dart';
-import 'package:qmhb/shared/text_with_title.dart';
+import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -22,31 +22,17 @@ class QuizDetailsWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextWithTitle(
-                title: "Title",
-                text: quizModel.title,
-              ),
-              TextWithTitle(
-                title: "Description",
-                text: quizModel.description,
-              ),
-              TextWithTitle(
-                title: "Total Points",
-                text: quizModel.totalPoints.toString(),
-              ),
-            ],
-          ),
+        TitleAndDetailsBlock(
+          title: quizModel.title,
+          description: quizModel.description,
+          item1Title: 'Total Points',
+          item1Text: quizModel.totalPoints.toString(),
         ),
         Divider(),
         SummaryRowHeader(
           headerTitle: "Quiz Rounds",
           headerButtonText: quizModel.roundIds.length.toString(),
-          headerButtonFunction: () {},
+          headerButtonFunction: null,
         ),
         Expanded(
           child: FutureBuilder(

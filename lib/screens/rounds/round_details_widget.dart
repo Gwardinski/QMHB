@@ -4,7 +4,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/questions/question_list_item.dart';
 import 'package:qmhb/services/database.dart';
-import 'package:qmhb/shared/text_with_title.dart';
+import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -22,25 +22,11 @@ class RoundDetailsWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextWithTitle(
-                title: "Title",
-                text: roundModel.title,
-              ),
-              TextWithTitle(
-                title: "Description",
-                text: roundModel.description,
-              ),
-              TextWithTitle(
-                title: "Total Points",
-                text: roundModel.totalPoints.toString(),
-              ),
-            ],
-          ),
+        TitleAndDetailsBlock(
+          title: roundModel.title,
+          description: roundModel.description,
+          item1Title: 'Total Points',
+          item1Text: roundModel.totalPoints.toString(),
         ),
         Divider(),
         SummaryRowHeader(

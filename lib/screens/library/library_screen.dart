@@ -8,9 +8,6 @@ import 'package:qmhb/screens/library/recent_questions_row.dart';
 import 'package:qmhb/screens/library/recent_quizzes_row.dart';
 import 'package:qmhb/screens/library/recent_rounds_row.dart';
 import 'package:qmhb/screens/library/user_listener.dart';
-import 'package:qmhb/screens/questions/question_collection_page.dart';
-import 'package:qmhb/screens/quizzes/quiz_collection_page.dart';
-import 'package:qmhb/screens/rounds/round_collection_page.dart';
 import 'package:qmhb/screens/settings/settings_page.dart';
 
 class LibraryScreen extends StatelessWidget {
@@ -52,39 +49,9 @@ class LibraryScreen extends StatelessWidget {
                   children: <Widget>[
                     Column(
                       children: [
-                        RecentQuizzesRow(
-                          headerTitle: "Recent Quizzes",
-                          headerButtonText: "See All",
-                          headerButtonFunction: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QuizCollectionPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        RecentRoundsRow(
-                          headerTitle: "Recent Rounds",
-                          headerButtonText: "See All",
-                          headerButtonFunction: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RoundCollectionPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        RecentQuestionsRow(
-                          headerTitle: "Recent Questions",
-                          headerButtonText: "See All",
-                          headerButtonFunction: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QuestionCollectionPage(),
-                              ),
-                            );
-                          },
-                        ),
+                        RecentQuizzesRow(),
+                        RecentRoundsRow(),
+                        RecentQuestionsRow(),
                       ],
                     ),
                   ],

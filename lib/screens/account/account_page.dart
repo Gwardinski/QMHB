@@ -31,25 +31,25 @@ class AccountPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextWithTitle(
+            TextListItem(
               title: "Name",
               text: user.displayName,
             ),
-            TextWithTitle(
+            TextListItem(
               title: "Email",
               text: user.email,
             ),
-            TextWithTitle(
+            TextListItem(
               title: "Questions Created",
               text: user.questionIds.length.toString(),
               highlighText: true,
             ),
-            TextWithTitle(
+            TextListItem(
               title: "Rounds Created",
               text: user.roundIds.length.toString(),
               highlighText: true,
             ),
-            TextWithTitle(
+            TextListItem(
               title: "Quizzes Created",
               text: user.quizIds.length.toString(),
               highlighText: true,

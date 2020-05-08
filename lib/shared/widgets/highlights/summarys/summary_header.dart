@@ -16,7 +16,7 @@ class SummaryRowHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 44,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -27,9 +27,7 @@ class SummaryRowHeader extends StatelessWidget {
           ),
           ButtonText(
             text: headerButtonText,
-            onTap: () {
-              headerButtonFunction();
-            },
+            onTap: headerButtonFunction,
           ),
         ],
       ),

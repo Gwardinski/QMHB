@@ -45,7 +45,7 @@ class SummaryQuestionRowContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = questions == null ? 0 : questions.length * 96;
+    final height = questions == null ? 0 : questions.length * 112;
     return Container(
       height: (height).toDouble(),
       child: ListView.builder(

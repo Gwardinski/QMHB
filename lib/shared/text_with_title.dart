@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextWithTitle extends StatelessWidget {
-  const TextWithTitle({
+class TextListItem extends StatelessWidget {
+  const TextListItem({
     Key key,
     @required this.title,
     @required this.text,
@@ -14,16 +14,15 @@ class TextWithTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(bottom: 8),
           child: Text(
-            title,
+            '$title:',
             style: TextStyle(
               fontSize: 16,
-              decoration: TextDecoration.underline,
             ),
           ),
         ),
@@ -32,7 +31,7 @@ class TextWithTitle extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               color: highlighText ? Color(0xffFFA630) : Colors.white,
             ),
           ),
