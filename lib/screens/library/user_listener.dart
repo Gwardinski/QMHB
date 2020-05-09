@@ -26,7 +26,7 @@ class _UserListenerState extends State<UserListener> {
     _userDataStateModel = Provider.of<UserDataStateModel>(context);
     UserModel currentUserModel = _userDataStateModel.user;
     return StreamBuilder(
-      stream: DatabaseService().getUserStream(currentUserModel.uid),
+      stream: DatabaseService().getUserStream(currentUserModel?.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           UserModel newUserModel = snapshot.data;

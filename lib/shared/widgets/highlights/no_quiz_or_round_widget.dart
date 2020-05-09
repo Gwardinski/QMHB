@@ -19,21 +19,21 @@ class NoQuizOrRoundWidget extends StatelessWidget {
     return Container(
       height: 120,
       padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          InkWell(
-            onTap: () {},
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        type == NoQuizOrRoundWidgetType.QUIZ ? QuizAddPage() : RoundAddPage(),
-                  ),
-                );
-              },
-              child: Container(
+      child: InkWell(
+        onTap: () {},
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    type == NoQuizOrRoundWidgetType.QUIZ ? QuizAddPage() : RoundAddPage(),
+              ),
+            );
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
                 height: 120,
                 width: 120,
                 decoration: BoxDecoration(
@@ -48,17 +48,19 @@ class NoQuizOrRoundWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Text(
+                    type == NoQuizOrRoundWidgetType.QUIZ
+                        ? "Your library of Quizzes lives here. Tap here to create your own. To save a pre-created Quiz, hit the explore tab and start searching."
+                        : "Your library of Rounds lives here. Tap here to create your own. To save a pre-created Round, hit the explore tab and start searching.",
+                  ),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 16),
-              child: Text(type == NoQuizOrRoundWidgetType.QUIZ
-                  ? "Any quizzes you save or create will sit here. To create your own Quiz press the create button. To save a pre-created quiz to your collection, hit the explore tab and start searching."
-                  : "Any rounds you save or create will sit here. To create your own Round press the create button. To save a pre-created round to your collection, hit the explore tab and start searching."),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

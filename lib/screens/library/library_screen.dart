@@ -15,49 +15,61 @@ class LibraryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isAuthenticated = Provider.of<UserDataStateModel>(context).isAuthenticated;
     UserModel user = Provider.of<UserDataStateModel>(context).user;
-    return !isAuthenticated
-        ? AuthenticationScreen()
-        : UserListener(
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text('Library'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text(user?.displayName ?? 'Account'),
-                    onPressed: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AccountPage(),
-                        ),
-                      );
-                    },
+    return UserListener(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Library'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(isAuthenticated ? user?.displayName ?? 'Account' : 'Sign In'),
+              onPressed: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => isAuthenticated ? AccountPage() : AuthenticationScreen(),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.settings),
-                    onPressed: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SettingsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        RecentQuizzesRow(),
-                        RecentRoundsRow(),
-                        RecentQuestionsRow(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                );
+              },
             ),
-          );
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: isAuthenticated
+              ? Column(
+                  children: [
+                    RecentQuizzesRow(),
+                    RecentRoundsRow(),
+                    RecentQuestionsRow(),
+                  ],
+                )
+              : Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AuthenticationScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Create an account to start your own library of Quizzes, Rounds & Questions, and become the ultimate Quiz Master",
+                      ),
+                    ),
+                  ),
+                ),
+        ),
+      ),
+    );
   }
 }

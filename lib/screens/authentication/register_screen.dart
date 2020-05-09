@@ -101,6 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
       if (userModel != null) {
         final userDataStateModel = Provider.of<UserDataStateModel>(context);
         userDataStateModel.updateCurrentUser(userModel);
+        Navigator.of(context).pop();
       } else {
         _updateError('Failed to register');
       }

@@ -93,10 +93,11 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
       if (userModel != null) {
         final userDataStateModel = Provider.of<UserDataStateModel>(context);
         userDataStateModel.updateCurrentUser(userModel);
+        Navigator.of(context).pop();
       } else {
         _updateError('Failed to log in');
-        _updateIsLoading(false);
       }
+      _updateIsLoading(false);
     }
   }
 }
