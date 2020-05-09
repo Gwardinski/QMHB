@@ -1,45 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/rounds/round_details_page.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class RoundHighlightRow extends StatelessWidget {
-  final String headerTitle;
-  final String headerButtonText;
-  final Function headerButtonFunction;
   final List<RoundModel> rounds;
-
   const RoundHighlightRow({
-    Key key,
-    @required this.headerTitle,
-    @required this.headerButtonText,
-    @required this.headerButtonFunction,
-    @required this.rounds,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SummaryRowHeader(
-          headerTitle: headerTitle,
-          headerButtonText: headerButtonText,
-          headerButtonFunction: headerButtonFunction,
-        ),
-        SummaryContentRound(
-          rounds: rounds,
-        ),
-        SummaryRowFooter(),
-      ],
-    );
-  }
-}
-
-class SummaryContentRound extends StatelessWidget {
-  final List<RoundModel> rounds;
-  const SummaryContentRound({
     Key key,
     @required this.rounds,
   }) : super(key: key);

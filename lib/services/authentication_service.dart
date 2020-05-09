@@ -19,6 +19,7 @@ class AuthenticationService {
         displayName: displayName,
         uid: fbUser.uid,
       );
+      _databaseService.updateUserDataOnFirebase(newUser);
       return newUser;
     } catch (e) {
       print(e.toString());

@@ -1,45 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/screens/quizzes/quiz_details_page.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class QuizHighlightRow extends StatelessWidget {
-  final String headerTitle;
-  final String headerButtonText;
-  final Function headerButtonFunction;
   final List<QuizModel> quizzes;
-
   const QuizHighlightRow({
-    Key key,
-    @required this.headerTitle,
-    @required this.headerButtonText,
-    @required this.headerButtonFunction,
-    @required this.quizzes,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SummaryRowHeader(
-          headerTitle: headerTitle,
-          headerButtonText: headerButtonText,
-          headerButtonFunction: headerButtonFunction,
-        ),
-        SummaryContentQuiz(
-          quizzes: quizzes,
-        ),
-        SummaryRowFooter(),
-      ],
-    );
-  }
-}
-
-class SummaryContentQuiz extends StatelessWidget {
-  final List<QuizModel> quizzes;
-  const SummaryContentQuiz({
     Key key,
     @required this.quizzes,
   }) : super(key: key);
