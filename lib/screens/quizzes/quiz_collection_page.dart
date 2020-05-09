@@ -5,6 +5,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/quizzes/quiz_add_page.dart';
 import 'package:qmhb/screens/quizzes/quiz_list_item.dart';
 import 'package:qmhb/services/database.dart';
+import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuizCollectionPage extends StatefulWidget {
@@ -49,6 +50,14 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
           if (snapshot.hasError == true) {
             return Center(
               child: Text("Could not load content :("),
+            );
+          }
+          if (snapshot.data.length == 0) {
+            return Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 16)),
+                NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.QUIZ),
+              ],
             );
           }
           return ListView.builder(

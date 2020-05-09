@@ -23,7 +23,7 @@ class FormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: keyboardType == TextInputType.multiline ? 180 : 90,
+      padding: EdgeInsets.only(bottom: 16),
       child: TextFormField(
         initialValue: initialValue,
         enabled: disabled != true,

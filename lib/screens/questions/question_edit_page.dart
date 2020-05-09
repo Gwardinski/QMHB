@@ -95,7 +95,6 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
                   initialValue: _category,
                   onSelect: (String val) {
                     setState(() {
-                      print(val);
                       _category = val;
                     });
                   },

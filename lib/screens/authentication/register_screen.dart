@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(16.0, 4, 16.0, 16.0),
           child: Form(
             key: _formKey,
             child: Column(

@@ -5,12 +5,12 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/questions/question_add_page.dart';
 import 'package:qmhb/screens/questions/question_list_item.dart';
 import 'package:qmhb/services/database.dart';
+import 'package:qmhb/shared/widgets/highlights/no_question_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuestionCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("QuestionCollectionPage");
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
@@ -40,6 +40,14 @@ class QuestionCollectionPage extends StatelessWidget {
           if (snapshot.hasError == true) {
             return Center(
               child: Text("Could not load content :("),
+            );
+          }
+          if (snapshot.data.length == 0) {
+            return Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 16)),
+                NoQuestionWidget(),
+              ],
             );
           }
           return ListView.builder(

@@ -5,6 +5,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/rounds/round_list_item.dart';
 import 'package:qmhb/screens/rounds/round_add_page.dart';
 import 'package:qmhb/services/database.dart';
+import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundCollectionPage extends StatelessWidget {
@@ -39,6 +40,14 @@ class RoundCollectionPage extends StatelessWidget {
           if (snapshot.hasError == true) {
             return Center(
               child: Text("Could not load content :("),
+            );
+          }
+          if (snapshot.data.length == 0) {
+            return Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 16)),
+                NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.ROUND),
+              ],
             );
           }
           return ListView.builder(
