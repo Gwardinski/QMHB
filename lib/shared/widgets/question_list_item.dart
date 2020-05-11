@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/screens/questions/question_details_page.dart';
-import 'package:qmhb/screens/questions/question_round_selector_page.dart';
+import 'package:qmhb/screens/library/questions/question_details_page.dart';
+import 'package:qmhb/screens/library/questions/question_round_selector_page.dart';
 
 class QuestionListItem extends StatefulWidget {
   final QuestionModel questionModel;

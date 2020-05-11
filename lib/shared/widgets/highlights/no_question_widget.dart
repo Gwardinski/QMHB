@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/questions/question_add_page.dart';
+import 'package:qmhb/screens/library/questions/question_add_page.dart';
 
 class NoQuestionWidget extends StatelessWidget {
   @override

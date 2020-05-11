@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/rounds/round_details_page.dart';
+import 'package:qmhb/screens/library/rounds/round_details_page.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class RoundHighlightRow extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/rounds/add_round_widgets/quiz_selector.dart';
+import 'package:qmhb/screens/library/rounds/add_round_widgets/quiz_selector.dart';
 
 class QuizSelectorWidget extends StatefulWidget {
   final List<QuizModel> quizzes;

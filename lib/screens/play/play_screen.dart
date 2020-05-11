@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/shared/widgets/button_primary.dart';
 
 class PlayScreen extends StatefulWidget {
   @override

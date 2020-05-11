@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/quizzes/quiz_add_page.dart';
-import 'package:qmhb/screens/rounds/round_add_page.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_add_page.dart';
+import 'package:qmhb/screens/library/rounds/round_add_page.dart';
 
 enum NoQuizOrRoundWidgetType {
   QUIZ,

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/rounds/round_list_item.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/round_list_item.dart';
 
 class QuizDetailsWidget extends StatelessWidget {
   const QuizDetailsWidget({

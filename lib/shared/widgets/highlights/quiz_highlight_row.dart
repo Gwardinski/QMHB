@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/quizzes/quiz_details_page.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class QuizHighlightRow extends StatelessWidget {

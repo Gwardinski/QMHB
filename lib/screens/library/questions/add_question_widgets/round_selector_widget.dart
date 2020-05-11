@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/questions/add_question_widgets/round_selector.dart';
+import 'package:qmhb/screens/library/questions/add_question_widgets/round_selector.dart';
 
 class RoundSelectorWidget extends StatefulWidget {
   final List<RoundModel> rounds;

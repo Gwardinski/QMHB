@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/quizzes/quiz_details_page.dart';
+import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/screens/library/rounds/round_details_page.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
-class QuizListItem extends StatelessWidget {
-  const QuizListItem({
+class RoundListItem extends StatelessWidget {
+  const RoundListItem({
     Key key,
-    @required this.quizModel,
+    @required this.roundModel,
   }) : super(key: key);
 
-  final QuizModel quizModel;
+  final RoundModel roundModel;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class QuizListItem extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => QuizDetailsPage(
-                quizModel: quizModel,
+              builder: (context) => RoundDetailsPage(
+                roundModel: roundModel,
               ),
             ),
           );
@@ -34,10 +34,10 @@ class QuizListItem extends StatelessWidget {
               IgnorePointer(
                 child: SummaryTile(
                   line1: "",
-                  line2: "Rounds",
-                  line2Value: quizModel.roundIds.length,
+                  line2: "Questions",
+                  line2Value: roundModel.questionIds.length,
                   line3: "Total Points",
-                  line3Value: quizModel.totalPoints,
+                  line3Value: roundModel.totalPoints,
                   onTap: () {},
                 ),
               ),
@@ -50,7 +50,7 @@ class QuizListItem extends StatelessWidget {
                         padding: EdgeInsets.all(8),
                         width: double.infinity,
                         child: Text(
-                          quizModel.title,
+                          roundModel.title,
                           maxLines: 2,
                           style: TextStyle(fontSize: 18),
                         ),
@@ -59,7 +59,7 @@ class QuizListItem extends StatelessWidget {
                         padding: EdgeInsets.all(8),
                         width: double.infinity,
                         child: Text(
-                          quizModel.description,
+                          roundModel.description,
                           maxLines: 2,
                         ),
                       ),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/rounds/round_list_item.dart';
-import 'package:qmhb/screens/rounds/round_add_page.dart';
+import 'package:qmhb/screens/library/questions/question_add_page.dart';
 import 'package:qmhb/services/database.dart';
-import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
+import 'package:qmhb/shared/widgets/highlights/no_question_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/question_list_item.dart';
 
-class RoundCollectionPage extends StatelessWidget {
+class QuestionCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Rounds"),
+        title: Text("Your Questions"),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.add),
@@ -22,7 +22,7 @@ class RoundCollectionPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => RoundAddPage(),
+                  builder: (context) => QuestionAddPage(),
                 ),
               );
             },
@@ -30,7 +30,7 @@ class RoundCollectionPage extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: DatabaseService().getRoundsByIds(user.roundIds),
+        future: DatabaseService().getQuestionsByIds(user.questionIds),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -46,7 +46,7 @@ class RoundCollectionPage extends StatelessWidget {
             return Column(
               children: <Widget>[
                 Padding(padding: EdgeInsets.only(top: 16)),
-                NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.ROUND),
+                NoQuestionWidget(),
               ],
             );
           }
@@ -54,9 +54,9 @@ class RoundCollectionPage extends StatelessWidget {
             itemCount: snapshot.data.length ?? 0,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
-              RoundModel roundModel = snapshot.data[index];
-              return RoundListItem(
-                roundModel: roundModel,
+              QuestionModel questionModel = snapshot.data[index];
+              return QuestionListItem(
+                questionModel: questionModel,
               );
             },
           );

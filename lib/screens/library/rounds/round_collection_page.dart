@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/quizzes/quiz_add_page.dart';
-import 'package:qmhb/screens/quizzes/quiz_list_item.dart';
+import 'package:qmhb/screens/library/rounds/round_add_page.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/round_list_item.dart';
 
-class QuizCollectionPage extends StatefulWidget {
-  @override
-  _QuizCollectionPageState createState() => _QuizCollectionPageState();
-}
-
-class _QuizCollectionPageState extends State<QuizCollectionPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class RoundCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Quizzes"),
+        title: Text("Your Rounds"),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.add),
@@ -32,7 +22,7 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => QuizAddPage(),
+                  builder: (context) => RoundAddPage(),
                 ),
               );
             },
@@ -40,7 +30,7 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
         ],
       ),
       body: FutureBuilder(
-        future: DatabaseService().getQuizzesByIds(user.quizIds),
+        future: DatabaseService().getRoundsByIds(user.roundIds),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -56,17 +46,18 @@ class _QuizCollectionPageState extends State<QuizCollectionPage>
             return Column(
               children: <Widget>[
                 Padding(padding: EdgeInsets.only(top: 16)),
-                NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.QUIZ),
+                NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.ROUND),
               ],
             );
           }
+          // TODO: Link for Adding Questions needed here
           return ListView.builder(
             itemCount: snapshot.data.length ?? 0,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
-              QuizModel quizModel = snapshot.data[index];
-              return QuizListItem(
-                quizModel: quizModel,
+              RoundModel roundModel = snapshot.data[index];
+              return RoundListItem(
+                roundModel: roundModel,
               );
             },
           );

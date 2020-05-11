@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/questions/add_question_widgets/round_selector_widget.dart';
-import 'package:qmhb/screens/rounds/round_add_page.dart';
+import 'package:qmhb/screens/library/questions/add_question_widgets/round_selector_widget.dart';
+import 'package:qmhb/screens/library/rounds/round_add_page.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
