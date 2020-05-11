@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_edit_page.dart';
-import 'package:qmhb/screens/library/quizzes/widgets/quiz_details_widget.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/shared/widgets/quiz_details_widget.dart';
 
 class QuizDetailsPage extends StatelessWidget {
   final QuizModel quizModel;
@@ -22,7 +22,10 @@ class QuizDetailsPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => QuizEditPage(quizModel: quizModel),
+                  builder: (context) => QuizEditorPage(
+                    type: QuizEditorPageType.EDIT,
+                    quizModel: quizModel,
+                  ),
                 ),
               );
             },

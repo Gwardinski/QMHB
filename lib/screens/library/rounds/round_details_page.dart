@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/rounds/round_edit_page.dart';
+import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_quiz_selector_page.dart';
-import 'package:qmhb/screens/library/rounds/widgets/round_details_widget.dart';
+import 'package:qmhb/shared/widgets/round_details_widget.dart';
 
-class RoundDetailsPage extends StatelessWidget {
+class RoundDetailsPage extends StatefulWidget {
   final RoundModel roundModel;
 
   RoundDetailsPage({
@@ -12,13 +12,26 @@ class RoundDetailsPage extends StatelessWidget {
   });
 
   @override
+  _RoundDetailsPageState createState() => _RoundDetailsPageState();
+}
+
+class _RoundDetailsPageState extends State<RoundDetailsPage> {
+  RoundModel roundModel;
+
+  @override
+  void initState() {
+    super.initState();
+    roundModel = widget.roundModel;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Round"),
+        title: Text("Round Details"),
         actions: <Widget>[
           FlatButton(
-            child: Text('Add to'),
+            child: Text('Add to Quiz'),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -30,15 +43,20 @@ class RoundDetailsPage extends StatelessWidget {
               );
             },
           ),
-          FlatButton.icon(
-            icon: Icon(Icons.edit),
-            label: Text('Edit'),
-            onPressed: () {
-              Navigator.of(context).push(
+          FlatButton(
+            child: Text('Edit'),
+            onPressed: () async {
+              final round = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => RoundEditPage(roundModel: roundModel),
+                  builder: (context) => RoundEditorPage(
+                    type: RoundEditorPageType.EDIT,
+                    roundModel: roundModel,
+                  ),
                 ),
               );
+              setState(() {
+                roundModel = round;
+              });
             },
           ),
         ],

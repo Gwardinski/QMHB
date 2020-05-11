@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizModel {
   String uid;
+  String userId;
   String title;
   String description;
   int rating;
@@ -13,6 +14,7 @@ class QuizModel {
 
   QuizModel({
     this.uid,
+    this.userId,
     this.title,
     this.description,
     this.rating,
@@ -25,6 +27,7 @@ class QuizModel {
 
   QuizModel.fromFirebase(DocumentSnapshot document, String id) {
     this.uid = id;
+    this.userId = document.data['userId'] ?? '';
     this.title = document.data['title'] ?? '';
     this.rating = document.data['rating'] ?? 0;
     this.difficulty = document.data['difficulty'] ?? 0;

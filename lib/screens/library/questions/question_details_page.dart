@@ -4,7 +4,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_edit_page.dart';
 import 'package:qmhb/screens/library/questions/question_round_selector_page.dart';
-import 'package:qmhb/screens/library/questions/widgets/question_details_widget.dart';
+import 'package:qmhb/shared/widgets/question_details_widget.dart';
 
 class QuestionDetailsPage extends StatelessWidget {
   final QuestionModel questionModel;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add_page.dart';
-import 'package:qmhb/screens/library/rounds/round_add_page.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 
 enum NoQuizOrRoundWidgetType {
   QUIZ,
@@ -25,8 +25,13 @@ class NoQuizOrRoundWidget extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>
-                    type == NoQuizOrRoundWidgetType.QUIZ ? QuizAddPage() : RoundAddPage(),
+                builder: (context) => type == NoQuizOrRoundWidgetType.QUIZ
+                    ? QuizEditorPage(
+                        type: QuizEditorPageType.ADD,
+                      )
+                    : RoundEditorPage(
+                        type: RoundEditorPageType.ADD,
+                      ),
               ),
             );
           },
@@ -53,8 +58,8 @@ class NoQuizOrRoundWidget extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16),
                   child: Text(
                     type == NoQuizOrRoundWidgetType.QUIZ
-                        ? "Your library of Quizzes lives here. Tap here to create your own. To save a pre-created Quiz, hit the explore tab and start searching."
-                        : "Your library of Rounds lives here. Tap here to create your own. To save a pre-created Round, hit the explore tab and start searching.",
+                        ? "Your library of Quizzes lives here. Tap here to create your own.\nTo save a pre-created Quiz, hit the explore tab and start searching."
+                        : "Your library of Rounds lives here. Tap here to create your own.\nTo save a pre-created Round, hit the explore tab and start searching.",
                   ),
                 ),
               ),

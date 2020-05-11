@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -9,17 +9,26 @@ import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class RoundAddPage extends StatefulWidget {
-  final initialQuestionId;
-
-  RoundAddPage({
-    this.initialQuestionId,
-  });
-  @override
-  _RoundAddPageState createState() => _RoundAddPageState();
+enum QuizEditorPageType {
+  ADD,
+  EDIT,
 }
 
-class _RoundAddPageState extends State<RoundAddPage> {
+class QuizEditorPage extends StatefulWidget {
+  final QuizEditorPageType type;
+  final String initialRoundId;
+  final QuizModel quizModel;
+
+  QuizEditorPage({
+    @required this.type,
+    this.initialRoundId,
+    this.quizModel,
+  });
+  @override
+  _QuizEditorPageState createState() => _QuizEditorPageState();
+}
+
+class _QuizEditorPageState extends State<QuizEditorPage> {
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _error = '';
@@ -27,10 +36,19 @@ class _RoundAddPageState extends State<RoundAddPage> {
   String _description = '';
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.quizModel != null) {
+      _title = widget.quizModel.title;
+      _description = widget.quizModel.description;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Round"),
+        title: Text(widget.type == QuizEditorPageType.ADD ? "Create Quiz" : "Edit Quiz"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -62,7 +80,7 @@ class _RoundAddPageState extends State<RoundAddPage> {
                 ),
                 ButtonPrimary(
                   child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
-                  onPressed: _createRound,
+                  onPressed: widget.type == QuizEditorPageType.ADD ? _createQuiz : _editQuiz,
                 ),
                 FormError(error: _error),
               ],
@@ -85,26 +103,46 @@ class _RoundAddPageState extends State<RoundAddPage> {
     });
   }
 
-  _createRound() async {
+  _createQuiz() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       final databaseService = Provider.of<DatabaseService>(context);
       final user = Provider.of<UserDataStateModel>(context).user;
-      List<String> questionIds = List<String>();
-      if (widget.initialQuestionId != null) {
-        questionIds.add(widget.initialQuestionId);
+      List<String> roundIds = List<String>();
+      if (widget.initialRoundId != null) {
+        roundIds.add(widget.initialRoundId);
       }
-      RoundModel roundModel = RoundModel(
+      QuizModel quizModel = QuizModel(
         title: _title,
         description: _description,
-        questionIds: questionIds,
+        roundIds: roundIds,
         isPublished: false,
       );
       try {
-        await databaseService.addRoundToFirebase(roundModel, user);
+        await databaseService.addQuizToFirebase(quizModel, user);
         Navigator.of(context).pop();
       } catch (e) {
-        _updateError('Failed to add Round');
+        _updateError('Failed to add Quiz');
+      } finally {
+        _updateIsLoading(false);
+      }
+    }
+  }
+
+  _editQuiz() async {
+    if (_formKey.currentState.validate()) {
+      _updateIsLoading(true);
+      final databaseService = Provider.of<DatabaseService>(context);
+      final user = Provider.of<UserDataStateModel>(context).user;
+      QuizModel newQuizModel = widget.quizModel;
+      newQuizModel.title = _title;
+      newQuizModel.description = _description;
+      try {
+        await databaseService.editQuizOnFirebase(newQuizModel, user);
+        Navigator.of(context).pop(newQuizModel);
+      } catch (e) {
+        print(e);
+        _updateError('Failed to edit Quiz');
       } finally {
         _updateIsLoading(false);
       }

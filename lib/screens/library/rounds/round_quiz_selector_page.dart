@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add_page.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/add_round_widgets/quiz_selector_widget.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
@@ -45,7 +45,8 @@ class _RoundToQuizSelectorPageState extends State<RoundToQuizSelectorPage> {
               headerButtonFunction: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => QuizAddPage(
+                    builder: (context) => QuizEditorPage(
+                      type: QuizEditorPageType.ADD,
                       initialRoundId: widget.roundId,
                     ),
                   ),
