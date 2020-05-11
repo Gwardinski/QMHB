@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/questions/question_add_page.dart';
 import 'package:qmhb/screens/library/questions/question_collection/created_questions_collection.dart';
 import 'package:qmhb/screens/library/questions/question_collection/saved_questions_collection.dart';
+import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -24,7 +24,9 @@ class QuestionCollectionPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => QuestionAddPage(),
+                    builder: (context) => QuestionEditorPage(
+                      type: QuestionEditorPageType.ADD,
+                    ),
                   ),
                 );
               },

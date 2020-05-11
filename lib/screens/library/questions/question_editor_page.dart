@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/category_model.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
@@ -10,15 +11,24 @@ import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class QuestionEditPage extends StatefulWidget {
-  final QuestionModel questionModel;
-
-  QuestionEditPage({this.questionModel});
-  @override
-  _QuestionEditPageState createState() => _QuestionEditPageState();
+enum QuestionEditorPageType {
+  ADD,
+  EDIT,
 }
 
-class _QuestionEditPageState extends State<QuestionEditPage> {
+class QuestionEditorPage extends StatefulWidget {
+  final QuestionEditorPageType type;
+  final QuestionModel questionModel;
+
+  QuestionEditorPage({
+    @required this.type,
+    this.questionModel,
+  });
+  @override
+  _QuestionEditorPageState createState() => _QuestionEditorPageState();
+}
+
+class _QuestionEditorPageState extends State<QuestionEditorPage> {
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _error = '';
@@ -30,26 +40,34 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
   @override
   void initState() {
     super.initState();
-    _question = widget.questionModel.question;
-    _answer = widget.questionModel.answer;
-    _category = widget.questionModel.category;
-    _points = widget.questionModel.points;
+    if (widget.questionModel != null) {
+      _question = widget.questionModel.question;
+      _answer = widget.questionModel.answer;
+      _category = widget.questionModel.category;
+      _points = widget.questionModel.points;
+    } else {
+      _category = acceptedCategories[0];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Question"),
-        actions: <Widget>[
-          FlatButton.icon(
-            icon: Icon(Icons.delete),
-            label: Text('Delete'),
-            onPressed: () {
-              _asyncConfirmDialog();
-            },
-          ),
-        ],
+        title: Text(
+          widget.type == QuestionEditorPageType.ADD ? "Create Question" : "Edit Question",
+        ),
+        actions: widget.type == QuestionEditorPageType.EDIT
+            ? [
+                FlatButton.icon(
+                  icon: Icon(Icons.delete),
+                  label: Text('Delete'),
+                  onPressed: () {
+                    _asyncConfirmDialog();
+                  },
+                ),
+              ]
+            : [],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -87,13 +105,13 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
                   labelText: "Points",
                   onChanged: (val) {
                     setState(() {
-                      _points = val;
+                      _points = double.parse(val);
                     });
                   },
                 ),
                 FormDropdown(
                   initialValue: _category,
-                  onSelect: (String val) {
+                  onSelect: (val) {
                     setState(() {
                       _category = val;
                     });
@@ -101,7 +119,8 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
                 ),
                 ButtonPrimary(
                   child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
-                  onPressed: _editQuestion,
+                  onPressed:
+                      widget.type == QuestionEditorPageType.ADD ? _createQuestion : _editQuestion,
                 ),
                 FormError(error: _error),
               ],
@@ -122,6 +141,29 @@ class _QuestionEditPageState extends State<QuestionEditPage> {
     setState(() {
       _isLoading = val;
     });
+  }
+
+  _createQuestion() async {
+    if (_formKey.currentState.validate()) {
+      _updateIsLoading(true);
+      final databaseService = Provider.of<DatabaseService>(context);
+      final user = Provider.of<UserDataStateModel>(context).user;
+      QuestionModel questionModel = QuestionModel(
+        question: _question,
+        answer: _answer,
+        points: _points,
+        category: _category,
+        isPublished: false,
+      );
+      try {
+        await databaseService.addQuestionToFirebase(questionModel, user);
+        Navigator.of(context).pop();
+      } catch (e) {
+        _updateError('Failed to add Question');
+      } finally {
+        _updateIsLoading(false);
+      }
+    }
   }
 
   _editQuestion() async {

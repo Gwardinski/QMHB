@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/questions/question_edit_page.dart';
+import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_page.dart';
 import 'package:qmhb/shared/widgets/details/question_details_widget.dart';
 
-class QuestionDetailsPage extends StatelessWidget {
+class QuestionDetailsPage extends StatefulWidget {
   final QuestionModel questionModel;
 
   QuestionDetailsPage({
@@ -14,8 +12,20 @@ class QuestionDetailsPage extends StatelessWidget {
   });
 
   @override
+  _QuestionDetailsPageState createState() => _QuestionDetailsPageState();
+}
+
+class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
+  QuestionModel questionModel;
+
+  @override
+  void initState() {
+    super.initState();
+    questionModel = widget.questionModel;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: Text("Question"),
@@ -33,19 +43,22 @@ class QuestionDetailsPage extends StatelessWidget {
               );
             },
           ),
-          user.uid == questionModel.userId
-              ? FlatButton.icon(
-                  icon: Icon(Icons.edit),
-                  label: Text('Edit'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => QuestionEditPage(questionModel: questionModel),
-                      ),
-                    );
-                  },
-                )
-              : Container()
+          FlatButton(
+            child: Text('Edit'),
+            onPressed: () async {
+              final question = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => QuestionEditorPage(
+                    type: QuestionEditorPageType.EDIT,
+                    questionModel: questionModel,
+                  ),
+                ),
+              );
+              setState(() {
+                questionModel = question;
+              });
+            },
+          ),
         ],
       ),
       body: QuestionDetailsWidget(
