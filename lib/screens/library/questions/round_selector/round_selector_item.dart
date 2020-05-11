@@ -5,31 +5,39 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/database.dart';
 
-class RoundSelector extends StatefulWidget {
+class RoundSelectorItem extends StatefulWidget {
   final RoundModel roundModel;
   final String questionId;
   final double questionPoints;
 
-  RoundSelector({
+  RoundSelectorItem({
     @required this.roundModel,
     @required this.questionId,
     @required this.questionPoints,
   });
 
   @override
-  _RoundSelectorState createState() => _RoundSelectorState();
+  _RoundSelectorItemState createState() => _RoundSelectorItemState();
 }
 
-class _RoundSelectorState extends State<RoundSelector> {
+class _RoundSelectorItemState extends State<RoundSelectorItem> {
+  bool isLoading;
   @override
   Widget build(BuildContext context) {
     bool hasQuestion = _roundContainsQuestion(widget.roundModel);
     return CheckboxListTile(
-      title: Text(widget.roundModel.title),
+      title: Text(
+        widget.roundModel.title,
+        style: TextStyle(
+          color: isLoading == true ? Colors.grey : Colors.white,
+        ),
+      ),
       value: hasQuestion,
-      onChanged: (bool value) {
-        _addOrRemoveQuestion(widget.roundModel);
-      },
+      onChanged: isLoading == true
+          ? null
+          : (bool value) {
+              _addOrRemoveQuestion(widget.roundModel);
+            },
     );
   }
 
@@ -39,6 +47,9 @@ class _RoundSelectorState extends State<RoundSelector> {
 
   _addOrRemoveQuestion(RoundModel roundModel) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       DatabaseService databaseService = Provider.of<DatabaseService>(context);
       UserModel userModel = Provider.of<UserDataStateModel>(context).user;
       if (_roundContainsQuestion(roundModel)) {
@@ -51,6 +62,10 @@ class _RoundSelectorState extends State<RoundSelector> {
       await databaseService.editRoundOnFirebase(roundModel, userModel);
     } catch (e) {
       print(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

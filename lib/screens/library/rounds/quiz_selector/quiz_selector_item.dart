@@ -5,31 +5,39 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/database.dart';
 
-class QuizSelector extends StatefulWidget {
+class QuizSelectorItem extends StatefulWidget {
   final QuizModel quizModel;
   final String roundId;
   final double roundPoints;
 
-  const QuizSelector({
+  const QuizSelectorItem({
     @required this.quizModel,
     @required this.roundId,
     @required this.roundPoints,
   });
 
   @override
-  _QuizSelectorState createState() => _QuizSelectorState();
+  _QuizSelectorItemState createState() => _QuizSelectorItemState();
 }
 
-class _QuizSelectorState extends State<QuizSelector> {
+class _QuizSelectorItemState extends State<QuizSelectorItem> {
+  bool isLoading;
   @override
   Widget build(BuildContext context) {
-    bool hasQuestion = _quizContainsRound(widget.quizModel);
+    bool hasRound = _quizContainsRound(widget.quizModel);
     return CheckboxListTile(
-      title: Text(widget.quizModel.title),
-      value: hasQuestion,
-      onChanged: (bool value) {
-        _addOrRemoveRound(widget.quizModel);
-      },
+      title: Text(
+        widget.quizModel.title,
+        style: TextStyle(
+          color: isLoading == true ? Colors.grey : Colors.white,
+        ),
+      ),
+      value: hasRound,
+      onChanged: isLoading == true
+          ? null
+          : (bool value) {
+              _addOrRemoveRound(widget.quizModel);
+            },
     );
   }
 
@@ -39,6 +47,9 @@ class _QuizSelectorState extends State<QuizSelector> {
 
   _addOrRemoveRound(QuizModel quizModel) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       DatabaseService databaseService = Provider.of<DatabaseService>(context);
       UserModel userModel = Provider.of<UserDataStateModel>(context).user;
       if (_quizContainsRound(quizModel)) {
@@ -51,6 +62,10 @@ class _QuizSelectorState extends State<QuizSelector> {
       await databaseService.editQuizOnFirebase(quizModel, userModel);
     } catch (e) {
       print(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

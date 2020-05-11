@@ -59,6 +59,11 @@ class QuizCollectionPage extends StatelessWidget {
             return Column(
               children: <Widget>[
                 TabBar(
+                  labelStyle: TextStyle(
+                    color: Color(0xffFFA630),
+                  ),
+                  labelColor: Color(0xffFFA630),
+                  indicatorColor: Color(0xffFFA630),
                   tabs: [
                     Tab(child: Text("Created")),
                     Tab(child: Text("Saved")),

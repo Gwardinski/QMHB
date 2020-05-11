@@ -24,7 +24,7 @@ class DatabaseService {
     });
   }
 
-  // Get data from Firebase by ID
+  // TODO handle this in single request
   Future<List<QuizModel>> getQuizzesByIds(List<String> quizIds) async {
     List<QuizModel> quizzes = [];
     for (var id in quizIds) {
@@ -39,6 +39,7 @@ class DatabaseService {
     return quizzes;
   }
 
+  // TODO handle this in single request
   Future<List<RoundModel>> getRoundsByIds(List<String> roundIds) async {
     List<RoundModel> rounds = [];
     for (var id in roundIds) {
@@ -53,6 +54,7 @@ class DatabaseService {
     return rounds;
   }
 
+  // TODO handle this in single request
   Future<List<QuestionModel>> getQuestionsByIds(List<String> questionIds) async {
     List<QuestionModel> questions = [];
     for (var id in questionIds) {

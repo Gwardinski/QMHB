@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
-import 'package:qmhb/screens/library/rounds/add_round_widgets/quiz_selector_widget.dart';
+import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_item.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
-class RoundToQuizSelectorPage extends StatefulWidget {
+class QuizSelectorPage extends StatefulWidget {
   final String roundId;
   final double roundPoints;
 
-  RoundToQuizSelectorPage({
+  QuizSelectorPage({
     @required this.roundId,
     @required this.roundPoints,
   });
 
   @override
-  _RoundToQuizSelectorPageState createState() {
-    return _RoundToQuizSelectorPageState();
+  _QuizSelectorPageState createState() {
+    return _QuizSelectorPageState();
   }
 }
 
-class _RoundToQuizSelectorPageState extends State<RoundToQuizSelectorPage> {
+class _QuizSelectorPageState extends State<QuizSelectorPage> {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
@@ -57,10 +58,26 @@ class _RoundToQuizSelectorPageState extends State<RoundToQuizSelectorPage> {
             FutureBuilder(
               future: databaseService.getQuizzesByIds(user.quizIds),
               builder: (BuildContext context, snapshot) {
-                return QuizSelectorWidget(
-                  quizzes: snapshot.data,
-                  roundId: widget.roundId,
-                  roundPoints: widget.roundPoints,
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+                if (snapshot.hasError == true) {
+                  return Center(
+                    child: Text("Could not load content"),
+                  );
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      QuizModel quizModel = snapshot.data[index];
+                      return QuizSelectorItem(
+                        quizModel: quizModel,
+                        roundId: widget.roundId,
+                        roundPoints: widget.roundPoints,
+                      );
+                    },
+                  ),
                 );
               },
             ),
