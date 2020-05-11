@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
-import 'package:qmhb/shared/widgets/round_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/round_list_item.dart';
 
 class CreatedRoundsCollection extends StatelessWidget {
   CreatedRoundsCollection({

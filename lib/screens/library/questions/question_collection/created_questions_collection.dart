@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/shared/widgets/highlights/no_question_widget.dart';
-import 'package:qmhb/shared/widgets/question_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
 
 class CreatedQuestionCollection extends StatelessWidget {
   CreatedQuestionCollection({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/question_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
 
 class QuestionHighlightRow extends StatelessWidget {
   final List<QuestionModel> questions;

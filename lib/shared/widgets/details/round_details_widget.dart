@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-import 'package:qmhb/shared/widgets/round_list_item.dart';
 
-class QuizDetailsWidget extends StatelessWidget {
-  const QuizDetailsWidget({
+class RoundDetailsWidget extends StatelessWidget {
+  const RoundDetailsWidget({
     Key key,
-    @required this.quizModel,
+    @required this.roundModel,
   }) : super(key: key);
 
-  final QuizModel quizModel;
+  final RoundModel roundModel;
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +23,29 @@ class QuizDetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TitleAndDetailsBlock(
-          title: quizModel.title,
-          description: quizModel.description,
+          title: roundModel.title,
+          description: roundModel.description,
           item1Title: 'Total Points',
-          item1Text: quizModel.totalPoints.toString(),
+          item1Text: roundModel.totalPoints.toString(),
         ),
         Divider(),
         SummaryRowHeader(
-          headerTitle: "Quiz Rounds",
-          headerButtonText: quizModel.roundIds.length.toString(),
-          headerButtonFunction: null,
+          headerTitle: "Round Questions",
+          headerButtonText: roundModel.questionIds.length.toString(),
+          headerButtonFunction: () {},
         ),
         Expanded(
           child: FutureBuilder(
-            future: databaseService.getRoundsByIds(quizModel.roundIds),
-            builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> roundSnapshot) {
-              if (roundSnapshot.connectionState == ConnectionState.waiting) {
+            future: databaseService.getQuestionsByIds(roundModel.questionIds),
+            builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> questionSnapshot) {
+              if (questionSnapshot.connectionState == ConnectionState.waiting) {
                 return LoadingSpinnerHourGlass();
               }
               return ListView.builder(
-                itemCount: roundSnapshot.data.length,
+                itemCount: questionSnapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  RoundModel round = roundSnapshot.data[index];
-                  return RoundListItem(
-                    roundModel: round,
-                  );
+                  QuestionModel question = questionSnapshot.data[index];
+                  return QuestionListItem(questionModel: question);
                 },
               );
             },

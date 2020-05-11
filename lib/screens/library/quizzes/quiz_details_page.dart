@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
-import 'package:qmhb/shared/widgets/quiz_details_widget.dart';
+import 'package:qmhb/shared/widgets/details/quiz_details_widget.dart';
 
 class QuizDetailsPage extends StatefulWidget {
   final QuizModel quizModel;

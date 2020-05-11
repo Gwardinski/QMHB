@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_quiz_selector_page.dart';
-import 'package:qmhb/shared/widgets/round_details_widget.dart';
+import 'package:qmhb/shared/widgets/details/round_details_widget.dart';
 
 class RoundDetailsPage extends StatefulWidget {
   final RoundModel roundModel;

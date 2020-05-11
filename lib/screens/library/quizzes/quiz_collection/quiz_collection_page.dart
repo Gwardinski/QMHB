@@ -6,9 +6,7 @@ import 'package:qmhb/screens/library/quizzes/quiz_collection/created_quizzes_col
 import 'package:qmhb/screens/library/quizzes/quiz_collection/saved_quizzes_collection.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/database.dart';
-import 'package:qmhb/shared/widgets/highlights/no_quiz_or_round_widget.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-import 'package:qmhb/shared/widgets/quiz_list_item.dart';
 
 class QuizCollectionPage extends StatelessWidget {
   @override
@@ -80,11 +78,5 @@ class QuizCollectionPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return null;
   }
 }

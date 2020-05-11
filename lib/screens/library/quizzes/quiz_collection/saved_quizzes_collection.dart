@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/shared/widgets/quiz_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/quiz_list_item.dart';
 
 class SavedQuizzesCollection extends StatelessWidget {
   SavedQuizzesCollection({
