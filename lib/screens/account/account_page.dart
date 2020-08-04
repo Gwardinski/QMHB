@@ -13,6 +13,7 @@ class AccountPage extends StatelessWidget {
     UserModel user = userDataStateModel.user;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Account"),
         actions: <Widget>[
           FlatButton(

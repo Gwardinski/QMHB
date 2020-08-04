@@ -16,6 +16,7 @@ class RoundCollectionPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text("Your Rounds"),
           actions: <Widget>[
             FlatButton.icon(

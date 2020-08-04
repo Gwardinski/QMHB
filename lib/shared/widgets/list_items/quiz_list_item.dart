@@ -14,7 +14,7 @@ class QuizListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: Theme.of(context).bottomAppBarColor,
       padding: EdgeInsets.all(16),
       child: GestureDetector(
         onTap: () {
@@ -28,7 +28,7 @@ class QuizListItem extends StatelessWidget {
         },
         child: Container(
           color: Colors.transparent,
-          height: 120,
+          height: 128,
           child: Row(
             children: [
               IgnorePointer(

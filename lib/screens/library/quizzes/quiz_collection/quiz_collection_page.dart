@@ -16,6 +16,7 @@ class QuizCollectionPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text("Your Quizzes"),
           actions: <Widget>[
             FlatButton.icon(
@@ -56,28 +57,33 @@ class QuizCollectionPage extends StatelessWidget {
                   (QuizModel qz) => qz.userId != user.uid,
                 )
                 .toList();
-            return Column(
-              children: <Widget>[
-                TabBar(
-                  labelStyle: TextStyle(
-                    color: Theme.of(context).accentColor,
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 600,
+                    child: TabBar(
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).accentColor,
+                      ),
+                      labelColor: Theme.of(context).accentColor,
+                      indicatorColor: Theme.of(context).accentColor,
+                      tabs: [
+                        Tab(child: Text("Created")),
+                        Tab(child: Text("Saved")),
+                      ],
+                    ),
                   ),
-                  labelColor: Theme.of(context).accentColor,
-                  indicatorColor: Theme.of(context).accentColor,
-                  tabs: [
-                    Tab(child: Text("Created")),
-                    Tab(child: Text("Saved")),
-                  ],
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      CreatedQuizzesCollection(userQuizzes: userQuizzes),
-                      SavedQuizzesCollection(savedQuizzes: savedQuizzes),
-                    ],
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        CreatedQuizzesCollection(userQuizzes: userQuizzes),
+                        SavedQuizzesCollection(savedQuizzes: savedQuizzes),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

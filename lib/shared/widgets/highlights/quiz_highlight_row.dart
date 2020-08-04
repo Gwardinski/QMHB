@@ -13,7 +13,8 @@ class QuizHighlightRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 128,
+      margin: EdgeInsets.fromLTRB(0, 16, 0, 16),
       child: ListView.separated(
         itemCount: quizzes?.length ?? 0,
         scrollDirection: Axis.horizontal,
@@ -31,7 +32,7 @@ class QuizHighlightRow extends StatelessWidget {
               line1: quizModel.title,
               line2: "Rounds",
               line2Value: quizModel.roundIds.length,
-              line3: "Total Points",
+              line3: "Points",
               line3Value: quizModel.totalPoints,
               onTap: () {
                 Navigator.of(context).push(

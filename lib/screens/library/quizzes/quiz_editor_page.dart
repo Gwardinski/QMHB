@@ -48,6 +48,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(widget.type == QuizEditorPageType.ADD ? "Create Quiz" : "Edit Quiz"),
       ),
       body: SingleChildScrollView(

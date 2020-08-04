@@ -30,6 +30,7 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
     DatabaseService databaseService = Provider.of<DatabaseService>(context);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Add Round to Quiz"),
       ),
       body: Container(
@@ -42,8 +43,8 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
             ),
             SummaryRowHeader(
               headerTitle: "Select Quizzes",
-              headerButtonText: "New Quiz",
-              headerButtonFunction: () {
+              primaryHeaderButtonText: "New Quiz",
+              primaryHeaderButtonFunction: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => QuizEditorPage(

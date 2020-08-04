@@ -31,8 +31,8 @@ class QuizDetailsWidget extends StatelessWidget {
         Divider(),
         SummaryRowHeader(
           headerTitle: "Quiz Rounds",
-          headerButtonText: quizModel.roundIds.length.toString(),
-          headerButtonFunction: null,
+          primaryHeaderButtonText: quizModel.roundIds.length.toString(),
+          primaryHeaderButtonFunction: null,
         ),
         Expanded(
           child: FutureBuilder(

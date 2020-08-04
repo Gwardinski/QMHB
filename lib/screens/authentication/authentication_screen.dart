@@ -17,6 +17,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text(activeTab == 0 ? "Sign In" : "Register"),
           bottom: TabBar(
             labelStyle: TextStyle(

@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     PlayScreen(),
   ];
   final AuthenticationService _authService = AuthenticationService();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -39,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userModel != null) {
       final userDataStateModel = Provider.of<UserDataStateModel>(context);
       userDataStateModel.updateCurrentUser(userModel);
-      final snackBar = SnackBar(content: Text('Signed In!'));
-      Scaffold.of(context).showSnackBar(snackBar);
+      final snackBar = SnackBar(content: Text('Signed In'));
+      globalKey.currentState.showSnackBar(snackBar);
     }
   }
 
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     bool useLargeLayout = MediaQuery.of(context).size.width > 800;
     return useLargeLayout
         ? Scaffold(
+            key: globalKey,
             body: Row(
               children: [
                 useLargeLayout
@@ -64,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             //   width: double.infinity,
                             // ),
                             Container(
-                              height: 120,
+                              height: 128,
                             ),
                             MainNavigationButton(
                               title: "Library",

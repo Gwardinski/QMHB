@@ -14,7 +14,7 @@ class ButtonPrimary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 48,
-      width: 120,
+      width: 128,
       child: RaisedButton(
         color: Color(0xff333333),
         onPressed: onPressed,

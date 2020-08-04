@@ -30,6 +30,7 @@ class _RoundSelectorPageState extends State<RoundSelectorPage> {
     DatabaseService databaseService = Provider.of<DatabaseService>(context);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Add to Rounds"),
       ),
       body: Container(
@@ -42,8 +43,8 @@ class _RoundSelectorPageState extends State<RoundSelectorPage> {
             ),
             SummaryRowHeader(
               headerTitle: "Select Round",
-              headerButtonText: "New Round",
-              headerButtonFunction: () {
+              primaryHeaderButtonText: "New Round",
+              primaryHeaderButtonFunction: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => RoundEditorPage(

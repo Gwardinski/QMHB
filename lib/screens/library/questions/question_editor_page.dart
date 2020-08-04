@@ -54,6 +54,7 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(
           widget.type == QuestionEditorPageType.ADD ? "Create Question" : "Edit Question",
         ),

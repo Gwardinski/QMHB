@@ -31,8 +31,8 @@ class RoundDetailsWidget extends StatelessWidget {
         Divider(),
         SummaryRowHeader(
           headerTitle: "Round Questions",
-          headerButtonText: roundModel.questionIds.length.toString(),
-          headerButtonFunction: () {},
+          primaryHeaderButtonText: roundModel.questionIds.length.toString(),
+          primaryHeaderButtonFunction: () {},
         ),
         Expanded(
           child: FutureBuilder(

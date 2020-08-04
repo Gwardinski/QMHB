@@ -10,6 +10,7 @@ class _PlayScreenState extends State<PlayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Play"),
       ),
       body: SingleChildScrollView(

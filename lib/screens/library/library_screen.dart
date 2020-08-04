@@ -18,6 +18,7 @@ class LibraryScreen extends StatelessWidget {
     return UserListener(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text('Library'),
           actions: <Widget>[
             AccountPageButton(isAuthenticated: isAuthenticated, user: user),

@@ -28,6 +28,7 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Question"),
         actions: <Widget>[
           FlatButton(

@@ -9,6 +9,7 @@ class ExploreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text('Explore'),
       ),
       body: SingleChildScrollView(
@@ -20,8 +21,8 @@ class ExploreScreen extends StatelessWidget {
             )
             // QuizRow(
             //   headerTitle: "Featured Quizzes",
-            //   headerButtonText: "Search All Quizzes",
-            //   headerButtonFunction: () {
+            //   primaryHeaderButtonText: "Search All Quizzes",
+            //   primaryHeaderButtonFunction: () {
             //     // Navigator.of(context).push(
             //     //   MaterialPageRoute(
             //     //     builder: (context) => QuizzesScreen(),
@@ -31,8 +32,8 @@ class ExploreScreen extends StatelessWidget {
             // ),
             // RoundRow(
             //   headerTitle: "Featured Rounds",
-            //   headerButtonText: "Search All Rounds",
-            //   headerButtonFunction: () {
+            //   primaryHeaderButtonText: "Search All Rounds",
+            //   primaryHeaderButtonFunction: () {
             //     // Navigator.of(context).push(
             //     //   MaterialPageRoute(
             //     //     builder: (context) => RoundsScreen(),
@@ -42,8 +43,8 @@ class ExploreScreen extends StatelessWidget {
             // ),
             // QuestionRow(
             //   headerTitle: "Featured Questions",
-            //   headerButtonText: "Search All Questions",
-            //   headerButtonFunction: () {
+            //   primaryHeaderButtonText: "Search All Questions",
+            //   primaryHeaderButtonFunction: () {
             //     // Navigator.of(context).push(
             //     //   MaterialPageRoute(
             //     //     builder: (context) => QuestionsScreen(),

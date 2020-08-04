@@ -48,6 +48,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(widget.type == RoundEditorPageType.ADD ? "Create Round" : "Edit Round"),
       ),
       body: SingleChildScrollView(

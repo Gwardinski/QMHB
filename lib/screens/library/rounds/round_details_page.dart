@@ -28,6 +28,7 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("Round Details"),
         actions: <Widget>[
           FlatButton(

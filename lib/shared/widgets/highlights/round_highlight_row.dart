@@ -13,7 +13,7 @@ class RoundHighlightRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 128,
       child: ListView.separated(
         itemCount: rounds?.length ?? 0,
         scrollDirection: Axis.horizontal,

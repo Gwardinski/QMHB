@@ -28,7 +28,7 @@ class RoundListItem extends StatelessWidget {
         },
         child: Container(
           color: Colors.transparent,
-          height: 120,
+          height: 128,
           child: Row(
             children: [
               IgnorePointer(
