@@ -19,40 +19,45 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         appBar: AppBar(
           elevation: 0,
           title: Text(activeTab == 0 ? "Sign In" : "Register"),
-          bottom: TabBar(
-            labelStyle: TextStyle(
-              color: Theme.of(context).accentColor,
-            ),
-            labelColor: Theme.of(context).accentColor,
-            indicatorColor: Theme.of(context).accentColor,
-            onTap: _setTab,
-            tabs: [
-              Tab(text: 'Sign In'),
-              Tab(text: 'Register'),
-            ],
-          ),
         ),
-        body: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(16, 32, 16, 32),
-              child: Text(
-                (activeTab == 0 ? "Sign in to view " : "Create an account to begin creating ") +
-                    "your library of Quizzes, Rounds and Questions",
-                style: TextStyle(
-                  fontSize: 16,
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 400,
+                child: TabBar(
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).accentColor,
+                  ),
+                  labelColor: Theme.of(context).accentColor,
+                  indicatorColor: Theme.of(context).accentColor,
+                  onTap: _setTab,
+                  tabs: [
+                    Tab(text: 'Sign In'),
+                    Tab(text: 'Register'),
+                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  SignInScreen(),
-                  RegisterScreen(),
-                ],
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 32, 16, 32),
+                child: Text(
+                  (activeTab == 0 ? "Sign in to view " : "Create an account to begin creating ") +
+                      "your library of Quizzes, Rounds and Questions",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    SignInScreen(),
+                    RegisterScreen(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
