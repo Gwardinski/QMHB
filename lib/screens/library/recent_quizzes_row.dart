@@ -28,7 +28,7 @@ class RecentQuizzesRow extends StatelessWidget {
             );
           },
         ),
-        // TODO: New Question Button here
+        // TODO: New Quiz Button here
         (quizzes == null || quizzes.length == 0)
             ? NoQuizOrRoundWidget(type: NoQuizOrRoundWidgetType.QUIZ)
             : QuizHighlightRow(
