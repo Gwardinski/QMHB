@@ -7,6 +7,19 @@ class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseService _databaseService = DatabaseService();
 
+  Future<UserModel> autoSignIn() async {
+    try {
+      FirebaseUser fbUser = await _auth.currentUser();
+      DocumentSnapshot firebaseData = await _databaseService.getUserFromUsersCollectionUsingUID(
+        fbUser.uid,
+      );
+      return UserModel.fromFirebase(firebaseData);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<UserModel> registerWithEmailAndPassword({
     String email,
     String password,
