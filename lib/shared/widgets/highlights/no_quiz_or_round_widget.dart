@@ -43,7 +43,7 @@ class NoQuizOrRoundWidget extends StatelessWidget {
                 width: 120,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(color: Color(0xffFFA630)),
+                  border: Border.all(color: Theme.of(context).accentColor),
                 ),
                 child: Center(
                   child: Text(

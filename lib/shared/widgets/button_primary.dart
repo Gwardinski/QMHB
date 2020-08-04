@@ -20,10 +20,8 @@ class ButtonPrimary extends StatelessWidget {
         onPressed: onPressed,
         child: child,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          side: BorderSide(
-            width: 2.0,
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          side: BorderSide(width: 1.0, color: Theme.of(context).accentColor),
         ),
       ),
     );

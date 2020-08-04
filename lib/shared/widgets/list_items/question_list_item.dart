@@ -35,7 +35,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: Color(0xffFFA630),
+                color: Theme.of(context).accentColor,
                 width: 0.25,
               ),
             ),
@@ -56,14 +56,14 @@ class _QuestionListItemState extends State<QuestionListItem> {
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
                         fontSize: 18,
-                        color: revealAnswer ? Color(0xffFFA630) : Colors.white,
+                        color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
                       ),
                     ),
                   ),
                   MaterialButton(
                     child: Icon(
                       Icons.remove_red_eye,
-                      color: revealAnswer ? Color(0xffFFA630) : Colors.white,
+                      color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
                     ),
                     onPressed: () {
                       setState(() {
@@ -86,7 +86,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
                               Text(
                                 widget.questionModel.points.toString(),
                                 style: TextStyle(
-                                  color: Color(0xffFFA630),
+                                  color: Theme.of(context).accentColor,
                                 ),
                               ),
                             ],
@@ -100,7 +100,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
                               Text(
                                 widget.questionModel.category,
                                 style: TextStyle(
-                                  color: Color(0xffFFA630),
+                                  color: Theme.of(context).accentColor,
                                 ),
                               ),
                             ],

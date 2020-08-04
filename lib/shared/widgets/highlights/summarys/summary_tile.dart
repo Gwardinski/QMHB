@@ -27,7 +27,7 @@ class SummaryTile extends StatelessWidget {
         width: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(4)),
-          border: Border.all(color: Color(0xffFFA630)),
+          border: Border.all(color: Theme.of(context).accentColor),
         ),
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -55,7 +55,7 @@ class SummaryTile extends StatelessWidget {
                   Text(
                     line2Value.toString(),
                     style: TextStyle(
-                      color: Color(0xffFFA630),
+                      color: Theme.of(context).accentColor,
                     ),
                   ),
                   Text(line2),
@@ -67,7 +67,7 @@ class SummaryTile extends StatelessWidget {
                   Text(
                     line3Value.toString(),
                     style: TextStyle(
-                      color: Color(0xffFFA630),
+                      color: Theme.of(context).accentColor,
                     ),
                   ),
                   Text(line3),

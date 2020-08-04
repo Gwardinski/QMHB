@@ -39,7 +39,7 @@ class _FormDropdownState extends State<FormDropdown> {
                 child: Icon(Icons.arrow_downward),
               ),
               iconSize: 28,
-              style: TextStyle(color: Color(0xffFFA630), fontSize: 18),
+              style: TextStyle(color: Theme.of(context).accentColor, fontSize: 18),
               onChanged: (String newValue) {
                 setState(() {
                   dropdownValue = newValue;

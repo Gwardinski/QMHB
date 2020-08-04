@@ -39,7 +39,7 @@
 //                   child: Icon(
 //                     Icons.star,
 //                     size: 20,
-//                     color: index < rating ? Color(0xffFFA630) : Color(0xffFFFFF0),
+//                     color: index < rating ? Theme.of(context).accentColor : Color(0xffFFFFF0),
 //                   ),
 //                 );
 //               },

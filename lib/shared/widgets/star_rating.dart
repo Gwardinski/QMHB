@@ -22,7 +22,7 @@ class StarRatingRow extends StatelessWidget {
                 return Icon(
                   Icons.star,
                   size: 20,
-                  color: Color(0xffFFA630),
+                  color: Theme.of(context).accentColor,
                 );
               },
             ),
