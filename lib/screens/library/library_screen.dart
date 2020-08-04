@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/account/account_page.dart';
-import 'package:qmhb/screens/authentication/authentication_screen.dart';
 import 'package:qmhb/screens/library/recent_questions_row.dart';
 import 'package:qmhb/screens/library/recent_quizzes_row.dart';
 import 'package:qmhb/screens/library/recent_rounds_row.dart';
 import 'package:qmhb/screens/library/user_listener.dart';
-import 'package:qmhb/screens/settings/settings_page.dart';
+import 'package:qmhb/shared/widgets/account_page_button.dart';
+import 'package:qmhb/shared/widgets/large_signin_prompt.dart';
+import 'package:qmhb/shared/widgets/settings_page_button.dart';
 
 class LibraryScreen extends StatelessWidget {
   @override
@@ -20,55 +20,21 @@ class LibraryScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Library'),
           actions: <Widget>[
-            FlatButton(
-              child: Text(isAuthenticated ? user?.displayName ?? 'Account' : 'Sign In'),
-              onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => isAuthenticated ? AccountPage() : AuthenticationScreen(),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
-                  ),
-                );
-              },
-            ),
+            AccountPageButton(isAuthenticated: isAuthenticated, user: user),
+            SettingsPageButton(),
           ],
         ),
-        body: SingleChildScrollView(
-          child: isAuthenticated
-              ? Column(
+        body: isAuthenticated
+            ? SingleChildScrollView(
+                child: Column(
                   children: [
                     RecentQuizzesRow(),
                     RecentRoundsRow(),
                     RecentQuestionsRow(),
                   ],
-                )
-              : Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: MaterialButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => AuthenticationScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Create an account to start your own library of Quizzes, Rounds & Questions, and become the ultimate Quiz Master",
-                      ),
-                    ),
-                  ),
                 ),
-        ),
+              )
+            : LargeSignInPrompt(),
       ),
     );
   }

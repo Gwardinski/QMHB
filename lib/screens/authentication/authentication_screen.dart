@@ -17,26 +17,26 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(activeTab == 0 ? "Log in" : "Register"),
+          title: Text(activeTab == 0 ? "Sign In" : "Register"),
           bottom: TabBar(
             labelStyle: TextStyle(
-              color: Color(0xffFFA630),
+              color: Theme.of(context).accentColor,
             ),
-            labelColor: Color(0xffFFA630),
-            indicatorColor: Color(0xffFFA630),
+            labelColor: Theme.of(context).accentColor,
+            indicatorColor: Theme.of(context).accentColor,
             onTap: _setTab,
             tabs: [
-              Tab(text: 'Log In'),
-              Tab(text: 'Sign up'),
+              Tab(text: 'Sign In'),
+              Tab(text: 'Register'),
             ],
           ),
         ),
         body: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.fromLTRB(16, 32, 16, 32),
               child: Text(
-                (activeTab == 0 ? "Log in to view " : "Sign up to create ") +
+                (activeTab == 0 ? "Sign in to view " : "Create an account to begin creating ") +
                     "your library of Quizzes, Rounds and Questions",
                 style: TextStyle(
                   fontSize: 16,

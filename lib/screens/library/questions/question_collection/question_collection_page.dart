@@ -60,10 +60,10 @@ class QuestionCollectionPage extends StatelessWidget {
               children: <Widget>[
                 TabBar(
                   labelStyle: TextStyle(
-                    color: Color(0xffFFA630),
+                    color: Theme.of(context).accentColor,
                   ),
-                  labelColor: Color(0xffFFA630),
-                  indicatorColor: Color(0xffFFA630),
+                  labelColor: Theme.of(context).accentColor,
+                  indicatorColor: Theme.of(context).accentColor,
                   tabs: [
                     Tab(child: Text("Created")),
                     Tab(child: Text("Saved")),

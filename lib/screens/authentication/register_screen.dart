@@ -31,46 +31,49 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
     super.build(context);
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16.0, 4, 16.0, 16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                FormInput(
-                  validate: validateForm,
-                  labelText: "Display Name",
-                  onChanged: (String val) {
-                    setState(() {
-                      _displayName = val;
-                    });
-                  },
-                ),
-                FormInput(
-                  validate: validateEmail,
-                  labelText: "Email",
-                  onChanged: (String val) {
-                    setState(() {
-                      _email = val;
-                    });
-                  },
-                ),
-                FormInput(
-                  validate: validatePassword,
-                  labelText: "Password",
-                  obscureText: true,
-                  onChanged: (String val) {
-                    setState(() {
-                      _password = val;
-                    });
-                  },
-                ),
-                ButtonPrimary(
-                  child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
-                  onPressed: _onSubmit,
-                ),
-                FormError(error: _error),
-              ],
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 600),
+            padding: EdgeInsets.fromLTRB(16.0, 4, 16.0, 16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  FormInput(
+                    validate: validateForm,
+                    labelText: "Display Name",
+                    onChanged: (String val) {
+                      setState(() {
+                        _displayName = val;
+                      });
+                    },
+                  ),
+                  FormInput(
+                    validate: validateEmail,
+                    labelText: "Email",
+                    onChanged: (String val) {
+                      setState(() {
+                        _email = val;
+                      });
+                    },
+                  ),
+                  FormInput(
+                    validate: validatePassword,
+                    labelText: "Password",
+                    obscureText: true,
+                    onChanged: (String val) {
+                      setState(() {
+                        _password = val;
+                      });
+                    },
+                  ),
+                  ButtonPrimary(
+                    child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                    onPressed: _isLoading ? null : _onSubmit,
+                  ),
+                  FormError(error: _error),
+                ],
+              ),
             ),
           ),
         ),

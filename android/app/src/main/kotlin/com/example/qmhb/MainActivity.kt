@@ -1,4 +1,4 @@
-package com.example.qmhb
+package com.templetech.qmhb
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

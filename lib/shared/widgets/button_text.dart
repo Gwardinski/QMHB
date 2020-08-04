@@ -17,7 +17,7 @@ class ButtonText extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Color(0xffFFA630),
+          color: Theme.of(context).accentColor,
           decoration: TextDecoration.underline,
         ),
       ),

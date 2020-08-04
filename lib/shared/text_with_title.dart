@@ -32,7 +32,7 @@ class TextListItem extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 16,
-              color: highlighText ? Color(0xffFFA630) : Colors.white,
+              color: highlighText ? Theme.of(context).accentColor : Colors.white,
             ),
           ),
         ),

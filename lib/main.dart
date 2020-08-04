@@ -23,7 +23,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'QMHB Demo',
-        theme: ThemeData.dark(),
+        theme: ThemeData.dark().copyWith(
+          accentColor: Color(0xffFFA630),
+        ),
         home: HomeScreen(),
       ),
     );

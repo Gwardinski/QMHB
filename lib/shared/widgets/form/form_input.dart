@@ -40,16 +40,16 @@ class FormInput extends StatelessWidget {
           ),
           filled: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderRadius: BorderRadius.all(Radius.circular(4.0)),
             borderSide: BorderSide(
               width: 2.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderRadius: BorderRadius.all(Radius.circular(4.0)),
             borderSide: BorderSide(
               width: 2.0,
-              color: Color(0xffFFA630),
+              color: Theme.of(context).accentColor,
             ),
           ),
           errorStyle: TextStyle(
