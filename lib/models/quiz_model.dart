@@ -25,8 +25,29 @@ class QuizModel {
     this.isPublished,
   });
 
+  QuizModel.fromJSON(json) {
+    this.userId = json['userId'] ?? '';
+    this.title = json['title'] ?? '';
+    this.rating = json['rating'] ?? 0;
+    this.difficulty = json['difficulty'] ?? 0;
+    this.totalPoints = json['totalPoints'] ?? 0;
+    this.description = json['description'] ?? '';
+    this.isPublished = json['isPublished'] ?? false;
+    roundIds = List<String>();
+    if (json['roundIds'] != null) {
+      json['roundIds'].forEach((id) {
+        roundIds.add(id);
+      });
+    }
+    questionIds = List<String>();
+    if (json['questionIds'] != null) {
+      json['questionIds'].forEach((id) {
+        questionIds.add(id);
+      });
+    }
+  }
+
   QuizModel.fromFirebase(DocumentSnapshot document, String id) {
-    this.uid = id;
     this.userId = document.data['userId'] ?? '';
     this.title = document.data['title'] ?? '';
     this.rating = document.data['rating'] ?? 0;

@@ -23,6 +23,21 @@ class RoundModel {
     this.isPublished,
   });
 
+  RoundModel.fromJSON(json) {
+    this.userId = json['userId'] ?? '';
+    this.title = json['title'] ?? '';
+    this.description = json['description'] ?? '';
+    this.rating = json['rating'] ?? 0;
+    this.difficulty = json['difficulty'] ?? 0;
+    this.totalPoints = json['totalPoints'] ?? 0;
+    this.isPublished = json['isPublished'] ?? false;
+    questionIds = List<String>();
+    if (json['questionIds'] != null) {
+      json['questionIds'].forEach((id) {
+        questionIds.add(id);
+      });
+    }
+  }
   RoundModel.fromFirebase(DocumentSnapshot document, String id) {
     this.uid = id;
     this.userId = document.data['userId'] ?? '';

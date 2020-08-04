@@ -21,6 +21,16 @@ class QuestionModel {
     this.isPublished,
   });
 
+  QuestionModel.fromJSON(json) {
+    this.userId = json['userId'] ?? '';
+    this.question = json['question'] ?? '';
+    this.answer = json['answer'] ?? '';
+    this.category = json['category'] ?? '';
+    this.difficulty = json['difficulty'] ?? '';
+    this.points = json['points'] ?? 1;
+    this.isPublished = json['isPublished'] ?? false;
+  }
+
   QuestionModel.fromFirebase(DocumentSnapshot document, String id) {
     this.uid = id;
     this.userId = document.data['userId'] ?? '';
