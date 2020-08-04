@@ -2,28 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 
-enum NoQuizOrRoundWidgetType {
+enum NoCollectionType {
   QUIZ,
   ROUND,
 }
 
-class NoQuizOrRoundWidget extends StatelessWidget {
-  final NoQuizOrRoundWidgetType type;
+class NoCollection extends StatelessWidget {
+  final NoCollectionType type;
 
-  NoQuizOrRoundWidget({
+  NoCollection({
     @required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(maxHeight: 128),
       height: 128,
       margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => type == NoQuizOrRoundWidgetType.QUIZ
+              builder: (context) => type == NoCollectionType.QUIZ
                   ? QuizEditorPage(
                       type: QuizEditorPageType.ADD,
                     )
@@ -51,7 +52,7 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
     @required this.type,
   }) : super(key: key);
 
-  final NoQuizOrRoundWidgetType type;
+  final NoCollectionType type;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          type == NoQuizOrRoundWidgetType.QUIZ ? "Create New Quiz" : "Create New Round",
+          type == NoCollectionType.QUIZ ? "Create New Quiz" : "Create New Round",
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -79,7 +80,7 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
     @required this.type,
   }) : super(key: key);
 
-  final NoQuizOrRoundWidgetType type;
+  final NoCollectionType type;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +88,7 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
         child: Text(
-          type == NoQuizOrRoundWidgetType.QUIZ
+          type == NoCollectionType.QUIZ
               ? "Your library of Quizzes lives here. Tap here to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
               : "Your library of Rounds lives here. Tap here to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/highlights/no_question_widget.dart';
-import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
+import 'package:qmhb/shared/widgets/highlights/no_question.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
 
 class CreatedQuestionCollection extends StatelessWidget {
   CreatedQuestionCollection({
@@ -19,14 +19,14 @@ class CreatedQuestionCollection extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               QuestionModel questionModel = userQuestions[index];
-              return QuestionListItem(
+              return ListItemQuestion(
                 questionModel: questionModel,
               );
             },
           )
         : Padding(
             padding: EdgeInsets.only(top: 16.0),
-            child: NoQuestionWidget(),
+            child: NoQuestion(),
           );
   }
 }

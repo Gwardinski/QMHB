@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_collection/created_quizzes_collection.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_collection/saved_quizzes_collection.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/database.dart';
+import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_column.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_grid.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuizCollectionPage extends StatelessWidget {
@@ -77,8 +78,21 @@ class QuizCollectionPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        CreatedQuizzesCollection(userQuizzes: userQuizzes),
-                        SavedQuizzesCollection(savedQuizzes: savedQuizzes),
+                        userQuizzes.length > 0
+                            ? QuizCollection(quizzes: userQuizzes)
+                            : Padding(
+                                padding: EdgeInsets.only(top: 16),
+                                child: NoCollection(type: NoCollectionType.QUIZ),
+                              ),
+                        savedQuizzes.length > 0
+                            ? QuizCollection(quizzes: savedQuizzes)
+                            : Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Text(
+                                  "You haven't saved any quizzes yet. \n Head to the Explore tab to start searching",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -89,5 +103,20 @@ class QuizCollectionPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class QuizCollection extends StatelessWidget {
+  const QuizCollection({
+    @required this.quizzes,
+  });
+
+  final quizzes;
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery.of(context).size.width > 800
+        ? ListItemGrid(quizzes: quizzes)
+        : ListItemColumn(quizzes: quizzes);
   }
 }

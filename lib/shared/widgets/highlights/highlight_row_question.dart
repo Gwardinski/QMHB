@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
 
-class QuestionHighlightRow extends StatelessWidget {
+class HighlightRowQuestion extends StatelessWidget {
   final List<QuestionModel> questions;
-  const QuestionHighlightRow({
+  const HighlightRowQuestion({
     Key key,
     @required this.questions,
   }) : super(key: key);
@@ -19,7 +19,7 @@ class QuestionHighlightRow extends StatelessWidget {
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return QuestionListItem(
+          return ListItemQuestion(
             questionModel: questions[index],
           );
         },

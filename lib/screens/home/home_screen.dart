@@ -36,12 +36,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void autoSignIn() async {
-    UserModel userModel = await _authService.autoSignIn();
+    // UserModel userModel = await _authService.autoSignIn();
+    // if (userModel != null) {
+    //   final userDataStateModel = Provider.of<UserDataStateModel>(context);
+    //   userDataStateModel.updateCurrentUser(userModel);
+    //   final snackBar = SnackBar(content: Text('Signed In'));
+    //   globalKey.currentState.showSnackBar(snackBar);
+    // }
+    _authService.signInWithEmailAndPassword(
+      email: "g1@test.com",
+      password: "qqqqqqqqqq",
+    );
+    UserModel userModel = await _authService.signInWithEmailAndPassword(
+      email: "g1@test.com",
+      password: "qqqqqqqqqq",
+    );
     if (userModel != null) {
       final userDataStateModel = Provider.of<UserDataStateModel>(context);
       userDataStateModel.updateCurrentUser(userModel);
-      final snackBar = SnackBar(content: Text('Signed In'));
-      globalKey.currentState.showSnackBar(snackBar);
     }
   }
 

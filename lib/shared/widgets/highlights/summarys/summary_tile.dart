@@ -10,8 +10,7 @@ class SummaryTile extends StatelessWidget {
   final double line4Value;
   final Function onTap;
 
-  const SummaryTile({
-    Key key,
+  SummaryTile({
     @required this.line1,
     @required this.line2,
     @required this.line2Value,
@@ -20,7 +19,7 @@ class SummaryTile extends StatelessWidget {
     this.line4 = "line4",
     this.line4Value = 0,
     @required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

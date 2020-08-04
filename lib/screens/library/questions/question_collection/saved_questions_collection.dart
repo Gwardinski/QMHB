@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
 
 class SavedQuestionCollection extends StatelessWidget {
   SavedQuestionCollection({
@@ -18,7 +18,7 @@ class SavedQuestionCollection extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               QuestionModel questionModel = savedQuestions[index];
-              return QuestionListItem(
+              return ListItemQuestion(
                 questionModel: questionModel,
               );
             },

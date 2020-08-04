@@ -25,8 +25,8 @@ class SummaryRowHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 16),
+          FlatButton(
+            onPressed: primaryHeaderButtonFunction,
             child: Text(
               headerTitle,
               style: TextStyle(

@@ -5,7 +5,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
-import 'package:qmhb/shared/widgets/list_items/question_list_item.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundDetailsWidget extends StatelessWidget {
@@ -25,7 +25,7 @@ class RoundDetailsWidget extends StatelessWidget {
         TitleAndDetailsBlock(
           title: roundModel.title,
           description: roundModel.description,
-          item1Title: 'Total Points',
+          item1Title: 'Points',
           item1Text: roundModel.totalPoints.toString(),
         ),
         Divider(),
@@ -45,7 +45,7 @@ class RoundDetailsWidget extends StatelessWidget {
                 itemCount: questionSnapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   QuestionModel question = questionSnapshot.data[index];
-                  return QuestionListItem(questionModel: question);
+                  return ListItemQuestion(questionModel: question);
                 },
               );
             },

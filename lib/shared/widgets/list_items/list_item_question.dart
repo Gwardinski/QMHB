@@ -3,19 +3,19 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/screens/library/questions/question_details_page.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_page.dart';
 
-class QuestionListItem extends StatefulWidget {
+class ListItemQuestion extends StatefulWidget {
   final QuestionModel questionModel;
 
-  QuestionListItem({
+  ListItemQuestion({
     Key key,
     @required this.questionModel,
   }) : super(key: key);
 
   @override
-  _QuestionListItemState createState() => _QuestionListItemState();
+  _ListItemQuestionState createState() => _ListItemQuestionState();
 }
 
-class _QuestionListItemState extends State<QuestionListItem> {
+class _ListItemQuestionState extends State<ListItemQuestion> {
   bool revealAnswer = false;
   @override
   Widget build(BuildContext context) {
