@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/questions/question_details_page.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_page.dart';
 
@@ -19,9 +21,9 @@ class _ListItemQuestionState extends State<ListItemQuestion> {
   bool revealAnswer = false;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: GestureDetector(
+    return Container(
+      margin: EdgeInsets.only(bottom: 8),
+      child: InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -33,6 +35,7 @@ class _ListItemQuestionState extends State<ListItemQuestion> {
         },
         child: Container(
           decoration: BoxDecoration(
+            color: Theme.of(context).bottomAppBarColor,
             border: Border(
               bottom: BorderSide(
                 color: Theme.of(context).accentColor,
@@ -40,7 +43,7 @@ class _ListItemQuestionState extends State<ListItemQuestion> {
               ),
             ),
           ),
-          padding: EdgeInsets.fromLTRB(16, 8, 0, 8),
+          padding: EdgeInsets.fromLTRB(getIt<AppSize>().rSpacingMd, 8, 0, 8),
           child: Column(
             children: [
               Row(

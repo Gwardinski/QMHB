@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
-import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/database.dart';
-import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_column.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_grid.dart';
+import 'package:qmhb/shared/widgets/highlights/no_question.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question_column.dart';
+import 'package:qmhb/shared/widgets/list_items/list_item_question_grid.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class RoundCollectionPage extends StatelessWidget {
+class QuestionCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -20,7 +20,7 @@ class RoundCollectionPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text("Your Rounds"),
+          title: Text("Your Questions"),
           actions: <Widget>[
             FlatButton.icon(
               icon: Icon(Icons.add),
@@ -28,8 +28,8 @@ class RoundCollectionPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => RoundEditorPage(
-                      type: RoundEditorPageType.ADD,
+                    builder: (context) => QuestionEditorPage(
+                      type: QuestionEditorPageType.ADD,
                     ),
                   ),
                 );
@@ -38,7 +38,7 @@ class RoundCollectionPage extends StatelessWidget {
           ],
         ),
         body: FutureBuilder(
-          future: DatabaseService().getRoundsByIds(user.roundIds),
+          future: DatabaseService().getQuestionsByIds(user.questionIds),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -50,14 +50,14 @@ class RoundCollectionPage extends StatelessWidget {
                 child: Text("Could not load content"),
               );
             }
-            final userRounds = snapshot.data
+            final userQuestions = snapshot.data
                 .where(
-                  (RoundModel rd) => rd.userId == user.uid,
+                  (QuestionModel qs) => qs.userId == user.uid,
                 )
                 .toList();
-            final savedRounds = snapshot.data
+            final savedQuestions = snapshot.data
                 .where(
-                  (RoundModel rd) => rd.userId != user.uid,
+                  (QuestionModel qs) => qs.userId != user.uid,
                 )
                 .toList();
             return Center(
@@ -80,23 +80,23 @@ class RoundCollectionPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        userRounds.length > 0
-                            ? RoundCollection(rounds: userRounds)
+                        userQuestions.length > 0
+                            ? QuestionCollection(questions: userQuestions)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    NoCollection(type: NoCollectionType.ROUND),
+                                    NoQuestion(),
                                   ],
                                 ),
                               ),
-                        savedRounds.length > 0
-                            ? RoundCollection(rounds: savedRounds)
+                        savedQuestions.length > 0
+                            ? QuestionCollection(questions: savedQuestions)
                             : Padding(
                                 padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(
-                                  "You haven't saved any rounds yet. \n Head to the Explore tab to start searching",
+                                  "You haven't saved any Questions yet. \n Head to the Explore tab to start searching",
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -113,17 +113,17 @@ class RoundCollectionPage extends StatelessWidget {
   }
 }
 
-class RoundCollection extends StatelessWidget {
-  const RoundCollection({
-    @required this.rounds,
+class QuestionCollection extends StatelessWidget {
+  const QuestionCollection({
+    @required this.questions,
   });
 
-  final rounds;
+  final questions;
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800
-        ? ListItemGrid(rounds: rounds)
-        : ListItemColumn(rounds: rounds);
+        ? ListItemQuestionGrid(questions: questions)
+        : ListItemQuestionColumn(questions: questions);
   }
 }

@@ -54,7 +54,7 @@ class QuizListItemGrid extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text("Create New"),
+                text: "Create New",
               ),
             ),
           ],
@@ -103,7 +103,7 @@ class RoundListItemGrid extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text("Create New"),
+                text: "Create New",
               ),
             ),
           ],

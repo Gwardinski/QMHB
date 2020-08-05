@@ -29,7 +29,11 @@ class RecentRoundsRow extends StatelessWidget {
           },
         ),
         (rounds == null || rounds.length == 0)
-            ? NoCollection(type: NoCollectionType.ROUND)
+            ? Row(
+                children: [
+                  Expanded(child: NoCollection(type: NoCollectionType.ROUND)),
+                ],
+              )
             : HighlightRow(
                 rounds: rounds,
               ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class ButtonPrimary extends StatelessWidget {
-  final child;
+  final text;
   final onPressed;
+  final isLoading;
 
   const ButtonPrimary({
     Key key,
-    @required this.child,
+    @required this.text,
     @required this.onPressed,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -17,8 +20,8 @@ class ButtonPrimary extends StatelessWidget {
       width: 128,
       child: RaisedButton(
         color: Color(0xff333333),
-        onPressed: onPressed,
-        child: child,
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading ? LoadingSpinnerHourGlass() : Text(text),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(4.0)),
           side: BorderSide(width: 1.0, color: Theme.of(context).accentColor),

@@ -11,7 +11,6 @@ import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 enum QuizEditorPageType {
   ADD,
@@ -93,8 +92,15 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
                             });
                           },
                         ),
+                        Row(
+                          children: [
+                            Text("Rounds"),
+                            ButtonPrimary(text: "Create Round", onPressed: null),
+                          ],
+                        ),
                         ButtonPrimary(
-                          child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                          text: "Submit",
+                          isLoading: _isLoading,
                           onPressed:
                               widget.type == QuizEditorPageType.ADD ? _createQuiz : _editQuiz,
                         ),

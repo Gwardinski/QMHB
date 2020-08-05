@@ -29,7 +29,11 @@ class RecentQuizzesRow extends StatelessWidget {
           },
         ),
         (quizzes == null || quizzes.length == 0)
-            ? NoCollection(type: NoCollectionType.QUIZ)
+            ? Row(
+                children: [
+                  Expanded(child: NoCollection(type: NoCollectionType.QUIZ)),
+                ],
+              )
             : HighlightRow(
                 quizzes: quizzes,
               ),

@@ -9,7 +9,6 @@ import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 enum RoundEditorPageType {
   ADD,
@@ -82,7 +81,8 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
                   },
                 ),
                 ButtonPrimary(
-                  child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                  text: "Submit",
+                  isLoading: _isLoading,
                   onPressed: widget.type == RoundEditorPageType.ADD ? _createRound : _editRound,
                 ),
                 FormError(error: _error),

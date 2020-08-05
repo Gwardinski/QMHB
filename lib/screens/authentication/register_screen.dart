@@ -7,7 +7,6 @@ import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -68,7 +67,8 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
                     },
                   ),
                   ButtonPrimary(
-                    child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                    isLoading: _isLoading,
+                    text: "Submit",
                     onPressed: _isLoading ? null : _onSubmit,
                   ),
                   FormError(error: _error),

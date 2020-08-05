@@ -86,7 +86,12 @@ class QuizCollectionPage extends StatelessWidget {
                             ? QuizCollection(quizzes: userQuizzes)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
-                                child: NoCollection(type: NoCollectionType.QUIZ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    NoCollection(type: NoCollectionType.QUIZ),
+                                  ],
+                                ),
                               ),
                         savedQuizzes.length > 0
                             ? QuizCollection(quizzes: savedQuizzes)

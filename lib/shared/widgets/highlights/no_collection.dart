@@ -40,12 +40,16 @@ class NoCollection extends StatelessWidget {
             ),
           );
         },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CreateNewQuizOrRoundTile(type: type),
-            CreateNewRoundOrQuizSummary(type: type),
-          ],
+        child: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CreateNewQuizOrRoundTile(type: type),
+              Expanded(
+                child: CreateNewRoundOrQuizSummary(type: type),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -90,14 +94,13 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
-        child: Text(
-          type == NoCollectionType.QUIZ
-              ? "Your library of Quizzes lives here. Tap here to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
-              : "Your library of Rounds lives here. Tap here to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
-        ),
+    return Container(
+      height: 128,
+      padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
+      child: Text(
+        type == NoCollectionType.QUIZ
+            ? "Your library of Quizzes lives here. Tap here to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
+            : "Your library of Rounds lives here. Tap here to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
       ),
     );
   }

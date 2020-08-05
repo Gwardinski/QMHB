@@ -11,7 +11,6 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_dropdown.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 enum QuestionEditorPageType {
   ADD,
@@ -121,7 +120,8 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
                   },
                 ),
                 ButtonPrimary(
-                  child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                  text: "Submit",
+                  isLoading: _isLoading,
                   onPressed:
                       widget.type == QuestionEditorPageType.ADD ? _createQuestion : _editQuestion,
                 ),
