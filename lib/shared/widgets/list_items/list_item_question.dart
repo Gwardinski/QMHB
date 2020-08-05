@@ -22,7 +22,6 @@ class _ListItemQuestionState extends State<ListItemQuestion> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(

@@ -26,7 +26,7 @@ class _FormDropdownState extends State<FormDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      height: 80,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

@@ -25,7 +25,7 @@ class ListItemQuestionGrid extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => QuestionEditorPage(
-                        type: QuestionEditorPageType.ADD,
+                        type: QuestionEditorType.ADD,
                       ),
                     ),
                   );
@@ -39,7 +39,7 @@ class ListItemQuestionGrid extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(32),
             child: ResponsiveGridList(
-                desiredItemWidth: 400,
+                desiredItemWidth: 600,
                 minSpacing: 16,
                 children: questions.map((QuestionModel questionModel) {
                   return ListItemQuestion(

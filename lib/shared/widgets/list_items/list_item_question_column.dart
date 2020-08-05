@@ -11,7 +11,12 @@ class ListItemQuestionColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 8),
+        );
+      },
       itemCount: questions.length ?? 0,
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {

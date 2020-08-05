@@ -50,7 +50,7 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
               final question = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => QuestionEditorPage(
-                    type: QuestionEditorPageType.EDIT,
+                    type: QuestionEditorType.EDIT,
                     questionModel: questionModel,
                   ),
                 ),

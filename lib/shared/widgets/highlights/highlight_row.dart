@@ -108,13 +108,9 @@ class RoundHighlightRow extends StatelessWidget {
         ),
         itemBuilder: (BuildContext context, int index) {
           EdgeInsets padding = index == 0
-              ? EdgeInsets.only(
-                  left: getIt<AppSize>().spacingMd,
-                )
+              ? EdgeInsets.only(left: getIt<AppSize>().rSpacingMd)
               : index == (rounds.length - 1)
-                  ? EdgeInsets.only(
-                      right: getIt<AppSize>().spacingMd,
-                    )
+                  ? EdgeInsets.only(right: getIt<AppSize>().rSpacingMd)
                   : EdgeInsets.all(0);
           RoundModel roundModel = rounds[index];
           return Padding(

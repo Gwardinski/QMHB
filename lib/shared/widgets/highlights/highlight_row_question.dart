@@ -14,7 +14,12 @@ class HighlightRowQuestion extends StatelessWidget {
     final height = questions == null ? 0 : questions.length * 112;
     return Container(
       height: (height).toDouble(),
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 8),
+          );
+        },
         itemCount: questions?.length ?? 0,
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),

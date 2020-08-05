@@ -29,7 +29,7 @@ class QuestionCollectionPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => QuestionEditorPage(
-                      type: QuestionEditorPageType.ADD,
+                      type: QuestionEditorType.ADD,
                     ),
                   ),
                 );
