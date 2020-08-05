@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
@@ -27,14 +29,14 @@ class AccountPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextListItem(
               title: "Name",
-              text: user.displayName,
+              text: user.displayName ?? '',
             ),
             TextListItem(
               title: "Email",

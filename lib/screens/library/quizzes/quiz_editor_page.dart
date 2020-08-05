@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -34,6 +38,8 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   String _error = '';
   String _title = '';
   String _description = '';
+  List<RoundModel> _rounds;
+  List<QuestionModel> _questions;
 
   @override
   void initState() {
@@ -51,42 +57,55 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
         elevation: 0,
         title: Text(widget.type == QuizEditorPageType.ADD ? "Create Quiz" : "Edit Quiz"),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                FormInput(
-                  initialValue: _title,
-                  validate: validateForm,
-                  labelText: "Title",
-                  onChanged: (val) {
-                    setState(() {
-                      _title = val;
-                    });
-                  },
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.width > 800 ? 64 : 8),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 800),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        FormInput(
+                          initialValue: _title,
+                          validate: validateForm,
+                          labelText: "Title",
+                          onChanged: (val) {
+                            setState(() {
+                              _title = val;
+                            });
+                          },
+                        ),
+                        FormInput(
+                          initialValue: _description,
+                          validate: validateForm,
+                          keyboardType: TextInputType.multiline,
+                          labelText: "Description",
+                          onChanged: (val) {
+                            setState(() {
+                              _description = val;
+                            });
+                          },
+                        ),
+                        ButtonPrimary(
+                          child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
+                          onPressed:
+                              widget.type == QuizEditorPageType.ADD ? _createQuiz : _editQuiz,
+                        ),
+                        FormError(error: _error),
+                      ],
+                    ),
+                  ),
                 ),
-                FormInput(
-                  initialValue: _description,
-                  validate: validateForm,
-                  keyboardType: TextInputType.multiline,
-                  labelText: "Description",
-                  onChanged: (val) {
-                    setState(() {
-                      _description = val;
-                    });
-                  },
-                ),
-                ButtonPrimary(
-                  child: _isLoading ? LoadingSpinnerHourGlass() : Text("Submit"),
-                  onPressed: widget.type == QuizEditorPageType.ADD ? _createQuiz : _editQuiz,
-                ),
-                FormError(error: _error),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

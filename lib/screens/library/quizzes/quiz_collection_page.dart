@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/database.dart';
@@ -19,21 +21,23 @@ class QuizCollectionPage extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           title: Text("Your Quizzes"),
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.add),
-              label: Text('New'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuizEditorPage(
-                      type: QuizEditorPageType.ADD,
-                    ),
+          actions: MediaQuery.of(context).size.width > 800
+              ? []
+              : [
+                  FlatButton.icon(
+                    icon: Icon(Icons.add),
+                    label: Text('New'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QuizEditorPage(
+                            type: QuizEditorPageType.ADD,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ],
+                ],
         ),
         body: FutureBuilder(
           future: DatabaseService().getQuizzesByIds(user.quizIds),
@@ -87,7 +91,7 @@ class QuizCollectionPage extends StatelessWidget {
                         savedQuizzes.length > 0
                             ? QuizCollection(quizzes: savedQuizzes)
                             : Padding(
-                                padding: EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(
                                   "You haven't saved any quizzes yet. \n Head to the Explore tab to start searching",
                                   textAlign: TextAlign.center,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -44,7 +46,13 @@ class QuizListItemGrid extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(52, 32, 0, 0),
               child: ButtonPrimary(
                 onPressed: () {
-                  print("Create New");
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => QuizEditorPage(
+                        type: QuizEditorPageType.ADD,
+                      ),
+                    ),
+                  );
                 },
                 child: Text("Create New"),
               ),
@@ -79,16 +87,41 @@ class RoundListItemGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(32),
-      child: ResponsiveGridList(
-          desiredItemWidth: 400,
-          minSpacing: 16,
-          children: rounds.map((RoundModel roundModel) {
-            return ListItem(
-              roundModel: roundModel,
-            );
-          }).toList()),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(52, 32, 0, 0),
+              child: ButtonPrimary(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RoundEditorPage(
+                        type: RoundEditorPageType.ADD,
+                      ),
+                    ),
+                  );
+                },
+                child: Text("Create New"),
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.all(32),
+            child: ResponsiveGridList(
+                desiredItemWidth: 400,
+                minSpacing: 16,
+                children: rounds.map((RoundModel roundModel) {
+                  return ListItem(
+                    roundModel: roundModel,
+                  );
+                }).toList()),
+          ),
+        ),
+      ],
     );
   }
 }

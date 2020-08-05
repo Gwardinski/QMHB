@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -53,7 +55,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
           child: Form(
             key: _formKey,
             child: Column(

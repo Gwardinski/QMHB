@@ -20,31 +20,27 @@ class SummaryRowHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 44,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          FlatButton(
-            onPressed: primaryHeaderButtonFunction,
-            child: Text(
-              headerTitle,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          ButtonText(
+            text: headerTitle,
+            onTap: primaryHeaderButtonFunction,
+            type: ButtonTextType.PRIMARY,
           ),
           Row(
             children: [
               ButtonText(
                 text: primaryHeaderButtonText,
                 onTap: primaryHeaderButtonFunction,
+                type: ButtonTextType.SECONDARY,
               ),
               (secondaryHeaderButtonText != null && secondaryHeaderButtonFunction != null)
                   ? ButtonText(
                       text: secondaryHeaderButtonText,
                       onTap: secondaryHeaderButtonFunction,
+                      type: ButtonTextType.SECONDARY,
                     )
                   : Container()
             ],

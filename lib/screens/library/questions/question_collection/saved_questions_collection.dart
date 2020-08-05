@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
 
 class SavedQuestionCollection extends StatelessWidget {
@@ -24,7 +26,7 @@ class SavedQuestionCollection extends StatelessWidget {
             },
           )
         : Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
             child: Text(
               "You haven't saved any questions yet. \n Head to the Explore tab to start searching",
               textAlign: TextAlign.center,

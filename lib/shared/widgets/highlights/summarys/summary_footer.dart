@@ -1,4 +1,6 @@
+import 'package:qmhb/get_it.dart';
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 
 class SummaryRowFooter extends StatelessWidget {
   const SummaryRowFooter({
@@ -8,7 +10,7 @@ class SummaryRowFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: getIt<AppSize>().rSpacingSm),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(

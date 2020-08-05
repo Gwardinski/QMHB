@@ -19,8 +19,7 @@ class DatabaseService {
   // stream user changes - called on base widget UserListener
   Stream<UserModel> getUserStream(id) {
     return _usersCollection.document(id).snapshots().map((user) {
-      final test = UserModel.fromFirebase(user.data);
-      return test;
+      return UserModel.fromFirebase(user.data);
     });
   }
 

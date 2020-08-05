@@ -49,6 +49,14 @@ class AuthenticationService {
       DocumentSnapshot firebaseData = await _databaseService.getUserFromUsersCollectionUsingUID(
         fbUser.uid,
       );
+      if (firebaseData.data == null) {
+        UserModel newUser = UserModel.registerNewUser(
+          email: email,
+          displayName: null,
+          uid: fbUser.uid,
+        );
+        _databaseService.updateUserDataOnFirebase(newUser);
+      }
       return UserModel.fromFirebase(firebaseData);
     } catch (e) {
       print(e.toString());

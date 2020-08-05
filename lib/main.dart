@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/home/home_screen.dart';
 import 'package:qmhb/services/database.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  getIt.registerSingleton<AppSize>(AppSize());
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

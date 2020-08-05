@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/database.dart';
@@ -87,7 +89,7 @@ class RoundCollectionPage extends StatelessWidget {
                         savedRounds.length > 0
                             ? RoundCollection(rounds: savedRounds)
                             : Padding(
-                                padding: EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(
                                   "You haven't saved any rounds yet. \n Head to the Explore tab to start searching",
                                   textAlign: TextAlign.center,

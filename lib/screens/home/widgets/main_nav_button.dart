@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/get_it.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 
 class MainNavigationButton extends StatelessWidget {
   final String title;
@@ -30,7 +32,7 @@ class MainNavigationButton extends StatelessWidget {
               color:
                   isSelected ? Theme.of(context).accentColor : Theme.of(context).selectedRowColor,
             ),
-            Padding(padding: EdgeInsets.only(left: 16)),
+            Padding(padding: EdgeInsets.all(getIt<AppSize>().spacingMd)),
             Text(
               title,
               style: TextStyle(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/get_it.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 
@@ -17,9 +19,13 @@ class NoCollection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 128),
       height: 128,
-      margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+      margin: EdgeInsets.fromLTRB(
+        getIt<AppSize>().rSpacingMd,
+        getIt<AppSize>().rSpacingXs,
+        getIt<AppSize>().rSpacingMd,
+        getIt<AppSize>().rSpacingSm,
+      ),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
