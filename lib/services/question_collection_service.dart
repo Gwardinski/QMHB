@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/user_model.dart';
 
-class DatabaseService {
+class QuestionCollectionService {
   // DB collections
   final CollectionReference _questionsCollection = Firestore.instance.collection('questions');
 
@@ -22,41 +21,35 @@ class DatabaseService {
     return questions;
   }
 
-  // Questions
-
-  addQuestionToFirebase(QuestionModel questionModel, UserModel userModel) async {
-    DocumentReference doc = await _addQuestionToFirebaseCollection(questionModel, userModel.uid);
-    userModel.questionIds.add(doc.documentID);
-    // await updateUserDataOnFirebase(userModel);
-  }
-
-  Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String uid) async {
+  Future<DocumentReference> addQuestionToFirebaseCollection(
+    QuestionModel questionModel,
+    String uid,
+  ) async {
+    final serverTimestamp = FieldValue.serverTimestamp();
     return await _questionsCollection.add({
+      "uid": uid,
       "question": questionModel.question,
       "answer": questionModel.answer,
       "category": questionModel.category,
       "difficulty": questionModel.difficulty,
       "points": questionModel.points,
       "isPublished": false,
-      "uid": uid,
+      "createdAt": serverTimestamp,
+      "lastUpdated": serverTimestamp,
     });
   }
 
-  editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
-    await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
-    // await updateUserDataOnFirebase(userModel);
-  }
-
-  Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String uid) async {
-    // TODO - wrong ID here!
-    // return await _questionsCollection.document(questionModel.uid).setData({
-    //   "question": questionModel.question,
-    //   "answer": questionModel.answer,
-    //   "category": questionModel.category,
-    //   "difficulty": questionModel.difficulty,
-    //   "points": questionModel.points,
-    //   "isPublished": questionModel.isPublished,
-    //   "uid": uid,
-    // });
+  Future<void> editQuestionOnFirebaseCollection(
+    QuestionModel questionModel,
+  ) async {
+    final serverTimestamp = FieldValue.serverTimestamp();
+    return await _questionsCollection.document(questionModel.id).setData({
+      "question": questionModel.question,
+      "answer": questionModel.answer,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+      "lastUpdated": serverTimestamp,
+    });
   }
 }

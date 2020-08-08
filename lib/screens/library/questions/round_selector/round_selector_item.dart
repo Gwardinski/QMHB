@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 
 class RoundSelectorItem extends StatefulWidget {
   final RoundModel roundModel;
@@ -50,7 +51,8 @@ class _RoundSelectorItemState extends State<RoundSelectorItem> {
       setState(() {
         isLoading = true;
       });
-      DatabaseService databaseService = Provider.of<DatabaseService>(context);
+      RoundCollectionService roundService = Provider.of<RoundCollectionService>(context);
+      UserCollectionService userService = Provider.of<UserCollectionService>(context);
       UserModel userModel = Provider.of<UserDataStateModel>(context).user;
       if (_roundContainsQuestion(roundModel)) {
         roundModel.questionIds.remove(widget.questionId);
@@ -59,7 +61,8 @@ class _RoundSelectorItemState extends State<RoundSelectorItem> {
         roundModel.questionIds.add(widget.questionId);
         roundModel.totalPoints += widget.questionPoints;
       }
-      await databaseService.editRoundOnFirebase(roundModel, userModel);
+      await roundService.editRoundOnFirebaseCollection(roundModel);
+      await userService.updateUserTimeStamp(userModel.uid);
     } catch (e) {
       print(e.toString());
     } finally {

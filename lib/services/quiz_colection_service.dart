@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/models/user_model.dart';
 
 class QuizCollectionService {
-  // DB collection
   final CollectionReference _quizzesCollection = Firestore.instance.collection('quizzes');
 
   // TODO handle this in single request
@@ -21,38 +19,27 @@ class QuizCollectionService {
     return quizzes;
   }
 
-  // Quizzes
-
-  addQuizToFirebase(QuizModel quizModel, UserModel userModel) async {
-    DocumentReference doc = await _addQuizToFirebaseCollection(quizModel, userModel.uid);
-    userModel.quizIds.add(doc.documentID);
-    // await updateUserDataOnFirebase(userModel);
-  }
-
-  Future _addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
+  Future addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
+    final serverTimestamp = FieldValue.serverTimestamp();
     return await _quizzesCollection.add({
+      "uid": uid,
       "title": quizModel.title,
       "description": quizModel.description,
       "roundIds": quizModel.roundIds,
       "isPublished": false,
-      "uid": uid,
+      "createdAt": serverTimestamp,
+      "lastUpdated": serverTimestamp,
     });
   }
 
-  editQuizOnFirebase(QuizModel quizModel, UserModel userModel) async {
-    await _editQuizOnFirebaseCollection(quizModel, userModel.uid);
-    // await updateUserDataOnFirebase(userModel);
-  }
-
-  Future<void> _editQuizOnFirebaseCollection(QuizModel quizModel, String uid) async {
-    // TODO - wrong ID here!
-    // return await _quizzesCollection.document(quizModel.uid).setData({
-    //   "title": quizModel.title,
-    //   "description": quizModel.description,
-    //   "roundIds": quizModel.roundIds,
-    //   "totalPoints": quizModel.totalPoints,
-    //   "isPublished": false,
-    //   "uid": uid,
-    // });
+  Future<void> editQuizOnFirebaseCollection(QuizModel quizModel) async {
+    final serverTimestamp = FieldValue.serverTimestamp();
+    return await _quizzesCollection.document(quizModel.id).setData({
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "roundIds": quizModel.roundIds,
+      "totalPoints": quizModel.totalPoints,
+      "lastUpdated": serverTimestamp,
+    });
   }
 }

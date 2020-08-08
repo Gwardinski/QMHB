@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/widgets/question_editor.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 
 enum QuestionEditorType {
   ADD,
@@ -35,10 +37,16 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
 
   _createQuestion(QuestionModel questionModel) async {
     _updateIsLoading(true);
-    final databaseService = Provider.of<DatabaseService>(context);
-    final user = Provider.of<UserDataStateModel>(context).user;
+    final questionService = Provider.of<QuestionCollectionService>(context);
+    final userService = Provider.of<UserCollectionService>(context);
+    final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
-      await databaseService.addQuestionToFirebase(questionModel, user);
+      DocumentReference doc = await questionService.addQuestionToFirebaseCollection(
+        questionModel,
+        userModel.uid,
+      );
+      userModel.questionIds.add(doc.documentID);
+      await userService.updateUserDataOnFirebase(userModel);
       Navigator.of(context).pop();
     } catch (e) {
       _updateError('Failed to add Question');
@@ -47,15 +55,18 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
     }
   }
 
-  _editQuestion(QuestionModel newQuestionModel) async {
+  _editQuestion(QuestionModel questionModel) async {
     _updateIsLoading(true);
-    final databaseService = Provider.of<DatabaseService>(context);
-    final user = Provider.of<UserDataStateModel>(context).user;
+    final questionService = Provider.of<QuestionCollectionService>(context);
+    final userService = Provider.of<UserCollectionService>(context);
+    final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
-      await databaseService.editQuestionOnFirebase(newQuestionModel, user);
+      await questionService.editQuestionOnFirebaseCollection(
+        questionModel,
+      );
+      await userService.updateUserTimeStamp(userModel.uid);
       Navigator.of(context).pop();
     } catch (e) {
-      print(e);
       _updateError('Failed to edit Question');
     } finally {
       _updateIsLoading(false);

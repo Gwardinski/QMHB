@@ -5,7 +5,10 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/services/quiz_colection_service.dart';
+import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 
 class UserListener extends StatefulWidget {
   final child;
@@ -25,8 +28,9 @@ class _UserListenerState extends State<UserListener> {
   Widget build(BuildContext context) {
     _userDataStateModel = Provider.of<UserDataStateModel>(context);
     UserModel currentUserModel = _userDataStateModel.user;
+    // Todo - use singleton here ?
     return StreamBuilder(
-      stream: DatabaseService().getUserStream(currentUserModel?.uid),
+      stream: UserCollectionService().getUserStream(currentUserModel?.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           UserModel newUserModel = snapshot.data;
@@ -51,15 +55,17 @@ class _UserListenerState extends State<UserListener> {
 
   _updateRecentActivity({UserModel newUserModel, UserModel currentUserModel}) async {
     print("_updateRecentActivity");
-    final databaseService = Provider.of<DatabaseService>(context);
+    final questionService = Provider.of<QuestionCollectionService>(context);
+    final roundService = Provider.of<RoundCollectionService>(context);
+    final quizService = Provider.of<QuizCollectionService>(context);
     final recentActivity = Provider.of<RecentActivityStateModel>(context);
     List<QuizModel> recentQuizzes;
     List<RoundModel> recentRounds;
     List<QuestionModel> recentQuestions;
     // TODO - remove all these and just do a normal request filtered by FirebaseServerTime
-    recentQuizzes = await databaseService.getQuizzesByIds(newUserModel.quizIds);
-    recentRounds = await databaseService.getRoundsByIds(newUserModel.roundIds);
-    recentQuestions = await databaseService.getQuestionsByIds(newUserModel.questionIds);
+    recentQuizzes = await quizService.getQuizzesByIds(newUserModel.quizIds);
+    recentRounds = await roundService.getRoundsByIds(newUserModel.roundIds);
+    recentQuestions = await questionService.getQuestionsByIds(newUserModel.questionIds);
 
     recentActivity.updateRecentActivity(
       quizzes: recentQuizzes,

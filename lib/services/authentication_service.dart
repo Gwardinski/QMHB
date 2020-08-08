@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DatabaseService _databaseService = DatabaseService();
+  final UserCollectionService _userService = UserCollectionService();
 
   Future<UserModel> autoSignIn() async {
     try {
       FirebaseUser fbUser = await _auth.currentUser();
-      DocumentSnapshot firebaseData = await _databaseService.getUserFromUsersCollectionUsingUID(
+      DocumentSnapshot firebaseData = await _userService.getUserFromUsersCollectionUsingUID(
         fbUser.uid,
       );
       return UserModel.fromFirebase(firebaseData);
@@ -32,7 +32,7 @@ class AuthenticationService {
         displayName: displayName,
         uid: fbUser.uid,
       );
-      _databaseService.updateUserDataOnFirebase(newUser);
+      _userService.updateUserDataOnFirebase(newUser);
       return newUser;
     } catch (e) {
       print(e.toString());
@@ -46,7 +46,7 @@ class AuthenticationService {
   }) async {
     try {
       FirebaseUser fbUser = await _firebaseGetUserFromEmailAndPassword(email, password);
-      DocumentSnapshot firebaseData = await _databaseService.getUserFromUsersCollectionUsingUID(
+      DocumentSnapshot firebaseData = await _userService.getUserFromUsersCollectionUsingUID(
         fbUser.uid,
       );
       if (firebaseData.data == null) {
@@ -55,7 +55,7 @@ class AuthenticationService {
           displayName: null,
           uid: fbUser.uid,
         );
-        _databaseService.updateUserDataOnFirebase(newUser);
+        _userService.updateUserDataOnFirebase(newUser);
       }
       return UserModel.fromFirebase(firebaseData);
     } catch (e) {

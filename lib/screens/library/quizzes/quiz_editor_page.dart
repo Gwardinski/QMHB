@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
@@ -6,7 +7,8 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/quiz_colection_service.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
@@ -132,8 +134,9 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   _createQuiz() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
-      final databaseService = Provider.of<DatabaseService>(context);
-      final user = Provider.of<UserDataStateModel>(context).user;
+      final quizService = Provider.of<QuizCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
       List<String> roundIds = List<String>();
       if (widget.initialRoundId != null) {
         roundIds.add(widget.initialRoundId);
@@ -145,7 +148,12 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
         isPublished: false,
       );
       try {
-        await databaseService.addQuizToFirebase(quizModel, user);
+        DocumentReference doc = await quizService.addQuizToFirebaseCollection(
+          quizModel,
+          userModel.uid,
+        );
+        userModel.questionIds.add(doc.documentID);
+        await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to add Quiz');
@@ -158,14 +166,18 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   _editQuiz() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
-      final databaseService = Provider.of<DatabaseService>(context);
-      final user = Provider.of<UserDataStateModel>(context).user;
-      QuizModel newQuizModel = widget.quizModel;
-      newQuizModel.title = _title;
-      newQuizModel.description = _description;
+      final quizService = Provider.of<QuizCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
+      QuizModel quizModel = widget.quizModel;
+      quizModel.title = _title;
+      quizModel.description = _description;
       try {
-        await databaseService.editQuizOnFirebase(newQuizModel, user);
-        Navigator.of(context).pop(newQuizModel);
+        await quizService.editQuizOnFirebaseCollection(
+          quizModel,
+        );
+        await userService.updateUserTimeStamp(userModel.uid);
+        Navigator.of(context).pop();
       } catch (e) {
         print(e);
         _updateError('Failed to edit Quiz');

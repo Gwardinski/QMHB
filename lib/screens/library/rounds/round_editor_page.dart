@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
@@ -109,8 +111,9 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   _createRound() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
-      final databaseService = Provider.of<DatabaseService>(context);
-      final user = Provider.of<UserDataStateModel>(context).user;
+      final roundService = Provider.of<RoundCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
       List<String> questionIds = List<String>();
       if (widget.initialQuestionId != null) {
         questionIds.add(widget.initialQuestionId);
@@ -122,7 +125,12 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
         isPublished: false,
       );
       try {
-        await databaseService.addRoundToFirebase(roundModel, user);
+        DocumentReference doc = await roundService.addRoundToFirebaseCollection(
+          roundModel,
+          userModel.uid,
+        );
+        userModel.questionIds.add(doc.documentID);
+        await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to add Round');
@@ -135,14 +143,18 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   _editRound() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
-      final databaseService = Provider.of<DatabaseService>(context);
-      final user = Provider.of<UserDataStateModel>(context).user;
-      RoundModel newRoundModel = widget.roundModel;
-      newRoundModel.title = _title;
-      newRoundModel.description = _description;
+      final roundService = Provider.of<RoundCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
+      RoundModel roundModel = widget.roundModel;
+      roundModel.title = _title;
+      roundModel.description = _description;
       try {
-        await databaseService.editRoundOnFirebase(newRoundModel, user);
-        Navigator.of(context).pop(newRoundModel);
+        await roundService.editRoundOnFirebaseCollection(
+          roundModel,
+        );
+        await userService.updateUserTimeStamp(userModel.uid);
+        Navigator.of(context).pop();
       } catch (e) {
         print(e);
         _updateError('Failed to edit Round');
