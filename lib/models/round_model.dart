@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RoundModel {
   String uid;
-  String userId;
   String title;
   String description;
   int rating;
@@ -13,7 +12,6 @@ class RoundModel {
 
   RoundModel({
     this.uid,
-    this.userId,
     this.title,
     this.description,
     this.questionIds,
@@ -24,7 +22,6 @@ class RoundModel {
   });
 
   RoundModel.fromJSON(json) {
-    this.userId = json['userId'] ?? '';
     this.title = json['title'] ?? '';
     this.description = json['description'] ?? '';
     this.rating = json['rating'] ?? 0;
@@ -40,7 +37,6 @@ class RoundModel {
   }
   RoundModel.fromFirebase(DocumentSnapshot document, String id) {
     this.uid = id;
-    this.userId = document.data['userId'] ?? '';
     this.title = document.data['title'] ?? '';
     this.description = document.data['description'] ?? '';
     this.rating = document.data['rating'] ?? 0;

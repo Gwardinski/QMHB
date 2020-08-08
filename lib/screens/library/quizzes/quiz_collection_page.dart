@@ -52,14 +52,15 @@ class QuizCollectionPage extends StatelessWidget {
                 child: Text("Could not load content"),
               );
             }
+            // TODO - filter on request not after
             final userQuizzes = snapshot.data
                 .where(
-                  (QuizModel qz) => qz.userId == user.uid,
+                  (QuizModel qz) => qz.uid == user.uid,
                 )
                 .toList();
             final savedQuizzes = snapshot.data
                 .where(
-                  (QuizModel qz) => qz.userId != user.uid,
+                  (QuizModel qz) => qz.uid != user.uid,
                 )
                 .toList();
             return Center(

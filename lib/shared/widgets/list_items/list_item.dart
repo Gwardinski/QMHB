@@ -135,38 +135,20 @@ class ListItemInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.only(bottom: 16),
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 18,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(bottom: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ListItemInfoBadge(value: infoValue1, title: infoTitle1),
-                ListItemInfoBadge(value: infoValue2, title: infoTitle2),
-                ListItemInfoBadge(value: infoValue3, title: infoTitle3),
-              ],
-            ),
-          ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Container(
                   child: Text(
-                    description,
-                    maxLines: 3,
+                    title,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).accentColor,
+                    ),
                   ),
                 ),
               ),
@@ -179,8 +161,29 @@ class ListItemInfo extends StatelessWidget {
                         onAddTo();
                       },
                     )
-                  : null
+                  : Container()
             ],
+          ),
+          Container(
+            padding: EdgeInsets.only(bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ListItemInfoBadge(value: infoValue1, title: infoTitle1),
+                ListItemInfoBadge(value: infoValue2, title: infoTitle2),
+                ListItemInfoBadge(value: infoValue3, title: infoTitle3),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: Text(
+                description,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+              ),
+            ),
           ),
         ],
       ),

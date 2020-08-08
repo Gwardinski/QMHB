@@ -21,117 +21,200 @@ class _ListItemQuestionState extends State<ListItemQuestion> {
   bool revealAnswer = false;
   @override
   Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => QuestionDetailsPage(
+              questionModel: widget.questionModel,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        height: 64,
+        padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RevealAnswerButton(
+              revealAnswer: revealAnswer,
+              onTap: () {
+                setState(() {
+                  revealAnswer = !revealAnswer;
+                });
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 16),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  QuestionAndAnswer(
+                    text: revealAnswer == true
+                        ? widget.questionModel.answer
+                        : widget.questionModel.question,
+                    highlight: revealAnswer,
+                  ),
+                  PointsAndCategory(
+                    points: widget.questionModel.points.toString(),
+                    category: widget.questionModel.category,
+                  ),
+                ],
+              ),
+            ),
+            AddToRoundButton(
+              questionId: widget.questionModel.uid,
+              questionPoints: widget.questionModel.points,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PointsAndCategory extends StatelessWidget {
+  const PointsAndCategory({
+    Key key,
+    @required this.points,
+    @required this.category,
+  }) : super(key: key);
+
+  final String points;
+  final String category;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      height: 32,
+      child: Row(
+        children: [
+          Row(
+            children: <Widget>[
+              Text("Points: "),
+              Text(
+                points,
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+            ],
+          ),
+          Padding(padding: EdgeInsets.only(left: 32)),
+          Text(
+            category,
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class QuestionAndAnswer extends StatelessWidget {
+  const QuestionAndAnswer({
+    Key key,
+    @required this.text,
+    @required this.highlight,
+  }) : super(key: key);
+
+  final String text;
+  final bool highlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          height: 32,
+          child: Center(
+            child: Text(
+              text,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              textAlign: TextAlign.start,
+              textDirection: TextDirection.ltr,
+              style: TextStyle(
+                fontSize: 18,
+                color: highlight ? Theme.of(context).accentColor : Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AddToRoundButton extends StatelessWidget {
+  const AddToRoundButton({
+    Key key,
+    @required this.questionId,
+    @required this.questionPoints,
+  }) : super(key: key);
+
+  final questionId;
+  final questionPoints;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
       child: InkWell(
+        child: Container(
+          width: 32,
+          height: 32,
+          child: Center(
+            child: Icon(
+              Icons.add,
+            ),
+          ),
+        ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => QuestionDetailsPage(
-                questionModel: widget.questionModel,
+              builder: (context) => RoundSelectorPage(
+                questionId: questionId,
+                questionPoints: questionPoints,
               ),
             ),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).bottomAppBarColor,
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).accentColor,
-                width: 0.25,
-              ),
-            ),
-          ),
-          padding: EdgeInsets.fromLTRB(getIt<AppSize>().rSpacingMd, 8, 0, 8),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      revealAnswer == true
-                          ? widget.questionModel.answer
-                          : widget.questionModel.question,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      textDirection: TextDirection.ltr,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
-                      ),
-                    ),
-                  ),
-                  MaterialButton(
-                    child: Icon(
-                      Icons.remove_red_eye,
-                      color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        revealAnswer = !revealAnswer;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Row(
-                            children: <Widget>[
-                              Text("Points: "),
-                              Text(
-                                widget.questionModel.points.toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            children: <Widget>[
-                              Text("Category: "),
-                              Text(
-                                widget.questionModel.category,
-                                style: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  MaterialButton(
-                    child: Icon(
-                      Icons.add,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => RoundSelectorPage(
-                            questionId: widget.questionModel.uid,
-                            questionPoints: widget.questionModel.points,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              )
-            ],
+      ),
+    );
+  }
+}
+
+class RevealAnswerButton extends StatelessWidget {
+  const RevealAnswerButton({
+    Key key,
+    @required this.revealAnswer,
+    @required this.onTap,
+  }) : super(key: key);
+
+  final bool revealAnswer;
+  final onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Container(
+        width: 32,
+        height: 32,
+        child: Center(
+          child: Icon(
+            Icons.remove_red_eye,
+            color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
           ),
         ),
       ),
+      onTap: onTap,
     );
   }
 }

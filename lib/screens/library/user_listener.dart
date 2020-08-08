@@ -56,9 +56,10 @@ class _UserListenerState extends State<UserListener> {
     List<QuizModel> recentQuizzes;
     List<RoundModel> recentRounds;
     List<QuestionModel> recentQuestions;
-    recentQuizzes = await databaseService.getQuizzesByIds(newUserModel.recentQuizIds);
-    recentRounds = await databaseService.getRoundsByIds(newUserModel.recentRoundIds);
-    recentQuestions = await databaseService.getQuestionsByIds(newUserModel.recentQuestionIds);
+    // TODO - remove all these and just do a normal request filtered by FirebaseServerTime
+    recentQuizzes = await databaseService.getQuizzesByIds(newUserModel.quizIds);
+    recentRounds = await databaseService.getRoundsByIds(newUserModel.roundIds);
+    recentQuestions = await databaseService.getQuestionsByIds(newUserModel.questionIds);
 
     recentActivity.updateRecentActivity(
       quizzes: recentQuizzes,

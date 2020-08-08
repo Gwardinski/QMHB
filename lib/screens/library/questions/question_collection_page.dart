@@ -8,7 +8,6 @@ import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/no_question.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item_question_column.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_question_grid.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuestionCollectionPage extends StatelessWidget {
@@ -50,14 +49,15 @@ class QuestionCollectionPage extends StatelessWidget {
                 child: Text("Could not load content"),
               );
             }
+            // TODO - filter on request not after
             final userQuestions = snapshot.data
                 .where(
-                  (QuestionModel qs) => qs.userId == user.uid,
+                  (QuestionModel qs) => qs.uid == user.uid,
                 )
                 .toList();
             final savedQuestions = snapshot.data
                 .where(
-                  (QuestionModel qs) => qs.userId != user.uid,
+                  (QuestionModel qs) => qs.uid != user.uid,
                 )
                 .toList();
             return Center(
@@ -81,7 +81,7 @@ class QuestionCollectionPage extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         userQuestions.length > 0
-                            ? QuestionCollection(questions: userQuestions)
+                            ? ListItemQuestionColumn(questions: userQuestions)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(
@@ -92,7 +92,7 @@ class QuestionCollectionPage extends StatelessWidget {
                                 ),
                               ),
                         savedQuestions.length > 0
-                            ? QuestionCollection(questions: savedQuestions)
+                            ? ListItemQuestionColumn(questions: savedQuestions)
                             : Padding(
                                 padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(
@@ -110,20 +110,5 @@ class QuestionCollectionPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class QuestionCollection extends StatelessWidget {
-  const QuestionCollection({
-    @required this.questions,
-  });
-
-  final questions;
-
-  @override
-  Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width > 800
-        ? ListItemQuestionGrid(questions: questions)
-        : ListItemQuestionColumn(questions: questions);
   }
 }

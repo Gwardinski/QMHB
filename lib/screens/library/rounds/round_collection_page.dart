@@ -50,14 +50,15 @@ class RoundCollectionPage extends StatelessWidget {
                 child: Text("Could not load content"),
               );
             }
+            // TODO - filter on request not after
             final userRounds = snapshot.data
                 .where(
-                  (RoundModel rd) => rd.userId == user.uid,
+                  (RoundModel rd) => rd.uid == user.uid,
                 )
                 .toList();
             final savedRounds = snapshot.data
                 .where(
-                  (RoundModel rd) => rd.userId != user.uid,
+                  (RoundModel rd) => rd.uid != user.uid,
                 )
                 .toList();
             return Center(

@@ -4,6 +4,7 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/user_model.dart';
 
+// TODO - refactor out to seperate collection services
 class DatabaseService {
   // DB collections
   final CollectionReference _usersCollection = Firestore.instance.collection('users');
@@ -78,9 +79,6 @@ class DatabaseService {
       "quizIds": userModel.quizIds,
       "roundIds": userModel.roundIds,
       "questionIds": userModel.questionIds,
-      "recentQuizIds": userModel.recentQuizIds,
-      "recentRoundIds": userModel.recentRoundIds,
-      "recentQuestionIds": userModel.recentQuestionIds,
       "lastUpdated": DateTime.now().toString(),
     });
   }
@@ -90,47 +88,34 @@ class DatabaseService {
   addQuizToFirebase(QuizModel quizModel, UserModel userModel) async {
     DocumentReference doc = await _addQuizToFirebaseCollection(quizModel, userModel.uid);
     userModel.quizIds.add(doc.documentID);
-    _updateUserRecentQuizzes(userModel, doc.documentID);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future _addQuizToFirebaseCollection(QuizModel quizModel, String userId) async {
+  Future _addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
     return await _quizzesCollection.add({
       "title": quizModel.title,
       "description": quizModel.description,
       "roundIds": quizModel.roundIds,
       "isPublished": false,
-      "userId": userId,
+      "uid": uid,
     });
   }
 
   editQuizOnFirebase(QuizModel quizModel, UserModel userModel) async {
     await _editQuizOnFirebaseCollection(quizModel, userModel.uid);
-    _updateUserRecentQuizzes(userModel, quizModel.uid);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future<void> _editQuizOnFirebaseCollection(QuizModel quizModel, String userId) async {
-    return await _quizzesCollection.document(quizModel.uid).setData({
-      "title": quizModel.title,
-      "description": quizModel.description,
-      "roundIds": quizModel.roundIds,
-      "totalPoints": quizModel.totalPoints,
-      "isPublished": false,
-      "userId": userId,
-    });
-  }
-
-  _updateUserRecentQuizzes(UserModel userModel, String quizId) {
-    List<String> quizIds = userModel.recentQuizIds;
-    quizIds.remove(quizId);
-    quizIds.add(quizId);
-    if (quizIds.length > 9) {
-      //TODO - this may not work
-      quizIds = quizIds.sublist(0, 9);
-    }
-    userModel.recentQuizIds = quizIds;
-    return userModel;
+  Future<void> _editQuizOnFirebaseCollection(QuizModel quizModel, String uid) async {
+    // TODO - wrong ID here!
+    // return await _quizzesCollection.document(quizModel.uid).setData({
+    //   "title": quizModel.title,
+    //   "description": quizModel.description,
+    //   "roundIds": quizModel.roundIds,
+    //   "totalPoints": quizModel.totalPoints,
+    //   "isPublished": false,
+    //   "uid": uid,
+    // });
   }
 
   // Rounds
@@ -138,47 +123,34 @@ class DatabaseService {
   addRoundToFirebase(RoundModel roundModel, UserModel userModel) async {
     DocumentReference doc = await _addRoundToFirebaseCollection(roundModel, userModel.uid);
     userModel.roundIds.add(doc.documentID);
-    _updateUserRecentRounds(userModel, doc.documentID);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future _addRoundToFirebaseCollection(RoundModel roundModel, String userId) async {
+  Future _addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
     return await _roundsCollection.add({
       "title": roundModel.title,
       "description": roundModel.description,
       "questionIds": roundModel.questionIds,
       "isPublished": false,
-      "userId": userId,
+      "uid": uid,
     });
   }
 
   editRoundOnFirebase(RoundModel roundModel, UserModel userModel) async {
     await _editRoundOnFirebaseCollection(roundModel, userModel.uid);
-    _updateUserRecentRounds(userModel, roundModel.uid);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future<void> _editRoundOnFirebaseCollection(RoundModel roundModel, String userId) async {
-    return await _roundsCollection.document(roundModel.uid).setData({
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "questionIds": roundModel.questionIds,
-      "totalPoints": roundModel.totalPoints,
-      "isPublished": false,
-      "userId": userId,
-    });
-  }
-
-  _updateUserRecentRounds(UserModel userModel, String roundId) {
-    List<String> roundIds = userModel.recentRoundIds;
-    roundIds.remove(roundId);
-    roundIds.add(roundId);
-    if (roundIds.length > 9) {
-      //TODO - this may not work
-      roundIds = roundIds.sublist(0, 9);
-    }
-    userModel.recentRoundIds = roundIds;
-    return userModel;
+  Future<void> _editRoundOnFirebaseCollection(RoundModel roundModel, String uid) async {
+    // TODO - wrong ID here!
+    // return await _roundsCollection.document(roundModel.uid).setData({
+    //   "title": roundModel.title,
+    //   "description": roundModel.description,
+    //   "questionIds": roundModel.questionIds,
+    //   "totalPoints": roundModel.totalPoints,
+    //   "isPublished": false,
+    //   "uid": uid,
+    // });
   }
 
   // Questions
@@ -186,11 +158,10 @@ class DatabaseService {
   addQuestionToFirebase(QuestionModel questionModel, UserModel userModel) async {
     DocumentReference doc = await _addQuestionToFirebaseCollection(questionModel, userModel.uid);
     userModel.questionIds.add(doc.documentID);
-    _updateUserRecentQuestions(userModel, doc.documentID);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String userId) async {
+  Future _addQuestionToFirebaseCollection(QuestionModel questionModel, String uid) async {
     return await _questionsCollection.add({
       "question": questionModel.question,
       "answer": questionModel.answer,
@@ -198,38 +169,26 @@ class DatabaseService {
       "difficulty": questionModel.difficulty,
       "points": questionModel.points,
       "isPublished": false,
-      "userId": userId,
+      "uid": uid,
     });
   }
 
   editQuestionOnFirebase(QuestionModel questionModel, UserModel userModel) async {
     await _editQuestionOnFirebaseCollection(questionModel, userModel.uid);
-    _updateUserRecentQuestions(userModel, questionModel.uid);
     await updateUserDataOnFirebase(userModel);
   }
 
-  Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String userId) async {
-    return await _questionsCollection.document(questionModel.uid).setData({
-      "question": questionModel.question,
-      "answer": questionModel.answer,
-      "category": questionModel.category,
-      "difficulty": questionModel.difficulty,
-      "points": questionModel.points,
-      "isPublished": questionModel.isPublished,
-      "userId": userId,
-    });
-  }
-
-  _updateUserRecentQuestions(UserModel userModel, String questionId) {
-    List<String> questionIds = userModel.recentQuestionIds;
-    questionIds.remove(questionId);
-    questionIds.add(questionId);
-    if (questionIds.length > 9) {
-      //TODO - this may not work
-      questionIds = questionIds.sublist(0, 9);
-    }
-    userModel.recentQuestionIds = questionIds;
-    return userModel;
+  Future<void> _editQuestionOnFirebaseCollection(QuestionModel questionModel, String uid) async {
+    // TODO - wrong ID here!
+    // return await _questionsCollection.document(questionModel.uid).setData({
+    //   "question": questionModel.question,
+    //   "answer": questionModel.answer,
+    //   "category": questionModel.category,
+    //   "difficulty": questionModel.difficulty,
+    //   "points": questionModel.points,
+    //   "isPublished": questionModel.isPublished,
+    //   "uid": uid,
+    // });
   }
 
   deleteQuestion(UserModel user, QuestionModel question) async {
@@ -254,7 +213,6 @@ class DatabaseService {
 
   _removeQuestionUser(UserModel user, QuestionModel question) async {
     user.questionIds.remove(question.uid);
-    user.recentQuestionIds.remove(question.uid);
     await updateUserDataOnFirebase(user);
   }
 }

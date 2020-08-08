@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionModel {
   String uid;
-  String userId;
   String question;
   String answer;
   String category;
@@ -12,7 +11,6 @@ class QuestionModel {
 
   QuestionModel({
     this.uid,
-    this.userId,
     this.question,
     this.answer,
     this.category,
@@ -22,7 +20,6 @@ class QuestionModel {
   });
 
   QuestionModel.fromJSON(json) {
-    this.userId = json['userId'] ?? '';
     this.question = json['question'] ?? '';
     this.answer = json['answer'] ?? '';
     this.category = json['category'] ?? '';
@@ -33,7 +30,6 @@ class QuestionModel {
 
   QuestionModel.fromFirebase(DocumentSnapshot document, String id) {
     this.uid = id;
-    this.userId = document.data['userId'] ?? '';
     this.question = document.data['question'] ?? '';
     this.answer = document.data['answer'] ?? '';
     this.category = document.data['category'] ?? '';
