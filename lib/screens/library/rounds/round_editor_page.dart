@@ -125,11 +125,11 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
         isPublished: false,
       );
       try {
-        DocumentReference doc = await roundService.addRoundToFirebaseCollection(
+        String newDocId = await roundService.addRoundToFirebaseCollection(
           roundModel,
           userModel.uid,
         );
-        userModel.questionIds.add(doc.documentID);
+        userModel.questionIds.add(newDocId);
         await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {

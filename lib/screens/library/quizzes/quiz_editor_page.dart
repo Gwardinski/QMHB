@@ -148,11 +148,11 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
         isPublished: false,
       );
       try {
-        DocumentReference doc = await quizService.addQuizToFirebaseCollection(
+        String newDocId = await quizService.addQuizToFirebaseCollection(
           quizModel,
           userModel.uid,
         );
-        userModel.questionIds.add(doc.documentID);
+        userModel.questionIds.add(newDocId);
         await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {

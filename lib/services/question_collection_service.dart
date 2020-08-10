@@ -21,12 +21,14 @@ class QuestionCollectionService {
     return questions;
   }
 
-  Future<DocumentReference> addQuestionToFirebaseCollection(
+  Future<String> addQuestionToFirebaseCollection(
     QuestionModel questionModel,
     String uid,
   ) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
-    return await _questionsCollection.add({
+    final serverTimestamp = Timestamp.now();
+    final newDocId = _questionsCollection.document().documentID;
+    await _questionsCollection.document(newDocId).setData({
+      "id": newDocId,
       "uid": uid,
       "question": questionModel.question,
       "answer": questionModel.answer,
@@ -37,12 +39,13 @@ class QuestionCollectionService {
       "createdAt": serverTimestamp,
       "lastUpdated": serverTimestamp,
     });
+    return newDocId;
   }
 
   Future<void> editQuestionOnFirebaseCollection(
     QuestionModel questionModel,
   ) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
+    final serverTimestamp = Timestamp.now();
     return await _questionsCollection.document(questionModel.id).setData({
       "question": questionModel.question,
       "answer": questionModel.answer,

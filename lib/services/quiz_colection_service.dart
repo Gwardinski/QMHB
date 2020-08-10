@@ -19,9 +19,11 @@ class QuizCollectionService {
     return quizzes;
   }
 
-  Future addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
-    return await _quizzesCollection.add({
+  Future<String> addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
+    final serverTimestamp = Timestamp.now();
+    final newDocId = _quizzesCollection.document().documentID;
+    await _quizzesCollection.document(newDocId).setData({
+      "id": newDocId,
       "uid": uid,
       "title": quizModel.title,
       "description": quizModel.description,
@@ -30,10 +32,11 @@ class QuizCollectionService {
       "createdAt": serverTimestamp,
       "lastUpdated": serverTimestamp,
     });
+    return newDocId;
   }
 
   Future<void> editQuizOnFirebaseCollection(QuizModel quizModel) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
+    final serverTimestamp = Timestamp.now();
     return await _quizzesCollection.document(quizModel.id).setData({
       "title": quizModel.title,
       "description": quizModel.description,

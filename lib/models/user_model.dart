@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class UserModel {
@@ -7,7 +8,8 @@ class UserModel {
   List<String> quizIds;
   List<String> roundIds;
   List<String> questionIds;
-  String lastUpdated;
+  Timestamp lastUpdated;
+  Timestamp createAt;
 
   UserModel({
     @required this.uid,
@@ -17,6 +19,7 @@ class UserModel {
     this.roundIds,
     this.questionIds,
     this.lastUpdated,
+    this.createAt,
   });
 
   UserModel.registerNewUser({
@@ -24,7 +27,8 @@ class UserModel {
     @required this.email,
     @required this.displayName,
   }) {
-    lastUpdated = DateTime.now().toString();
+    lastUpdated = Timestamp.now();
+    createAt = Timestamp.now();
     quizIds = List<String>();
     roundIds = List<String>();
     questionIds = List<String>();
@@ -35,6 +39,7 @@ class UserModel {
     email = data['email'];
     displayName = data['displayName'];
     lastUpdated = data['lastUpdated'];
+    createAt = data['createAt'];
     quizIds = List<String>();
     if (data['quizIds'] != null) {
       data['quizIds'].forEach((id) {

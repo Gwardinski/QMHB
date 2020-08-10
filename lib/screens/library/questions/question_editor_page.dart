@@ -41,11 +41,11 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
     final userService = Provider.of<UserCollectionService>(context);
     final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
-      DocumentReference doc = await questionService.addQuestionToFirebaseCollection(
+      String newDocId = await questionService.addQuestionToFirebaseCollection(
         questionModel,
         userModel.uid,
       );
-      userModel.questionIds.add(doc.documentID);
+      userModel.questionIds.add(newDocId);
       await userService.updateUserDataOnFirebase(userModel);
       Navigator.of(context).pop();
     } catch (e) {

@@ -9,6 +9,8 @@ class QuestionModel {
   String difficulty;
   double points;
   bool isPublished;
+  Timestamp lastUpdated;
+  Timestamp createAt;
 
   QuestionModel({
     this.id,
@@ -24,6 +26,8 @@ class QuestionModel {
   QuestionModel.fromJSON(json) {
     this.id = json['id'] ?? '';
     this.uid = json['uid'] ?? '';
+    this.lastUpdated = json['lastUpdated'];
+    this.createAt = json['createAt'];
     this.question = json['question'] ?? '';
     this.answer = json['answer'] ?? '';
     this.category = json['category'] ?? '';
@@ -35,6 +39,8 @@ class QuestionModel {
   QuestionModel.fromFirebase(DocumentSnapshot document, String id) {
     this.id = id;
     this.uid = document.data['uid'] ?? '';
+    this.lastUpdated = document.data['lastUpdated'];
+    this.createAt = document.data['createAt'];
     this.question = document.data['question'] ?? '';
     this.answer = document.data['answer'] ?? '';
     this.category = document.data['category'] ?? '';

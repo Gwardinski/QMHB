@@ -22,9 +22,11 @@ class RoundCollectionService {
 
   // Rounds
 
-  Future addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
-    return await _roundsCollection.add({
+  Future<String> addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
+    final serverTimestamp = Timestamp.now();
+    final newDocId = _roundsCollection.document().documentID;
+    await _roundsCollection.document(newDocId).setData({
+      "id": newDocId,
       "uid": uid,
       "title": roundModel.title,
       "description": roundModel.description,
@@ -33,10 +35,11 @@ class RoundCollectionService {
       "createdAt": serverTimestamp,
       "lastUpdated": serverTimestamp,
     });
+    return newDocId;
   }
 
   Future<void> editRoundOnFirebaseCollection(RoundModel roundModel) async {
-    final serverTimestamp = FieldValue.serverTimestamp();
+    final serverTimestamp = Timestamp.now();
     return await _roundsCollection.document(roundModel.id).setData({
       "title": roundModel.title,
       "description": roundModel.description,

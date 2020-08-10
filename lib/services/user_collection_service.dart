@@ -26,13 +26,13 @@ class UserCollectionService {
       "quizIds": userModel.quizIds,
       "roundIds": userModel.roundIds,
       "questionIds": userModel.questionIds,
-      "lastUpdated": FieldValue.serverTimestamp(),
+      "lastUpdated": Timestamp.now(),
     });
   }
 
   Future updateUserTimeStamp(String id) async {
     return await _usersCollection.document(id).setData({
-      "lastUpdated": FieldValue.serverTimestamp(),
+      "lastUpdated": Timestamp.now(),
     });
   }
 }
