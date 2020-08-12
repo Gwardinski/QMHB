@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
@@ -129,7 +128,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
           roundModel,
           userModel.uid,
         );
-        userModel.questionIds.add(newDocId);
+        userModel.roundIds.add(newDocId);
         await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {

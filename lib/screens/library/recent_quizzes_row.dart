@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_collection_page.dart';
+import 'package:qmhb/services/quiz_colection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row.dart';
 import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
@@ -14,7 +14,6 @@ class RecentQuizzesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final quizzes = Provider.of<RecentActivityStateModel>(context).recentQuizzes;
     return Column(
       children: [
         SummaryRowHeader(
@@ -28,15 +27,27 @@ class RecentQuizzesRow extends StatelessWidget {
             );
           },
         ),
-        (quizzes == null || quizzes.length == 0)
-            ? Row(
-                children: [
-                  Expanded(child: NoCollection(type: NoCollectionType.QUIZ)),
-                ],
-              )
-            : HighlightRow(
-                quizzes: quizzes,
-              ),
+        StreamBuilder(
+            stream: Provider.of<QuizCollectionService>(context).getRecentQuizStream(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text("loading");
+              }
+              if (snapshot.hasError) {
+                return Container(
+                  child: Text("err"),
+                );
+              }
+              return (snapshot.data.length == 0)
+                  ? Row(
+                      children: [
+                        Expanded(child: NoCollection(type: NoCollectionType.QUIZ)),
+                      ],
+                    )
+                  : HighlightRow(
+                      quizzes: snapshot.data,
+                    );
+            }),
         SummaryRowFooter(),
       ],
     );

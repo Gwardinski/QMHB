@@ -11,14 +11,19 @@ class QuestionCollectionService {
     for (var id in questionIds) {
       DocumentSnapshot fbquestion = await _questionsCollection.document(id).get();
       try {
-        // add id in here ?
-        QuestionModel question = QuestionModel.fromFirebase(fbquestion, id);
+        QuestionModel question = QuestionModel.fromFirebase(fbquestion);
         questions.add(question);
       } catch (e) {
         print("failed to find question with ID of $id");
       }
     }
     return questions;
+  }
+
+  Stream<List<QuestionModel>> getRecentQuestionStream() {
+    return _questionsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
+      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+    });
   }
 
   Future<String> addQuestionToFirebaseCollection(

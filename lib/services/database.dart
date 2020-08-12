@@ -30,7 +30,7 @@ class DatabaseService {
     for (var id in quizIds) {
       DocumentSnapshot fbquiz = await _quizzesCollection.document(id).get();
       try {
-        QuizModel quiz = QuizModel.fromFirebase(fbquiz, id);
+        QuizModel quiz = QuizModel.fromFirebase(fbquiz);
         quizzes.add(quiz);
       } catch (e) {
         print("failed to find quiz with ID of $id");
@@ -45,7 +45,7 @@ class DatabaseService {
     for (var id in roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
       try {
-        RoundModel round = RoundModel.fromFirebase(fbround, id);
+        RoundModel round = RoundModel.fromFirebase(fbround);
         rounds.add(round);
       } catch (e) {
         print("failed to find round with ID of $id");
@@ -66,7 +66,7 @@ class DatabaseService {
     for (var id in user.roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
       try {
-        RoundModel round = RoundModel.fromFirebase(fbround, id);
+        RoundModel round = RoundModel.fromFirebase(fbround);
         round.questionIds.remove(question.uid);
         round.totalPoints -= question.points;
         // await _editRoundOnFirebaseCollection(round, user.uid);

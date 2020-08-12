@@ -10,13 +10,19 @@ class QuizCollectionService {
     for (var id in quizIds) {
       DocumentSnapshot fbquiz = await _quizzesCollection.document(id).get();
       try {
-        QuizModel quiz = QuizModel.fromFirebase(fbquiz, id);
+        QuizModel quiz = QuizModel.fromFirebase(fbquiz);
         quizzes.add(quiz);
       } catch (e) {
         print("failed to find quiz with ID of $id");
       }
     }
     return quizzes;
+  }
+
+  Stream<List<QuizModel>> getRecentQuizStream() {
+    return _quizzesCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
+      return snapshot.documents.map((doc) => QuizModel.fromFirebase(doc)).toList();
+    });
   }
 
   Future<String> addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {

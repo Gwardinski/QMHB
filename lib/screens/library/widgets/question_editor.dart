@@ -20,22 +20,16 @@ class QuestionEditor extends StatefulWidget {
 
 class _QuestionEditorState extends State<QuestionEditor> {
   final _formKey = GlobalKey<FormState>();
+  QuestionModel _questionEdit;
   bool _isLoading = false;
-  String _question = '';
-  String _answer = '';
-  String _category;
-  double _points = 1;
 
   @override
   void initState() {
     super.initState();
     if (widget.questionModel != null) {
-      _question = widget.questionModel.question;
-      _answer = widget.questionModel.answer;
-      _category = widget.questionModel.category;
-      _points = widget.questionModel.points;
+      _questionEdit = widget.questionModel;
     } else {
-      _category = acceptedCategories[0];
+      _questionEdit.category = acceptedCategories[0];
     }
   }
 
@@ -49,43 +43,43 @@ class _QuestionEditorState extends State<QuestionEditor> {
         child: Column(
           children: <Widget>[
             FormInput(
-              initialValue: _question,
+              initialValue: _questionEdit.question,
               validate: validateForm,
               labelText: "Question",
               keyboardType: TextInputType.multiline,
               onChanged: (val) {
                 setState(() {
-                  _question = val;
+                  _questionEdit.question = val;
                 });
               },
             ),
             FormInput(
-              initialValue: _answer,
+              initialValue: _questionEdit.answer,
               validate: validateForm,
               labelText: "Answer",
               keyboardType: TextInputType.multiline,
               onChanged: (val) {
                 setState(() {
-                  _answer = val;
+                  _questionEdit.answer = val;
                 });
               },
             ),
             FormInput(
-              initialValue: _points.toString(),
+              initialValue: _questionEdit.points.toString(),
               validate: validateNumber,
               keyboardType: TextInputType.number,
               labelText: "Points",
               onChanged: (val) {
                 setState(() {
-                  _points = double.parse(val);
+                  _questionEdit.points = double.parse(val);
                 });
               },
             ),
             FormDropdown(
-              initialValue: _category,
+              initialValue: _questionEdit.category,
               onSelect: (val) {
                 setState(() {
-                  _category = val;
+                  _questionEdit.category = val;
                 });
               },
             ),
@@ -102,14 +96,7 @@ class _QuestionEditorState extends State<QuestionEditor> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      QuestionModel questionModel = QuestionModel(
-        question: _question,
-        answer: _answer,
-        points: _points,
-        category: _category,
-        isPublished: false,
-      );
-      widget.onSubmit(questionModel);
+      widget.onSubmit(_questionEdit);
     }
   }
 }

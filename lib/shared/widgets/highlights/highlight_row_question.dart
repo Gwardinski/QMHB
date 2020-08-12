@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
 class HighlightRowQuestion extends StatelessWidget {
   final List<QuestionModel> questions;
@@ -24,7 +24,7 @@ class HighlightRowQuestion extends StatelessWidget {
         scrollDirection: Axis.vertical,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return ListItemQuestion(
+          return QuestionListItem(
             questionModel: questions[index],
           );
         },

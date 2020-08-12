@@ -1,5 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum QuestionType {
+  STANDARD,
+  MUSIC,
+  MULTIPLECHOICE,
+}
+
 class QuestionModel {
   String id;
   String uid;
@@ -9,6 +15,8 @@ class QuestionModel {
   String difficulty;
   double points;
   bool isPublished;
+  // TODO - QuestionType
+  // QuestionType questionType;
   Timestamp lastUpdated;
   Timestamp createAt;
 
@@ -36,8 +44,8 @@ class QuestionModel {
     this.isPublished = json['isPublished'] ?? false;
   }
 
-  QuestionModel.fromFirebase(DocumentSnapshot document, String id) {
-    this.id = id;
+  QuestionModel.fromFirebase(DocumentSnapshot document) {
+    this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
     this.lastUpdated = document.data['lastUpdated'];
     this.createAt = document.data['createAt'];

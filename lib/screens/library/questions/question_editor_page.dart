@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -28,6 +27,35 @@ class QuestionEditorPage extends StatefulWidget {
 class _QuestionEditorPageState extends State<QuestionEditorPage> {
   bool _isLoading = false;
   String _error = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text(
+          widget.type == QuestionEditorType.ADD ? "Create Question" : "Edit Question",
+        ),
+        actions: widget.type == QuestionEditorType.EDIT
+            ? [
+                FlatButton.icon(
+                  icon: Icon(Icons.delete),
+                  label: Text('Delete'),
+                  onPressed: () {
+                    // _asyncConfirmDialog();
+                  },
+                ),
+              ]
+            : [],
+      ),
+      body: QuestionEditor(
+        questionModel: widget.questionModel,
+        onSubmit: (QuestionModel questionModel) {
+          _onSubmit(questionModel);
+        },
+      ),
+    );
+  }
 
   _onSubmit(QuestionModel questionModel) {
     widget.type == QuestionEditorType.ADD
@@ -83,34 +111,5 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
     setState(() {
       _isLoading = val;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          widget.type == QuestionEditorType.ADD ? "Create Question" : "Edit Question",
-        ),
-        actions: widget.type == QuestionEditorType.EDIT
-            ? [
-                FlatButton.icon(
-                  icon: Icon(Icons.delete),
-                  label: Text('Delete'),
-                  onPressed: () {
-                    // _asyncConfirmDialog();
-                  },
-                ),
-              ]
-            : [],
-      ),
-      body: QuestionEditor(
-        questionModel: widget.questionModel,
-        onSubmit: (QuestionModel questionModel) {
-          _onSubmit(questionModel);
-        },
-      ),
-    );
   }
 }

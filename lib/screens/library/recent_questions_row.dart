@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_collection_page.dart';
+import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/no_question.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
@@ -14,7 +14,6 @@ class RecentQuestionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questions = Provider.of<RecentActivityStateModel>(context).recentQuestions;
     return Column(
       children: [
         SummaryRowHeader(
@@ -28,11 +27,23 @@ class RecentQuestionsRow extends StatelessWidget {
             );
           },
         ),
-        (questions == null || questions.length == 0)
-            ? NoQuestion()
-            : HighlightRowQuestion(
-                questions: questions,
-              ),
+        StreamBuilder(
+            stream: Provider.of<QuestionCollectionService>(context).getRecentQuestionStream(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text("loading");
+              }
+              if (snapshot.hasError) {
+                return Container(
+                  child: Text("err"),
+                );
+              }
+              return (snapshot.data.length == 0)
+                  ? NoQuestion()
+                  : HighlightRowQuestion(
+                      questions: snapshot.data,
+                    );
+            }),
         SummaryRowFooter(),
       ],
     );

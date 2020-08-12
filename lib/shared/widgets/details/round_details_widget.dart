@@ -6,7 +6,7 @@ import 'package:qmhb/services/database.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_question.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundDetailsWidget extends StatelessWidget {
@@ -46,7 +46,7 @@ class RoundDetailsWidget extends StatelessWidget {
                 itemCount: questionSnapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   QuestionModel question = questionSnapshot.data[index];
-                  return ListItemQuestion(questionModel: question);
+                  return QuestionListItem(questionModel: question);
                 },
               );
             },

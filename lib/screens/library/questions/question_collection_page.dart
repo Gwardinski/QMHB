@@ -7,7 +7,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/no_question.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_question_column.dart';
+import 'package:qmhb/shared/widgets/list_items/question_list_item_column.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuestionCollectionPage extends StatelessWidget {
@@ -82,7 +82,7 @@ class QuestionCollectionPage extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         userQuestions.length > 0
-                            ? ListItemQuestionColumn(questions: userQuestions)
+                            ? QuestionListItemColumn(questions: userQuestions)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(
@@ -93,7 +93,7 @@ class QuestionCollectionPage extends StatelessWidget {
                                 ),
                               ),
                         savedQuestions.length > 0
-                            ? ListItemQuestionColumn(questions: savedQuestions)
+                            ? QuestionListItemColumn(questions: savedQuestions)
                             : Padding(
                                 padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(

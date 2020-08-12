@@ -52,8 +52,8 @@ class QuizModel {
     }
   }
 
-  QuizModel.fromFirebase(DocumentSnapshot document, String id) {
-    this.id = id;
+  QuizModel.fromFirebase(DocumentSnapshot document) {
+    this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
     this.lastUpdated = document.data['lastUpdated'];
     this.createAt = document.data['createAt'];

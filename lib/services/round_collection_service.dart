@@ -11,7 +11,7 @@ class RoundCollectionService {
     for (var id in roundIds) {
       DocumentSnapshot fbround = await _roundsCollection.document(id).get();
       try {
-        RoundModel round = RoundModel.fromFirebase(fbround, id);
+        RoundModel round = RoundModel.fromFirebase(fbround);
         rounds.add(round);
       } catch (e) {
         print("failed to find round with ID of $id");
@@ -20,7 +20,11 @@ class RoundCollectionService {
     return rounds;
   }
 
-  // Rounds
+  Stream<List<RoundModel>> getRecentRoundStream() {
+    return _roundsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
+      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+    });
+  }
 
   Future<String> addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
     final serverTimestamp = Timestamp.now();

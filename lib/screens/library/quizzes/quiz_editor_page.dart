@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
@@ -152,7 +151,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
           quizModel,
           userModel.uid,
         );
-        userModel.questionIds.add(newDocId);
+        userModel.quizIds.add(newDocId);
         await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {

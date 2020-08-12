@@ -40,37 +40,12 @@ class _UserListenerState extends State<UserListener> {
               setState(() {
                 _hasInitiated = true;
               });
-              _updateRecentActivity(
-                newUserModel: newUserModel,
-                currentUserModel: currentUserModel,
-              );
               _userDataStateModel.updateCurrentUser(newUserModel);
             });
           }
         }
         return widget.child;
       },
-    );
-  }
-
-  _updateRecentActivity({UserModel newUserModel, UserModel currentUserModel}) async {
-    print("_updateRecentActivity");
-    final questionService = Provider.of<QuestionCollectionService>(context);
-    final roundService = Provider.of<RoundCollectionService>(context);
-    final quizService = Provider.of<QuizCollectionService>(context);
-    final recentActivity = Provider.of<RecentActivityStateModel>(context);
-    List<QuizModel> recentQuizzes;
-    List<RoundModel> recentRounds;
-    List<QuestionModel> recentQuestions;
-    // TODO - remove all these and just do a normal request filtered by FirebaseServerTime
-    recentQuizzes = await quizService.getQuizzesByIds(newUserModel.quizIds);
-    recentRounds = await roundService.getRoundsByIds(newUserModel.roundIds);
-    recentQuestions = await questionService.getQuestionsByIds(newUserModel.questionIds);
-
-    recentActivity.updateRecentActivity(
-      quizzes: recentQuizzes,
-      rounds: recentRounds,
-      questions: recentQuestions,
     );
   }
 }
