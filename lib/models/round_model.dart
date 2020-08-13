@@ -61,4 +61,8 @@ class RoundModel {
       });
     }
   }
+
+  RoundModel.newRound() {
+    // todo prefil with any required fields
+  }
 }

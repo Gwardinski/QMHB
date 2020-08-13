@@ -7,6 +7,7 @@ import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/category_selector.dart';
+import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
 enum QuestionEditorType {
@@ -30,6 +31,7 @@ class _QuestionEditorState extends State<QuestionEditor> {
   final _formKey = GlobalKey<FormState>();
   QuestionModel _question;
   bool _isLoading = false;
+  String _error = "";
 
   @override
   void initState() {
@@ -39,6 +41,18 @@ class _QuestionEditorState extends State<QuestionEditor> {
     } else {
       _question = QuestionModel.newQuestion();
     }
+  }
+
+  _updateError(String val) {
+    setState(() {
+      _error = val;
+    });
+  }
+
+  _updateIsLoading(bool val) {
+    setState(() {
+      _isLoading = val;
+    });
   }
 
   _onSubmit() async {
@@ -52,6 +66,8 @@ class _QuestionEditorState extends State<QuestionEditor> {
     final userService = Provider.of<UserCollectionService>(context);
     final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
+      _updateIsLoading(true);
+      _updateError('');
       String newDocId = await questionService.addQuestionToFirebaseCollection(
         _question,
         userModel.uid,
@@ -61,6 +77,9 @@ class _QuestionEditorState extends State<QuestionEditor> {
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
+      _updateError('Failed to edit Question');
+    } finally {
+      _updateIsLoading(false);
     }
   }
 
@@ -69,6 +88,8 @@ class _QuestionEditorState extends State<QuestionEditor> {
     final userService = Provider.of<UserCollectionService>(context);
     final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
+      _updateIsLoading(true);
+      _updateError('');
       await questionService.editQuestionOnFirebaseCollection(
         _question,
       );
@@ -76,6 +97,9 @@ class _QuestionEditorState extends State<QuestionEditor> {
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
+      _updateError('Failed to edit Question');
+    } finally {
+      _updateIsLoading(false);
     }
   }
 
@@ -141,6 +165,7 @@ class _QuestionEditorState extends State<QuestionEditor> {
                   isLoading: _isLoading,
                   onPressed: _onSubmit,
                 ),
+                FormError(error: _error),
               ],
             ),
           ),

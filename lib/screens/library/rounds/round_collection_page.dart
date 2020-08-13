@@ -4,6 +4,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/round_editor.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item_column.dart';
@@ -28,7 +29,7 @@ class RoundCollectionPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => RoundEditorPage(
-                      type: RoundEditorPageType.ADD,
+                      type: RoundEditorType.ADD,
                     ),
                   ),
                 );

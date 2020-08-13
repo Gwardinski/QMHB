@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/services/database.dart';
-import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundDetailsWidget extends StatelessWidget {
   const RoundDetailsWidget({
@@ -19,7 +13,7 @@ class RoundDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QuestionCollectionService questionService = Provider.of<QuestionCollectionService>(context);
+    // QuestionCollectionService questionService = Provider.of<QuestionCollectionService>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

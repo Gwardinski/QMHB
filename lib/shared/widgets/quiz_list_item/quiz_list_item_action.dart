@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
 class QuizListItemAction extends StatelessWidget {
   const QuizListItemAction({
@@ -12,25 +12,25 @@ class QuizListItemAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: PopupMenuButton<QuestionOptions>(
+      child: PopupMenuButton<QuizOptions>(
         onSelected: (result) {
           onTap(result);
         },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.edit,
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<QuizOptions>>[
+          PopupMenuItem<QuizOptions>(
+            value: QuizOptions.edit,
             child: Text("Edit"),
           ),
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.delete,
+          PopupMenuItem<QuizOptions>(
+            value: QuizOptions.delete,
             child: Text("Delete"),
           ),
-          // PopupMenuItem<QuestionOptions>(
-          //   value: QuestionOptions.save,
+          // PopupMenuItem<QuizOptions>(
+          //   value: QuizOptions.save,
           //   child: Text("Save To Collection"),
           // ),
-          // PopupMenuItem<QuestionOptions>(
-          //   value: QuestionOptions.publish,
+          // PopupMenuItem<QuizOptions>(
+          //   value: QuizOptions.publish,
           //   child: Text("Publish"),
           // ),
         ],

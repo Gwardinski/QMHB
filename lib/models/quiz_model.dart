@@ -76,4 +76,8 @@ class QuizModel {
       });
     }
   }
+
+  QuizModel.newRound() {
+    // todo prefil with any required fields
+  }
 }

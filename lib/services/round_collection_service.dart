@@ -62,10 +62,13 @@ class RoundCollectionService {
   Future<void> editRoundOnFirebaseCollection(RoundModel roundModel) async {
     final serverTimestamp = Timestamp.now();
     return await _roundsCollection.document(roundModel.id).setData({
+      "id": roundModel.id,
+      "uid": roundModel.uid,
       "title": roundModel.title,
       "description": roundModel.description,
       "questionIds": roundModel.questionIds,
-      "totalPoints": roundModel.totalPoints,
+      "isPublished": false,
+      "createdAt": roundModel.createAt,
       "lastUpdated": serverTimestamp,
     });
   }

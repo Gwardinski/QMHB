@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
 import 'package:qmhb/shared/widgets/details/quiz_details_widget.dart';
 
 class QuizDetailsPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
               final quiz = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => QuizEditorPage(
-                    type: QuizEditorPageType.EDIT,
+                    type: QuizEditorType.EDIT,
                     quizModel: quizModel,
                   ),
                 ),

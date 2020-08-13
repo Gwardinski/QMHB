@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/round_editor.dart';
 import 'package:qmhb/shared/widgets/details/round_details_widget.dart';
 
 class RoundDetailsPage extends StatefulWidget {
@@ -50,7 +51,7 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
               final round = await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => RoundEditorPage(
-                    type: RoundEditorPageType.EDIT,
+                    type: RoundEditorType.EDIT,
                     roundModel: roundModel,
                   ),
                 ),

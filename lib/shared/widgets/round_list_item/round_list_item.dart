@@ -4,6 +4,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_page.dart';
 import 'package:qmhb/screens/library/rounds/round_details_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/round_editor.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
@@ -107,7 +108,7 @@ class _RoundListItemState extends State<RoundListItem> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
-          type: RoundEditorPageType.EDIT,
+          type: RoundEditorType.EDIT,
           roundModel: widget.roundModel,
         ),
       ),

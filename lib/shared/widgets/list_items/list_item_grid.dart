@@ -3,6 +3,8 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/widgets/round_editor.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
@@ -29,7 +31,7 @@ class QuizListItemGrid extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => QuizEditorPage(
-                        type: QuizEditorPageType.ADD,
+                        type: QuizEditorType.ADD,
                       ),
                     ),
                   );
@@ -78,7 +80,7 @@ class RoundListItemGrid extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => RoundEditorPage(
-                        type: RoundEditorPageType.ADD,
+                        type: RoundEditorType.ADD,
                       ),
                     ),
                   );
