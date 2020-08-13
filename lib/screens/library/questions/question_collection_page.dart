@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/question_editor.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
-import 'package:qmhb/shared/widgets/list_items/question_list_item_column.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-
-import '../../../get_it.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_items_column.dart';
 
 class QuestionCollectionPage extends StatelessWidget {
   @override
@@ -74,7 +71,7 @@ class QuestionCollectionPage extends StatelessWidget {
                           );
                         }
                         return snapshot.data.length > 0
-                            ? QuestionListItemColumn(questions: snapshot.data)
+                            ? QuestionListItemsColumn(questions: snapshot.data)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(
@@ -102,7 +99,7 @@ class QuestionCollectionPage extends StatelessWidget {
                           );
                         }
                         return snapshot.data.length > 0
-                            ? QuestionListItemColumn(questions: snapshot.data)
+                            ? QuestionListItemsColumn(questions: snapshot.data)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(

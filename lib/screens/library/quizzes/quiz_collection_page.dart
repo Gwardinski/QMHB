@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/get_it.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
 import 'package:qmhb/services/quiz_colection_service.dart';
-import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_column.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item_grid.dart';
+import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_column.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_grid.dart';
 
 class QuizCollectionPage extends StatelessWidget {
   @override
@@ -139,6 +137,6 @@ class QuizCollection extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800
         ? QuizListItemGrid(quizzes: quizzes)
-        : QuizListItemColumn(quizzes: quizzes);
+        : QuizListItemsColumn(quizzes: quizzes);
   }
 }

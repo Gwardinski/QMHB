@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
-// TODO can remove ?
-class QuestionListItemColumn extends StatelessWidget {
+class QuestionListItemsColumn extends StatelessWidget {
   final List<QuestionModel> questions;
 
-  const QuestionListItemColumn({
+  const QuestionListItemsColumn({
     this.questions,
   });
 

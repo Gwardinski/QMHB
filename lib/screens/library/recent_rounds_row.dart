@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/rounds/round_collection_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row.dart';
-import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
+import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
