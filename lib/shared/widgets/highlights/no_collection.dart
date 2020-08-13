@@ -99,8 +99,8 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
       child: Text(
         type == NoCollectionType.QUIZ
-            ? "Your library of Quizzes lives here. Tap here to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
-            : "Your library of Rounds lives here. Tap here to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
+            ? "Your library of Quizzes lives here. Tap to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
+            : "Your library of Rounds lives here. Tap to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
       ),
     );
   }

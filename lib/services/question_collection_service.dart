@@ -5,19 +5,36 @@ class QuestionCollectionService {
   // DB collections
   final CollectionReference _questionsCollection = Firestore.instance.collection('questions');
 
-  // TODO handle this in single request
-  Future<List<QuestionModel>> getQuestionsByIds(List<String> questionIds) async {
-    List<QuestionModel> questions = [];
-    for (var id in questionIds) {
-      DocumentSnapshot fbquestion = await _questionsCollection.document(id).get();
-      try {
-        QuestionModel question = QuestionModel.fromFirebase(fbquestion);
-        questions.add(question);
-      } catch (e) {
-        print("failed to find question with ID of $id");
-      }
-    }
-    return questions;
+  // Todo - add pagination
+  Stream<List<QuestionModel>> getQuestionsCreatedByUser({
+    String userId,
+    String orderBy = "lastUpdated",
+    int limit = 100,
+  }) {
+    return _questionsCollection
+        .where("uid", isEqualTo: userId)
+        // .orderBy(orderBy)
+        // .limit(limit)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+    });
+  }
+
+  // Todo - add pagination
+  Stream<List<QuestionModel>> getQuestionsSavedByUser({
+    List<String> savedIds,
+    String orderBy = "lastUpdated",
+    int limit = 100,
+  }) {
+    return _questionsCollection
+        // where id is equal to one of savedIds
+        // .orderBy(orderBy)
+        // .limit(limit)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+    });
   }
 
   Stream<List<QuestionModel>> getRecentQuestionStream() {

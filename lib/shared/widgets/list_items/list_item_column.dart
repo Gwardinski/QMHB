@@ -1,28 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item.dart';
-
-class ListItemColumn extends StatelessWidget {
-  final List<QuizModel> quizzes;
-  final List<RoundModel> rounds;
-
-  const ListItemColumn({
-    this.quizzes,
-    this.rounds,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return quizzes != null
-        ? QuizListItemColumn(
-            quizzes: quizzes,
-          )
-        : RoundListItemColumn(
-            rounds: rounds,
-          );
-  }
-}
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 class QuizListItemColumn extends StatelessWidget {
   QuizListItemColumn({
@@ -44,7 +24,7 @@ class QuizListItemColumn extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {
         QuizModel quizModel = quizzes[index];
-        return ListItem(
+        return QuizListItem(
           quizModel: quizModel,
         );
       },
@@ -72,7 +52,7 @@ class RoundListItemColumn extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {
         RoundModel roundModel = rounds[index];
-        return ListItem(
+        return RoundListItem(
           roundModel: roundModel,
         );
       },

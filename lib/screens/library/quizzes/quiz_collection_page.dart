@@ -126,7 +126,7 @@ class QuizCollection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800
-        ? ListItemGrid(quizzes: quizzes)
-        : ListItemColumn(quizzes: quizzes);
+        ? QuizListItemGrid(quizzes: quizzes)
+        : QuizListItemColumn(quizzes: quizzes);
   }
 }

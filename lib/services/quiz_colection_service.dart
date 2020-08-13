@@ -51,4 +51,10 @@ class QuizCollectionService {
       "lastUpdated": serverTimestamp,
     });
   }
+
+  Future<void> deleteQuizOnFirebaseCollection(String id) async {
+    await _quizzesCollection.document(id).delete();
+    // remove from all quizzes where used
+    // remove from user model
+  }
 }

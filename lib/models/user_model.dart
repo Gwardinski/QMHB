@@ -8,6 +8,9 @@ class UserModel {
   List<String> quizIds;
   List<String> roundIds;
   List<String> questionIds;
+  List<String> savedQuestionIds;
+  List<String> savedRoundIds;
+  List<String> savedQuizIds;
   Timestamp lastUpdated;
   Timestamp createAt;
 
@@ -18,6 +21,9 @@ class UserModel {
     this.quizIds,
     this.roundIds,
     this.questionIds,
+    this.savedQuizIds,
+    this.savedRoundIds,
+    this.savedQuestionIds,
     this.lastUpdated,
     this.createAt,
   });
@@ -32,6 +38,9 @@ class UserModel {
     quizIds = List<String>();
     roundIds = List<String>();
     questionIds = List<String>();
+    savedQuizIds = List<String>();
+    savedRoundIds = List<String>();
+    savedQuestionIds = List<String>();
   }
 
   UserModel.fromFirebase(data) {
@@ -56,6 +65,24 @@ class UserModel {
     if (data['questionIds'] != null) {
       data['questionIds'].forEach((id) {
         questionIds.add(id);
+      });
+    }
+    savedQuizIds = List<String>();
+    if (data['savedQuizIds'] != null) {
+      data['savedQuizIds'].forEach((id) {
+        savedQuizIds.add(id);
+      });
+    }
+    savedRoundIds = List<String>();
+    if (data['savedRoundIds'] != null) {
+      data['savedRoundIds'].forEach((id) {
+        savedRoundIds.add(id);
+      });
+    }
+    savedQuestionIds = List<String>();
+    if (data['savedQuestionIds'] != null) {
+      data['savedQuestionIds'].forEach((id) {
+        savedQuestionIds.add(id);
       });
     }
   }

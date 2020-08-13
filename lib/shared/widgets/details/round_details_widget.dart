@@ -35,23 +35,23 @@ class RoundDetailsWidget extends StatelessWidget {
           primaryHeaderButtonText: roundModel.questionIds.length.toString(),
           primaryHeaderButtonFunction: () {},
         ),
-        Expanded(
-          child: FutureBuilder(
-            future: questionService.getQuestionsByIds(roundModel.questionIds),
-            builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> questionSnapshot) {
-              if (questionSnapshot.connectionState == ConnectionState.waiting) {
-                return LoadingSpinnerHourGlass();
-              }
-              return ListView.builder(
-                itemCount: questionSnapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  QuestionModel question = questionSnapshot.data[index];
-                  return QuestionListItem(questionModel: question);
-                },
-              );
-            },
-          ),
-        ),
+        // Expanded(
+        // child: FutureBuilder(
+        //   future: questionService.getQuestionsByIds(roundModel.questionIds),
+        //   builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> questionSnapshot) {
+        //     if (questionSnapshot.connectionState == ConnectionState.waiting) {
+        //       return LoadingSpinnerHourGlass();
+        //     }
+        //     return ListView.builder(
+        //       itemCount: questionSnapshot.data.length,
+        //       itemBuilder: (BuildContext context, int index) {
+        //         QuestionModel question = questionSnapshot.data[index];
+        //         return QuestionListItem(questionModel: question);
+        //       },
+        //     );
+        //   },
+        // ),
+        // ),
       ],
     );
   }

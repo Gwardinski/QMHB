@@ -5,8 +5,8 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/TitleAndDetailsBlock.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
-import 'package:qmhb/shared/widgets/list_items/list_item.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 class QuizDetailsWidget extends StatelessWidget {
   const QuizDetailsWidget({
@@ -45,7 +45,7 @@ class QuizDetailsWidget extends StatelessWidget {
                 itemCount: roundSnapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   RoundModel round = roundSnapshot.data[index];
-                  return ListItem(
+                  return RoundListItem(
                     roundModel: round,
                   );
                 },

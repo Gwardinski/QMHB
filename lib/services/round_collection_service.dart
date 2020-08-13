@@ -5,19 +5,36 @@ class RoundCollectionService {
   // DB collections
   final CollectionReference _roundsCollection = Firestore.instance.collection('rounds');
 
-  // TODO handle this in single request
-  Future<List<RoundModel>> getRoundsByIds(List<String> roundIds) async {
-    List<RoundModel> rounds = [];
-    for (var id in roundIds) {
-      DocumentSnapshot fbround = await _roundsCollection.document(id).get();
-      try {
-        RoundModel round = RoundModel.fromFirebase(fbround);
-        rounds.add(round);
-      } catch (e) {
-        print("failed to find round with ID of $id");
-      }
-    }
-    return rounds;
+  // Todo - add pagination
+  Stream<List<RoundModel>> getRoundsCreatedByUser({
+    String userId,
+    String orderBy = "lastUpdated",
+    int limit = 100,
+  }) {
+    return _roundsCollection
+        .where("uid", isEqualTo: userId)
+        // .orderBy(orderBy)
+        // .limit(limit)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+    });
+  }
+
+  // Todo - add pagination
+  Stream<List<RoundModel>> getRoundsSavedByUser({
+    List<String> savedIds,
+    String orderBy = "lastUpdated",
+    int limit = 100,
+  }) {
+    return _roundsCollection
+        // where id is equal to one of savedIds
+        // .orderBy(orderBy)
+        // .limit(limit)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+    });
   }
 
   Stream<List<RoundModel>> getRecentRoundStream() {
@@ -51,5 +68,11 @@ class RoundCollectionService {
       "totalPoints": roundModel.totalPoints,
       "lastUpdated": serverTimestamp,
     });
+  }
+
+  Future<void> deleteRoundOnFirebaseCollection(String id) async {
+    await _roundsCollection.document(id).delete();
+    // remove from all quizzes where used
+    // remove from user model
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item_column.dart';
 import 'package:qmhb/shared/widgets/list_items/list_item_grid.dart';
@@ -37,52 +36,44 @@ class RoundCollectionPage extends StatelessWidget {
             ),
           ],
         ),
-        body: FutureBuilder(
-          future: DatabaseService().getRoundsByIds(user.roundIds),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: LoadingSpinnerHourGlass(),
-              );
-            }
-            if (snapshot.hasError == true) {
-              return Center(
-                child: Text("Could not load content"),
-              );
-            }
-            // TODO - filter on request not after
-            final userRounds = snapshot.data
-                .where(
-                  (RoundModel rd) => rd.uid == user.uid,
-                )
-                .toList();
-            final savedRounds = snapshot.data
-                .where(
-                  (RoundModel rd) => rd.uid != user.uid,
-                )
-                .toList();
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 600,
-                    child: TabBar(
-                      labelStyle: TextStyle(
-                        color: Theme.of(context).accentColor,
-                      ),
-                      labelColor: Theme.of(context).accentColor,
-                      indicatorColor: Theme.of(context).accentColor,
-                      tabs: [
-                        Tab(child: Text("Created")),
-                        Tab(child: Text("Saved")),
-                      ],
-                    ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 600,
+                child: TabBar(
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).accentColor,
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        userRounds.length > 0
-                            ? RoundCollection(rounds: userRounds)
+                  labelColor: Theme.of(context).accentColor,
+                  indicatorColor: Theme.of(context).accentColor,
+                  tabs: [
+                    Tab(child: Text("Created")),
+                    Tab(child: Text("Saved")),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    StreamBuilder(
+                      stream: RoundCollectionService().getRoundsCreatedByUser(
+                        userId: user.uid,
+                      ),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: LoadingSpinnerHourGlass(),
+                          );
+                        }
+                        if (snapshot.hasError == true) {
+                          print(snapshot.error);
+                          return Center(
+                            child: Text("Could not load content"),
+                          );
+                        }
+                        return snapshot.data.length > 0
+                            ? RoundCollection(rounds: snapshot.data)
                             : Padding(
                                 padding: EdgeInsets.only(top: 16),
                                 child: Column(
@@ -91,23 +82,40 @@ class RoundCollectionPage extends StatelessWidget {
                                     NoCollection(type: NoCollectionType.ROUND),
                                   ],
                                 ),
-                              ),
-                        savedRounds.length > 0
-                            ? RoundCollection(rounds: savedRounds)
+                              );
+                      },
+                    ),
+                    StreamBuilder(
+                      stream: RoundCollectionService().getRoundsSavedByUser(
+                        savedIds: user.questionIds,
+                      ),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: LoadingSpinnerHourGlass(),
+                          );
+                        }
+                        if (snapshot.hasError == true) {
+                          return Center(
+                            child: Text("Could not load content"),
+                          );
+                        }
+                        return snapshot.data.length > 0
+                            ? RoundCollection(rounds: snapshot.data)
                             : Padding(
                                 padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
                                 child: Text(
                                   "You haven't saved any rounds yet. \n Head to the Explore tab to start searching",
                                   textAlign: TextAlign.center,
                                 ),
-                              ),
-                      ],
+                              );
+                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            );
-          },
+            ],
+          ),
         ),
       ),
     );
@@ -124,7 +132,7 @@ class RoundCollection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800
-        ? ListItemGrid(rounds: rounds)
-        : ListItemColumn(rounds: rounds);
+        ? RoundListItemGrid(rounds: rounds)
+        : RoundListItemColumn(rounds: rounds);
   }
 }
