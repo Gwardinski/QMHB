@@ -4,25 +4,12 @@ import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
 import 'package:qmhb/shared/widgets/details/quiz_details_widget.dart';
 
-class QuizDetailsPage extends StatefulWidget {
+class QuizDetailsPage extends StatelessWidget {
   final QuizModel quizModel;
 
   QuizDetailsPage({
     @required this.quizModel,
   });
-
-  @override
-  _QuizDetailsPageState createState() => _QuizDetailsPageState();
-}
-
-class _QuizDetailsPageState extends State<QuizDetailsPage> {
-  QuizModel quizModel;
-
-  @override
-  void initState() {
-    super.initState();
-    quizModel = widget.quizModel;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +20,8 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
         actions: <Widget>[
           FlatButton(
             child: Text('Edit'),
-            onPressed: () async {
-              final quiz = await Navigator.of(context).push(
+            onPressed: () {
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => QuizEditorPage(
                     type: QuizEditorType.EDIT,
@@ -42,15 +29,12 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
                   ),
                 ),
               );
-              setState(() {
-                quizModel = quiz;
-              });
             },
           ),
         ],
       ),
       body: QuizDetailsWidget(
-        quizModel: widget.quizModel,
+        quizModel: quizModel,
       ),
     );
   }

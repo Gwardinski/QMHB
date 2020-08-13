@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/shared/text_with_title.dart';
+import 'package:qmhb/shared/widgets/text_with_title.dart';
 
 class TitleAndDetailsBlock extends StatelessWidget {
   const TitleAndDetailsBlock({

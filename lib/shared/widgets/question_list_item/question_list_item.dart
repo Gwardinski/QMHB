@@ -7,6 +7,7 @@ import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_page.dart';
 import 'package:qmhb/screens/library/widgets/question_editor.dart';
 import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_details.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_line1.dart';
@@ -80,40 +81,11 @@ class _QuestionListItemState extends State<QuestionListItem> {
   _viewQuestionDetails() {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text(widget.questionModel.question),
-        content: Text(widget.questionModel.answer),
-        actions: [
-          FlatButton(
-            child: const Text('Add To Round'),
-            onPressed: () {
-              Navigator.pop(context);
-              _addQuestionToRound();
-            },
-          ),
-          FlatButton(
-            child: const Text('Edit'),
-            onPressed: () {
-              Navigator.pop(context);
-              _editQuestion();
-            },
-          ),
-          FlatButton(
-            child: const Text('Delete'),
-            onPressed: () {
-              Navigator.pop(context);
-              _deleteQuestion();
-            },
-          ),
-          // FlatButton(
-          //   child: const Text('Publish'),
-          //   onPressed: _publishQuestion,
-          // ),
-          // FlatButton(
-          //   child: const Text('Save'),
-          //   onPressed: _deleteQuestion,
-          // ),
-        ],
+      child: QuestionDetails(
+        questionModel: widget.questionModel,
+        editQuestion: _editQuestion,
+        addQuestionToRound: _addQuestionToRound,
+        deleteQuestion: _deleteQuestion,
       ),
     );
   }

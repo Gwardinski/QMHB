@@ -5,25 +5,12 @@ import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/round_editor.dart';
 import 'package:qmhb/shared/widgets/details/round_details_widget.dart';
 
-class RoundDetailsPage extends StatefulWidget {
+class RoundDetailsPage extends StatelessWidget {
   final RoundModel roundModel;
 
   RoundDetailsPage({
     @required this.roundModel,
   });
-
-  @override
-  _RoundDetailsPageState createState() => _RoundDetailsPageState();
-}
-
-class _RoundDetailsPageState extends State<RoundDetailsPage> {
-  RoundModel roundModel;
-
-  @override
-  void initState() {
-    super.initState();
-    roundModel = widget.roundModel;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +34,8 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
           ),
           FlatButton(
             child: Text('Edit'),
-            onPressed: () async {
-              final round = await Navigator.of(context).push(
+            onPressed: () {
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => RoundEditorPage(
                     type: RoundEditorType.EDIT,
@@ -56,9 +43,6 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
                   ),
                 ),
               );
-              setState(() {
-                roundModel = round;
-              });
             },
           ),
         ],

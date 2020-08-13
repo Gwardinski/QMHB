@@ -5,7 +5,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
-import 'package:qmhb/shared/text_with_title.dart';
+import 'package:qmhb/shared/widgets/text_with_title.dart';
 
 class AccountPage extends StatelessWidget {
   final AuthenticationService _authenticationService = AuthenticationService();
