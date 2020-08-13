@@ -41,7 +41,7 @@ class RecentQuizzesRow extends StatelessWidget {
               return (snapshot.data.length == 0)
                   ? Row(
                       children: [
-                        Expanded(child: NoCollection(type: NoCollectionType.QUIZ)),
+                        Expanded(child: CreateNewQuizOrRound(type: CreateNewQuizOrRoundType.QUIZ)),
                       ],
                     )
                   : HighlightRow(

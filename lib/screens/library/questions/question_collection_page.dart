@@ -104,10 +104,14 @@ class QuestionCollectionPage extends StatelessWidget {
                         return snapshot.data.length > 0
                             ? QuestionListItemColumn(questions: snapshot.data)
                             : Padding(
-                                padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
-                                child: Text(
-                                  "You haven't saved any Questions yet. \n Head to the Explore tab to start searching",
-                                  textAlign: TextAlign.center,
+                                padding: EdgeInsets.only(top: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    NoSavedItems(
+                                      type: NoSavedItemsType.QUESTION,
+                                    ),
+                                  ],
                                 ),
                               );
                       },

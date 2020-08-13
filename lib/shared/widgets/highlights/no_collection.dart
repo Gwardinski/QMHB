@@ -6,15 +6,15 @@ import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
 import 'package:qmhb/screens/library/widgets/round_editor.dart';
 
-enum NoCollectionType {
+enum CreateNewQuizOrRoundType {
   QUIZ,
   ROUND,
 }
 
-class NoCollection extends StatelessWidget {
-  final NoCollectionType type;
+class CreateNewQuizOrRound extends StatelessWidget {
+  final CreateNewQuizOrRoundType type;
 
-  NoCollection({
+  CreateNewQuizOrRound({
     @required this.type,
   });
 
@@ -32,7 +32,7 @@ class NoCollection extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => type == NoCollectionType.QUIZ
+              builder: (context) => type == CreateNewQuizOrRoundType.QUIZ
                   ? QuizEditorPage(
                       type: QuizEditorType.ADD,
                     )
@@ -64,7 +64,7 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
     @required this.type,
   }) : super(key: key);
 
-  final NoCollectionType type;
+  final CreateNewQuizOrRoundType type;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          type == NoCollectionType.QUIZ ? "Create New Quiz" : "Create New Round",
+          type == CreateNewQuizOrRoundType.QUIZ ? "Create New Quiz" : "Create New Round",
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -92,7 +92,7 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
     @required this.type,
   }) : super(key: key);
 
-  final NoCollectionType type;
+  final CreateNewQuizOrRoundType type;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
       height: 128,
       padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
       child: Text(
-        type == NoCollectionType.QUIZ
+        type == CreateNewQuizOrRoundType.QUIZ
             ? "Your library of Quizzes lives here. Tap to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
             : "Your library of Rounds lives here. Tap to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
       ),

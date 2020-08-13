@@ -47,7 +47,7 @@ class RecentRoundsRow extends StatelessWidget {
               return (snapshot.data.length == 0)
                   ? Row(
                       children: [
-                        Expanded(child: NoCollection(type: NoCollectionType.ROUND)),
+                        Expanded(child: CreateNewQuizOrRound(type: CreateNewQuizOrRoundType.ROUND)),
                       ],
                     )
                   : HighlightRow(

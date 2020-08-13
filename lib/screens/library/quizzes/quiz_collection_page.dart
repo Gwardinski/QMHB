@@ -4,6 +4,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
 import 'package:qmhb/services/quiz_colection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/no_collection.dart';
@@ -80,7 +81,7 @@ class QuizCollectionPage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    NoCollection(type: NoCollectionType.ROUND),
+                                    CreateNewQuizOrRound(type: CreateNewQuizOrRoundType.ROUND),
                                   ],
                                 ),
                               );
@@ -104,10 +105,14 @@ class QuizCollectionPage extends StatelessWidget {
                         return snapshot.data.length > 0
                             ? QuizCollection(quizzes: snapshot.data)
                             : Padding(
-                                padding: EdgeInsets.all(getIt<AppSize>().rSpacingMd),
-                                child: Text(
-                                  "You haven't saved any quizzes yet. \n Head to the Explore tab to start searching",
-                                  textAlign: TextAlign.center,
+                                padding: EdgeInsets.only(top: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    NoSavedItems(
+                                      type: NoSavedItemsType.QUIZ,
+                                    ),
+                                  ],
                                 ),
                               );
                       },
