@@ -7,21 +7,27 @@ class AppSize {
   double rSpacingLg = 32.0;
 
   // for large layouts only
-  double rSpacingXs = 0.0;
+  double lOnly8 = 0.0;
+  double lOnly16 = 0.0;
+  double rSpacingPageTop = 16;
   // does not change
   double spacingXl = 64.0;
 
   updateSize(useLargeLayout) {
     if (useLargeLayout) {
-      rSpacingXs = 8.0;
+      lOnly8 = 8.0;
+      lOnly16 = 16.0;
       rSpacingSm = 16.0;
       rSpacingMd = 32.0;
       rSpacingLg = 64.0;
+      rSpacingPageTop = 128.0;
     } else {
-      rSpacingXs = 0;
+      lOnly8 = 0;
+      lOnly16 = 0;
       rSpacingSm = spacingSm;
       rSpacingMd = spacingMd;
       rSpacingLg = spacingLg;
+      rSpacingPageTop = 16;
     }
   }
 }

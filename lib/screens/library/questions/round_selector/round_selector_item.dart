@@ -62,7 +62,7 @@ class _RoundSelectorItemState extends State<RoundSelectorItem> {
         roundModel.totalPoints += widget.questionPoints;
       }
       await roundService.editRoundOnFirebaseCollection(roundModel);
-      await userService.updateUserTimeStamp(userModel.uid);
+      await userService.updateUserDataOnFirebase(userModel);
     } catch (e) {
       print(e.toString());
     } finally {

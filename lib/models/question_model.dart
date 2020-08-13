@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qmhb/models/category_model.dart';
 
 enum QuestionType {
   STANDARD,
@@ -15,10 +16,9 @@ class QuestionModel {
   String difficulty;
   double points;
   bool isPublished;
-  // TODO - QuestionType
-  // QuestionType questionType;
   Timestamp lastUpdated;
   Timestamp createAt;
+  // TODO - QuestionType questionType;
 
   QuestionModel({
     this.id,
@@ -55,5 +55,10 @@ class QuestionModel {
     this.difficulty = document.data['difficulty'] ?? '';
     this.points = document.data['points'] ?? 1;
     this.isPublished = document.data['isPublished'] ?? false;
+  }
+
+  QuestionModel.newQuestion() {
+    this.points = 1;
+    this.category = acceptedCategories[0];
   }
 }

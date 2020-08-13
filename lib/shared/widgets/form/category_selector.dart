@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/category_model.dart';
 
-class FormDropdown extends StatefulWidget {
+class CategorySelector extends StatefulWidget {
   final Function(String) onSelect;
   final String initialValue;
-  FormDropdown({
+  CategorySelector({
     Key key,
     this.onSelect,
     this.initialValue,
   }) : super(key: key);
 
   @override
-  _FormDropdownState createState() => _FormDropdownState();
+  _CategorySelectorState createState() => _CategorySelectorState();
 }
 
-class _FormDropdownState extends State<FormDropdown> {
+class _CategorySelectorState extends State<CategorySelector> {
   String dropdownValue;
 
   @override

@@ -52,12 +52,22 @@ class QuestionCollectionService {
   ) async {
     final serverTimestamp = Timestamp.now();
     return await _questionsCollection.document(questionModel.id).setData({
+      "id": questionModel.id,
+      "uid": questionModel.uid,
       "question": questionModel.question,
       "answer": questionModel.answer,
       "category": questionModel.category,
       "difficulty": questionModel.difficulty,
       "points": questionModel.points,
+      "isPublished": questionModel.isPublished,
+      "createdAt": questionModel.createAt,
       "lastUpdated": serverTimestamp,
     });
+  }
+
+  Future<void> deleteQuestionOnFirebaseCollection(String id) async {
+    await _questionsCollection.document(id).delete();
+    // remove from all rounds where used
+    // remove from user model
   }
 }

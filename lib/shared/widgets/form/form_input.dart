@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
+
+import '../../../get_it.dart';
 
 class FormInput extends StatelessWidget {
   final initialValue;
@@ -23,7 +26,7 @@ class FormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: getIt<AppSize>().rSpacingMd),
       child: TextFormField(
         initialValue: initialValue,
         enabled: disabled != true,

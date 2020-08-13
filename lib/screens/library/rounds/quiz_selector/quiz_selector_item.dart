@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/services/database.dart';
 import 'package:qmhb/services/quiz_colection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 
@@ -63,7 +62,7 @@ class _QuizSelectorItemState extends State<QuizSelectorItem> {
         quizModel.totalPoints += widget.roundPoints;
       }
       await quizService.editQuizOnFirebaseCollection(quizModel);
-      await userService.updateUserTimeStamp(userModel.uid);
+      await userService.updateUserDataOnFirebase(userModel);
     } catch (e) {
       print(e.toString());
     } finally {

@@ -152,7 +152,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
         await roundService.editRoundOnFirebaseCollection(
           roundModel,
         );
-        await userService.updateUserTimeStamp(userModel.uid);
+        await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);

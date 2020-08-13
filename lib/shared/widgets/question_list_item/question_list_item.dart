@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_page.dart';
+import 'package:qmhb/screens/library/widgets/question_editor.dart';
+import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_line1.dart';
@@ -83,15 +86,24 @@ class _QuestionListItemState extends State<QuestionListItem> {
         actions: [
           FlatButton(
             child: const Text('Add To Round'),
-            onPressed: _addQuestionToRound,
+            onPressed: () {
+              Navigator.pop(context);
+              _addQuestionToRound();
+            },
           ),
           FlatButton(
             child: const Text('Edit'),
-            onPressed: _editQuestion,
+            onPressed: () {
+              Navigator.pop(context);
+              _editQuestion();
+            },
           ),
           FlatButton(
             child: const Text('Delete'),
-            onPressed: _deleteQuestion,
+            onPressed: () {
+              Navigator.pop(context);
+              _deleteQuestion();
+            },
           ),
           // FlatButton(
           //   child: const Text('Publish'),
@@ -118,9 +130,6 @@ class _QuestionListItemState extends State<QuestionListItem> {
     }
     if (result == QuestionOptions.save) {
       return _saveQuestion();
-    }
-    if (result == QuestionOptions.details) {
-      return _viewQuestionDetails();
     }
     if (result == QuestionOptions.publish) {
       return _publishQuestion();
@@ -150,8 +159,29 @@ class _QuestionListItemState extends State<QuestionListItem> {
   }
 
   _deleteQuestion() {
-    // TODO delete own questions only
-    print("Delete Question");
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Are you sure you wish to delete this question ?"),
+        content: Text(widget.questionModel.question),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text('Delete'),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await Provider.of<QuestionCollectionService>(context)
+                  .deleteQuestionOnFirebaseCollection(widget.questionModel.id);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   _saveQuestion() {

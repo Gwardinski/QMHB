@@ -5,8 +5,9 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/question_editor.dart';
 import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/shared/widgets/highlights/no_question.dart';
+import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/list_items/question_list_item_column.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -88,7 +89,7 @@ class QuestionCollectionPage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    NoQuestion(),
+                                    CreateFirstQuestionButton(),
                                   ],
                                 ),
                               ),

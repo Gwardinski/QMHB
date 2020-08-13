@@ -29,10 +29,4 @@ class UserCollectionService {
       "lastUpdated": Timestamp.now(),
     });
   }
-
-  Future updateUserTimeStamp(String id) async {
-    return await _usersCollection.document(id).setData({
-      "lastUpdated": Timestamp.now(),
-    });
-  }
 }

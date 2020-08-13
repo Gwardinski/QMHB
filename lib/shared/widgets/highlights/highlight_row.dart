@@ -41,7 +41,7 @@ class QuizHighlightRow extends StatelessWidget {
       height: 128,
       margin: EdgeInsets.fromLTRB(
         0,
-        getIt<AppSize>().rSpacingXs,
+        getIt<AppSize>().lOnly8,
         0,
         getIt<AppSize>().rSpacingSm,
       ),
@@ -96,7 +96,7 @@ class RoundHighlightRow extends StatelessWidget {
       height: 128,
       margin: EdgeInsets.fromLTRB(
         0,
-        getIt<AppSize>().rSpacingXs,
+        getIt<AppSize>().lOnly8,
         0,
         getIt<AppSize>().rSpacingSm,
       ),

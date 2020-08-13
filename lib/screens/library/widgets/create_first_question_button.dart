@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
+import 'package:qmhb/screens/library/widgets/question_editor.dart';
 
-class NoQuestion extends StatelessWidget {
+class CreateFirstQuestionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -175,7 +175,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
         await quizService.editQuizOnFirebaseCollection(
           quizModel,
         );
-        await userService.updateUserTimeStamp(userModel.uid);
+        await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);

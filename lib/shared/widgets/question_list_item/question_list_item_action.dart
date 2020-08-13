@@ -37,10 +37,6 @@ class QuestionListItemAction extends StatelessWidget {
           //   value: QuestionOptions.publish,
           //   child: Text("Publish"),
           // ),
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.details,
-            child: Text("Details"),
-          ),
         ],
       ),
     );

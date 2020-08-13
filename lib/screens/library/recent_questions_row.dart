@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/questions/question_collection_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/shared/widgets/highlights/no_question.dart';
+import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
@@ -39,7 +39,7 @@ class RecentQuestionsRow extends StatelessWidget {
                 );
               }
               return (snapshot.data.length == 0)
-                  ? NoQuestion()
+                  ? CreateFirstQuestionButton()
                   : HighlightRowQuestion(
                       questions: snapshot.data,
                     );

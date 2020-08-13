@@ -22,7 +22,7 @@ class NoCollection extends StatelessWidget {
       height: 128,
       margin: EdgeInsets.fromLTRB(
         getIt<AppSize>().rSpacingMd,
-        getIt<AppSize>().rSpacingXs,
+        getIt<AppSize>().lOnly8,
         getIt<AppSize>().rSpacingMd,
         getIt<AppSize>().rSpacingSm,
       ),
