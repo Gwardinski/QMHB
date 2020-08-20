@@ -31,48 +31,68 @@ class _QuestionListItemState extends State<QuestionListItem> {
   bool revealAnswer = false;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _viewQuestionDetails,
-      child: Container(
-        height: 64,
-        padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            QuestionListItemAction2(
-              revealAnswer: revealAnswer,
-              onTap: () {
-                setState(() {
-                  revealAnswer = !revealAnswer;
-                });
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  QuestionListItemLine1(
-                    text: revealAnswer == true
-                        ? widget.questionModel.answer
-                        : widget.questionModel.question,
-                    highlight: revealAnswer,
-                  ),
-                  QuestionListItemLine2(
-                    points: widget.questionModel.points.toString(),
-                    category: widget.questionModel.category,
-                  ),
-                ],
+    return Draggable<QuestionModel>(
+      dragAnchor: DragAnchor.pointer,
+      data: widget.questionModel,
+      feedback: Material(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          height: 64,
+          width: 256,
+          color: Colors.grey,
+          child: Center(
+            child: Text(
+              widget.questionModel.question,
+              style: TextStyle(
+                fontSize: 18,
               ),
             ),
-            QuestionListItemAction(
-              onTap: onMenuSelect,
-            ),
-          ],
+          ),
+        ),
+      ),
+      child: InkWell(
+        onTap: _viewQuestionDetails,
+        child: Container(
+          height: 64,
+          padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              QuestionListItemAction2(
+                revealAnswer: revealAnswer,
+                onTap: () {
+                  setState(() {
+                    revealAnswer = !revealAnswer;
+                  });
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    QuestionListItemLine1(
+                      text: revealAnswer == true
+                          ? widget.questionModel.answer
+                          : widget.questionModel.question,
+                      highlight: revealAnswer,
+                    ),
+                    QuestionListItemLine2(
+                      points: widget.questionModel.points.toString(),
+                      category: widget.questionModel.category,
+                    ),
+                  ],
+                ),
+              ),
+              QuestionListItemAction(
+                onTap: onMenuSelect,
+              ),
+            ],
+          ),
         ),
       ),
     );

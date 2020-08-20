@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 
 class RoundCollectionService {
@@ -77,5 +78,19 @@ class RoundCollectionService {
     await _roundsCollection.document(id).delete();
     // remove from all quizzes where used
     // remove from user model
+  }
+
+  Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
+    final serverTimestamp = Timestamp.now();
+    return await _roundsCollection.document(roundModel.id).setData({
+      "id": roundModel.id,
+      "uid": roundModel.uid,
+      "title": roundModel.title,
+      "description": roundModel.description,
+      "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
+      "isPublished": false,
+      "createdAt": roundModel.createAt,
+      "lastUpdated": serverTimestamp,
+    });
   }
 }

@@ -7,6 +7,7 @@ import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_items_column.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_items_column.dart';
 
 class QuestionCollectionPage extends StatelessWidget {
   @override
@@ -52,66 +53,77 @@ class QuestionCollectionPage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: TabBarView(
+                child: Row(
                   children: [
-                    StreamBuilder(
-                      stream: QuestionCollectionService().getQuestionsCreatedByUser(
-                        userId: user.uid,
-                      ),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(
-                            child: LoadingSpinnerHourGlass(),
-                          );
-                        }
-                        if (snapshot.hasError == true) {
-                          print(snapshot.error);
-                          return Center(
-                            child: Text("Could not load content"),
-                          );
-                        }
-                        return snapshot.data.length > 0
-                            ? QuestionListItemsColumn(questions: snapshot.data)
-                            : Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CreateFirstQuestionButton(),
-                                  ],
-                                ),
-                              );
-                      },
+                    Column(
+                      children: [
+                        Expanded(child: UserRoundSidebar()),
+                      ],
                     ),
-                    StreamBuilder(
-                      stream: QuestionCollectionService().getQuestionsSavedByUser(
-                        savedIds: user.questionIds,
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          StreamBuilder(
+                            stream: QuestionCollectionService().getQuestionsCreatedByUser(
+                              userId: user.uid,
+                            ),
+                            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(
+                                  child: LoadingSpinnerHourGlass(),
+                                );
+                              }
+                              if (snapshot.hasError == true) {
+                                print(snapshot.error);
+                                return Center(
+                                  child: Text("Could not load content"),
+                                );
+                              }
+                              return snapshot.data.length > 0
+                                  ? QuestionListItemsColumn(questions: snapshot.data)
+                                  : Padding(
+                                      padding: EdgeInsets.only(top: 16),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          CreateFirstQuestionButton(),
+                                        ],
+                                      ),
+                                    );
+                            },
+                          ),
+                          StreamBuilder(
+                            stream: QuestionCollectionService().getQuestionsSavedByUser(
+                              savedIds: user.questionIds,
+                            ),
+                            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Center(
+                                  child: LoadingSpinnerHourGlass(),
+                                );
+                              }
+                              if (snapshot.hasError == true) {
+                                return Center(
+                                  child: Text("Could not load content"),
+                                );
+                              }
+                              return snapshot.data.length > 0
+                                  ? QuestionListItemsColumn(questions: snapshot.data)
+                                  : Padding(
+                                      padding: EdgeInsets.only(top: 16),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          NoSavedItems(
+                                            type: NoSavedItemsType.QUESTION,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                            },
+                          ),
+                        ],
                       ),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(
-                            child: LoadingSpinnerHourGlass(),
-                          );
-                        }
-                        if (snapshot.hasError == true) {
-                          return Center(
-                            child: Text("Could not load content"),
-                          );
-                        }
-                        return snapshot.data.length > 0
-                            ? QuestionListItemsColumn(questions: snapshot.data)
-                            : Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    NoSavedItems(
-                                      type: NoSavedItemsType.QUESTION,
-                                    ),
-                                  ],
-                                ),
-                              );
-                      },
                     ),
                   ],
                 ),
