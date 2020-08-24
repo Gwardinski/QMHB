@@ -9,20 +9,11 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
-enum RoundEditorType {
-  ADD,
-  EDIT,
-}
-
 class RoundEditor extends StatefulWidget {
   final RoundModel roundModel;
-  final RoundEditorType type;
-  final String initialQuestionId;
 
   RoundEditor({
     this.roundModel,
-    this.type,
-    this.initialQuestionId,
   });
   @override
   _RoundEditorState createState() => _RoundEditorState();
@@ -37,11 +28,7 @@ class _RoundEditorState extends State<RoundEditor> {
   @override
   void initState() {
     super.initState();
-    if (widget.roundModel != null) {
-      _round = widget.roundModel;
-    } else {
-      _round = RoundModel.newRound();
-    }
+    _round = widget.roundModel;
   }
 
   _updateError(String val) {
@@ -58,34 +45,7 @@ class _RoundEditorState extends State<RoundEditor> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      widget.type == RoundEditorType.ADD ? _createRound() : _editRound();
-    }
-  }
-
-  _createRound() async {
-    if (_formKey.currentState.validate()) {
-      _updateIsLoading(true);
-      _updateError('');
-      final roundService = Provider.of<RoundCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
-      List<String> questionIds = List<String>();
-      if (widget.initialQuestionId != null) {
-        questionIds.add(widget.initialQuestionId);
-      }
-      try {
-        String newDocId = await roundService.addRoundToFirebaseCollection(
-          _round,
-          userModel.uid,
-        );
-        userModel.roundIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
-        Navigator.of(context).pop();
-      } catch (e) {
-        _updateError('Failed to add Round');
-      } finally {
-        _updateIsLoading(false);
-      }
+      _editRound();
     }
   }
 

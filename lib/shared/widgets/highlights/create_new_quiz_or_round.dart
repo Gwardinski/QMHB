@@ -4,6 +4,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/widgets/round_add.dart';
 import 'package:qmhb/screens/library/widgets/round_editor.dart';
 
 enum CreateNewQuizOrRoundType {
@@ -36,9 +37,7 @@ class CreateNewQuizOrRound extends StatelessWidget {
                   ? QuizEditorPage(
                       type: QuizEditorType.ADD,
                     )
-                  : RoundEditorPage(
-                      type: RoundEditorType.ADD,
-                    ),
+                  : RoundAdd(),
             ),
           );
         },

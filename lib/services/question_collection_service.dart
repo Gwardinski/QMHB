@@ -43,6 +43,12 @@ class QuestionCollectionService {
     });
   }
 
+  Stream<List<QuestionModel>> getQuestionsByIds(List<String> ids) {
+    return _questionsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
+      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+    });
+  }
+
   Future<String> addQuestionToFirebaseCollection(
     QuestionModel questionModel,
     String uid,

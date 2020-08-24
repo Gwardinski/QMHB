@@ -24,13 +24,14 @@ class RoundListItemGrid extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(52, 32, 0, 0),
               child: ButtonPrimary(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => RoundEditorPage(
-                        type: RoundEditorType.ADD,
-                      ),
-                    ),
-                  );
+                  //   Navigator.of(context).push(
+                  //     MaterialPageRoute(
+                  //       builder: (context) => RoundEditorPage(
+                  //         type: RoundEditorType.ADD,
+                  //       ),
+                  //     ),
+                  //   );
+                  // todo
                 },
                 text: "Create New",
                 // TODO hide when used in explore tab
