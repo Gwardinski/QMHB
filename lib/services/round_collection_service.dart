@@ -3,10 +3,8 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 
 class RoundCollectionService {
-  // DB collections
   final CollectionReference _roundsCollection = Firestore.instance.collection('rounds');
 
-  // TODO - add pagination
   Stream<List<RoundModel>> getRoundsCreatedByUser({
     String userId,
     String orderBy = "lastUpdated",
@@ -22,7 +20,6 @@ class RoundCollectionService {
     });
   }
 
-  // TODO - add pagination
   Stream<List<RoundModel>> getRoundsSavedByUser({
     List<String> savedIds,
     String orderBy = "lastUpdated",
@@ -40,6 +37,12 @@ class RoundCollectionService {
 
   Stream<List<RoundModel>> getRecentRoundStream() {
     return _roundsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
+      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+    });
+  }
+
+  Stream<List<RoundModel>> getRoundsByIds(List<String> ids) {
+    return _roundsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
       return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }

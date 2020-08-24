@@ -5,7 +5,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/library/questions/round_selector/round_selector_item.dart';
 import 'package:qmhb/screens/library/widgets/round_add.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
 class RoundSelectorPage extends StatefulWidget {
@@ -27,7 +27,7 @@ class _RoundSelectorPageState extends State<RoundSelectorPage> {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
-    DatabaseService databaseService = Provider.of<DatabaseService>(context);
+    RoundCollectionService roundCollectionService = Provider.of<RoundCollectionService>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -54,8 +54,8 @@ class _RoundSelectorPageState extends State<RoundSelectorPage> {
               },
             ),
             Divider(),
-            FutureBuilder(
-              future: databaseService.getRoundsByIds(user.roundIds),
+            StreamBuilder(
+              stream: roundCollectionService.getRoundsByIds(user.roundIds),
               builder: (BuildContext context, snapshot) {
                 if (!snapshot.hasData) {
                   return Container();

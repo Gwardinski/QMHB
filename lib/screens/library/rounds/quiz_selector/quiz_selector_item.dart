@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/services/quiz_colection_service.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 
 class QuizSelectorItem extends StatefulWidget {

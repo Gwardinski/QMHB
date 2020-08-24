@@ -6,7 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_item.dart';
 import 'package:qmhb/screens/library/widgets/quiz_add.dart';
-import 'package:qmhb/services/database.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
 class QuizSelectorPage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
-    DatabaseService databaseService = Provider.of<DatabaseService>(context);
+    QuizCollectionService quizCollectionService = Provider.of<QuizCollectionService>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -55,8 +55,8 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
               },
             ),
             Divider(),
-            FutureBuilder(
-              future: databaseService.getQuizzesByIds(user.quizIds),
+            StreamBuilder(
+              stream: quizCollectionService.getQuizzesByIds(user.quizIds),
               builder: (BuildContext context, snapshot) {
                 if (!snapshot.hasData) {
                   return Container();

@@ -31,7 +31,6 @@ class RoundListItemGrid extends StatelessWidget {
                   );
                 },
                 text: "Create New",
-                // TODO hide when used in explore tab
               ),
             ),
           ],

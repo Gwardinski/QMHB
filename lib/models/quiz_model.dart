@@ -77,7 +77,5 @@ class QuizModel {
     }
   }
 
-  QuizModel.newRound() {
-    // TODO prefil with any required fields
-  }
+  QuizModel.newRound();
 }

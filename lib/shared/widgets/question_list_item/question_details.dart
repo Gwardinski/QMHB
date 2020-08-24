@@ -19,7 +19,6 @@ class QuestionDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       contentPadding: EdgeInsets.all(16),
-      title: Text(questionModel.question),
       content: Container(
         constraints: BoxConstraints(maxHeight: 256),
         child: Column(
@@ -29,6 +28,7 @@ class QuestionDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(questionModel.question),
                   Text(questionModel.answer),
                   Text(questionModel.category),
                   Text("${questionModel.points.toString()} points"),

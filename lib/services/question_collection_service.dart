@@ -5,7 +5,6 @@ class QuestionCollectionService {
   // DB collections
   final CollectionReference _questionsCollection = Firestore.instance.collection('questions');
 
-  // TODO - add pagination
   Stream<List<QuestionModel>> getQuestionsCreatedByUser({
     String userId,
     String orderBy = "lastUpdated",
@@ -21,7 +20,6 @@ class QuestionCollectionService {
     });
   }
 
-  // TODO - add pagination
   Stream<List<QuestionModel>> getQuestionsSavedByUser({
     List<String> savedIds,
     String orderBy = "lastUpdated",

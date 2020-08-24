@@ -62,7 +62,5 @@ class RoundModel {
     }
   }
 
-  RoundModel.newRound() {
-    // TODO prefil with any required fields
-  }
+  RoundModel.newRound();
 }

@@ -18,7 +18,6 @@ class QuestionModel {
   bool isPublished;
   Timestamp lastUpdated;
   Timestamp createAt;
-  // TODO - QuestionType questionType;
 
   QuestionModel({
     this.id,

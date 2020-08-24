@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
-import 'package:qmhb/services/quiz_colection_service.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 
@@ -126,12 +126,10 @@ class _QuizListItemState extends State<QuizListItem> {
   }
 
   _saveRound() {
-    // TODO save pre-existing question
-    print("Save Question");
+    print("Save Quiz");
   }
 
   _publishRound() {
-    // TODO publish question
-    print("Publish Question");
+    print("Publish Quiz");
   }
 }

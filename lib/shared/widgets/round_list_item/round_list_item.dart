@@ -139,12 +139,10 @@ class _RoundListItemState extends State<RoundListItem> {
   }
 
   _saveRound() {
-    // TODO save pre-existing question
-    print("Save Question");
+    print("Save Round");
   }
 
   _publishRound() {
-    // TODO publish question
-    print("Publish Question");
+    print("Publish Round");
   }
 }

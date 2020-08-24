@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_collection_page.dart';
-import 'package:qmhb/services/quiz_colection_service.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';

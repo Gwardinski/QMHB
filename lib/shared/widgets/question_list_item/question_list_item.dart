@@ -177,12 +177,10 @@ class _QuestionListItemState extends State<QuestionListItem> {
   }
 
   _saveQuestion() {
-    // TODO save pre-existing question
     print("Save Question");
   }
 
   _publishQuestion() {
-    // TODO publish question
     print("Publish Question");
   }
 }
