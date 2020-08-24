@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
-import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/widgets/quiz_add.dart';
 import 'package:qmhb/services/quiz_colection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -25,12 +24,11 @@ class QuizCollectionPage extends StatelessWidget {
               icon: Icon(Icons.add),
               label: Text('New'),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuizEditorPage(
-                      type: QuizEditorType.ADD,
-                    ),
-                  ),
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return QuizAdd();
+                  },
                 );
               },
             ),

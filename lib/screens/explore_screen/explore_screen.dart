@@ -23,33 +23,33 @@ class ExploreScreen extends StatelessWidget {
             //   headerTitle: "Featured Quizzes",
             //   primaryHeaderButtonText: "Search All Quizzes",
             //   primaryHeaderButtonFunction: () {
-            //     // Navigator.of(context).push(
-            //     //   MaterialPageRoute(
-            //     //     builder: (context) => QuizzesScreen(),
-            //     //   ),
-            //     // );
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute(
+            //         builder: (context) => QuizzesScreen(),
+            //       ),
+            //     );
             //   },
             // ),
             // RoundRow(
             //   headerTitle: "Featured Rounds",
             //   primaryHeaderButtonText: "Search All Rounds",
             //   primaryHeaderButtonFunction: () {
-            //     // Navigator.of(context).push(
-            //     //   MaterialPageRoute(
-            //     //     builder: (context) => RoundsScreen(),
-            //     //   ),
-            //     // );
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute(
+            //         builder: (context) => RoundsScreen(),
+            //       ),
+            //     );
             //   },
             // ),
             // QuestionRow(
             //   headerTitle: "Featured Questions",
             //   primaryHeaderButtonText: "Search All Questions",
             //   primaryHeaderButtonFunction: () {
-            //     // Navigator.of(context).push(
-            //     //   MaterialPageRoute(
-            //     //     builder: (context) => QuestionsScreen(),
-            //     //   ),
-            //     // );
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute(
+            //         builder: (context) => QuestionsScreen(),
+            //       ),
+            //     );
             //   },
             // ),
           ],

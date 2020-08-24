@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
-import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/widgets/quiz_add.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -24,12 +23,11 @@ class QuizListItemGrid extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(52, 32, 0, 0),
               child: ButtonPrimary(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => QuizEditorPage(
-                        type: QuizEditorType.ADD,
-                      ),
-                    ),
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return QuizAdd();
+                    },
                   );
                 },
                 text: "Create New",

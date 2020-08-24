@@ -4,7 +4,7 @@ import 'package:qmhb/models/quiz_model.dart';
 class QuizCollectionService {
   final CollectionReference _quizzesCollection = Firestore.instance.collection('quizzes');
 
-  // Todo - add pagination
+  // TODO - add pagination
   Stream<List<QuizModel>> getQuizzesCreatedByUser({
     String userId,
     String orderBy = "lastUpdated",
@@ -20,7 +20,7 @@ class QuizCollectionService {
     });
   }
 
-  // Todo - add pagination
+  // TODO - add pagination
   Stream<List<QuizModel>> getQuizzesSavedByUser({
     List<String> savedIds,
     String orderBy = "lastUpdated",

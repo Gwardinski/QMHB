@@ -9,20 +9,11 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
-enum QuizEditorType {
-  ADD,
-  EDIT,
-}
-
 class QuizEditor extends StatefulWidget {
   final QuizModel quizModel;
-  final QuizEditorType type;
-  final String initialRoundId;
 
   QuizEditor({
     this.quizModel,
-    this.type,
-    this.initialRoundId,
   });
   @override
   _QuizEditorState createState() => _QuizEditorState();
@@ -37,11 +28,7 @@ class _QuizEditorState extends State<QuizEditor> {
   @override
   void initState() {
     super.initState();
-    if (widget.quizModel != null) {
-      _quiz = widget.quizModel;
-    } else {
-      _quiz = QuizModel.newRound();
-    }
+    _quiz = widget.quizModel;
   }
 
   _updateError(String val) {
@@ -58,34 +45,7 @@ class _QuizEditorState extends State<QuizEditor> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      widget.type == QuizEditorType.ADD ? _createQuiz() : _editQuiz();
-    }
-  }
-
-  _createQuiz() async {
-    if (_formKey.currentState.validate()) {
-      _updateIsLoading(true);
-      _updateError('');
-      final quizService = Provider.of<QuizCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
-      List<String> questionIds = List<String>();
-      if (widget.initialRoundId != null) {
-        questionIds.add(widget.initialRoundId);
-      }
-      try {
-        String newDocId = await quizService.addQuizToFirebaseCollection(
-          _quiz,
-          userModel.uid,
-        );
-        userModel.roundIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
-        Navigator.of(context).pop();
-      } catch (e) {
-        _updateError('Failed to add Quiz');
-      } finally {
-        _updateIsLoading(false);
-      }
+      _editQuiz();
     }
   }
 

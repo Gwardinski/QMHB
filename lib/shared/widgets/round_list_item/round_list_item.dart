@@ -96,8 +96,7 @@ class _RoundListItemState extends State<RoundListItem> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuizSelectorPage(
-          roundId: widget.roundModel.id,
-          roundPoints: widget.roundModel.totalPoints,
+          round: widget.roundModel,
         ),
       ),
     );

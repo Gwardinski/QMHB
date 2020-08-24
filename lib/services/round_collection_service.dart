@@ -6,7 +6,7 @@ class RoundCollectionService {
   // DB collections
   final CollectionReference _roundsCollection = Firestore.instance.collection('rounds');
 
-  // Todo - add pagination
+  // TODO - add pagination
   Stream<List<RoundModel>> getRoundsCreatedByUser({
     String userId,
     String orderBy = "lastUpdated",
@@ -22,7 +22,7 @@ class RoundCollectionService {
     });
   }
 
-  // Todo - add pagination
+  // TODO - add pagination
   Stream<List<RoundModel>> getRoundsSavedByUser({
     List<String> savedIds,
     String orderBy = "lastUpdated",

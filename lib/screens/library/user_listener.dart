@@ -22,7 +22,7 @@ class _UserListenerState extends State<UserListener> {
   Widget build(BuildContext context) {
     _userDataStateModel = Provider.of<UserDataStateModel>(context);
     UserModel currentUserModel = _userDataStateModel.user;
-    // Todo - use singleton here ?
+    // TODO - use singleton here ?
     return StreamBuilder(
       stream: UserCollectionService().getUserStream(currentUserModel?.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {

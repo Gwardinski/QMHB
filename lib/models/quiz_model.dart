@@ -78,6 +78,6 @@ class QuizModel {
   }
 
   QuizModel.newRound() {
-    // todo prefil with any required fields
+    // TODO prefil with any required fields
   }
 }

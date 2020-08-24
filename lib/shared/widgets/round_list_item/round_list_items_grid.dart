@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/screens/library/widgets/round_editor.dart';
+import 'package:qmhb/screens/library/widgets/round_add.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -24,14 +23,12 @@ class RoundListItemGrid extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(52, 32, 0, 0),
               child: ButtonPrimary(
                 onPressed: () {
-                  //   Navigator.of(context).push(
-                  //     MaterialPageRoute(
-                  //       builder: (context) => RoundEditorPage(
-                  //         type: RoundEditorType.ADD,
-                  //       ),
-                  //     ),
-                  //   );
-                  // todo
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return RoundAdd();
+                    },
+                  );
                 },
                 text: "Create New",
                 // TODO hide when used in explore tab

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_item.dart';
-import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/widgets/quiz_add.dart';
 import 'package:qmhb/services/database.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
 class QuizSelectorPage extends StatefulWidget {
-  final String roundId;
-  final double roundPoints;
+  final RoundModel round;
 
   QuizSelectorPage({
-    @required this.roundId,
-    @required this.roundPoints,
+    @required this.round,
   });
 
   @override
@@ -46,13 +44,13 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
               headerTitle: "Select Quizzes",
               primaryHeaderButtonText: "New Quiz",
               primaryHeaderButtonFunction: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuizEditorPage(
-                      type: QuizEditorType.ADD,
-                      initialRoundId: widget.roundId,
-                    ),
-                  ),
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return QuizAdd(
+                      intialRound: widget.round,
+                    );
+                  },
                 );
               },
             ),
@@ -75,8 +73,8 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
                       QuizModel quizModel = snapshot.data[index];
                       return QuizSelectorItem(
                         quizModel: quizModel,
-                        roundId: widget.roundId,
-                        roundPoints: widget.roundPoints,
+                        roundId: widget.round.id,
+                        roundPoints: widget.round.totalPoints,
                       );
                     },
                   ),

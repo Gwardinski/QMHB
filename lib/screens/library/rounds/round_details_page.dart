@@ -24,8 +24,7 @@ class RoundDetailsPage extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => QuizSelectorPage(
-                    roundId: roundModel.uid,
-                    roundPoints: roundModel.totalPoints,
+                    round: roundModel,
                   ),
                 ),
               );
