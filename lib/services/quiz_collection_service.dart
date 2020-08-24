@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
 
 class QuizCollectionService {
   final CollectionReference _quizzesCollection = Firestore.instance.collection('quizzes');
@@ -71,7 +72,7 @@ class QuizCollectionService {
       "description": quizModel.description,
       "roundIds": quizModel.roundIds,
       "isPublished": false,
-      "createdAt": quizModel.createAt,
+      "createdAt": quizModel.createdAt,
       "lastUpdated": serverTimestamp,
     });
   }
@@ -80,5 +81,19 @@ class QuizCollectionService {
     await _quizzesCollection.document(id).delete();
     // remove from all quizzes where used
     // remove from user model
+  }
+
+  Future<void> addRoundToQuiz(QuizModel quizModel, RoundModel round) async {
+    final serverTimestamp = Timestamp.now();
+    return await _quizzesCollection.document(quizModel.id).setData({
+      "id": quizModel.id,
+      "uid": quizModel.uid,
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "questionIds": List.from(quizModel.questionIds)..addAll([round.id]),
+      "isPublished": false,
+      "createdAt": quizModel.createdAt,
+      "lastUpdated": serverTimestamp,
+    });
   }
 }

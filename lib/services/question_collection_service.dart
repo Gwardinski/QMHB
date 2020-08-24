@@ -81,7 +81,7 @@ class QuestionCollectionService {
       "difficulty": questionModel.difficulty,
       "points": questionModel.points,
       "isPublished": questionModel.isPublished,
-      "createdAt": questionModel.createAt,
+      "createdAt": questionModel.createdAt,
       "lastUpdated": serverTimestamp,
     });
   }

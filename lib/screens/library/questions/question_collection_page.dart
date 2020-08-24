@@ -57,7 +57,7 @@ class QuestionCollectionPage extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Expanded(child: UserRoundSidebar()),
+                        Expanded(child: UserRoundsSidebar()),
                       ],
                     ),
                     Expanded(

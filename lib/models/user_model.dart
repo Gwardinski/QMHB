@@ -12,7 +12,7 @@ class UserModel {
   List<String> savedRoundIds;
   List<String> savedQuizIds;
   Timestamp lastUpdated;
-  Timestamp createAt;
+  Timestamp createdAt;
 
   UserModel({
     @required this.uid,
@@ -25,7 +25,7 @@ class UserModel {
     this.savedRoundIds,
     this.savedQuestionIds,
     this.lastUpdated,
-    this.createAt,
+    this.createdAt,
   });
 
   UserModel.registerNewUser({
@@ -34,7 +34,7 @@ class UserModel {
     @required this.displayName,
   }) {
     lastUpdated = Timestamp.now();
-    createAt = Timestamp.now();
+    createdAt = Timestamp.now();
     quizIds = List<String>();
     roundIds = List<String>();
     questionIds = List<String>();
@@ -48,7 +48,7 @@ class UserModel {
     email = data['email'];
     displayName = data['displayName'];
     lastUpdated = data['lastUpdated'];
-    createAt = data['createAt'];
+    createdAt = data['createdAt'];
     quizIds = List<String>();
     if (data['quizIds'] != null) {
       data['quizIds'].forEach((id) {

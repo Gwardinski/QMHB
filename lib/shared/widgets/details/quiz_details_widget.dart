@@ -35,23 +35,25 @@ class QuizDetailsWidget extends StatelessWidget {
           primaryHeaderButtonFunction: null,
         ),
         Expanded(
-          child: StreamBuilder(
-            stream: roundCollectionService.getRoundsByIds(quizModel.roundIds),
-            builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> roundSnapshot) {
-              if (roundSnapshot.connectionState == ConnectionState.waiting) {
-                return LoadingSpinnerHourGlass();
-              }
-              return ListView.builder(
-                itemCount: roundSnapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  RoundModel round = roundSnapshot.data[index];
-                  return RoundListItem(
-                    roundModel: round,
-                  );
-                },
-              );
-            },
-          ),
+          child: quizModel.roundIds.length > 0
+              ? StreamBuilder(
+                  stream: roundCollectionService.getRoundsByIds(quizModel.roundIds),
+                  builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> roundSnapshot) {
+                    if (roundSnapshot.connectionState == ConnectionState.waiting) {
+                      return LoadingSpinnerHourGlass();
+                    }
+                    return ListView.builder(
+                      itemCount: roundSnapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        RoundModel round = roundSnapshot.data[index];
+                        return RoundListItem(
+                          roundModel: round,
+                        );
+                      },
+                    );
+                  },
+                )
+              : Text("No Rounds"),
         ),
       ],
     );

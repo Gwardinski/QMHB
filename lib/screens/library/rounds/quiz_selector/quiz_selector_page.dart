@@ -48,7 +48,7 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return QuizAdd(
-                      intialRound: widget.round,
+                      initialRound: widget.round,
                     );
                   },
                 );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/screens/library/quizzes/user_quizzes_sidebar.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/screens/library/widgets/round_add.dart';
 import 'package:qmhb/services/round_collection_service.dart';
@@ -54,35 +55,7 @@ class RoundCollectionPage extends StatelessWidget {
               Expanded(
                 child: TabBarView(
                   children: [
-                    StreamBuilder(
-                      stream: RoundCollectionService().getRoundsCreatedByUser(
-                        userId: user.uid,
-                      ),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(
-                            child: LoadingSpinnerHourGlass(),
-                          );
-                        }
-                        if (snapshot.hasError == true) {
-                          print(snapshot.error);
-                          return Center(
-                            child: Text("Could not load content"),
-                          );
-                        }
-                        return snapshot.data.length > 0
-                            ? RoundCollection(rounds: snapshot.data)
-                            : Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CreateNewQuizOrRound(type: CreateNewQuizOrRoundType.ROUND),
-                                  ],
-                                ),
-                              );
-                      },
-                    ),
+                    UserQuizzesSidebar(),
                     StreamBuilder(
                       stream: RoundCollectionService().getRoundsSavedByUser(
                         savedIds: user.questionIds,

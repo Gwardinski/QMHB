@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/rounds/round_details_page.dart';
-import 'package:qmhb/screens/library/widgets/round_add.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
+import 'package:qmhb/screens/library/widgets/quiz_add.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class UserRoundsSidebar extends StatelessWidget {
+class UserQuizzesSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -24,11 +24,11 @@ class UserRoundsSidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          UserRoundsSidebarNewRound(),
-          UserRoundsSidebarTitle(),
+          UserQuizzesSidebarNewQuiz(),
+          UserQuizzesSidebarTitle(),
           Expanded(
             child: StreamBuilder(
-              stream: RoundCollectionService().getRoundsCreatedByUser(
+              stream: QuizCollectionService().getQuizzesCreatedByUser(
                 userId: user.uid,
               ),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -40,7 +40,7 @@ class UserRoundsSidebar extends StatelessWidget {
                 if (snapshot.hasError == true) {
                   print(snapshot.error);
                   return Center(
-                    child: Text("Can't load your Rounds"),
+                    child: Text("Can't load your Quizzes"),
                   );
                 }
                 return snapshot.data.length > 0
@@ -48,7 +48,7 @@ class UserRoundsSidebar extends StatelessWidget {
                         itemCount: snapshot.data.length ?? 0,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (BuildContext context, int index) {
-                          return UserRoundsSidebarItem(roundModel: snapshot.data[index]);
+                          return UserQuizzesSidebarItem(quizModel: snapshot.data[index]);
                         },
                       )
                     : Container();
@@ -61,8 +61,8 @@ class UserRoundsSidebar extends StatelessWidget {
   }
 }
 
-class UserRoundsSidebarTitle extends StatelessWidget {
-  const UserRoundsSidebarTitle({
+class UserQuizzesSidebarTitle extends StatelessWidget {
+  const UserQuizzesSidebarTitle({
     Key key,
   }) : super(key: key);
 
@@ -77,7 +77,7 @@ class UserRoundsSidebarTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Your Rounds:",
+            "Your Quizzes:",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,
@@ -92,13 +92,13 @@ class UserRoundsSidebarTitle extends StatelessWidget {
   }
 }
 
-class UserRoundsSidebarNewRound extends StatelessWidget {
-  openNewRoundForm(context, {initialQuestion}) {
+class UserQuizzesSidebarNewQuiz extends StatelessWidget {
+  openNewQuizForm(context, {initialRound}) {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return RoundAdd(
-          initialQuestion: initialQuestion,
+        return QuizAdd(
+          initialRound: initialRound,
         );
       },
     );
@@ -106,14 +106,14 @@ class UserRoundsSidebarNewRound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<QuestionModel>(
-      onAccept: (question) {
-        openNewRoundForm(context, initialQuestion: question);
+    return DragTarget<RoundModel>(
+      onAccept: (round) {
+        openNewQuizForm(context, initialRound: round);
       },
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
-            openNewRoundForm(context);
+            openNewQuizForm(context);
           },
           child: Container(
             height: 64,
@@ -127,7 +127,7 @@ class UserRoundsSidebarNewRound extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 16),
                     child: Text(
-                      "New Round",
+                      "New Quiz",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
@@ -146,27 +146,27 @@ class UserRoundsSidebarNewRound extends StatelessWidget {
   }
 }
 
-class UserRoundsSidebarItem extends StatelessWidget {
-  const UserRoundsSidebarItem({
-    @required this.roundModel,
+class UserQuizzesSidebarItem extends StatelessWidget {
+  const UserQuizzesSidebarItem({
+    @required this.quizModel,
   });
 
-  final RoundModel roundModel;
+  final QuizModel quizModel;
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<QuestionModel>(
-      onWillAccept: (question) => !roundModel.questionIds.contains(question.id),
-      onAccept: (question) {
-        RoundCollectionService().addQuestionToRound(roundModel, question);
+    return DragTarget<RoundModel>(
+      onWillAccept: (round) => !quizModel.roundIds.contains(round.id),
+      onAccept: (round) {
+        QuizCollectionService().addRoundToQuiz(quizModel, round);
       },
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => RoundDetailsPage(
-                  roundModel: roundModel,
+                builder: (context) => QuizDetailsPage(
+                  quizModel: quizModel,
                 ),
               ),
             );
@@ -178,7 +178,7 @@ class UserRoundsSidebarItem extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 child: Text(
-                  roundModel.title,
+                  quizModel.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,

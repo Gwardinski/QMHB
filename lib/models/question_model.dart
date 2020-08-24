@@ -17,7 +17,7 @@ class QuestionModel {
   double points;
   bool isPublished;
   Timestamp lastUpdated;
-  Timestamp createAt;
+  Timestamp createdAt;
 
   QuestionModel({
     this.id,
@@ -34,7 +34,7 @@ class QuestionModel {
     this.id = json['id'] ?? '';
     this.uid = json['uid'] ?? '';
     this.lastUpdated = json['lastUpdated'];
-    this.createAt = json['createAt'];
+    this.createdAt = json['createdAt'];
     this.question = json['question'] ?? '';
     this.answer = json['answer'] ?? '';
     this.category = json['category'] ?? '';
@@ -47,7 +47,7 @@ class QuestionModel {
     this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
     this.lastUpdated = document.data['lastUpdated'];
-    this.createAt = document.data['createAt'];
+    this.createdAt = document.data['createdAt'];
     this.question = document.data['question'] ?? '';
     this.answer = document.data['answer'] ?? '';
     this.category = document.data['category'] ?? '';

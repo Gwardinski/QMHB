@@ -72,7 +72,7 @@ class RoundCollectionService {
       "description": roundModel.description,
       "questionIds": roundModel.questionIds,
       "isPublished": false,
-      "createdAt": roundModel.createAt,
+      "createdAt": roundModel.createdAt,
       "lastUpdated": serverTimestamp,
     });
   }
@@ -92,7 +92,7 @@ class RoundCollectionService {
       "description": roundModel.description,
       "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
       "isPublished": false,
-      "createdAt": roundModel.createAt,
+      "createdAt": roundModel.createdAt,
       "lastUpdated": serverTimestamp,
     });
   }

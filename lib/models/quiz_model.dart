@@ -12,7 +12,7 @@ class QuizModel {
   List<String> roundIds;
   List<String> questionIds;
   Timestamp lastUpdated;
-  Timestamp createAt;
+  Timestamp createdAt;
 
   QuizModel({
     this.id,
@@ -31,7 +31,7 @@ class QuizModel {
     this.id = json['id'] ?? '';
     this.uid = json['uid'] ?? '';
     this.lastUpdated = json['lastUpdated'];
-    this.createAt = json['createAt'];
+    this.createdAt = json['createdAt'];
     this.title = json['title'] ?? '';
     this.rating = json['rating'] ?? 0;
     this.difficulty = json['difficulty'] ?? 0;
@@ -56,7 +56,7 @@ class QuizModel {
     this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
     this.lastUpdated = document.data['lastUpdated'];
-    this.createAt = document.data['createAt'];
+    this.createdAt = document.data['createdAt'];
     this.title = document.data['title'] ?? '';
     this.rating = document.data['rating'] ?? 0;
     this.difficulty = document.data['difficulty'] ?? 0;

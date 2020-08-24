@@ -11,7 +11,7 @@ class RoundModel {
   double totalPoints;
   bool isPublished;
   Timestamp lastUpdated;
-  Timestamp createAt;
+  Timestamp createdAt;
 
   RoundModel({
     this.uid,
@@ -29,7 +29,7 @@ class RoundModel {
     this.id = json['id'] ?? '';
     this.uid = json['uid'] ?? '';
     this.lastUpdated = json['lastUpdated'];
-    this.createAt = json['createAt'];
+    this.createdAt = json['createdAt'];
     this.title = json['title'] ?? '';
     this.description = json['description'] ?? '';
     this.rating = json['rating'] ?? 0;
@@ -47,7 +47,7 @@ class RoundModel {
     this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
     this.lastUpdated = document.data['lastUpdated'];
-    this.createAt = document.data['createAt'];
+    this.createdAt = document.data['createdAt'];
     this.title = document.data['title'] ?? '';
     this.description = document.data['description'] ?? '';
     this.rating = document.data['rating'] ?? 0;

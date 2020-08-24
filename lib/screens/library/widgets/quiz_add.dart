@@ -11,10 +11,10 @@ import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
 class QuizAdd extends StatefulWidget {
-  final RoundModel intialRound;
+  final RoundModel initialRound;
 
   QuizAdd({
-    this.intialRound,
+    this.initialRound,
   });
   @override
   _RoundAddState createState() => _RoundAddState();
@@ -58,8 +58,8 @@ class _RoundAddState extends State<QuizAdd> {
       final userService = Provider.of<UserCollectionService>(context);
       final userModel = Provider.of<UserDataStateModel>(context).user;
       List<String> roundIds = List<String>();
-      if (widget.intialRound != null) {
-        roundIds.add(widget.intialRound.id);
+      if (widget.initialRound != null) {
+        roundIds.add(widget.initialRound.id);
       }
       try {
         _quiz.roundIds = roundIds;
@@ -99,8 +99,8 @@ class _RoundAddState extends State<QuizAdd> {
                       });
                     },
                   ),
-                  Text(widget.intialRound != null
-                      ? "Quiz will be created with: \n${widget.intialRound?.title} \n\n"
+                  Text(widget.initialRound != null
+                      ? "Quiz will be created with: \n${widget.initialRound?.title} \n\n"
                       : ""),
                   ButtonPrimary(
                     text: "Create",

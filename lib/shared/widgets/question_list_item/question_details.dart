@@ -32,7 +32,7 @@ class QuestionDetails extends StatelessWidget {
                   Text(questionModel.answer),
                   Text(questionModel.category),
                   Text("${questionModel.points.toString()} points"),
-                  Text(questionModel.createAt.toString()),
+                  Text(questionModel.createdAt.toString()),
                   Text(questionModel.lastUpdated.toString()),
                 ],
               ),
