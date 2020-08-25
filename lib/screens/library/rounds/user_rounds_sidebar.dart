@@ -4,7 +4,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/round_details_page.dart';
-import 'package:qmhb/screens/library/widgets/round_add.dart';
+import 'package:qmhb/screens/library/rounds/round_add.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
@@ -25,7 +25,6 @@ class UserRoundsSidebar extends StatelessWidget {
       child: Column(
         children: [
           UserRoundsSidebarNewRound(),
-          UserRoundsSidebarTitle(),
           Expanded(
             child: StreamBuilder(
               stream: RoundCollectionService().getRoundsCreatedByUser(
@@ -53,37 +52,6 @@ class UserRoundsSidebar extends StatelessWidget {
                       )
                     : Container();
               },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class UserRoundsSidebarTitle extends StatelessWidget {
-  const UserRoundsSidebarTitle({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      padding: EdgeInsets.all(16),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Your Rounds:",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
             ),
           ),
         ],

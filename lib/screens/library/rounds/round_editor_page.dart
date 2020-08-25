@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/widgets/round_editor.dart';
+import 'package:qmhb/screens/library/rounds/round_editor.dart';
 
 class RoundEditorPage extends StatefulWidget {
   final RoundModel roundModel;

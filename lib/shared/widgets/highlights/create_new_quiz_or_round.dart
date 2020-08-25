@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/library/widgets/quiz_add.dart';
-import 'package:qmhb/screens/library/widgets/round_add.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_add.dart';
+import 'package:qmhb/screens/library/rounds/round_add.dart';
 
 enum CreateNewQuizOrRoundType {
   QUIZ,

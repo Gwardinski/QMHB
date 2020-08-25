@@ -4,7 +4,7 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
-import 'package:qmhb/screens/library/widgets/quiz_add.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_add.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/screens/library/widgets/question_editor.dart';
+import 'package:qmhb/screens/library/questions/question_editor.dart';
 
 class QuestionEditorPage extends StatefulWidget {
   final QuestionEditorType type;

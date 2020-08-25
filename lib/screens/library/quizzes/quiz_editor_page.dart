@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/library/widgets/quiz_editor.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor.dart';
 
 class QuizEditorPage extends StatefulWidget {
   final QuizModel quizModel;
