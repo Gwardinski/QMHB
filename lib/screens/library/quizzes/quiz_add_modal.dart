@@ -10,17 +10,17 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
-class QuizAdd extends StatefulWidget {
+class QuizAddModal extends StatefulWidget {
   final RoundModel initialRound;
 
-  QuizAdd({
+  QuizAddModal({
     this.initialRound,
   });
   @override
-  _RoundAddState createState() => _RoundAddState();
+  _RoundAddModalState createState() => _RoundAddModalState();
 }
 
-class _RoundAddState extends State<QuizAdd> {
+class _RoundAddModalState extends State<QuizAddModal> {
   final _formKey = GlobalKey<FormState>();
   QuizModel _quiz;
   bool _isLoading = false;

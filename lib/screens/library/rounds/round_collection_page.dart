@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/screens/library/quizzes/user_quizzes_sidebar.dart';
 import 'package:qmhb/screens/library/rounds/user_rounds_collection.dart';
-import 'package:qmhb/screens/library/rounds/round_add.dart';
+import 'package:qmhb/screens/library/rounds/round_add_modal.dart';
 
 class RoundCollectionPage extends StatelessWidget {
   @override
@@ -20,7 +20,7 @@ class RoundCollectionPage extends StatelessWidget {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return RoundAdd();
+                    return RoundAddModal();
                   },
                 );
               },

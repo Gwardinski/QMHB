@@ -34,40 +34,15 @@ class _QuizListItemState extends State<QuizListItem> {
           ),
         );
       },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Row(
-          children: [
-            IgnorePointer(
-              child: SummaryTile(
-                line1: widget.quizModel.title,
-                line2: "Rounds",
-                line2Value: widget.quizModel.roundIds.length,
-                line3: "Points",
-                line3Value: widget.quizModel.totalPoints,
-                onTap: () {},
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-            ),
-            Expanded(
-              child: Container(
-                height: 128,
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: Text(widget.quizModel.description)),
-                  ],
-                ),
-              ),
-            ),
-            QuizListItemAction(
-              onTap: onMenuSelect,
-            ),
-          ],
+      child: SummaryTileLarge(
+        line1: widget.quizModel.title,
+        line2: "Questions",
+        line2Value: widget.quizModel.questionIds.length,
+        line3: "Points",
+        line3Value: widget.quizModel.totalPoints,
+        description: widget.quizModel.description,
+        actionButton: QuizListItemAction(
+          onTap: onMenuSelect,
         ),
       ),
     );

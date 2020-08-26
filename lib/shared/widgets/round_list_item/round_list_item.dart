@@ -25,50 +25,45 @@ class RoundListItem extends StatefulWidget {
 class _RoundListItemState extends State<RoundListItem> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => RoundDetailsPage(
-              roundModel: widget.roundModel,
+    return Draggable<RoundModel>(
+      dragAnchor: DragAnchor.pointer,
+      data: widget.roundModel,
+      feedback: Material(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          height: 64,
+          width: 256,
+          color: Colors.grey,
+          child: Center(
+            child: Text(
+              widget.roundModel.title,
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Row(
-          children: [
-            IgnorePointer(
-              child: SummaryTile(
-                line1: widget.roundModel.title,
-                line2: "Questions",
-                line2Value: widget.roundModel.questionIds.length,
-                line3: "Points",
-                line3Value: widget.roundModel.totalPoints,
-                onTap: () {},
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => RoundDetailsPage(
+                roundModel: widget.roundModel,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.0),
-            ),
-            Expanded(
-              child: Container(
-                height: 128,
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: Text(widget.roundModel.description)),
-                  ],
-                ),
-              ),
-            ),
-            RoundListItemAction(
-              onTap: onMenuSelect,
-            ),
-          ],
+          );
+        },
+        child: SummaryTileLarge(
+          line1: widget.roundModel.title,
+          line2: "Questions",
+          line2Value: widget.roundModel.questionIds.length,
+          line3: "Points",
+          line3Value: widget.roundModel.totalPoints,
+          description: widget.roundModel.description,
+          actionButton: RoundListItemAction(
+            onTap: onMenuSelect,
+          ),
         ),
       ),
     );

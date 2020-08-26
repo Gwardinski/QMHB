@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_add_modal.dart';
 import 'package:qmhb/screens/library/quizzes/user_quizzes_collection.dart';
 
 class QuizCollectionPage extends StatelessWidget {
@@ -19,7 +19,7 @@ class QuizCollectionPage extends StatelessWidget {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return QuizAdd();
+                    return QuizAddModal();
                   },
                 );
               },

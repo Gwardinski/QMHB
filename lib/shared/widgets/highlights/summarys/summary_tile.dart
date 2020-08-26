@@ -36,12 +36,86 @@ class SummaryTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SummaryTileTitle(line1: line1),
+            Expanded(child: SummaryTileTitle(line1: line1)),
             SummaryTileInfoRow(value: line2Value.toString(), title: line2),
             SummaryTileInfoRow(value: line3Value.toString(), title: line3),
             SummaryTileInfoRow(value: line4Value.toString(), title: line4),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SummaryTileLarge extends StatelessWidget {
+  final String line1;
+  final String line2;
+  final String line3;
+  final String line4;
+  final String description;
+  final int line2Value;
+  final double line3Value;
+  final double line4Value;
+  final Widget actionButton;
+
+  SummaryTileLarge({
+    @required this.line1,
+    @required this.line2,
+    @required this.line2Value,
+    @required this.line3,
+    @required this.line3Value,
+    @required this.description,
+    @required this.actionButton,
+    this.line4 = "line4",
+    this.line4Value = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 128,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        border: Border.all(color: Theme.of(context).accentColor),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(child: SummaryTileTitle(line1: line1)),
+                Padding(padding: EdgeInsets.only(bottom: 8)),
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: 128,
+                        child: Column(
+                          children: [
+                            SummaryTileInfoRow(value: line2Value.toString(), title: line2),
+                            SummaryTileInfoRow(value: line3Value.toString(), title: line3),
+                            SummaryTileInfoRow(value: line4Value.toString(), title: line4),
+                          ],
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 16)),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(description),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actionButton
+        ],
       ),
     );
   }
@@ -57,15 +131,13 @@ class SummaryTileTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        child: Text(
-          line1,
-          maxLines: 2,
-          textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 18),
-        ),
+    return Container(
+      width: double.infinity,
+      child: Text(
+        line1,
+        maxLines: 2,
+        textAlign: TextAlign.start,
+        style: TextStyle(fontSize: 18),
       ),
     );
   }
