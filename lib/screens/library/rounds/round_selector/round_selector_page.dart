@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/rounds/quiz_selector/quiz_selector_item.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add_modal.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/screens/library/rounds/round_add_modal.dart';
+import 'package:qmhb/screens/library/rounds/round_selector/round_selector_item.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 
-class QuizSelectorPage extends StatefulWidget {
-  final RoundModel round;
+class RoundSelectorPage extends StatefulWidget {
+  final String questionId;
+  final double questionPoints;
 
-  QuizSelectorPage({
-    @required this.round,
+  RoundSelectorPage({
+    @required this.questionId,
+    @required this.questionPoints,
   });
 
   @override
-  _QuizSelectorPageState createState() {
-    return _QuizSelectorPageState();
+  _RoundSelectorPageState createState() {
+    return _RoundSelectorPageState();
   }
 }
 
-class _QuizSelectorPageState extends State<QuizSelectorPage> {
+class _RoundSelectorPageState extends State<RoundSelectorPage> {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
-    QuizCollectionService quizCollectionService = Provider.of<QuizCollectionService>(context);
+    RoundCollectionService roundCollectionService = Provider.of<RoundCollectionService>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Add Round to Quiz"),
+        title: Text("Add to Rounds"),
       ),
       body: Container(
         width: double.infinity,
@@ -41,22 +42,20 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
               padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
             ),
             SummaryRowHeader(
-              headerTitle: "Select Quizzes",
-              primaryHeaderButtonText: "New Quiz",
+              headerTitle: "Select Round",
+              primaryHeaderButtonText: "New Round",
               primaryHeaderButtonFunction: () {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return QuizAddModal(
-                      initialRound: widget.round,
-                    );
+                    return RoundAddModal();
                   },
                 );
               },
             ),
             Divider(),
             StreamBuilder(
-              stream: quizCollectionService.getQuizzesByIds(user.quizIds),
+              stream: roundCollectionService.getRoundsByIds(user.roundIds),
               builder: (BuildContext context, snapshot) {
                 if (!snapshot.hasData) {
                   return Container();
@@ -70,11 +69,11 @@ class _QuizSelectorPageState extends State<QuizSelectorPage> {
                   child: ListView.builder(
                     itemCount: snapshot.data.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
-                      QuizModel quizModel = snapshot.data[index];
-                      return QuizSelectorItem(
-                        quizModel: quizModel,
-                        roundId: widget.round.id,
-                        roundPoints: widget.round.totalPoints,
+                      RoundModel roundModel = snapshot.data[index];
+                      return RoundSelectorItem(
+                        roundModel: roundModel,
+                        questionId: widget.questionId,
+                        questionPoints: widget.questionPoints,
                       );
                     },
                   ),
