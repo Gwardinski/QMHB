@@ -48,7 +48,7 @@ class QuizCollectionService {
   }
 
   Future<String> addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
-    final serverTimestamp = Timestamp.now();
+    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
     final newDocId = _quizzesCollection.document().documentID;
     await _quizzesCollection.document(newDocId).setData({
       "id": newDocId,
@@ -64,7 +64,7 @@ class QuizCollectionService {
   }
 
   Future<void> editQuizOnFirebaseCollection(QuizModel quizModel) async {
-    final serverTimestamp = Timestamp.now();
+    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
     return await _quizzesCollection.document(quizModel.id).setData({
       "id": quizModel.id,
       "uid": quizModel.uid,
@@ -84,7 +84,7 @@ class QuizCollectionService {
   }
 
   Future<void> addRoundToQuiz(QuizModel quizModel, RoundModel round) async {
-    final serverTimestamp = Timestamp.now();
+    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
     return await _quizzesCollection.document(quizModel.id).setData({
       "id": quizModel.id,
       "uid": quizModel.uid,
@@ -92,6 +92,23 @@ class QuizCollectionService {
       "description": quizModel.description,
       "questionIds": quizModel.questionIds,
       "roundIds": List.from(quizModel.roundIds)..addAll([round.id]),
+      "isPublished": false,
+      "createdAt": quizModel.createdAt,
+      "lastUpdated": serverTimestamp,
+    });
+  }
+
+  Future<void> removeRoundFromQuiz(QuizModel quizModel, RoundModel round) async {
+    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final ids = quizModel.roundIds;
+    ids.remove(round.id);
+    return await _quizzesCollection.document(quizModel.id).setData({
+      "id": quizModel.id,
+      "uid": quizModel.uid,
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "questionIds": quizModel.questionIds,
+      "roundIds": ids,
       "isPublished": false,
       "createdAt": quizModel.createdAt,
       "lastUpdated": serverTimestamp,

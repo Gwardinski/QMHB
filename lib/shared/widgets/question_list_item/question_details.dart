@@ -28,12 +28,54 @@ class QuestionDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(questionModel.question),
-                  Text(questionModel.answer),
-                  Text(questionModel.category),
-                  Text("${questionModel.points.toString()} points"),
-                  Text(questionModel.createdAt.toString()),
-                  Text(questionModel.lastUpdated.toString()),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      questionModel.question,
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      questionModel.answer,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      questionModel.category,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      "${questionModel.points.toString()} points",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    DateTime.fromMicrosecondsSinceEpoch(
+                      questionModel.createdAt,
+                    ).toString(),
+                  ),
+                  Text(
+                    DateTime.fromMicrosecondsSinceEpoch(
+                      questionModel.lastUpdated,
+                    ).toString(),
+                  ),
                 ],
               ),
             ),

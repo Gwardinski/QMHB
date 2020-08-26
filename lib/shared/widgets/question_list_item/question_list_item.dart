@@ -5,7 +5,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/questions/question_editor.dart';
-import 'package:qmhb/screens/library/rounds/round_selector/round_selector_page.dart';
+import 'package:qmhb/screens/library/rounds/add_question_to_round.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_details.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
@@ -129,13 +129,13 @@ class _QuestionListItemState extends State<QuestionListItem> {
   }
 
   _addQuestionToRound() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => RoundSelectorPage(
-          questionId: widget.questionModel.id,
-          questionPoints: widget.questionModel.points,
-        ),
-      ),
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AddQuestionToRoundPage(
+          questionModel: widget.questionModel,
+        );
+      },
     );
   }
 

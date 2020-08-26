@@ -16,8 +16,8 @@ class QuestionModel {
   String difficulty;
   double points;
   bool isPublished;
-  Timestamp lastUpdated;
-  Timestamp createdAt;
+  int lastUpdated;
+  int createdAt;
 
   QuestionModel({
     this.id,

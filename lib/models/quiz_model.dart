@@ -11,8 +11,8 @@ class QuizModel {
   bool isPublished;
   List<String> roundIds;
   List<String> questionIds;
-  Timestamp lastUpdated;
-  Timestamp createdAt;
+  int lastUpdated;
+  int createdAt;
 
   QuizModel({
     this.id,

@@ -26,7 +26,7 @@ class UserCollectionService {
       "quizIds": userModel.quizIds,
       "roundIds": userModel.roundIds,
       "questionIds": userModel.questionIds,
-      "lastUpdated": Timestamp.now(),
+      "lastUpdated": Timestamp.now().millisecondsSinceEpoch,
     });
   }
 }

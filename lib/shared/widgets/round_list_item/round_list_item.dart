@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_selector/quiz_selector_page.dart';
+import 'package:qmhb/screens/library/quizzes/add_round_to_quiz.dart';
 import 'package:qmhb/screens/library/rounds/round_details_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
@@ -88,12 +88,13 @@ class _RoundListItemState extends State<RoundListItem> {
   }
 
   _addRoundToQuiz() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => QuizSelectorPage(
-          round: widget.roundModel,
-        ),
-      ),
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AddRoundToQuizPage(
+          roundModel: widget.roundModel,
+        );
+      },
     );
   }
 

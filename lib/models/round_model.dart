@@ -10,8 +10,8 @@ class RoundModel {
   List<String> questionIds;
   double totalPoints;
   bool isPublished;
-  Timestamp lastUpdated;
-  Timestamp createdAt;
+  int lastUpdated;
+  int createdAt;
 
   RoundModel({
     this.uid,

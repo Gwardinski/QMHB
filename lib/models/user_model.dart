@@ -11,8 +11,8 @@ class UserModel {
   List<String> savedQuestionIds;
   List<String> savedRoundIds;
   List<String> savedQuizIds;
-  Timestamp lastUpdated;
-  Timestamp createdAt;
+  int lastUpdated;
+  int createdAt;
 
   UserModel({
     @required this.uid,
@@ -33,8 +33,8 @@ class UserModel {
     @required this.email,
     @required this.displayName,
   }) {
-    lastUpdated = Timestamp.now();
-    createdAt = Timestamp.now();
+    lastUpdated = Timestamp.now().millisecondsSinceEpoch;
+    createdAt = Timestamp.now().millisecondsSinceEpoch;
     quizIds = List<String>();
     roundIds = List<String>();
     questionIds = List<String>();
