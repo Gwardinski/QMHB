@@ -39,12 +39,6 @@ class QuizHighlightRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 128,
-      margin: EdgeInsets.fromLTRB(
-        0,
-        getIt<AppSize>().lOnly8,
-        0,
-        getIt<AppSize>().rSpacingSm,
-      ),
       child: ListView.separated(
         itemCount: quizzes?.length ?? 0,
         scrollDirection: Axis.horizontal,
@@ -94,12 +88,6 @@ class RoundHighlightRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 128,
-      margin: EdgeInsets.fromLTRB(
-        0,
-        getIt<AppSize>().lOnly8,
-        0,
-        getIt<AppSize>().rSpacingSm,
-      ),
       child: ListView.separated(
         itemCount: rounds?.length ?? 0,
         scrollDirection: Axis.horizontal,

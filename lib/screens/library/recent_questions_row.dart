@@ -6,6 +6,7 @@ import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RecentQuestionsRow extends StatelessWidget {
   RecentQuestionsRow({
@@ -31,7 +32,10 @@ class RecentQuestionsRow extends StatelessWidget {
             stream: Provider.of<QuestionCollectionService>(context).getRecentQuestionStream(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("loading");
+                return Container(
+                  height: 128,
+                  child: LoadingSpinnerHourGlass(),
+                );
               }
               if (snapshot.hasError) {
                 return Container(
