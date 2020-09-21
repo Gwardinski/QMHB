@@ -5,6 +5,7 @@ import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_items_column.dart';
+import 'package:qmhb/shared/widgets/toolbar.dart';
 
 class UserQuestionsCollection extends StatelessWidget {
   final canDrag;
@@ -18,15 +19,7 @@ class UserQuestionsCollection extends StatelessWidget {
     final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
-        Container(
-          height: 64,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Center(child: Text("Toolbar: Search, Filter, Add, Created / Saved")),
-            ],
-          ),
-        ),
+        Toolbar(),
         Expanded(
           child: StreamBuilder(
             stream: QuestionCollectionService().getQuestionsCreatedByUser(

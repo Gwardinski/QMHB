@@ -5,6 +5,7 @@ import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_column.dart';
+import 'package:qmhb/shared/widgets/toolbar.dart';
 
 class UserQuizzesCollection extends StatelessWidget {
   @override
@@ -12,15 +13,7 @@ class UserQuizzesCollection extends StatelessWidget {
     final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
-        Container(
-          height: 64,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Center(child: Text("Toolbar: Search, Filter, Add, Created / Saved")),
-            ],
-          ),
-        ),
+        Toolbar(),
         Expanded(
           child: StreamBuilder(
             stream: QuizCollectionService().getQuizzesCreatedByUser(

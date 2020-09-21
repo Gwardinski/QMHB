@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/quizzes/add_round_to_quiz.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
@@ -9,10 +8,12 @@ import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 class RoundListItemAction extends StatefulWidget {
   const RoundListItemAction({
     Key key,
-    this.roundModel,
+    @required this.roundModel,
+    this.emitData,
   }) : super(key: key);
 
-  final RoundModel roundModel;
+  final roundModel;
+  final emitData;
 
   @override
   _RoundListItemActionState createState() => _RoundListItemActionState();
@@ -28,8 +29,8 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
         child: PopupMenuButton<RoundOptions>(
           padding: EdgeInsets.zero,
           tooltip: "Round Actions",
-          onSelected: (result) {
-            onMenuSelect(result);
+          onSelected: (result) async {
+            await onMenuSelect(result);
           },
           child: Container(
             width: 64,
@@ -63,12 +64,12 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
     );
   }
 
-  onMenuSelect(RoundOptions result) {
+  onMenuSelect(RoundOptions result) async {
     if (result == RoundOptions.addToQuiz) {
       return _addRoundToRound();
     }
     if (result == RoundOptions.edit) {
-      return _editRound();
+      return await _editRound();
     }
     if (result == RoundOptions.delete) {
       return _deleteRound();
@@ -92,14 +93,15 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
     );
   }
 
-  _editRound() {
-    Navigator.of(context).push(
+  _editRound() async {
+    final quiz = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
           roundModel: widget.roundModel,
         ),
       ),
     );
+    widget.emitData(quiz);
   }
 
   _deleteRound() {

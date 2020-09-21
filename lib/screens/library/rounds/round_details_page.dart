@@ -3,12 +3,25 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/shared/widgets/details/round_details_widget.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
-class RoundDetailsPage extends StatelessWidget {
+class RoundDetailsPage extends StatefulWidget {
   final RoundModel roundModel;
 
   RoundDetailsPage({
     @required this.roundModel,
   });
+
+  @override
+  _RoundDetailsPageState createState() => _RoundDetailsPageState();
+}
+
+class _RoundDetailsPageState extends State<RoundDetailsPage> {
+  RoundModel round;
+
+  @override
+  void initState() {
+    round = widget.roundModel;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +31,17 @@ class RoundDetailsPage extends StatelessWidget {
         title: Text("Round Details"),
         actions: <Widget>[
           RoundListItemAction(
-            roundModel: roundModel,
+            roundModel: widget.roundModel,
+            emitData: (newQuiz) {
+              setState(() {
+                round = newQuiz;
+              });
+            },
           ),
         ],
       ),
       body: RoundDetailsWidget(
-        roundModel: roundModel,
+        roundModel: widget.roundModel,
       ),
     );
   }

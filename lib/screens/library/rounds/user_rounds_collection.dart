@@ -5,6 +5,7 @@ import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_items_column.dart';
+import 'package:qmhb/shared/widgets/toolbar.dart';
 
 class UserRoundsCollection extends StatelessWidget {
   final canDrag;
@@ -17,15 +18,7 @@ class UserRoundsCollection extends StatelessWidget {
     final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
-        Container(
-          height: 64,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Center(child: Text("Toolbar: Search, Filter, Add, Created / Saved")),
-            ],
-          ),
-        ),
+        Toolbar(),
         Expanded(
           child: StreamBuilder(
             stream: RoundCollectionService().getRoundsCreatedByUser(
