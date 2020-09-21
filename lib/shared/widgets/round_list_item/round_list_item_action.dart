@@ -11,34 +11,44 @@ class RoundListItemAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: PopupMenuButton<RoundOptions>(
-        tooltip: "Round Actions",
-        onSelected: (result) {
-          onTap(result);
-        },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<RoundOptions>>[
-          PopupMenuItem<RoundOptions>(
-            value: RoundOptions.addToRound,
-            child: Text("Add to Quiz"),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100),
+      child: Material(
+        color: Colors.transparent,
+        child: PopupMenuButton<RoundOptions>(
+          padding: EdgeInsets.zero,
+          tooltip: "Round Actions",
+          onSelected: (result) {
+            onTap(result);
+          },
+          child: Container(
+            width: 64,
+            height: 64,
+            child: Icon(Icons.more_vert),
           ),
-          PopupMenuItem<RoundOptions>(
-            value: RoundOptions.edit,
-            child: Text("Edit"),
-          ),
-          PopupMenuItem<RoundOptions>(
-            value: RoundOptions.delete,
-            child: Text("Delete"),
-          ),
-          // PopupMenuItem<RoundOptions>(
-          //   value: RoundOptions.save,
-          //   child: Text("Save To Collection"),
-          // ),
-          // PopupMenuItem<RoundOptions>(
-          //   value: RoundOptions.publish,
-          //   child: Text("Publish"),
-          // ),
-        ],
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<RoundOptions>>[
+            PopupMenuItem<RoundOptions>(
+              value: RoundOptions.addToQuiz,
+              child: Text("Add to Quiz"),
+            ),
+            PopupMenuItem<RoundOptions>(
+              value: RoundOptions.edit,
+              child: Text("Edit"),
+            ),
+            PopupMenuItem<RoundOptions>(
+              value: RoundOptions.delete,
+              child: Text("Delete"),
+            ),
+            // PopupMenuItem<RoundOptions>(
+            //   value: RoundOptions.save,
+            //   child: Text("Save To Collection"),
+            // ),
+            // PopupMenuItem<RoundOptions>(
+            //   value: RoundOptions.publish,
+            //   child: Text("Publish"),
+            // ),
+          ],
+        ),
       ),
     );
   }

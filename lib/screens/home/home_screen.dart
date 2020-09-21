@@ -60,81 +60,78 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     bool useLargeLayout = MediaQuery.of(context).size.width > 800;
     getIt<AppSize>().updateSize(useLargeLayout);
-    return MultiProvider(
-      providers: [],
-      child: useLargeLayout
-          ? Scaffold(
-              key: globalKey,
-              body: Row(
-                children: [
-                  useLargeLayout
-                      ? Container(
-                          width: 200,
-                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          color: Theme.of(context).primaryColor,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 128,
-                              ),
-                              MainNavigationButton(
-                                title: "Library",
-                                icon: Icons.home,
-                                isSelected: _selectedIndex == 0,
-                                onPressed: () {
-                                  _onItemTapped(0);
-                                },
-                              ),
-                              MainNavigationButton(
-                                title: "Explore",
-                                icon: Icons.search,
-                                isSelected: _selectedIndex == 1,
-                                onPressed: () {
-                                  _onItemTapped(1);
-                                },
-                              ),
-                              MainNavigationButton(
-                                title: "Play",
-                                icon: Icons.play_arrow,
-                                isSelected: _selectedIndex == 2,
-                                onPressed: () {
-                                  _onItemTapped(2);
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
-                  Expanded(child: pages.elementAt(_selectedIndex))
+    return useLargeLayout
+        ? Scaffold(
+            key: globalKey,
+            body: Row(
+              children: [
+                useLargeLayout
+                    ? Container(
+                        width: 200,
+                        padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        color: Theme.of(context).primaryColor,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 128,
+                            ),
+                            MainNavigationButton(
+                              title: "Library",
+                              icon: Icons.home,
+                              isSelected: _selectedIndex == 0,
+                              onPressed: () {
+                                _onItemTapped(0);
+                              },
+                            ),
+                            MainNavigationButton(
+                              title: "Explore",
+                              icon: Icons.search,
+                              isSelected: _selectedIndex == 1,
+                              onPressed: () {
+                                _onItemTapped(1);
+                              },
+                            ),
+                            MainNavigationButton(
+                              title: "Play",
+                              icon: Icons.play_arrow,
+                              isSelected: _selectedIndex == 2,
+                              onPressed: () {
+                                _onItemTapped(2);
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    : null,
+                Expanded(child: pages.elementAt(_selectedIndex))
+              ],
+            ),
+          )
+        : DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              body: pages.elementAt(_selectedIndex),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                selectedItemColor: Theme.of(context).accentColor,
+                onTap: _onItemTapped,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('Library'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    title: Text('Explore'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.play_arrow),
+                    title: Text('Play'),
+                  ),
                 ],
               ),
-            )
-          : DefaultTabController(
-              length: 3,
-              child: Scaffold(
-                body: pages.elementAt(_selectedIndex),
-                bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: Theme.of(context).accentColor,
-                  onTap: _onItemTapped,
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      title: Text('Library'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.search),
-                      title: Text('Explore'),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.play_arrow),
-                      title: Text('Play'),
-                    ),
-                  ],
-                ),
-              ),
             ),
-    );
+          );
   }
 }

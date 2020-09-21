@@ -5,7 +5,6 @@ import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_items_column.dart';
-import 'package:qmhb/shared/widgets/round_list_item/round_list_items_grid.dart';
 
 class UserRoundsCollection extends StatelessWidget {
   @override
@@ -40,7 +39,7 @@ class UserRoundsCollection extends StatelessWidget {
                 );
               }
               return snapshot.data.length > 0
-                  ? RoundCollection(rounds: snapshot.data)
+                  ? RoundListItemsColumn(rounds: snapshot.data)
                   : Padding(
                       padding: EdgeInsets.only(top: 16),
                       child: Column(
@@ -57,20 +56,5 @@ class UserRoundsCollection extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class RoundCollection extends StatelessWidget {
-  const RoundCollection({
-    @required this.rounds,
-  });
-
-  final rounds;
-
-  @override
-  Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width > 800
-        ? RoundListItemGrid(rounds: rounds)
-        : RoundListItemsColumn(rounds: rounds);
   }
 }

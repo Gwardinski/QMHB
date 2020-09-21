@@ -3,12 +3,11 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
 class QuizListItemsColumn extends StatelessWidget {
-  QuizListItemsColumn({
-    Key key,
-    @required this.quizzes,
-  }) : super(key: key);
+  final List<QuizModel> quizzes;
 
-  final quizzes;
+  const QuizListItemsColumn({
+    this.quizzes,
+  });
 
   @override
   Widget build(BuildContext context) {

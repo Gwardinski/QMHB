@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-class QuestionListItemLine1 extends StatelessWidget {
-  const QuestionListItemLine1({
+class RoundListItemLine1 extends StatelessWidget {
+  const RoundListItemLine1({
     Key key,
     @required this.text,
-    @required this.highlight,
   }) : super(key: key);
 
   final String text;
-  final bool highlight;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class QuestionListItemLine1 extends StatelessWidget {
             textDirection: TextDirection.ltr,
             style: TextStyle(
               fontSize: 18,
-              color: highlight ? Theme.of(context).accentColor : Colors.white,
+              color: Colors.white,
             ),
           ),
         ],

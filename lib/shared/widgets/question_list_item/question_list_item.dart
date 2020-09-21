@@ -10,8 +10,7 @@ import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_details.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item_line1.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item_line2.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
 enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
@@ -29,6 +28,13 @@ class QuestionListItem extends StatefulWidget {
 
 class _QuestionListItemState extends State<QuestionListItem> {
   bool revealAnswer = false;
+
+  void updateRevealAnswer() {
+    setState(() {
+      revealAnswer = !revealAnswer;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Draggable<QuestionModel>(
@@ -54,42 +60,26 @@ class _QuestionListItemState extends State<QuestionListItem> {
         onTap: _viewQuestionDetails,
         child: Container(
           height: 64,
-          padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              QuestionListItemAction2(
-                revealAnswer: revealAnswer,
-                onTap: () {
-                  setState(() {
-                    revealAnswer = !revealAnswer;
-                  });
-                },
-              ),
               Padding(
-                padding: EdgeInsets.only(left: 16),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    QuestionListItemLine1(
-                      text: revealAnswer == true
-                          ? widget.questionModel.answer
-                          : widget.questionModel.question,
-                      highlight: revealAnswer,
-                    ),
-                    QuestionListItemLine2(
-                      points: widget.questionModel.points.toString(),
-                      category: widget.questionModel.category,
-                    ),
-                  ],
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+                child: QuestionListItemAction2(
+                  revealAnswer: revealAnswer,
+                  onTap: updateRevealAnswer,
                 ),
               ),
-              QuestionListItemAction(
-                onTap: onMenuSelect,
+              QuestionListItemDetails(
+                revealAnswer: revealAnswer,
+                questionModel: widget.questionModel,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+                child: QuestionListItemAction(
+                  onTap: onMenuSelect,
+                ),
               ),
             ],
           ),
@@ -154,8 +144,8 @@ class _QuestionListItemState extends State<QuestionListItem> {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Are you sure you wish to delete this question ?"),
-        content: Text(widget.questionModel.question),
+        title: Text("Delete Question"),
+        content: Text("Are you sure you wish to delete ${widget.questionModel.question} ?"),
         actions: <Widget>[
           FlatButton(
             child: Text('Cancel'),

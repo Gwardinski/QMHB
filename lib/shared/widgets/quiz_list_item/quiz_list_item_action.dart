@@ -11,30 +11,40 @@ class QuizListItemAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: PopupMenuButton<QuizOptions>(
-        tooltip: "Quiz Actions",
-        onSelected: (result) {
-          onTap(result);
-        },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<QuizOptions>>[
-          PopupMenuItem<QuizOptions>(
-            value: QuizOptions.edit,
-            child: Text("Edit"),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100),
+      child: Material(
+        color: Colors.transparent,
+        child: PopupMenuButton<QuizOptions>(
+          padding: EdgeInsets.zero,
+          tooltip: "Quiz Actions",
+          onSelected: (result) {
+            onTap(result);
+          },
+          child: Container(
+            width: 64,
+            height: 64,
+            child: Icon(Icons.more_vert),
           ),
-          PopupMenuItem<QuizOptions>(
-            value: QuizOptions.delete,
-            child: Text("Delete"),
-          ),
-          // PopupMenuItem<QuizOptions>(
-          //   value: QuizOptions.save,
-          //   child: Text("Save To Collection"),
-          // ),
-          // PopupMenuItem<QuizOptions>(
-          //   value: QuizOptions.publish,
-          //   child: Text("Publish"),
-          // ),
-        ],
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuizOptions>>[
+            PopupMenuItem<QuizOptions>(
+              value: QuizOptions.edit,
+              child: Text("Edit"),
+            ),
+            PopupMenuItem<QuizOptions>(
+              value: QuizOptions.delete,
+              child: Text("Delete"),
+            ),
+            // PopupMenuItem<QuizOptions>(
+            //   value: QuizOptions.save,
+            //   child: Text("Save To Collection"),
+            // ),
+            // PopupMenuItem<QuizOptions>(
+            //   value: QuizOptions.publish,
+            //   child: Text("Publish"),
+            // ),
+          ],
+        ),
       ),
     );
   }

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_details.dart';
 
-enum QuizOptions { save, edit, delete, details, addToRound, publish }
+enum QuizOptions { save, edit, delete, details, addToQuiz, publish }
 
 class QuizListItem extends StatefulWidget {
-  const QuizListItem({
+  final QuizModel quizModel;
+
+  QuizListItem({
     Key key,
     @required this.quizModel,
   }) : super(key: key);
-
-  final QuizModel quizModel;
 
   @override
   _QuizListItemState createState() => _QuizListItemState();
@@ -24,25 +26,56 @@ class QuizListItem extends StatefulWidget {
 class _QuizListItemState extends State<QuizListItem> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => QuizDetailsPage(
-              quizModel: widget.quizModel,
+    return Draggable<QuizModel>(
+      dragAnchor: DragAnchor.pointer,
+      data: widget.quizModel,
+      feedback: Material(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          height: 64,
+          width: 256,
+          color: Colors.grey,
+          child: Center(
+            child: Text(
+              widget.quizModel.title,
+              style: TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
-        );
-      },
-      child: SummaryTileLarge(
-        line1: widget.quizModel.title,
-        line2: "Questions",
-        line2Value: widget.quizModel.questionIds.length,
-        line3: "Points",
-        line3Value: widget.quizModel.totalPoints,
-        description: widget.quizModel.description,
-        actionButton: QuizListItemAction(
-          onTap: onMenuSelect,
+        ),
+      ),
+      child: InkWell(
+        onTap: _viewQuizDetails,
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
+              ),
+              QuizListItemDetails(
+                quizModel: widget.quizModel,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+                child: QuizListItemAction(
+                  onTap: onMenuSelect,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _viewQuizDetails() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuizDetailsPage(
+          quizModel: widget.quizModel,
         ),
       ),
     );
@@ -50,20 +83,20 @@ class _QuizListItemState extends State<QuizListItem> {
 
   onMenuSelect(QuizOptions result) {
     if (result == QuizOptions.edit) {
-      return _editRound();
+      return _editQuiz();
     }
     if (result == QuizOptions.delete) {
-      return _deleteRound();
+      return _deleteQuiz();
     }
     if (result == QuizOptions.save) {
-      return _saveRound();
+      return _saveQuiz();
     }
     if (result == QuizOptions.publish) {
-      return _publishRound();
+      return _publishQuiz();
     }
   }
 
-  _editRound() {
+  _editQuiz() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuizEditorPage(
@@ -73,12 +106,17 @@ class _QuizListItemState extends State<QuizListItem> {
     );
   }
 
-  _deleteRound() {
+  _deleteQuiz() {
+    var text = "Are you sure you wish to delete ${widget.quizModel.title} ?";
+    if (widget.quizModel.questionIds.length > 0) {
+      text +=
+          "\n\nThis will not delete the ${widget.quizModel.questionIds.length} questions this quiz contains.";
+    }
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Are you sure you wish to delete this quiz ?"),
-        content: Text(widget.quizModel.title),
+        title: Text("Delete Quiz"),
+        content: Text(text),
         actions: <Widget>[
           FlatButton(
             child: Text('Cancel'),
@@ -90,9 +128,8 @@ class _QuizListItemState extends State<QuizListItem> {
             child: Text('Delete'),
             onPressed: () async {
               Navigator.of(context).pop();
-              await Provider.of<QuizCollectionService>(context).deleteQuizOnFirebaseCollection(
-                widget.quizModel.id,
-              );
+              await Provider.of<QuizCollectionService>(context)
+                  .deleteQuizOnFirebaseCollection(widget.quizModel.id);
             },
           ),
         ],
@@ -100,11 +137,11 @@ class _QuizListItemState extends State<QuizListItem> {
     );
   }
 
-  _saveRound() {
+  _saveQuiz() {
     print("Save Quiz");
   }
 
-  _publishRound() {
+  _publishQuiz() {
     print("Publish Quiz");
   }
 }

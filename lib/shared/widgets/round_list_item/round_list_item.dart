@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/add_round_to_quiz.dart';
 import 'package:qmhb/screens/library/rounds/round_details_page.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item_details.dart';
 
-enum RoundOptions { save, edit, delete, details, addToRound, publish }
+enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
 class RoundListItem extends StatefulWidget {
-  const RoundListItem({
+  final RoundModel roundModel;
+
+  RoundListItem({
     Key key,
     @required this.roundModel,
   }) : super(key: key);
-
-  final RoundModel roundModel;
 
   @override
   _RoundListItemState createState() => _RoundListItemState();
@@ -45,33 +47,44 @@ class _RoundListItemState extends State<RoundListItem> {
         ),
       ),
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => RoundDetailsPage(
+        onTap: _viewRoundDetails,
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
+              ),
+              RoundListItemDetails(
                 roundModel: widget.roundModel,
               ),
-            ),
-          );
-        },
-        child: SummaryTileLarge(
-          line1: widget.roundModel.title,
-          line2: "Questions",
-          line2Value: widget.roundModel.questionIds.length,
-          line3: "Points",
-          line3Value: widget.roundModel.totalPoints,
-          description: widget.roundModel.description,
-          actionButton: RoundListItemAction(
-            onTap: onMenuSelect,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+                child: RoundListItemAction(
+                  onTap: onMenuSelect,
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
+  _viewRoundDetails() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => RoundDetailsPage(
+          roundModel: widget.roundModel,
+        ),
+      ),
+    );
+  }
+
   onMenuSelect(RoundOptions result) {
-    if (result == RoundOptions.addToRound) {
-      return _addRoundToQuiz();
+    if (result == RoundOptions.addToQuiz) {
+      return _addRoundToRound();
     }
     if (result == RoundOptions.edit) {
       return _editRound();
@@ -87,7 +100,7 @@ class _RoundListItemState extends State<RoundListItem> {
     }
   }
 
-  _addRoundToQuiz() {
+  _addRoundToRound() {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -109,11 +122,16 @@ class _RoundListItemState extends State<RoundListItem> {
   }
 
   _deleteRound() {
+    var text = "Are you sure you wish to delete ${widget.roundModel.title} ?";
+    if (widget.roundModel.questionIds.length > 0) {
+      text +=
+          "\n\nThis will not delete the ${widget.roundModel.questionIds.length} questions this round contains.";
+    }
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text("Are you sure you wish to delete this round ?"),
-        content: Text(widget.roundModel.title),
+        title: Text("Delete Round"),
+        content: Text(text),
         actions: <Widget>[
           FlatButton(
             child: Text('Cancel'),

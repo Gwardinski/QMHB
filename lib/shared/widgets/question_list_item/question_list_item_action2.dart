@@ -12,18 +12,33 @@ class QuestionListItemAction2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Container(
-        width: 32,
-        height: 32,
-        child: Center(
-          child: Icon(
-            Icons.remove_red_eye,
-            color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      width: 64,
+      height: 64,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Icon(
+                  Icons.remove_red_eye,
+                  size: 24,
+                  color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
+        onPressed: onTap,
       ),
-      onTap: onTap,
     );
   }
 }

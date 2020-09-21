@@ -3,12 +3,11 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 class RoundListItemsColumn extends StatelessWidget {
-  RoundListItemsColumn({
-    Key key,
-    @required this.rounds,
-  }) : super(key: key);
+  final List<RoundModel> rounds;
 
-  final rounds;
+  const RoundListItemsColumn({
+    this.rounds,
+  });
 
   @override
   Widget build(BuildContext context) {

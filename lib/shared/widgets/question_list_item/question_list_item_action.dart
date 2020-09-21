@@ -11,34 +11,44 @@ class QuestionListItemAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: PopupMenuButton<QuestionOptions>(
-        tooltip: "Question Actions",
-        onSelected: (result) {
-          onTap(result);
-        },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.addToRound,
-            child: Text("Add to Round"),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100),
+      child: Material(
+        color: Colors.transparent,
+        child: PopupMenuButton<QuestionOptions>(
+          padding: EdgeInsets.zero,
+          tooltip: "Question Actions",
+          onSelected: (result) {
+            onTap(result);
+          },
+          child: Container(
+            width: 64,
+            height: 64,
+            child: Icon(Icons.more_vert),
           ),
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.edit,
-            child: Text("Edit"),
-          ),
-          PopupMenuItem<QuestionOptions>(
-            value: QuestionOptions.delete,
-            child: Text("Delete"),
-          ),
-          // PopupMenuItem<QuestionOptions>(
-          //   value: QuestionOptions.save,
-          //   child: Text("Save To Collection"),
-          // ),
-          // PopupMenuItem<QuestionOptions>(
-          //   value: QuestionOptions.publish,
-          //   child: Text("Publish"),
-          // ),
-        ],
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
+            PopupMenuItem<QuestionOptions>(
+              value: QuestionOptions.addToRound,
+              child: Text("Add to Round"),
+            ),
+            PopupMenuItem<QuestionOptions>(
+              value: QuestionOptions.edit,
+              child: Text("Edit"),
+            ),
+            PopupMenuItem<QuestionOptions>(
+              value: QuestionOptions.delete,
+              child: Text("Delete"),
+            ),
+            // PopupMenuItem<QuestionOptions>(
+            //   value: QuestionOptions.save,
+            //   child: Text("Save To Collection"),
+            // ),
+            // PopupMenuItem<QuestionOptions>(
+            //   value: QuestionOptions.publish,
+            //   child: Text("Publish"),
+            // ),
+          ],
+        ),
       ),
     );
   }
