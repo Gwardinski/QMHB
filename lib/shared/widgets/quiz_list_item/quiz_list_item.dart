@@ -3,6 +3,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
+import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_details.dart';
 
@@ -26,21 +27,8 @@ class _QuizListItemState extends State<QuizListItem> {
     return Draggable<QuizModel>(
       dragAnchor: DragAnchor.pointer,
       data: widget.quizModel,
-      feedback: Material(
-        child: Container(
-          padding: EdgeInsets.all(16),
-          height: 64,
-          width: 256,
-          color: Colors.grey,
-          child: Center(
-            child: Text(
-              widget.quizModel.title,
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ),
+      feedback: DragFeedback(
+        title: widget.quizModel.title,
       ),
       child: InkWell(
         onTap: _viewQuizDetails,

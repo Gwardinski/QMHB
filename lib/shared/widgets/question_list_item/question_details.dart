@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/screens/library/rounds/add_question_to_round.dart';
 
-class QuestionDetails extends StatelessWidget {
+class QuestionDetails extends StatefulWidget {
   const QuestionDetails({
     Key key,
     @required this.questionModel,
-    @required this.addQuestionToRound,
-    @required this.deleteQuestion,
-    @required this.editQuestion,
   }) : super(key: key);
 
   final QuestionModel questionModel;
-  final addQuestionToRound;
-  final deleteQuestion;
-  final editQuestion;
 
+  @override
+  _QuestionDetailsState createState() => _QuestionDetailsState();
+}
+
+class _QuestionDetailsState extends State<QuestionDetails> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -31,7 +31,7 @@ class QuestionDetails extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(bottom: 16),
                     child: Text(
-                      questionModel.question,
+                      widget.questionModel.question,
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -40,7 +40,7 @@ class QuestionDetails extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(bottom: 16),
                     child: Text(
-                      questionModel.answer,
+                      widget.questionModel.answer,
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -49,7 +49,7 @@ class QuestionDetails extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(bottom: 16),
                     child: Text(
-                      questionModel.category,
+                      widget.questionModel.category,
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).accentColor,
@@ -59,7 +59,7 @@ class QuestionDetails extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(bottom: 16),
                     child: Text(
-                      "${questionModel.points.toString()} points",
+                      "${widget.questionModel.points.toString()} points",
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).accentColor,
@@ -68,12 +68,12 @@ class QuestionDetails extends StatelessWidget {
                   ),
                   Text(
                     DateTime.fromMicrosecondsSinceEpoch(
-                      questionModel.createdAt,
+                      widget.questionModel.createdAt,
                     ).toString(),
                   ),
                   Text(
                     DateTime.fromMicrosecondsSinceEpoch(
-                      questionModel.lastUpdated,
+                      widget.questionModel.lastUpdated,
                     ).toString(),
                   ),
                 ],
@@ -86,7 +86,7 @@ class QuestionDetails extends StatelessWidget {
                   child: const Text('Add To Round'),
                   onPressed: () {
                     Navigator.pop(context);
-                    addQuestionToRound();
+                    _addQuestionToRound();
                   },
                 ),
               ],
@@ -94,6 +94,17 @@ class QuestionDetails extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  _addQuestionToRound() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AddQuestionToRoundPage(
+          questionModel: widget.questionModel,
+        );
+      },
     );
   }
 }

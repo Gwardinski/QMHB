@@ -4,9 +4,11 @@ import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 class RoundListItemsColumn extends StatelessWidget {
   final List<RoundModel> rounds;
+  final canDrag;
 
   const RoundListItemsColumn({
     this.rounds,
+    this.canDrag = false,
   });
 
   @override
@@ -22,6 +24,7 @@ class RoundListItemsColumn extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         RoundModel roundModel = rounds[index];
         return RoundListItem(
+          canDrag: canDrag,
           roundModel: roundModel,
         );
       },

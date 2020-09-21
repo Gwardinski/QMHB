@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/questions/user_question_collection.dart';
 import 'package:qmhb/screens/library/rounds/user_rounds_sidebar.dart';
 import 'package:qmhb/screens/library/questions/question_editor.dart';
 
+import '../../../get_it.dart';
+
 class QuestionCollectionPage extends StatelessWidget {
+  final canDrag = getIt<AppSize>().isLarge;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -31,9 +36,11 @@ class QuestionCollectionPage extends StatelessWidget {
         ),
         body: Row(
           children: [
-            UserRoundsSidebar(),
+            canDrag ? UserRoundsSidebar() : Container(),
             Expanded(
-              child: UserQuestionsCollection(),
+              child: UserQuestionsCollection(
+                canDrag: canDrag,
+              ),
             ),
           ],
         ),

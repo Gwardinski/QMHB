@@ -4,9 +4,11 @@ import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
 class QuestionListItemsColumn extends StatelessWidget {
   final List<QuestionModel> questions;
+  final canDrag;
 
   const QuestionListItemsColumn({
     this.questions,
+    this.canDrag = false,
   });
 
   @override
@@ -23,6 +25,7 @@ class QuestionListItemsColumn extends StatelessWidget {
         QuestionModel questionModel = questions[index];
         return QuestionListItem(
           questionModel: questionModel,
+          canDrag: canDrag,
         );
       },
     );

@@ -27,6 +27,7 @@ class RoundDetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RoundDetailsHeader(roundModel: roundModel),
+        Divider(),
         SummaryRowHeader(
           headerTitle: "Questions",
         ),
@@ -48,7 +49,10 @@ class RoundDetailsWidget extends StatelessWidget {
                       itemCount: questionSnapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         QuestionModel question = questionSnapshot.data[index];
-                        return QuestionListItem(questionModel: question);
+                        return QuestionListItem(
+                          questionModel: question,
+                          canDrag: false,
+                        );
                       },
                     );
                   },
@@ -115,7 +119,7 @@ class DetailsHeaderColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InfoColumn(title: "Questions", value: roundModel.questionIds.length.toString()),
-              InfoColumn(title: "Total Points", value: roundModel.totalPoints.toString()),
+              InfoColumn(title: "Points", value: roundModel.totalPoints.toString()),
               InfoColumn(title: "Created", value: roundModel.createdAt.toString()),
             ],
           ),
@@ -130,8 +134,6 @@ class DetailsHeaderColumn extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          Padding(padding: EdgeInsets.only(bottom: getIt<AppSize>().spacingMd)),
-          Divider(),
         ],
       ),
     );
@@ -203,7 +205,7 @@ class DetailsHeaderRow extends StatelessWidget {
                               padding: true,
                             ),
                             InfoColumn(
-                              title: "Total Points",
+                              title: "Points",
                               value: roundModel.totalPoints.toString(),
                               padding: true,
                             ),
@@ -225,7 +227,9 @@ class DetailsHeaderRow extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(top: 32),
+            padding: EdgeInsets.only(
+              bottom: roundModel.description != '' ? getIt<AppSize>().spacingLg : 0,
+            ),
           ),
           Text(
             roundModel.description,

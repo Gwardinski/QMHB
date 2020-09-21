@@ -7,6 +7,11 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_items_column.dart';
 
 class UserRoundsCollection extends StatelessWidget {
+  final canDrag;
+
+  UserRoundsCollection({
+    @required this.canDrag,
+  });
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -39,7 +44,10 @@ class UserRoundsCollection extends StatelessWidget {
                 );
               }
               return snapshot.data.length > 0
-                  ? RoundListItemsColumn(rounds: snapshot.data)
+                  ? RoundListItemsColumn(
+                      rounds: snapshot.data,
+                      canDrag: canDrag,
+                    )
                   : Padding(
                       padding: EdgeInsets.only(top: 16),
                       child: Column(

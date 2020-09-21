@@ -7,6 +7,12 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_items_column.dart';
 
 class UserQuestionsCollection extends StatelessWidget {
+  final canDrag;
+
+  UserQuestionsCollection({
+    @required this.canDrag,
+  });
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -39,7 +45,10 @@ class UserQuestionsCollection extends StatelessWidget {
                 );
               }
               return snapshot.data.length > 0
-                  ? QuestionListItemsColumn(questions: snapshot.data)
+                  ? QuestionListItemsColumn(
+                      questions: snapshot.data,
+                      canDrag: canDrag,
+                    )
                   : Padding(
                       padding: EdgeInsets.only(top: 16),
                       child: Column(

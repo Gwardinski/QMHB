@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/user_quizzes_sidebar.dart';
 import 'package:qmhb/screens/library/rounds/user_rounds_collection.dart';
 import 'package:qmhb/screens/library/rounds/round_add_modal.dart';
 
+import '../../../get_it.dart';
+
 class RoundCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final canDrag = getIt<AppSize>().isLarge;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -29,9 +34,11 @@ class RoundCollectionPage extends StatelessWidget {
         ),
         body: Row(
           children: [
-            UserQuizzesSidebar(),
+            canDrag ? UserQuizzesSidebar() : Container(),
             Expanded(
-              child: UserRoundsCollection(),
+              child: UserRoundsCollection(
+                canDrag: canDrag,
+              ),
             ),
           ],
         ),

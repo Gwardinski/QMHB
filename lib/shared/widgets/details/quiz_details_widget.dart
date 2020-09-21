@@ -53,7 +53,7 @@ class QuizDetailsWidget extends StatelessWidget {
                     );
                   },
                 )
-              : Text("No Rounds"),
+              : Center(child: Text("This quiz has no rounds")),
         ),
       ],
     );
@@ -115,7 +115,7 @@ class DetailsHeaderColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InfoColumn(title: "Rounds", value: quizModel.roundIds.length.toString()),
-              InfoColumn(title: "Total Points", value: quizModel.totalPoints.toString()),
+              InfoColumn(title: "Points", value: quizModel.totalPoints.toString()),
               InfoColumn(title: "Created", value: quizModel.createdAt.toString()),
             ],
           ),
@@ -201,7 +201,7 @@ class DetailsHeaderRow extends StatelessWidget {
                               padding: true,
                             ),
                             InfoColumn(
-                              title: "Total Points",
+                              title: "Points",
                               value: quizModel.totalPoints.toString(),
                               padding: true,
                             ),
@@ -223,7 +223,9 @@ class DetailsHeaderRow extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(top: 32),
+            padding: EdgeInsets.only(
+              bottom: quizModel.description != '' ? getIt<AppSize>().spacingLg : 0,
+            ),
           ),
           Text(
             quizModel.description,

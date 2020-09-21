@@ -30,7 +30,7 @@ class RoundListItemLine3 extends StatelessWidget {
           Padding(padding: EdgeInsets.only(left: 32)),
           Row(
             children: <Widget>[
-              Text("Total Points: "),
+              Text("Points: "),
               Text(
                 points,
                 style: TextStyle(
