@@ -7,7 +7,8 @@ import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-import 'package:qmhb/shared/widgets/round_list_item%20copy/round_list_item.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 import '../../../get_it.dart';
 
@@ -33,7 +34,7 @@ class QuizDetailsWidget extends StatelessWidget {
         Expanded(
           child: quizModel.roundIds.length > 0
               ? StreamBuilder(
-                  stream: roundCollectionService.getRoundsByIds(quizModel.questionIds),
+                  stream: roundCollectionService.getRoundsByIds(quizModel.roundIds),
                   builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> roundSnapshot) {
                     if (roundSnapshot.connectionState == ConnectionState.waiting) {
                       return LoadingSpinnerHourGlass();
@@ -208,6 +209,9 @@ class DetailsHeaderRow extends StatelessWidget {
                               title: "Created",
                               value: quizModel.createdAt.toString(),
                               padding: true,
+                            ),
+                            QuizListItemAction(
+                              quizModel: quizModel,
                             ),
                           ],
                         ),

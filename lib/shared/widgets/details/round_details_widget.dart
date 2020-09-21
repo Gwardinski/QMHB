@@ -8,6 +8,7 @@ import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
 import '../../../get_it.dart';
 
@@ -26,7 +27,6 @@ class RoundDetailsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RoundDetailsHeader(roundModel: roundModel),
-        Divider(),
         SummaryRowHeader(
           headerTitle: "Questions",
         ),
@@ -130,6 +130,8 @@ class DetailsHeaderColumn extends StatelessWidget {
               fontSize: 16,
             ),
           ),
+          Padding(padding: EdgeInsets.only(bottom: getIt<AppSize>().spacingMd)),
+          Divider(),
         ],
       ),
     );
@@ -209,6 +211,9 @@ class DetailsHeaderRow extends StatelessWidget {
                               title: "Created",
                               value: roundModel.createdAt.toString(),
                               padding: true,
+                            ),
+                            RoundListItemAction(
+                              roundModel: roundModel,
                             ),
                           ],
                         ),

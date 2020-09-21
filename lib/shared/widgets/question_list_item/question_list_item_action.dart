@@ -29,15 +29,15 @@ class QuestionListItemAction extends StatelessWidget {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.addToRound,
-              child: Text("Add to Round"),
+              child: Text("Add Question to Round"),
             ),
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.edit,
-              child: Text("Edit"),
+              child: Text("Edit Question"),
             ),
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.delete,
-              child: Text("Delete"),
+              child: Text("Delete Question"),
             ),
             // PopupMenuItem<QuestionOptions>(
             //   value: QuestionOptions.save,

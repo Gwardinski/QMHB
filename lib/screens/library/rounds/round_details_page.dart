@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/quizzes/add_round_to_quiz.dart';
-import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/shared/widgets/details/round_details_widget.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
 class RoundDetailsPage extends StatelessWidget {
   final RoundModel roundModel;
@@ -18,30 +17,8 @@ class RoundDetailsPage extends StatelessWidget {
         elevation: 0,
         title: Text("Round Details"),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Add to Quiz'),
-            onPressed: () {
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AddRoundToQuizPage(
-                    roundModel: roundModel,
-                  );
-                },
-              );
-            },
-          ),
-          FlatButton(
-            child: Text('Edit'),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RoundEditorPage(
-                    roundModel: roundModel,
-                  ),
-                ),
-              );
-            },
+          RoundListItemAction(
+            roundModel: roundModel,
           ),
         ],
       ),
