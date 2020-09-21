@@ -1,4 +1,5 @@
 class AppSize {
+  bool isLarge = false;
   double spacingSm = 8.0;
   double spacingMd = 16.0;
   double spacingLg = 32.0;
@@ -15,6 +16,7 @@ class AppSize {
 
   updateSize(useLargeLayout) {
     if (useLargeLayout) {
+      isLarge = true;
       lOnly8 = 8.0;
       lOnly16 = 16.0;
       rSpacingSm = 16.0;
@@ -22,6 +24,7 @@ class AppSize {
       rSpacingLg = 64.0;
       rSpacingPageTop = 128.0;
     } else {
+      isLarge = false;
       lOnly8 = 0;
       lOnly16 = 0;
       rSpacingSm = spacingSm;

@@ -11,8 +11,8 @@ class SummaryRowHeader extends StatelessWidget {
   const SummaryRowHeader({
     Key key,
     @required this.headerTitle,
-    @required this.primaryHeaderButtonText,
-    @required this.primaryHeaderButtonFunction,
+    this.primaryHeaderButtonText,
+    this.primaryHeaderButtonFunction,
     this.secondaryHeaderButtonText,
     this.secondaryHeaderButtonFunction,
   }) : super(key: key);
@@ -29,22 +29,24 @@ class SummaryRowHeader extends StatelessWidget {
             onTap: primaryHeaderButtonFunction,
             type: ButtonTextType.PRIMARY,
           ),
-          Row(
-            children: [
-              ButtonText(
-                text: primaryHeaderButtonText,
-                onTap: primaryHeaderButtonFunction,
-                type: ButtonTextType.SECONDARY,
-              ),
-              (secondaryHeaderButtonText != null && secondaryHeaderButtonFunction != null)
-                  ? ButtonText(
-                      text: secondaryHeaderButtonText,
-                      onTap: secondaryHeaderButtonFunction,
+          primaryHeaderButtonText != null
+              ? Row(
+                  children: [
+                    ButtonText(
+                      text: primaryHeaderButtonText,
+                      onTap: primaryHeaderButtonFunction,
                       type: ButtonTextType.SECONDARY,
-                    )
-                  : Container()
-            ],
-          ),
+                    ),
+                    (secondaryHeaderButtonText != null && secondaryHeaderButtonFunction != null)
+                        ? ButtonText(
+                            text: secondaryHeaderButtonText,
+                            onTap: secondaryHeaderButtonFunction,
+                            type: ButtonTextType.SECONDARY,
+                          )
+                        : Container()
+                  ],
+                )
+              : Container(),
         ],
       ),
     );

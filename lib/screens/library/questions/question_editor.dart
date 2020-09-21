@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
@@ -9,6 +10,8 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/category_selector.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
+
+import '../../../get_it.dart';
 
 enum QuestionEditorType {
   ADD,
@@ -111,7 +114,7 @@ class _QuestionEditorState extends State<QuestionEditor> {
           constraints: BoxConstraints(maxWidth: 600),
           padding: EdgeInsets.fromLTRB(
             16,
-            MediaQuery.of(context).size.width > 800 ? 128 : 16,
+            getIt<AppSize>().isLarge ? 128 : 16,
             16,
             16,
           ),

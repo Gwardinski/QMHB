@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
@@ -8,6 +9,8 @@ import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
+
+import '../../../get_it.dart';
 
 class QuizEditor extends StatefulWidget {
   final QuizModel quizModel;
@@ -79,7 +82,7 @@ class _QuizEditorState extends State<QuizEditor> {
           constraints: BoxConstraints(maxWidth: 600),
           padding: EdgeInsets.fromLTRB(
             16,
-            MediaQuery.of(context).size.width > 800 ? 128 : 16,
+            getIt<AppSize>().isLarge ? 128 : 16,
             16,
             16,
           ),
