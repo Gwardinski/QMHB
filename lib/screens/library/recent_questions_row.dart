@@ -38,6 +38,8 @@ class RecentQuestionsRow extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
+                print("err");
+                print(snapshot.error.toString());
                 return Container(
                   child: Text("err"),
                 );

@@ -27,7 +27,8 @@ class _UserListenerState extends State<UserListener> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           UserModel newUserModel = snapshot.data;
-          bool hasUpdated = newUserModel.lastUpdated != currentUserModel.lastUpdated;
+          bool hasUpdated =
+              newUserModel.lastUpdated.toString() != currentUserModel.lastUpdated.toString();
           if (hasUpdated || !_hasInitiated) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {

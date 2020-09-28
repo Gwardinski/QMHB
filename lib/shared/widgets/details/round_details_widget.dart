@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
@@ -57,7 +58,7 @@ class RoundDetailsWidget extends StatelessWidget {
                     );
                   },
                 )
-              : Text("No Questions"),
+              : Center(child: Text("No Questions")),
         ),
       ],
     );
@@ -120,7 +121,10 @@ class DetailsHeaderColumn extends StatelessWidget {
             children: [
               InfoColumn(title: "Questions", value: roundModel.questionIds.length.toString()),
               InfoColumn(title: "Points", value: roundModel.totalPoints.toString()),
-              InfoColumn(title: "Created", value: roundModel.createdAt.toString()),
+              InfoColumn(
+                title: "Created",
+                value: DateFormat('dd-mm-yyyy').format(roundModel.createdAt),
+              ),
             ],
           ),
           Padding(

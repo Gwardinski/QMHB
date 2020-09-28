@@ -51,7 +51,7 @@ class QuestionCollectionService {
     QuestionModel questionModel,
     String uid,
   ) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     final newDocId = _questionsCollection.document().documentID;
     await _questionsCollection.document(newDocId).setData({
       "id": newDocId,
@@ -71,7 +71,7 @@ class QuestionCollectionService {
   Future<void> editQuestionOnFirebaseCollection(
     QuestionModel questionModel,
   ) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     return await _questionsCollection.document(questionModel.id).setData({
       "id": questionModel.id,
       "uid": questionModel.uid,

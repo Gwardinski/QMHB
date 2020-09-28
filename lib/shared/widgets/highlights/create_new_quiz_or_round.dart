@@ -62,6 +62,7 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(16),
       height: 128,
       width: 128,
       decoration: BoxDecoration(
@@ -94,8 +95,8 @@ class CreateNewRoundOrQuizSummary extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16, 16, 0, 16),
       child: Text(
         type == CreateNewQuizOrRoundType.QUIZ
-            ? "Your library of Quizzes lives here. Tap to create your first Quiz.\n\nTo save a pre-created Quiz, hit the explore tab and start searching."
-            : "Your library of Rounds lives here. Tap to create your first Round.\n\nTo save a pre-created Round, hit the explore tab and start searching.",
+            ? "Your library of Quizzes lives here.\n\nTap to create your first Quiz, or hit the explore tab and start searching."
+            : "Your library of Rounds lives here.\n\nTap to create your first Round, or hit the explore tab and start searching.",
       ),
     );
   }

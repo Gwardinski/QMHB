@@ -41,11 +41,11 @@ class FormInput extends StatelessWidget {
           labelStyle: TextStyle(
             color: Colors.white,
           ),
-          filled: true,
+          filled: false,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(4.0)),
             borderSide: BorderSide(
-              width: 2.0,
+              width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(

@@ -10,8 +10,8 @@ class RoundModel {
   List<String> questionIds;
   double totalPoints;
   bool isPublished;
-  int lastUpdated;
-  int createdAt;
+  DateTime lastUpdated;
+  DateTime createdAt;
 
   RoundModel({
     this.uid,
@@ -46,8 +46,8 @@ class RoundModel {
   RoundModel.fromFirebase(DocumentSnapshot document) {
     this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
-    this.lastUpdated = document.data['lastUpdated'];
-    this.createdAt = document.data['createdAt'];
+    this.lastUpdated = document.data['lastUpdated'].toDate();
+    this.createdAt = document.data['createdAt'].toDate();
     this.title = document.data['title'] ?? '';
     this.description = document.data['description'] ?? '';
     this.rating = document.data['rating'] ?? 0;

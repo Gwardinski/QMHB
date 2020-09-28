@@ -48,7 +48,7 @@ class QuizCollectionService {
   }
 
   Future<String> addQuizToFirebaseCollection(QuizModel quizModel, String uid) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     final newDocId = _quizzesCollection.document().documentID;
     await _quizzesCollection.document(newDocId).setData({
       "id": newDocId,
@@ -64,7 +64,7 @@ class QuizCollectionService {
   }
 
   Future<void> editQuizOnFirebaseCollection(QuizModel quizModel) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     return await _quizzesCollection.document(quizModel.id).setData({
       "id": quizModel.id,
       "uid": quizModel.uid,
@@ -84,7 +84,7 @@ class QuizCollectionService {
   }
 
   Future<void> addRoundToQuiz(QuizModel quizModel, RoundModel round) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     return await _quizzesCollection.document(quizModel.id).setData({
       "id": quizModel.id,
       "uid": quizModel.uid,
@@ -99,7 +99,7 @@ class QuizCollectionService {
   }
 
   Future<void> removeRoundFromQuiz(QuizModel quizModel, RoundModel round) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     final ids = quizModel.roundIds;
     ids.remove(round.id);
     return await _quizzesCollection.document(quizModel.id).setData({

@@ -10,9 +10,11 @@ class AuthenticationService {
   Future<UserModel> autoSignIn() async {
     try {
       FirebaseUser fbUser = await _auth.currentUser();
+      print(fbUser);
       DocumentSnapshot firebaseData = await _userService.getUserFromUsersCollectionUsingUID(
         fbUser.uid,
       );
+      print(firebaseData);
       return UserModel.fromFirebase(firebaseData);
     } catch (e) {
       print(e.toString());

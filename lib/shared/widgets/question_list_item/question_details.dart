@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/screens/library/rounds/add_question_to_round.dart';
 
@@ -67,14 +68,10 @@ class _QuestionDetailsState extends State<QuestionDetails> {
                     ),
                   ),
                   Text(
-                    DateTime.fromMicrosecondsSinceEpoch(
-                      widget.questionModel.createdAt,
-                    ).toString(),
+                    DateFormat('dd-mm-yyyy').format(widget.questionModel.createdAt),
                   ),
                   Text(
-                    DateTime.fromMicrosecondsSinceEpoch(
-                      widget.questionModel.lastUpdated,
-                    ).toString(),
+                    DateFormat('dd-mm-yyyy').format(widget.questionModel.lastUpdated),
                   ),
                 ],
               ),

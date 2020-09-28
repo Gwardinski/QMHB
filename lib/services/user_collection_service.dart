@@ -13,7 +13,7 @@ class UserCollectionService {
   // stream user changes - called on base widget UserListener
   Stream<UserModel> getUserStream(id) {
     return _usersCollection.document(id).snapshots().map((user) {
-      return UserModel.fromFirebase(user.data);
+      return UserModel.fromFirebase(user);
     });
   }
 
@@ -26,7 +26,8 @@ class UserCollectionService {
       "quizIds": userModel.quizIds,
       "roundIds": userModel.roundIds,
       "questionIds": userModel.questionIds,
-      "lastUpdated": Timestamp.now().millisecondsSinceEpoch,
+      "lastUpdated": Timestamp.now().toDate(),
+      "createdAt": userModel.createdAt,
     });
   }
 }

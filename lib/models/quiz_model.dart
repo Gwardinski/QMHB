@@ -11,8 +11,8 @@ class QuizModel {
   bool isPublished;
   List<String> roundIds;
   List<String> questionIds;
-  int lastUpdated;
-  int createdAt;
+  DateTime lastUpdated;
+  DateTime createdAt;
 
   QuizModel({
     this.id,
@@ -55,8 +55,8 @@ class QuizModel {
   QuizModel.fromFirebase(DocumentSnapshot document) {
     this.id = document.data['id'] ?? '';
     this.uid = document.data['uid'] ?? '';
-    this.lastUpdated = document.data['lastUpdated'];
-    this.createdAt = document.data['createdAt'];
+    this.lastUpdated = document.data['lastUpdated'].toDate();
+    this.createdAt = document.data['createdAt'].toDate();
     this.title = document.data['title'] ?? '';
     this.rating = document.data['rating'] ?? 0;
     this.difficulty = document.data['difficulty'] ?? 0;

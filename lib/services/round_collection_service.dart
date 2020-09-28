@@ -48,7 +48,7 @@ class RoundCollectionService {
   }
 
   Future<String> addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     final newDocId = _roundsCollection.document().documentID;
     await _roundsCollection.document(newDocId).setData({
       "id": newDocId,
@@ -64,7 +64,7 @@ class RoundCollectionService {
   }
 
   Future<void> editRoundOnFirebaseCollection(RoundModel roundModel) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     return await _roundsCollection.document(roundModel.id).setData({
       "id": roundModel.id,
       "uid": roundModel.uid,
@@ -84,7 +84,7 @@ class RoundCollectionService {
   }
 
   Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     return await _roundsCollection.document(roundModel.id).setData({
       "id": roundModel.id,
       "uid": roundModel.uid,
@@ -98,7 +98,7 @@ class RoundCollectionService {
   }
 
   Future<void> removeQuestionToRound(RoundModel roundModel, QuestionModel question) async {
-    final serverTimestamp = Timestamp.now().millisecondsSinceEpoch;
+    final serverTimestamp = Timestamp.now().toDate();
     final ids = roundModel.questionIds;
     ids.remove(question.id);
     return await _roundsCollection.document(roundModel.id).setData({

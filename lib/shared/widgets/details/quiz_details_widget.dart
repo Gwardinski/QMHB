@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
@@ -53,7 +54,7 @@ class QuizDetailsWidget extends StatelessWidget {
                     );
                   },
                 )
-              : Center(child: Text("This quiz has no rounds")),
+              : Center(child: Text("No Rounds")),
         ),
       ],
     );
@@ -116,7 +117,10 @@ class DetailsHeaderColumn extends StatelessWidget {
             children: [
               InfoColumn(title: "Rounds", value: quizModel.roundIds.length.toString()),
               InfoColumn(title: "Points", value: quizModel.totalPoints.toString()),
-              InfoColumn(title: "Created", value: quizModel.createdAt.toString()),
+              InfoColumn(
+                title: "Created",
+                value: DateFormat('dd-mm-yyyy').format(quizModel.createdAt),
+              ),
             ],
           ),
           Padding(

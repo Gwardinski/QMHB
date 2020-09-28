@@ -59,7 +59,7 @@ class RecentRoundsRow extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CreateNewQuizOrRound(
-                              type: CreateNewQuizOrRoundType.QUIZ,
+                              type: CreateNewQuizOrRoundType.ROUND,
                             ),
                           ),
                         ],
