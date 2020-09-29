@@ -14,6 +14,8 @@ class AppSize {
   // does not change
   double spacingXl = 64.0;
 
+  double borderRadius = 16.0;
+
   updateSize(useLargeLayout) {
     if (useLargeLayout) {
       isLarge = true;

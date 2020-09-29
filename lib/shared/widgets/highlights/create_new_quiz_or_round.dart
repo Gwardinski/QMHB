@@ -66,8 +66,10 @@ class CreateNewQuizOrRoundTile extends StatelessWidget {
       height: 128,
       width: 128,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
         border: Border.all(color: Theme.of(context).accentColor),
+        borderRadius: BorderRadius.all(
+          Radius.circular(getIt<AppSize>().borderRadius),
+        ),
       ),
       child: Center(
         child: Text(

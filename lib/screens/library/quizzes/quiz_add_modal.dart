@@ -81,35 +81,39 @@ class _RoundAddModalState extends State<QuizAddModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: EdgeInsets.all(0),
       content: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  FormInput(
-                    initialValue: _quiz.title,
-                    validate: validateForm,
-                    labelText: "Quiz Name",
-                    onChanged: (val) {
-                      setState(() {
-                        _quiz.title = val;
-                      });
-                    },
-                  ),
-                  Text(widget.initialRound != null
-                      ? "Quiz will be created with: \n${widget.initialRound?.title} \n\n"
-                      : ""),
-                  ButtonPrimary(
+        padding: EdgeInsets.all(16),
+        child: Container(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                widget.initialRound != null
+                    ? Text("Quiz will be created with: \n${widget.initialRound?.title} \n\n")
+                    : Container(),
+                FormInput(
+                  initialValue: _quiz.title,
+                  validate: validateForm,
+                  labelText: "Quiz Name",
+                  noPadding: true,
+                  onChanged: (val) {
+                    setState(() {
+                      _quiz.title = val;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: ButtonPrimary(
                     text: "Create",
                     isLoading: _isLoading,
                     onPressed: _onSubmit,
+                    fullWidth: false,
                   ),
-                  FormError(error: _error),
-                ],
-              ),
+                ),
+                _error != "" ? FormError(error: _error) : Container(),
+              ],
             ),
           ),
         ),
