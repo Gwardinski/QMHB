@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class ButtonPrimary extends StatelessWidget {
-  final text;
+  final String text;
   final onPressed;
   final isLoading;
 

@@ -70,6 +70,7 @@ class RoundListItemContent extends StatelessWidget {
         viewQuestionDetails();
       },
       child: Container(
+        color: Theme.of(context).cardColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,

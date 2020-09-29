@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -17,7 +15,6 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => true;
 
-  final AuthenticationService _authService = AuthenticationService();
   final _formKey = GlobalKey<FormState>();
   String _displayName;
   String _email;
@@ -95,20 +92,19 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      _updateIsLoading(true);
-      UserModel userModel = await _authService.registerWithEmailAndPassword(
-        email: _email.trim(),
-        password: _password.trim(),
-        displayName: _displayName.trim(),
-      );
-      if (userModel != null) {
-        final userDataStateModel = Provider.of<UserDataStateModel>(context);
-        userDataStateModel.updateCurrentUser(userModel);
-        Navigator.of(context).pop();
-      } else {
+      try {
+        final authenticationService = Provider.of<AuthenticationService>(context);
+        await authenticationService.registerWithEmailAndPassword(
+          email: _email.trim(),
+          password: _password.trim(),
+          displayName: _displayName.trim(),
+        );
+      } catch (e) {
         _updateError('Failed to register');
+        print(e.toString());
+      } finally {
+        _updateIsLoading(false);
       }
-      _updateIsLoading(false);
     }
   }
 }

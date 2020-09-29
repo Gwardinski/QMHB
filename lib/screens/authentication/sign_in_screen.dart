@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -17,13 +15,19 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
-  final AuthenticationService _authService = AuthenticationService();
   final _formKey = GlobalKey<FormState>();
 
+  AuthenticationService _authService;
   String _email = '';
   String _password = '';
   String _error = '';
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = Provider.of<AuthenticationService>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,39 +38,48 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
           child: Container(
             constraints: BoxConstraints(maxWidth: 600),
             padding: EdgeInsets.fromLTRB(16.0, 4, 16.0, 16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  FormInput(
-                    validate: validateEmail,
-                    labelText: "Email",
-                    disabled: _isLoading,
-                    onChanged: (String val) {
-                      setState(() {
-                        _email = val;
-                      });
-                    },
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      FormInput(
+                        validate: validateEmail,
+                        labelText: "Email",
+                        disabled: _isLoading,
+                        onChanged: (String val) {
+                          setState(() {
+                            _email = val;
+                          });
+                        },
+                      ),
+                      FormInput(
+                        validate: validateEmail,
+                        labelText: "Password",
+                        obscureText: true,
+                        disabled: _isLoading,
+                        onChanged: (String val) {
+                          setState(() {
+                            _password = val;
+                          });
+                        },
+                      ),
+                      ButtonPrimary(
+                        text: "Submit",
+                        isLoading: _isLoading,
+                        onPressed: _isLoading ? null : _onSubmit,
+                      ),
+                      FormError(error: _error),
+                      ButtonPrimary(
+                        text: "Google",
+                        isLoading: false,
+                        onPressed: _isLoading ? null : _googleSignIn,
+                      ),
+                    ],
                   ),
-                  FormInput(
-                    validate: validateEmail,
-                    labelText: "Password",
-                    obscureText: true,
-                    disabled: _isLoading,
-                    onChanged: (String val) {
-                      setState(() {
-                        _password = val;
-                      });
-                    },
-                  ),
-                  ButtonPrimary(
-                    text: "Submit",
-                    isLoading: _isLoading,
-                    onPressed: _isLoading ? null : _onSubmit,
-                  ),
-                  FormError(error: _error),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -86,21 +99,33 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
     });
   }
 
+  _googleSignIn() async {
+    try {
+      _updateIsLoading(true);
+      await _authService.googleSignIn();
+      Navigator.of(context).pop();
+    } catch (e) {
+      _updateError('Failed to log in');
+    } finally {
+      _updateIsLoading(false);
+    }
+  }
+
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      _updateIsLoading(true);
-      UserModel userModel = await _authService.signInWithEmailAndPassword(
-        email: _email.trim(),
-        password: _password.trim(),
-      );
-      if (userModel != null) {
-        final userDataStateModel = Provider.of<UserDataStateModel>(context);
-        userDataStateModel.updateCurrentUser(userModel);
+      try {
+        _updateIsLoading(true);
+        await _authService.signInWithEmailAndPassword(
+          email: _email.trim(),
+          password: _password.trim(),
+        );
         Navigator.of(context).pop();
-      } else {
+      } catch (e) {
         _updateError('Failed to log in');
+        print(e.toString());
+      } finally {
+        _updateIsLoading(false);
       }
-      _updateIsLoading(false);
     }
   }
 }

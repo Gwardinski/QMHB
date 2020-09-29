@@ -33,6 +33,7 @@ class _QuizListItemState extends State<QuizListItem> {
       child: InkWell(
         onTap: _viewQuizDetails,
         child: Container(
+          color: Theme.of(context).cardColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,

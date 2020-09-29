@@ -4,6 +4,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/home/home_screen.dart';
+import 'package:qmhb/services/authentication_service.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/services/round_collection_service.dart';
@@ -15,12 +16,19 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final UserDataStateModel userDataStateModel = UserDataStateModel();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserDataStateModel>(
-          create: (BuildContext context) => UserDataStateModel(),
+          create: (BuildContext context) => userDataStateModel,
+        ),
+        Provider<AuthenticationService>(
+          create: (BuildContext context) => AuthenticationService(
+            userDataStateModel: userDataStateModel,
+          ),
         ),
         Provider<UserCollectionService>(
           create: (BuildContext context) => UserCollectionService(),

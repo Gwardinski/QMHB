@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/explore_screen/explore_screen.dart';
 import 'package:qmhb/screens/home/widgets/main_nav_button.dart';
 import 'package:qmhb/screens/library/library_screen.dart';
 import 'package:qmhb/screens/play/play_screen.dart';
-import 'package:qmhb/services/authentication_service.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -22,29 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ExploreScreen(),
     PlayScreen(),
   ];
-  final AuthenticationService _authService = AuthenticationService();
   final globalKey = GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    autoSignIn();
-  }
-
-  void autoSignIn() async {
-    UserModel userModel = await _authService.autoSignIn();
-    if (userModel != null) {
-      final userDataStateModel = Provider.of<UserDataStateModel>(context);
-      userDataStateModel.updateCurrentUser(userModel);
-      final snackBar = SnackBar(content: Text('Signed In'));
-      globalKey.currentState.showSnackBar(snackBar);
-    }
   }
 
   @override

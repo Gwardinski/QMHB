@@ -1,28 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 
 class AuthenticationService {
+  final UserDataStateModel userDataStateModel;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserCollectionService _userService = UserCollectionService();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<UserModel> autoSignIn() async {
+  AuthenticationService({
+    this.userDataStateModel,
+  }) {
+    _auth.onAuthStateChanged.listen((user) {
+      if (user != null) {
+        _updateUserState(user);
+      } else {
+        userDataStateModel.removeCurrentUser();
+      }
+    });
+  }
+
+  _updateUserState(FirebaseUser user) async {
+    final userDoc = await _userService.getUserFromUsersCollectionUsingUID(
+      user.uid,
+    );
+    final userModel = UserModel.fromFirebase(userDoc);
+    userDataStateModel.updateCurrentUser(userModel);
+  }
+
+  Future<void> googleSignIn() async {
     try {
-      FirebaseUser fbUser = await _auth.currentUser();
-      print(fbUser);
-      DocumentSnapshot firebaseData = await _userService.getUserFromUsersCollectionUsingUID(
-        fbUser.uid,
+      GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-      print(firebaseData);
-      return UserModel.fromFirebase(firebaseData);
+      final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+      UserModel newUser = UserModel.registerNewUser(
+        email: user.email,
+        displayName: user.displayName,
+        uid: user.uid,
+      );
+      _userService.updateUserDataOnFirebase(newUser);
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future<UserModel> registerWithEmailAndPassword({
+  Future<void> registerWithEmailAndPassword({
     String email,
     String password,
     String displayName,
@@ -35,14 +65,13 @@ class AuthenticationService {
         uid: fbUser.uid,
       );
       _userService.updateUserDataOnFirebase(newUser);
-      return newUser;
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future<UserModel> signInWithEmailAndPassword({
+  Future<void> signInWithEmailAndPassword({
     String email,
     String password,
   }) async {
@@ -59,7 +88,6 @@ class AuthenticationService {
         );
         _userService.updateUserDataOnFirebase(newUser);
       }
-      return UserModel.fromFirebase(firebaseData);
     } catch (e) {
       print(e.toString());
       return null;

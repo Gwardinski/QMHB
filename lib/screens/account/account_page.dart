@@ -3,16 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/services/authentication_service.dart';
-import 'package:qmhb/shared/widgets/text_with_title.dart';
+import 'package:qmhb/shared/widgets/details/info_column.dart';
 
 class AccountPage extends StatelessWidget {
-  final AuthenticationService _authenticationService = AuthenticationService();
   @override
   Widget build(BuildContext context) {
-    final userDataStateModel = Provider.of<UserDataStateModel>(context);
-    UserModel user = userDataStateModel.user;
+    final user = Provider.of<UserDataStateModel>(context).user;
+    final authenticationService = Provider.of<AuthenticationService>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -21,8 +19,7 @@ class AccountPage extends StatelessWidget {
           FlatButton(
             child: Text("Sign Out"),
             onPressed: () async {
-              await _authenticationService.signOut();
-              userDataStateModel.removeCurrentUser();
+              await authenticationService.signOut();
               Navigator.of(context).pop();
             },
           ),
@@ -34,28 +31,42 @@ class AccountPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextListItem(
-              title: "Name",
-              text: user.displayName ?? '',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoColumn(
+                  title: 'Display Name',
+                  value: user.displayName ?? '',
+                ),
+              ],
             ),
-            TextListItem(
-              title: "Email",
-              text: user.email,
+            Padding(padding: EdgeInsets.only(bottom: 16)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoColumn(
+                  title: 'Email',
+                  value: user.email,
+                ),
+              ],
             ),
-            TextListItem(
-              title: "Questions Created",
-              text: user.questionIds.length.toString(),
-              highlighText: true,
-            ),
-            TextListItem(
-              title: "Rounds Created",
-              text: user.roundIds.length.toString(),
-              highlighText: true,
-            ),
-            TextListItem(
-              title: "Quizzes Created",
-              text: user.quizIds.length.toString(),
-              highlighText: true,
+            Padding(padding: EdgeInsets.only(bottom: 16)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoColumn(
+                  title: 'Questions',
+                  value: user.questionIds.length.toString(),
+                ),
+                InfoColumn(
+                  title: 'Rounds',
+                  value: user.roundIds.length.toString(),
+                ),
+                InfoColumn(
+                  title: 'Quizzes',
+                  value: user.quizIds.length.toString(),
+                ),
+              ],
             ),
           ],
         ),

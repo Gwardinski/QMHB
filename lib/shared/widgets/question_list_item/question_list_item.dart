@@ -3,7 +3,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_details.dart';
+import 'package:qmhb/shared/widgets/details/question_details.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';

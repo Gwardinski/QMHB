@@ -45,7 +45,12 @@ class QuizDetailsWidget extends StatelessWidget {
                         child: Text("err"),
                       );
                     }
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                        );
+                      },
                       itemCount: roundSnapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
                         RoundModel round = roundSnapshot.data[index];
