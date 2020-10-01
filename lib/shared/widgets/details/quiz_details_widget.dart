@@ -11,7 +11,6 @@ import 'package:qmhb/shared/widgets/image_switcher.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import '../../../get_it.dart';
 

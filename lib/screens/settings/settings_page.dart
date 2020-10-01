@@ -13,7 +13,7 @@ class SettingsPage extends StatelessWidget {
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 8)),
             Center(
-              child: Text("Settings do not yet exist."),
+              child: Text("Dark / Light mode \nlanguages \ndisable images when not in wifi"),
             )
           ],
         ),

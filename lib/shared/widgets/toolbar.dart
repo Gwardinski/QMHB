@@ -17,6 +17,7 @@ class Toolbar extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
+                icon: Icon(Icons.search),
                 hintText: 'Search...',
               ),
             ),

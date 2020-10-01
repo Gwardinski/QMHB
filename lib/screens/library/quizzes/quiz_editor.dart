@@ -14,7 +14,6 @@ import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/image_switcher.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import '../../../get_it.dart';
 

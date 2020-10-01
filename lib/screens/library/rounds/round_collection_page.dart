@@ -19,7 +19,7 @@ class RoundCollectionPage extends StatelessWidget {
           title: Text("Your Rounds"),
           actions: <Widget>[
             FlatButton.icon(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.add_circle),
               label: Text('New'),
               onPressed: () {
                 showDialog<void>(

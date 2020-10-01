@@ -41,7 +41,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               value: QuestionOptions.addToRound,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.add),
+                  Icon(Icons.add_to_queue),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Question to Round'),
                 ],
@@ -63,7 +63,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
                 children: <Widget>[
                   Icon(Icons.delete),
                   Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Edit Question Details'),
+                  Text('Delete Question'),
                 ],
               ),
             ),
