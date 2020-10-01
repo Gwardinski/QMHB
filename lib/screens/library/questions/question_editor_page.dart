@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor.dart';
 
 class QuestionEditorPage extends StatefulWidget {
   final QuestionEditorType type;
   final QuestionModel questionModel;
+  final RoundModel initialRound;
 
   QuestionEditorPage({
     @required this.type,
     this.questionModel,
+    this.initialRound,
   });
 
   @override
@@ -26,9 +29,9 @@ class _QuestionEditorPageState extends State<QuestionEditorPage> {
         ),
       ),
       body: QuestionEditor(
-        questionModel: widget.questionModel,
-        type: widget.type,
-      ),
+          questionModel: widget.questionModel,
+          type: widget.type,
+          initialRound: widget.initialRound),
     );
   }
 }

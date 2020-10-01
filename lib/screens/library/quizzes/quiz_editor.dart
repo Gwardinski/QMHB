@@ -157,7 +157,6 @@ class _QuizEditorState extends State<QuizEditor> {
                     GestureDetector(
                       onTap: _selectImage,
                       child: Container(
-                        color: Theme.of(context).primaryColorDark,
                         width: 120,
                         height: 120,
                         child: ImageSwitcher(

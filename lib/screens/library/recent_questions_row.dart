@@ -13,19 +13,26 @@ class RecentQuestionsRow extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  navigate(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestionCollectionPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SummaryRowHeader(
           headerTitle: 'Questions',
+          headerTitleButtonFunction: () {
+            navigate(context);
+          },
           primaryHeaderButtonText: 'See All',
           primaryHeaderButtonFunction: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => QuestionCollectionPage(),
-              ),
-            );
+            navigate(context);
           },
         ),
         StreamBuilder(

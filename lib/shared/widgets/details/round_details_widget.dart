@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/screens/library/questions/question_editor.dart';
+import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
@@ -14,13 +16,42 @@ import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart'
 
 import '../../../get_it.dart';
 
-class RoundDetailsWidget extends StatelessWidget {
+class RoundDetailsWidget extends StatefulWidget {
   const RoundDetailsWidget({
     Key key,
     @required this.roundModel,
   }) : super(key: key);
 
   final RoundModel roundModel;
+
+  @override
+  _RoundDetailsWidgetState createState() => _RoundDetailsWidgetState();
+}
+
+class _RoundDetailsWidgetState extends State<RoundDetailsWidget> {
+  RoundModel roundModel;
+
+  @override
+  void initState() {
+    roundModel = widget.roundModel;
+    super.initState();
+  }
+
+  _createNewQuestionOnRound() async {
+    final updatedRoundModel = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestionEditorPage(
+          type: QuestionEditorType.ADD,
+          initialRound: roundModel,
+        ),
+      ),
+    );
+    setState(() {
+      if (updatedRoundModel != null) {
+        roundModel = updatedRoundModel;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +62,10 @@ class RoundDetailsWidget extends StatelessWidget {
         Divider(),
         SummaryRowHeader(
           headerTitle: "Questions",
+          primaryHeaderButtonText: "Create New",
+          primaryHeaderButtonFunction: () async {
+            _createNewQuestionOnRound();
+          },
         ),
         roundModel.questionIds.length > 0
             ? StreamBuilder(

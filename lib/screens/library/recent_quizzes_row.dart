@@ -16,19 +16,26 @@ class RecentQuizzesRow extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  navigate(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuizCollectionPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SummaryRowHeader(
           headerTitle: 'Quizzes',
+          headerTitleButtonFunction: () {
+            navigate(context);
+          },
           primaryHeaderButtonText: 'See All',
           primaryHeaderButtonFunction: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => QuizCollectionPage(),
-              ),
-            );
+            navigate(context);
           },
         ),
         Container(

@@ -68,6 +68,7 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
                       ButtonPrimary(
                         text: "Submit",
                         isLoading: _isLoading,
+                        fullWidth: true,
                         onPressed: _isLoading ? null : _onSubmit,
                       ),
                       FormError(error: _error),

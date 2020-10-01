@@ -3,6 +3,7 @@ import 'package:qmhb/shared/widgets/button_text.dart';
 
 class SummaryRowHeader extends StatelessWidget {
   final String headerTitle;
+  final Function headerTitleButtonFunction;
   final String primaryHeaderButtonText;
   final Function primaryHeaderButtonFunction;
   final String secondaryHeaderButtonText;
@@ -11,6 +12,7 @@ class SummaryRowHeader extends StatelessWidget {
   const SummaryRowHeader({
     Key key,
     @required this.headerTitle,
+    this.headerTitleButtonFunction,
     this.primaryHeaderButtonText,
     this.primaryHeaderButtonFunction,
     this.secondaryHeaderButtonText,
@@ -26,7 +28,7 @@ class SummaryRowHeader extends StatelessWidget {
         children: <Widget>[
           ButtonText(
             text: headerTitle,
-            onTap: primaryHeaderButtonFunction,
+            onTap: headerTitleButtonFunction,
             type: ButtonTextType.PRIMARY,
           ),
           primaryHeaderButtonText != null

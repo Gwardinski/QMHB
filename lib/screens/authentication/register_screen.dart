@@ -66,6 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
                   ButtonPrimary(
                     isLoading: _isLoading,
                     text: "Submit",
+                    fullWidth: true,
                     onPressed: _isLoading ? null : _onSubmit,
                   ),
                   FormError(error: _error),

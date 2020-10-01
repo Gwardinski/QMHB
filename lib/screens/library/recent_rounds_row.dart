@@ -16,19 +16,26 @@ class RecentRoundsRow extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  navigate(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => RoundCollectionPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SummaryRowHeader(
           headerTitle: 'Rounds',
+          headerTitleButtonFunction: () {
+            navigate(context);
+          },
           primaryHeaderButtonText: 'See All',
           primaryHeaderButtonFunction: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => RoundCollectionPage(),
-              ),
-            );
+            navigate(context);
           },
         ),
         Container(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -19,12 +21,14 @@ enum QuestionEditorType {
 }
 
 class QuestionEditor extends StatefulWidget {
-  final QuestionModel questionModel;
   final QuestionEditorType type;
+  final QuestionModel questionModel;
+  final RoundModel initialRound;
 
   QuestionEditor({
-    this.questionModel,
     this.type,
+    this.questionModel,
+    this.initialRound,
   });
   @override
   _QuestionEditorState createState() => _QuestionEditorState();
@@ -77,7 +81,15 @@ class _QuestionEditorState extends State<QuestionEditor> {
       );
       userModel.questionIds.add(newDocId);
       await userService.updateUserDataOnFirebase(userModel);
-      Navigator.of(context).pop();
+      if (widget.initialRound != null) {
+        final roundService = Provider.of<RoundCollectionService>(context);
+        final newRound = widget.initialRound;
+        newRound.questionIds.add(newDocId);
+        await roundService.editRoundOnFirebaseCollection(newRound);
+        Navigator.of(context).pop(newRound);
+      } else {
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       print(e.toString());
       _updateError('Failed to edit Question');
@@ -164,8 +176,9 @@ class _QuestionEditorState extends State<QuestionEditor> {
                   },
                 ),
                 ButtonPrimary(
-                  text: "Submit",
+                  text: "Save!",
                   isLoading: _isLoading,
+                  fullWidth: true,
                   onPressed: _onSubmit,
                 ),
                 FormError(error: _error),

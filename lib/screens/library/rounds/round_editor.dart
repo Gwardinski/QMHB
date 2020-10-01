@@ -157,7 +157,6 @@ class _RoundEditorState extends State<RoundEditor> {
                     GestureDetector(
                       onTap: _selectImage,
                       child: Container(
-                        color: Theme.of(context).primaryColorDark,
                         width: 120,
                         height: 120,
                         child: ImageSwitcher(
