@@ -5,6 +5,7 @@ class RoundModel {
   String id;
   String title;
   String description;
+  String imageURL;
   int rating;
   int difficulty;
   List<String> questionIds;
@@ -18,6 +19,7 @@ class RoundModel {
     this.id,
     this.title,
     this.description,
+    this.imageURL,
     this.questionIds,
     this.rating,
     this.difficulty,
@@ -32,6 +34,7 @@ class RoundModel {
     this.createdAt = json['createdAt'];
     this.title = json['title'] ?? '';
     this.description = json['description'] ?? '';
+    this.imageURL = json['imageURL'] ?? '';
     this.rating = json['rating'] ?? 0;
     this.difficulty = json['difficulty'] ?? 0;
     this.totalPoints = json['totalPoints'] ?? 0;
@@ -44,19 +47,20 @@ class RoundModel {
     }
   }
   RoundModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data['id'] ?? '';
-    this.uid = document.data['uid'] ?? '';
-    this.lastUpdated = document.data['lastUpdated'].toDate();
-    this.createdAt = document.data['createdAt'].toDate();
-    this.title = document.data['title'] ?? '';
-    this.description = document.data['description'] ?? '';
-    this.rating = document.data['rating'] ?? 0;
-    this.difficulty = document.data['difficulty'] ?? 0;
-    this.totalPoints = document.data['totalPoints'] ?? 0;
-    this.isPublished = document.data['isPublished'] ?? false;
+    this.id = document.data()['id'] ?? '';
+    this.uid = document.data()['uid'] ?? '';
+    this.lastUpdated = document.data()['lastUpdated'].toDate();
+    this.createdAt = document.data()['createdAt'].toDate();
+    this.title = document.data()['title'] ?? '';
+    this.description = document.data()['description'] ?? '';
+    this.imageURL = document.data()['imageURL'] ?? '';
+    this.rating = document.data()['rating'] ?? 0;
+    this.difficulty = document.data()['difficulty'] ?? 0;
+    this.totalPoints = document.data()['totalPoints'] ?? 0;
+    this.isPublished = document.data()['isPublished'] ?? false;
     questionIds = List<String>();
-    if (document['questionIds'] != null) {
-      document['questionIds'].forEach((id) {
+    if (document.data()['questionIds'] != null) {
+      document.data()['questionIds'].forEach((id) {
         questionIds.add(id);
       });
     }

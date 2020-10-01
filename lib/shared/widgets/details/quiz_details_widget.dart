@@ -7,9 +7,11 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/image_switcher.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../../../get_it.dart';
 
@@ -24,43 +26,48 @@ class QuizDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RoundCollectionService roundCollectionService = Provider.of<RoundCollectionService>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         QuizDetailsHeader(quizModel: quizModel),
         Divider(),
         SummaryRowHeader(
           headerTitle: "Rounds",
         ),
-        Expanded(
-          child: quizModel.roundIds.length > 0
-              ? StreamBuilder(
-                  stream: roundCollectionService.getRoundsByIds(quizModel.roundIds),
-                  builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> roundSnapshot) {
-                    if (roundSnapshot.connectionState == ConnectionState.waiting) {
-                      return LoadingSpinnerHourGlass();
-                    }
-                    if (roundSnapshot.hasError) {
-                      return Container(
-                        child: Text("err"),
-                      );
-                    }
-                    return ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                        );
-                      },
-                      itemCount: roundSnapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        RoundModel round = roundSnapshot.data[index];
-                        return RoundListItem(roundModel: round);
-                      },
+        quizModel.roundIds.length > 0
+            ? StreamBuilder(
+                stream: roundCollectionService.getRoundsByIds(quizModel.roundIds),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<RoundModel>> roundSnapshot,
+                ) {
+                  if (roundSnapshot.connectionState == ConnectionState.waiting) {
+                    return LoadingSpinnerHourGlass();
+                  }
+                  if (roundSnapshot.hasError) {
+                    return Container(
+                      child: Text("An error occured loading this Quizzes Rounds"),
                     );
-                  },
-                )
-              : Center(child: Text("No Rounds")),
-        ),
+                  }
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 120),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                      );
+                    },
+                    itemCount: roundSnapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      RoundModel round = roundSnapshot.data[index];
+                      return RoundListItem(roundModel: round);
+                    },
+                  );
+                },
+              )
+            : Center(
+                child: Text("The Quiz has no Rounds"),
+              ),
       ],
     );
   }
@@ -82,7 +89,7 @@ class QuizDetailsHeader extends StatelessWidget {
   }
 }
 
-class DetailsHeaderColumn extends StatelessWidget {
+class DetailsHeaderColumn extends StatefulWidget {
   const DetailsHeaderColumn({
     Key key,
     this.quizModel,
@@ -91,56 +98,87 @@ class DetailsHeaderColumn extends StatelessWidget {
   final QuizModel quizModel;
 
   @override
+  _DetailsHeaderColumnState createState() => _DetailsHeaderColumnState();
+}
+
+class _DetailsHeaderColumnState extends State<DetailsHeaderColumn> {
+  bool isExpanded = false;
+
+  expandImage(bool expand) {
+    setState(() {
+      isExpanded = expand;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 120,
-            height: 120,
-            color: Colors.orange,
-            margin: EdgeInsets.all(16),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        (widget.quizModel.imageURL != null && widget.quizModel.imageURL != "")
+            ? GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  if (details.delta.dy > 0)
+                    expandImage(true);
+                  else
+                    expandImage(false);
+                },
+                onTap: () {
+                  expandImage(true);
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 250),
+                  width: double.infinity,
+                  height: isExpanded ? 300 : 120,
+                  margin: EdgeInsets.only(bottom: 32),
+                  child: ImageSwitcher(
+                    fileImage: null,
+                    networkImage: widget.quizModel.imageURL,
+                  ),
+                ),
+              )
+            : Container(height: 32),
+        Text(
+          "Quiz",
+          style: TextStyle(
+            fontSize: 12,
           ),
-          Text(
-            "Quiz",
-            style: TextStyle(
-              fontSize: 12,
+        ),
+        Text(
+          widget.quizModel.title,
+          style: TextStyle(
+            fontSize: 32,
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(bottom: getIt<AppSize>().spacingLg)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InfoColumn(title: "Rounds", value: widget.quizModel.roundIds.length.toString()),
+            InfoColumn(title: "Points", value: widget.quizModel.totalPoints.toString()),
+            InfoColumn(
+              title: "Created",
+              value: DateFormat('dd-mm-yyyy').format(widget.quizModel.createdAt),
             ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            getIt<AppSize>().spacingLg,
           ),
-          Text(
-            quizModel.title,
-            style: TextStyle(
-              fontSize: 32,
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(bottom: getIt<AppSize>().spacingLg)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InfoColumn(title: "Rounds", value: quizModel.roundIds.length.toString()),
-              InfoColumn(title: "Points", value: quizModel.totalPoints.toString()),
-              InfoColumn(
-                title: "Created",
-                value: DateFormat('dd-mm-yyyy').format(quizModel.createdAt),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: quizModel.description != '' ? getIt<AppSize>().spacingLg : 0,
-            ),
-          ),
-          Text(
-            quizModel.description,
+          child: Text(
+            widget.quizModel.description ?? 'no description',
             style: TextStyle(
               fontSize: 16,
+              fontStyle: widget.quizModel.description != '' ? FontStyle.normal : FontStyle.italic,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -168,6 +206,12 @@ class DetailsHeaderRow extends StatelessWidget {
                 width: 160,
                 height: 160,
                 color: Colors.orange,
+                child: (quizModel.imageURL != null && quizModel.imageURL != "")
+                    ? Image.network(
+                        quizModel.imageURL,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 32),

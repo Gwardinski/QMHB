@@ -28,11 +28,11 @@ class CreateNewQuizOrRound extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) =>
-                  type == CreateNewQuizOrRoundType.QUIZ ? QuizAddModal() : RoundAddModal(),
-            ),
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return type == CreateNewQuizOrRoundType.QUIZ ? QuizAddModal() : RoundAddModal();
+            },
           );
         },
         child: Container(

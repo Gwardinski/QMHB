@@ -39,11 +39,23 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<QuizOptions>>[
             PopupMenuItem<QuizOptions>(
               value: QuizOptions.edit,
-              child: Text("Edit Quiz"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.edit),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Edit Quiz Details'),
+                ],
+              ),
             ),
             PopupMenuItem<QuizOptions>(
               value: QuizOptions.delete,
-              child: Text("Delete Quiz"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.delete),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Delete Quiz'),
+                ],
+              ),
             ),
             // PopupMenuItem<QuizOptions>(
             //   value: QuizOptions.save,

@@ -5,6 +5,7 @@ class QuizModel {
   String uid;
   String title;
   String description;
+  String imageURL;
   int rating;
   int difficulty;
   double totalPoints;
@@ -19,6 +20,7 @@ class QuizModel {
     this.uid,
     this.title,
     this.description,
+    this.imageURL,
     this.rating,
     this.difficulty,
     this.totalPoints,
@@ -37,6 +39,7 @@ class QuizModel {
     this.difficulty = json['difficulty'] ?? 0;
     this.totalPoints = json['totalPoints'] ?? 0;
     this.description = json['description'] ?? '';
+    this.imageURL = json['imageURL'] ?? '';
     this.isPublished = json['isPublished'] ?? false;
     roundIds = List<String>();
     if (json['roundIds'] != null) {
@@ -53,25 +56,26 @@ class QuizModel {
   }
 
   QuizModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data['id'] ?? '';
-    this.uid = document.data['uid'] ?? '';
-    this.lastUpdated = document.data['lastUpdated'].toDate();
-    this.createdAt = document.data['createdAt'].toDate();
-    this.title = document.data['title'] ?? '';
-    this.rating = document.data['rating'] ?? 0;
-    this.difficulty = document.data['difficulty'] ?? 0;
-    this.totalPoints = document.data['totalPoints'] ?? 0;
-    this.description = document.data['description'] ?? '';
-    this.isPublished = document.data['isPublished'] ?? false;
+    this.id = document.data()['id'] ?? '';
+    this.uid = document.data()['uid'] ?? '';
+    this.lastUpdated = document.data()['lastUpdated'].toDate();
+    this.createdAt = document.data()['createdAt'].toDate();
+    this.title = document.data()['title'] ?? '';
+    this.rating = document.data()['rating'] ?? 0;
+    this.difficulty = document.data()['difficulty'] ?? 0;
+    this.totalPoints = document.data()['totalPoints'] ?? 0;
+    this.description = document.data()['description'] ?? '';
+    this.imageURL = document.data()['imageURL'] ?? '';
+    this.isPublished = document.data()['isPublished'] ?? false;
     roundIds = List<String>();
-    if (document['roundIds'] != null) {
-      document['roundIds'].forEach((id) {
+    if (document.data()['roundIds'] != null) {
+      document.data()['roundIds'].forEach((id) {
         roundIds.add(id);
       });
     }
     questionIds = List<String>();
-    if (document['questionIds'] != null) {
-      document['questionIds'].forEach((id) {
+    if (document.data()['questionIds'] != null) {
+      document.data()['questionIds'].forEach((id) {
         questionIds.add(id);
       });
     }

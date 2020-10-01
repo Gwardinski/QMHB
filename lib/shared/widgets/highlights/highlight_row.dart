@@ -60,6 +60,7 @@ class QuizHighlightRow extends StatelessWidget {
               line2Value: quizModel.roundIds.length,
               line3: "Points",
               line3Value: quizModel.totalPoints,
+              imageURL: quizModel.imageURL,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

@@ -11,6 +11,7 @@ class SummaryTile extends StatelessWidget {
   final int line2Value;
   final double line3Value;
   final double line4Value;
+  final String imageURL;
   final Function onTap;
 
   SummaryTile({
@@ -21,6 +22,7 @@ class SummaryTile extends StatelessWidget {
     @required this.line3Value,
     this.line4 = "line4",
     this.line4Value = 0,
+    this.imageURL,
     @required this.onTap,
   });
 

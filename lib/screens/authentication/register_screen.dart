@@ -99,6 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
           password: _password.trim(),
           displayName: _displayName.trim(),
         );
+        Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to register');
         print(e.toString());

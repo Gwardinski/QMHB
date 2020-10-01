@@ -45,46 +45,46 @@ class UserModel {
 
   UserModel.fromFirebase(DocumentSnapshot document) {
     print(document);
-    print(document.data['lastUpdated']);
-    print(document.data['createdAt']);
-    uid = document.data['uid'];
-    email = document.data['email'];
-    displayName = document.data['displayName'];
-    lastUpdated = document.data['lastUpdated'].toDate() ?? '';
-    createdAt = document.data['createdAt']?.toDate() ?? null;
+    print(document.data()['lastUpdated']);
+    print(document.data()['createdAt']);
+    uid = document.data()['uid'];
+    email = document.data()['email'];
+    displayName = document.data()['displayName'];
+    lastUpdated = document.data()['lastUpdated'].toDate() ?? '';
+    createdAt = document.data()['createdAt']?.toDate() ?? null;
     quizIds = List<String>();
-    if (document.data['quizIds'] != null) {
-      document.data['quizIds'].forEach((id) {
+    if (document.data()['quizIds'] != null) {
+      document.data()['quizIds'].forEach((id) {
         quizIds.add(id);
       });
     }
     roundIds = List<String>();
-    if (document.data['roundIds'] != null) {
-      document.data['roundIds'].forEach((id) {
+    if (document.data()['roundIds'] != null) {
+      document.data()['roundIds'].forEach((id) {
         roundIds.add(id);
       });
     }
     questionIds = List<String>();
-    if (document.data['questionIds'] != null) {
-      document.data['questionIds'].forEach((id) {
+    if (document.data()['questionIds'] != null) {
+      document.data()['questionIds'].forEach((id) {
         questionIds.add(id);
       });
     }
     savedQuizIds = List<String>();
-    if (document.data['savedQuizIds'] != null) {
-      document.data['savedQuizIds'].forEach((id) {
+    if (document.data()['savedQuizIds'] != null) {
+      document.data()['savedQuizIds'].forEach((id) {
         savedQuizIds.add(id);
       });
     }
     savedRoundIds = List<String>();
-    if (document.data['savedRoundIds'] != null) {
-      document.data['savedRoundIds'].forEach((id) {
+    if (document.data()['savedRoundIds'] != null) {
+      document.data()['savedRoundIds'].forEach((id) {
         savedRoundIds.add(id);
       });
     }
     savedQuestionIds = List<String>();
-    if (document.data['savedQuestionIds'] != null) {
-      document.data['savedQuestionIds'].forEach((id) {
+    if (document.data()['savedQuestionIds'] != null) {
+      document.data()['savedQuestionIds'].forEach((id) {
         savedQuestionIds.add(id);
       });
     }

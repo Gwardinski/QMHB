@@ -36,7 +36,7 @@ class AccountPage extends StatelessWidget {
               children: [
                 InfoColumn(
                   title: 'Display Name',
-                  value: user.displayName ?? '',
+                  value: user?.displayName ?? '',
                 ),
               ],
             ),
@@ -46,7 +46,7 @@ class AccountPage extends StatelessWidget {
               children: [
                 InfoColumn(
                   title: 'Email',
-                  value: user.email,
+                  value: user?.email ?? '',
                 ),
               ],
             ),
@@ -56,15 +56,15 @@ class AccountPage extends StatelessWidget {
               children: [
                 InfoColumn(
                   title: 'Questions',
-                  value: user.questionIds.length.toString(),
+                  value: user?.questionIds?.length.toString() ?? '',
                 ),
                 InfoColumn(
                   title: 'Rounds',
-                  value: user.roundIds.length.toString(),
+                  value: user?.roundIds?.length.toString() ?? '',
                 ),
                 InfoColumn(
                   title: 'Quizzes',
-                  value: user.quizIds.length.toString(),
+                  value: user?.quizIds?.length.toString() ?? '',
                 ),
               ],
             ),

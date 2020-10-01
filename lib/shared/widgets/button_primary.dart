@@ -26,7 +26,12 @@ class ButtonPrimary extends StatelessWidget {
       child: RaisedButton(
         color: Color(0xff333333),
         onPressed: isLoading ? null : onPressed,
-        child: isLoading ? LoadingSpinnerHourGlass() : Text(text),
+        child: isLoading
+            ? LoadingSpinnerHourGlass()
+            : Text(
+                text,
+                style: TextStyle(fontSize: 18),
+              ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(getIt<AppSize>().borderRadius),

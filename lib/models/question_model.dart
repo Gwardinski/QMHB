@@ -44,16 +44,16 @@ class QuestionModel {
   }
 
   QuestionModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data['id'] ?? '';
-    this.uid = document.data['uid'] ?? '';
-    this.lastUpdated = document.data['lastUpdated'].toDate();
-    this.createdAt = document.data['createdAt'].toDate();
-    this.question = document.data['question'] ?? '';
-    this.answer = document.data['answer'] ?? '';
-    this.category = document.data['category'] ?? '';
-    this.difficulty = document.data['difficulty'] ?? '';
-    this.points = document.data['points'] ?? 1;
-    this.isPublished = document.data['isPublished'] ?? false;
+    this.id = document.data()['id'] ?? '';
+    this.uid = document.data()['uid'] ?? '';
+    this.lastUpdated = document.data()['lastUpdated'].toDate();
+    this.createdAt = document.data()['createdAt'].toDate();
+    this.question = document.data()['question'] ?? '';
+    this.answer = document.data()['answer'] ?? '';
+    this.category = document.data()['category'] ?? '';
+    this.difficulty = document.data()['difficulty'] ?? '';
+    this.points = document.data()['points'] ?? 1;
+    this.isPublished = document.data()['isPublished'] ?? false;
   }
 
   QuestionModel.newQuestion() {

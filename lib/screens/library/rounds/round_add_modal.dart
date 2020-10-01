@@ -7,6 +7,7 @@ import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
+import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 
@@ -83,7 +84,7 @@ class _RoundAddModalState extends State<RoundAddModal> {
     return AlertDialog(
       contentPadding: EdgeInsets.all(0),
       content: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
         child: Container(
           child: Form(
             key: _formKey,
@@ -113,6 +114,11 @@ class _RoundAddModalState extends State<RoundAddModal> {
                   ),
                 ),
                 _error != "" ? FormError(error: _error) : Container(),
+                ButtonText(
+                  onTap: () => Navigator.of(context).pop(),
+                  text: "Close",
+                  type: ButtonTextType.SECONDARY,
+                ),
               ],
             ),
           ),

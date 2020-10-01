@@ -14,7 +14,8 @@ class AuthenticationService {
   AuthenticationService({
     this.userDataStateModel,
   }) {
-    _auth.onAuthStateChanged.listen((user) {
+    _auth.authStateChanges().listen((user) {
+      print(user);
       if (user != null) {
         _updateUserState(user);
       } else {
@@ -23,7 +24,7 @@ class AuthenticationService {
     });
   }
 
-  _updateUserState(FirebaseUser user) async {
+  _updateUserState(User user) async {
     final userDoc = await _userService.getUserFromUsersCollectionUsingUID(
       user.uid,
     );
@@ -35,11 +36,11 @@ class AuthenticationService {
     try {
       GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+      final User user = (await _auth.signInWithCredential(credential)).user;
       UserModel newUser = UserModel.registerNewUser(
         email: user.email,
         displayName: user.displayName,
@@ -58,7 +59,7 @@ class AuthenticationService {
     String displayName,
   }) async {
     try {
-      FirebaseUser fbUser = await _firebaseCreateUserWithEmailAndPassword(email, password);
+      User fbUser = await _firebaseCreateUserWithEmailAndPassword(email, password);
       UserModel newUser = UserModel.registerNewUser(
         email: email,
         displayName: displayName,
@@ -66,8 +67,9 @@ class AuthenticationService {
       );
       _userService.updateUserDataOnFirebase(newUser);
     } catch (e) {
+      print("FAIL");
       print(e.toString());
-      return null;
+      throw Exception();
     }
   }
 
@@ -76,7 +78,7 @@ class AuthenticationService {
     String password,
   }) async {
     try {
-      FirebaseUser fbUser = await _firebaseGetUserFromEmailAndPassword(email, password);
+      User fbUser = await _firebaseGetUserFromEmailAndPassword(email, password);
       DocumentSnapshot firebaseData = await _userService.getUserFromUsersCollectionUsingUID(
         fbUser.uid,
       );
@@ -103,22 +105,22 @@ class AuthenticationService {
     }
   }
 
-  Future<FirebaseUser> _firebaseCreateUserWithEmailAndPassword(
+  Future<User> _firebaseCreateUserWithEmailAndPassword(
     String email,
     String password,
   ) async {
-    AuthResult res = await _auth.createUserWithEmailAndPassword(
+    final res = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     return res.user;
   }
 
-  Future<FirebaseUser> _firebaseGetUserFromEmailAndPassword(
+  Future<User> _firebaseGetUserFromEmailAndPassword(
     String email,
     String password,
   ) async {
-    AuthResult res = await _auth.signInWithEmailAndPassword(
+    final res = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );

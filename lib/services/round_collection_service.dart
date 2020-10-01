@@ -3,7 +3,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 
 class RoundCollectionService {
-  final CollectionReference _roundsCollection = Firestore.instance.collection('rounds');
+  final CollectionReference _roundsCollection = FirebaseFirestore.instance.collection('rounds');
 
   Stream<List<RoundModel>> getRoundsCreatedByUser({
     String userId,
@@ -16,7 +16,7 @@ class RoundCollectionService {
         // .limit(limit)
         .snapshots()
         .map((snapshot) {
-      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }
 
@@ -31,30 +31,31 @@ class RoundCollectionService {
         // .limit(limit)
         .snapshots()
         .map((snapshot) {
-      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }
 
   Stream<List<RoundModel>> getRecentRoundStream() {
     return _roundsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }
 
   Stream<List<RoundModel>> getRoundsByIds(List<String> ids) {
     return _roundsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => RoundModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }
 
   Future<String> addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
     final serverTimestamp = Timestamp.now().toDate();
-    final newDocId = _roundsCollection.document().documentID;
-    await _roundsCollection.document(newDocId).setData({
+    final newDocId = _roundsCollection.doc().id;
+    await _roundsCollection.doc(newDocId).set({
       "id": newDocId,
       "uid": uid,
       "title": roundModel.title,
       "description": roundModel.description,
+      "imageURL": roundModel.imageURL,
       "questionIds": roundModel.questionIds,
       "isPublished": false,
       "createdAt": serverTimestamp,
@@ -65,11 +66,12 @@ class RoundCollectionService {
 
   Future<void> editRoundOnFirebaseCollection(RoundModel roundModel) async {
     final serverTimestamp = Timestamp.now().toDate();
-    return await _roundsCollection.document(roundModel.id).setData({
+    return await _roundsCollection.doc(roundModel.id).set({
       "id": roundModel.id,
       "uid": roundModel.uid,
       "title": roundModel.title,
       "description": roundModel.description,
+      "imageURL": roundModel.imageURL,
       "questionIds": roundModel.questionIds,
       "isPublished": false,
       "createdAt": roundModel.createdAt,
@@ -78,18 +80,19 @@ class RoundCollectionService {
   }
 
   Future<void> deleteRoundOnFirebaseCollection(String id) async {
-    await _roundsCollection.document(id).delete();
+    await _roundsCollection.doc(id).delete();
     // remove from all quizzes where used
     // remove from user model
   }
 
   Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
     final serverTimestamp = Timestamp.now().toDate();
-    return await _roundsCollection.document(roundModel.id).setData({
+    return await _roundsCollection.doc(roundModel.id).set({
       "id": roundModel.id,
       "uid": roundModel.uid,
       "title": roundModel.title,
       "description": roundModel.description,
+      "imageURL": roundModel.imageURL,
       "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
       "isPublished": false,
       "createdAt": roundModel.createdAt,
@@ -101,11 +104,12 @@ class RoundCollectionService {
     final serverTimestamp = Timestamp.now().toDate();
     final ids = roundModel.questionIds;
     ids.remove(question.id);
-    return await _roundsCollection.document(roundModel.id).setData({
+    return await _roundsCollection.doc(roundModel.id).set({
       "id": roundModel.id,
       "uid": roundModel.uid,
       "title": roundModel.title,
       "description": roundModel.description,
+      "imageURL": roundModel.imageURL,
       "questionIds": ids,
       "isPublished": false,
       "createdAt": roundModel.createdAt,

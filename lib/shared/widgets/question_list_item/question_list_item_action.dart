@@ -39,15 +39,33 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.addToRound,
-              child: Text("Add Question to Round"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.add),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Add Question to Round'),
+                ],
+              ),
             ),
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.edit,
-              child: Text("Edit Question"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.edit),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Edit Question Details'),
+                ],
+              ),
             ),
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.delete,
-              child: Text("Delete Question"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.delete),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Edit Question Details'),
+                ],
+              ),
             ),
             // PopupMenuItem<QuestionOptions>(
             //   value: QuestionOptions.save,

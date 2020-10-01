@@ -3,7 +3,8 @@ import 'package:qmhb/models/question_model.dart';
 
 class QuestionCollectionService {
   // DB collections
-  final CollectionReference _questionsCollection = Firestore.instance.collection('questions');
+  final CollectionReference _questionsCollection =
+      FirebaseFirestore.instance.collection('questions');
 
   Stream<List<QuestionModel>> getQuestionsCreatedByUser({
     String userId,
@@ -16,7 +17,7 @@ class QuestionCollectionService {
         // .limit(limit)
         .snapshots()
         .map((snapshot) {
-      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => QuestionModel.fromFirebase(doc)).toList();
     });
   }
 
@@ -31,19 +32,19 @@ class QuestionCollectionService {
         // .limit(limit)
         .snapshots()
         .map((snapshot) {
-      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => QuestionModel.fromFirebase(doc)).toList();
     });
   }
 
   Stream<List<QuestionModel>> getRecentQuestionStream() {
     return _questionsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => QuestionModel.fromFirebase(doc)).toList();
     });
   }
 
   Stream<List<QuestionModel>> getQuestionsByIds(List<String> ids) {
     return _questionsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
-      return snapshot.documents.map((doc) => QuestionModel.fromFirebase(doc)).toList();
+      return snapshot.docs.map((doc) => QuestionModel.fromFirebase(doc)).toList();
     });
   }
 
@@ -52,8 +53,8 @@ class QuestionCollectionService {
     String uid,
   ) async {
     final serverTimestamp = Timestamp.now().toDate();
-    final newDocId = _questionsCollection.document().documentID;
-    await _questionsCollection.document(newDocId).setData({
+    final newDocId = _questionsCollection.doc().id;
+    await _questionsCollection.doc(newDocId).set({
       "id": newDocId,
       "uid": uid,
       "question": questionModel.question,
@@ -72,7 +73,7 @@ class QuestionCollectionService {
     QuestionModel questionModel,
   ) async {
     final serverTimestamp = Timestamp.now().toDate();
-    return await _questionsCollection.document(questionModel.id).setData({
+    return await _questionsCollection.doc(questionModel.id).set({
       "id": questionModel.id,
       "uid": questionModel.uid,
       "question": questionModel.question,
@@ -87,7 +88,7 @@ class QuestionCollectionService {
   }
 
   Future<void> deleteQuestionOnFirebaseCollection(String id) async {
-    await _questionsCollection.document(id).delete();
+    await _questionsCollection.doc(id).delete();
     // remove from all rounds where used
     // remove from user model
   }

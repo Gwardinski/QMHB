@@ -40,15 +40,33 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<RoundOptions>>[
             PopupMenuItem<RoundOptions>(
               value: RoundOptions.addToQuiz,
-              child: Text("Add Round to Quiz"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.add_to_queue),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Add Round to Quiz'),
+                ],
+              ),
             ),
             PopupMenuItem<RoundOptions>(
               value: RoundOptions.edit,
-              child: Text("Edit Round"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.edit),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Edit Round Details'),
+                ],
+              ),
             ),
             PopupMenuItem<RoundOptions>(
               value: RoundOptions.delete,
-              child: Text("Delete Round"),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.delete),
+                  Padding(padding: EdgeInsets.only(left: 16)),
+                  Text('Delete Round'),
+                ],
+              ),
             ),
             // PopupMenuItem<RoundOptions>(
             //   value: RoundOptions.save,
