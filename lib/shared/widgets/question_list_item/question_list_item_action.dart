@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/questions/question_editor.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
-import 'package:qmhb/screens/library/rounds/add_question_to_round.dart';
+import 'package:qmhb/screens/library/questions/add_question_to_round_dialog.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
@@ -103,7 +102,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AddQuestionToRoundPage(
+        return AddQuestionToRoundPageDialog(
           questionModel: widget.questionModel,
         );
       },

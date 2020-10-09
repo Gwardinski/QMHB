@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/rounds/round_details_page.dart';
-import 'package:qmhb/screens/library/rounds/round_add_modal.dart';
+import 'package:qmhb/screens/details/round/round_details_page.dart';
+import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class UserRoundsSidebar extends StatelessWidget {
+class RoundsLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -24,7 +24,7 @@ class UserRoundsSidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          UserRoundsSidebarNewRound(),
+          RoundsLibrarySidebarNewRound(),
           Expanded(
             child: StreamBuilder(
               stream: RoundCollectionService().getRoundsCreatedByUser(
@@ -47,7 +47,7 @@ class UserRoundsSidebar extends StatelessWidget {
                         itemCount: snapshot.data.length ?? 0,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (BuildContext context, int index) {
-                          return UserRoundsSidebarItem(roundModel: snapshot.data[index]);
+                          return RoundsLibrarySidebarItem(roundModel: snapshot.data[index]);
                         },
                       )
                     : Container();
@@ -60,12 +60,12 @@ class UserRoundsSidebar extends StatelessWidget {
   }
 }
 
-class UserRoundsSidebarNewRound extends StatelessWidget {
+class RoundsLibrarySidebarNewRound extends StatelessWidget {
   openNewRoundForm(context, {initialQuestion}) {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return RoundAddModal(
+        return RoundCreateDialog(
           initialQuestion: initialQuestion,
         );
       },
@@ -114,8 +114,8 @@ class UserRoundsSidebarNewRound extends StatelessWidget {
   }
 }
 
-class UserRoundsSidebarItem extends StatelessWidget {
-  const UserRoundsSidebarItem({
+class RoundsLibrarySidebarItem extends StatelessWidget {
+  const RoundsLibrarySidebarItem({
     @required this.roundModel,
   });
 

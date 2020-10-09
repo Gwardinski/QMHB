@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/questions/question_collection_page.dart';
+import 'package:qmhb/screens/library/questions/questions_library_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
@@ -16,7 +16,7 @@ class RecentQuestionsRow extends StatelessWidget {
   navigate(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => QuestionCollectionPage(),
+        builder: (context) => QuestionsLibraryPage(),
       ),
     );
   }

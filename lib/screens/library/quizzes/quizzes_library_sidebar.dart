@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_details_page.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add_modal.dart';
+import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class UserQuizzesSidebar extends StatelessWidget {
+class QuizzesLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
@@ -97,7 +97,7 @@ class UserQuizzesSidebarNewQuiz extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return QuizAddModal(
+        return QuizCreateDialog(
           initialRound: initialRound,
         );
       },

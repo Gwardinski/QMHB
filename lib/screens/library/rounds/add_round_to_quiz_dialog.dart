@@ -4,14 +4,15 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_add_modal.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class AddRoundToQuizPage extends StatelessWidget {
+// Dialog is used for building up: Question => Round => Quiz
+class AddRoundToQuizDialog extends StatelessWidget {
   final RoundModel roundModel;
 
-  AddRoundToQuizPage({
+  AddRoundToQuizDialog({
     @required this.roundModel,
   });
 
@@ -78,7 +79,7 @@ class AddRoundToNewQuizButton extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return QuizAddModal(
+        return QuizCreateDialog(
           initialRound: initialRound,
         );
       },

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/screens/library/rounds/add_question_to_round.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/screens/library/questions/add_question_to_round_dialog.dart';
+import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 
-class QuestionDetails extends StatefulWidget {
-  const QuestionDetails({
+import '../../../get_it.dart';
+
+class QuestionDetailsDialog extends StatefulWidget {
+  const QuestionDetailsDialog({
     Key key,
     @required this.questionModel,
   }) : super(key: key);
@@ -16,7 +20,7 @@ class QuestionDetails extends StatefulWidget {
   _QuestionDetailsState createState() => _QuestionDetailsState();
 }
 
-class _QuestionDetailsState extends State<QuestionDetails> {
+class _QuestionDetailsState extends State<QuestionDetailsDialog> {
   bool _revealAnswer = false;
 
   void _updateRevealAnswer() {
@@ -50,19 +54,25 @@ class _QuestionDetailsState extends State<QuestionDetails> {
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(bottom: 16)),
-                    GestureDetector(
-                      onTap: () {
-                        _updateRevealAnswer();
-                      },
-                      child: Container(
-                        child: Text(
-                          _revealAnswer ? widget.questionModel.answer : 'Show Answer',
-                          style: TextStyle(
-                            fontSize: 24,
+                    _revealAnswer
+                        ? Container(
+                            height: getIt<AppSize>().spacingXl,
+                            child: Center(
+                              child: Text(
+                                widget.questionModel.answer,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ),
+                          )
+                        : ButtonText(
+                            text: 'Reveal Answer',
+                            onTap: () {
+                              _updateRevealAnswer();
+                            },
+                            type: ButtonTextType.PRIMARY,
                           ),
-                        ),
-                      ),
-                    ),
                     Padding(padding: EdgeInsets.only(bottom: 16)),
                     InfoColumn(
                       title: 'Points',
@@ -114,7 +124,7 @@ class _QuestionDetailsState extends State<QuestionDetails> {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AddQuestionToRoundPage(
+        return AddQuestionToRoundPageDialog(
           questionModel: widget.questionModel,
         );
       },

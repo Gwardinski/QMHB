@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/screens/details/question/question_details_dialog.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
-import 'package:qmhb/shared/widgets/details/question_details.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item_add_to_round.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
 enum QuestionOptions { save, edit, delete, details, addToRound, publish }
@@ -13,11 +15,13 @@ enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 class QuestionListItem extends StatefulWidget {
   final QuestionModel questionModel;
   final bool canDrag;
+  final RoundModel roundModel;
 
   QuestionListItem({
     Key key,
     @required this.questionModel,
     this.canDrag = false,
+    this.roundModel,
   }) : super(key: key);
 
   @override
@@ -34,6 +38,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
       questionModel: widget.questionModel,
       viewQuestionDetails: _viewQuestionDetails,
       updateRevealAnswer: _updateRevealAnswer,
+      roundModel: widget.roundModel,
     );
     return widget.canDrag
         ? Draggable<QuestionModel>(
@@ -56,7 +61,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
   void _viewQuestionDetails() {
     showDialog(
       context: context,
-      child: QuestionDetails(
+      child: QuestionDetailsDialog(
         questionModel: widget.questionModel,
       ),
     );
@@ -70,12 +75,16 @@ class QuestionListItemContent extends StatelessWidget {
     @required this.questionModel,
     @required this.viewQuestionDetails,
     @required this.updateRevealAnswer,
+    this.roundModel,
+    this.onAddToRound,
   }) : super(key: key);
 
   final bool revealAnswer;
   final QuestionModel questionModel;
   final viewQuestionDetails;
   final updateRevealAnswer;
+  final RoundModel roundModel;
+  final onAddToRound;
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +113,14 @@ class QuestionListItemContent extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: QuestionListItemAction(
-                questionModel: questionModel,
-              ),
+              child: roundModel != null
+                  ? QuestionListItemActionAddToRound(
+                      roundModel: roundModel,
+                      questionModel: questionModel,
+                    )
+                  : QuestionListItemAction(
+                      questionModel: questionModel,
+                    ),
             ),
           ],
         ),

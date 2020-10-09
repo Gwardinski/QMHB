@@ -87,17 +87,21 @@ class RoundCollectionService {
 
   Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
     final serverTimestamp = Timestamp.now().toDate();
-    return await _roundsCollection.doc(roundModel.id).set({
-      "id": roundModel.id,
-      "uid": roundModel.uid,
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "imageURL": roundModel.imageURL,
-      "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
-      "isPublished": false,
-      "createdAt": roundModel.createdAt,
-      "lastUpdated": serverTimestamp,
-    });
+    try {
+      return await _roundsCollection.doc(roundModel.id).set({
+        "id": roundModel.id,
+        "uid": roundModel.uid,
+        "title": roundModel.title,
+        "description": roundModel.description,
+        "imageURL": roundModel.imageURL,
+        "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
+        "isPublished": false,
+        "createdAt": roundModel.createdAt,
+        "lastUpdated": serverTimestamp,
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> removeQuestionToRound(RoundModel roundModel, QuestionModel question) async {

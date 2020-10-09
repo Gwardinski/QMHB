@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/library/rounds/round_details_page.dart';
+import 'package:qmhb/screens/details/round/round_details_page.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_details.dart';
