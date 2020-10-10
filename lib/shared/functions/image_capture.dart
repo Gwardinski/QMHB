@@ -66,21 +66,25 @@ class _ImageCaptureState extends State<ImageCapture> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
+            FlatButton.icon(
+              label: Text("Camera"),
               icon: Icon(Icons.camera),
               onPressed: () => _pickImage(ImageSource.camera),
             ),
-            IconButton(
+            FlatButton.icon(
+              label: Text("Gallery"),
               icon: Icon(Icons.photo_library),
               onPressed: () => _pickImage(ImageSource.gallery),
             ),
-            IconButton(
+            FlatButton.icon(
+              label: Text("Crop"),
               icon: Icon(Icons.crop),
-              onPressed: (_fileImage != null && _networkImage != null) ? _cropImage : null,
+              onPressed: (_fileImage != null || _networkImage != null) ? _cropImage : null,
             ),
-            IconButton(
+            FlatButton.icon(
+              label: Text("Clear"),
               icon: Icon(Icons.refresh),
-              onPressed: (_fileImage != null && _networkImage != null) ? _clear : null,
+              onPressed: (_fileImage != null || _networkImage != null) ? _clear : null,
             ),
           ],
         ),
@@ -92,12 +96,15 @@ class _ImageCaptureState extends State<ImageCapture> {
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ImageSwitcher(
-                  fileImage: _fileImage,
-                  networkImage: _networkImage,
+                Expanded(
+                  child: ImageSwitcher(
+                    fileImage: _fileImage,
+                    networkImage: _networkImage,
+                  ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(16),
+                Container(
+                  height: 48,
+                  margin: EdgeInsets.all(16),
                   child: ButtonPrimary(
                     text: "Use This Image",
                     onPressed: _selectImage,

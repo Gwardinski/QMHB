@@ -13,7 +13,7 @@ import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
-import 'package:qmhb/shared/widgets/image_switcher.dart';
+import 'package:qmhb/shared/widgets/form/image_selector.dart';
 
 import '../../../get_it.dart';
 
@@ -159,41 +159,12 @@ class _QuizEditorState extends State<QuizEditorPage> {
                       });
                     },
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: _selectImage,
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          child: ImageSwitcher(
-                            fileImage: _newImage,
-                            networkImage: _quiz.imageURL,
-                            showNoImageText: true,
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(right: 16)),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            ButtonPrimary(
-                              text: "Select Image",
-                              fullWidth: true,
-                              onPressed: _selectImage,
-                            ),
-                            Padding(padding: EdgeInsets.only(bottom: 16)),
-                            ButtonPrimary(
-                              text: "Remove Image",
-                              fullWidth: true,
-                              onPressed: _removeImage,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  ImageSelector(
+                    fileImage: _newImage,
+                    networkImage: _quiz.imageURL,
+                    selectImage: _selectImage,
+                    removeImage: _removeImage,
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 16)),
                   ButtonPrimary(
                     text: "Save Quiz!",
                     isLoading: _isLoading,

@@ -10,7 +10,9 @@ enum QuestionType {
 class QuestionModel {
   String id;
   String uid;
+  String questionType;
   String question;
+  String imageURL;
   String answer;
   String category;
   String difficulty;
@@ -22,7 +24,9 @@ class QuestionModel {
   QuestionModel({
     this.id,
     this.uid,
+    this.questionType,
     this.question,
+    this.imageURL,
     this.answer,
     this.category,
     this.difficulty,
@@ -35,7 +39,9 @@ class QuestionModel {
     this.uid = json['uid'] ?? '';
     this.lastUpdated = json['lastUpdated'];
     this.createdAt = json['createdAt'];
+    this.questionType = json['questionType'] ?? '';
     this.question = json['question'] ?? '';
+    this.imageURL = json['imageURL'] ?? '';
     this.answer = json['answer'] ?? '';
     this.category = json['category'] ?? '';
     this.difficulty = json['difficulty'] ?? '';
@@ -48,7 +54,9 @@ class QuestionModel {
     this.uid = document.data()['uid'] ?? '';
     this.lastUpdated = document.data()['lastUpdated'].toDate();
     this.createdAt = document.data()['createdAt'].toDate();
+    this.questionType = document.data()['questionType'] ?? '';
     this.question = document.data()['question'] ?? '';
+    this.imageURL = document.data()['imageURL'] ?? '';
     this.answer = document.data()['answer'] ?? '';
     this.category = document.data()['category'] ?? '';
     this.difficulty = document.data()['difficulty'] ?? '';
