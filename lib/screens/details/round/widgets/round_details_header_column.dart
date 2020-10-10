@@ -34,7 +34,7 @@ class _RoundDetailsHeaderColumnState extends State<RoundDetailsHeaderColumn> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        (widget.roundModel.imageURL != null && widget.roundModel.imageURL != "")
+        (widget.roundModel.imageURL != null)
             ? GestureDetector(
                 onVerticalDragUpdate: (details) {
                   if (details.delta.dy > 0)
@@ -92,7 +92,8 @@ class _RoundDetailsHeaderColumnState extends State<RoundDetailsHeaderColumn> {
             widget.roundModel.description ?? 'no description',
             style: TextStyle(
               fontSize: 16,
-              fontStyle: widget.roundModel.description != '' ? FontStyle.normal : FontStyle.italic,
+              fontStyle:
+                  widget.roundModel.description != null ? FontStyle.normal : FontStyle.italic,
             ),
           ),
         ),

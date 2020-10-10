@@ -53,11 +53,6 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
         actions: <Widget>[
           RoundListItemAction(
             roundModel: widget.roundModel,
-            emitData: (newQuiz) {
-              setState(() {
-                roundModel = newQuiz;
-              });
-            },
           ),
         ],
       ),

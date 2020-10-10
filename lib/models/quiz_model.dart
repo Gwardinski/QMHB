@@ -30,16 +30,16 @@ class QuizModel {
   });
 
   QuizModel.fromJSON(json) {
-    this.id = json['id'] ?? '';
-    this.uid = json['uid'] ?? '';
+    this.id = json['id'];
+    this.uid = json['uid'];
     this.lastUpdated = json['lastUpdated'];
     this.createdAt = json['createdAt'];
-    this.title = json['title'] ?? '';
+    this.title = json['title'];
     this.rating = json['rating'] ?? 0;
     this.difficulty = json['difficulty'] ?? 0;
     this.totalPoints = json['totalPoints'] ?? 0;
-    this.description = json['description'] ?? '';
-    this.imageURL = json['imageURL'] ?? '';
+    this.description = json['description'];
+    this.imageURL = json['imageURL'];
     this.isPublished = json['isPublished'] ?? false;
     roundIds = List<String>();
     if (json['roundIds'] != null) {
@@ -56,16 +56,16 @@ class QuizModel {
   }
 
   QuizModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'] ?? '';
-    this.uid = document.data()['uid'] ?? '';
+    this.id = document.data()['id'];
+    this.uid = document.data()['uid'];
     this.lastUpdated = document.data()['lastUpdated'].toDate();
     this.createdAt = document.data()['createdAt'].toDate();
-    this.title = document.data()['title'] ?? '';
+    this.title = document.data()['title'];
     this.rating = document.data()['rating'] ?? 0;
     this.difficulty = document.data()['difficulty'] ?? 0;
     this.totalPoints = document.data()['totalPoints'] ?? 0;
-    this.description = document.data()['description'] ?? '';
-    this.imageURL = document.data()['imageURL'] ?? '';
+    this.description = document.data()['description'];
+    this.imageURL = document.data()['imageURL'];
     this.isPublished = document.data()['isPublished'] ?? false;
     roundIds = List<String>();
     if (document.data()['roundIds'] != null) {

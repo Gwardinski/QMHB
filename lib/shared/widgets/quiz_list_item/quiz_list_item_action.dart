@@ -8,11 +8,9 @@ class QuizListItemAction extends StatefulWidget {
   const QuizListItemAction({
     Key key,
     @required this.quizModel,
-    this.emitData,
   }) : super(key: key);
 
   final quizModel;
-  final emitData;
 
   @override
   _QuizListItemActionState createState() => _QuizListItemActionState();
@@ -87,14 +85,13 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
   }
 
   _editQuiz() async {
-    final quiz = await Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuizEditorPage(
           quizModel: widget.quizModel,
         ),
       ),
     );
-    widget.emitData(quiz);
   }
 
   _deleteQuiz() {

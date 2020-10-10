@@ -4,7 +4,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
-import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
+import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';

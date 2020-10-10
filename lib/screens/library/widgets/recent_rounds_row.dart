@@ -9,7 +9,7 @@ import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-import '../../get_it.dart';
+import '../../../get_it.dart';
 
 class RecentRoundsRow extends StatelessWidget {
   RecentRoundsRow({

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/questions/questions_library_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/screens/library/widgets/create_first_question_button.dart';
+import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';

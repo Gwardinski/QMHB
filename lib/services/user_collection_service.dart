@@ -7,7 +7,12 @@ class UserCollectionService {
 
   // Log in user
   Future<DocumentSnapshot> getUserFromUsersCollectionUsingUID(uid) async {
-    return await _usersCollection.doc(uid).get();
+    try {
+      return await _usersCollection.doc(uid).get();
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   // stream user changes - called on base widget UserListener

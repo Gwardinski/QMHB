@@ -9,7 +9,7 @@ class CreateFirstQuestionButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: MaterialButton(
         child: Text(
-          "Tap here to create your first Question. Or hit the explore tab to save a pre created question.",
+          "Your library of Questions lives here.\n\nTap to create your first Question.\n\nOr you can head to the Explore tab to save a pre-created Question.",
           textAlign: TextAlign.center,
         ),
         onPressed: () {

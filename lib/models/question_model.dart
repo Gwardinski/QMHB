@@ -35,31 +35,31 @@ class QuestionModel {
   });
 
   QuestionModel.fromJSON(json) {
-    this.id = json['id'] ?? '';
-    this.uid = json['uid'] ?? '';
+    this.id = json['id'];
+    this.uid = json['uid'];
     this.lastUpdated = json['lastUpdated'];
     this.createdAt = json['createdAt'];
-    this.questionType = json['questionType'] ?? '';
-    this.question = json['question'] ?? '';
-    this.imageURL = json['imageURL'] ?? '';
-    this.answer = json['answer'] ?? '';
-    this.category = json['category'] ?? '';
-    this.difficulty = json['difficulty'] ?? '';
+    this.questionType = json['questionType'];
+    this.question = json['question'];
+    this.imageURL = json['imageURL'];
+    this.answer = json['answer'];
+    this.category = json['category'];
+    this.difficulty = json['difficulty'];
     this.points = json['points'] ?? 1;
     this.isPublished = json['isPublished'] ?? false;
   }
 
   QuestionModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'] ?? '';
-    this.uid = document.data()['uid'] ?? '';
+    this.id = document.data()['id'];
+    this.uid = document.data()['uid'];
     this.lastUpdated = document.data()['lastUpdated'].toDate();
     this.createdAt = document.data()['createdAt'].toDate();
-    this.questionType = document.data()['questionType'] ?? '';
-    this.question = document.data()['question'] ?? '';
-    this.imageURL = document.data()['imageURL'] ?? '';
-    this.answer = document.data()['answer'] ?? '';
-    this.category = document.data()['category'] ?? '';
-    this.difficulty = document.data()['difficulty'] ?? '';
+    this.questionType = document.data()['questionType'];
+    this.question = document.data()['question'];
+    this.imageURL = document.data()['imageURL'];
+    this.answer = document.data()['answer'];
+    this.category = document.data()['category'];
+    this.difficulty = document.data()['difficulty'];
     this.points = document.data()['points'].toDouble() ?? 1.0;
     this.isPublished = document.data()['isPublished'] ?? false;
   }

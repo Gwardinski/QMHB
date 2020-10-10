@@ -50,8 +50,8 @@ class UserModel {
     uid = document.data()['uid'];
     email = document.data()['email'];
     displayName = document.data()['displayName'];
-    lastUpdated = document.data()['lastUpdated'].toDate() ?? '';
-    createdAt = document.data()['createdAt']?.toDate() ?? null;
+    lastUpdated = document.data()['lastUpdated'].toDate();
+    createdAt = document.data()['createdAt']?.toDate();
     quizIds = List<String>();
     if (document.data()['quizIds'] != null) {
       document.data()['quizIds'].forEach((id) {

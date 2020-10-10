@@ -19,7 +19,9 @@ class QuizListItemLine2 extends StatelessWidget {
               description != '' ? description : 'no description',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontStyle: description != '' ? FontStyle.normal : FontStyle.italic),
+              style: TextStyle(
+                fontStyle: description != null ? FontStyle.normal : FontStyle.italic,
+              ),
             ),
           ),
         ],

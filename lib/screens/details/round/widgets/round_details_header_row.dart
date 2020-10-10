@@ -29,7 +29,7 @@ class RoundDetailsHeaderRow extends StatelessWidget {
                 width: 160,
                 height: 160,
                 color: Colors.orange,
-                child: (roundModel.imageURL != null && roundModel.imageURL != "")
+                child: (roundModel.imageURL != null)
                     ? Image.network(
                         roundModel.imageURL,
                         fit: BoxFit.cover,
@@ -100,7 +100,7 @@ class RoundDetailsHeaderRow extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(
-              bottom: roundModel.description != '' ? getIt<AppSize>().spacingLg : 0,
+              bottom: roundModel.description != null ? getIt<AppSize>().spacingLg : 0,
             ),
           ),
           Text(

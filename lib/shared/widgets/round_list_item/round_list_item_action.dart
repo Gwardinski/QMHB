@@ -9,11 +9,9 @@ class RoundListItemAction extends StatefulWidget {
   const RoundListItemAction({
     Key key,
     @required this.roundModel,
-    this.emitData,
   }) : super(key: key);
 
   final roundModel;
-  final emitData;
 
   @override
   _RoundListItemActionState createState() => _RoundListItemActionState();
@@ -112,7 +110,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
   }
 
   _editRound() async {
-    final quiz = await Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
           type: RoundEditorType.EDIT,
@@ -120,7 +118,6 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
         ),
       ),
     );
-    widget.emitData(quiz);
   }
 
   _deleteRound() {

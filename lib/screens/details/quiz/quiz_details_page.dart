@@ -53,11 +53,6 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
         actions: <Widget>[
           QuizListItemAction(
             quizModel: widget.quizModel,
-            emitData: (newQuiz) {
-              setState(() {
-                quizModel = newQuiz;
-              });
-            },
           )
         ],
       ),
@@ -94,7 +89,7 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
               quizModel.questionIds.length > 0
                   ? QuizDetailsRoundsList(quizModel: quizModel)
                   : Center(
-                      child: Text("This Round has no Questions"),
+                      child: Text("This Quiz has no Rounds"),
                     ),
             ],
           );

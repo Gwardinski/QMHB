@@ -22,7 +22,7 @@ class ImageSwitcher extends StatelessWidget {
             fileImage,
             fit: BoxFit.cover,
           )
-        : (networkImage != null && networkImage != "")
+        : (networkImage != null)
             ? Stack(
                 children: [
                   Center(child: LoadingSpinnerHourGlass()),

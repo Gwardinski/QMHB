@@ -34,7 +34,7 @@ class _QuizDetailsHeaderColumnState extends State<QuizDetailsHeaderColumn> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        (widget.quizModel.imageURL != null && widget.quizModel.imageURL != "")
+        (widget.quizModel.imageURL != null)
             ? GestureDetector(
                 onVerticalDragUpdate: (details) {
                   if (details.delta.dy > 0)
@@ -92,7 +92,7 @@ class _QuizDetailsHeaderColumnState extends State<QuizDetailsHeaderColumn> {
             widget.quizModel.description ?? 'no description',
             style: TextStyle(
               fontSize: 16,
-              fontStyle: widget.quizModel.description != '' ? FontStyle.normal : FontStyle.italic,
+              fontStyle: widget.quizModel.description != null ? FontStyle.normal : FontStyle.italic,
             ),
           ),
         ),

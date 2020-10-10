@@ -29,7 +29,7 @@ class QuizDetailsHeaderRow extends StatelessWidget {
                 width: 160,
                 height: 160,
                 color: Colors.orange,
-                child: (quizModel.imageURL != null && quizModel.imageURL != "")
+                child: (quizModel.imageURL != null)
                     ? Image.network(
                         quizModel.imageURL,
                         fit: BoxFit.cover,
@@ -100,7 +100,7 @@ class QuizDetailsHeaderRow extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(
-              bottom: quizModel.description != '' ? getIt<AppSize>().spacingLg : 0,
+              bottom: quizModel.description != null ? getIt<AppSize>().spacingLg : 0,
             ),
           ),
           Text(
