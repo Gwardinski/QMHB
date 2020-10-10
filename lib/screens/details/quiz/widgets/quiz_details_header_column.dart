@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/image_switcher.dart';
 
@@ -84,17 +86,32 @@ class _QuizDetailsHeaderColumnState extends State<QuizDetailsHeaderColumn> {
         Padding(
           padding: EdgeInsets.fromLTRB(
             16,
+            widget.quizModel.description != null
+                ? getIt<AppSize>().spacingLg
+                : getIt<AppSize>().spacingSm,
             16,
-            16,
-            getIt<AppSize>().spacingLg,
+            widget.quizModel.description != null ? 24 : 0,
           ),
-          child: Text(
-            widget.quizModel.description ?? 'no description',
-            style: TextStyle(
-              fontSize: 16,
-              fontStyle: widget.quizModel.description != null ? FontStyle.normal : FontStyle.italic,
-            ),
-          ),
+          child: widget.quizModel.description != null
+              ? Text(
+                  widget.quizModel.description,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                )
+              : ButtonText(
+                  text: "Edit Quiz Details",
+                  type: ButtonTextType.SECONDARY,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => QuizEditorPage(
+                          quizModel: widget.quizModel,
+                        ),
+                      ),
+                    );
+                  },
+                ),
         ),
       ],
     );

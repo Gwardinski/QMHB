@@ -27,7 +27,7 @@ class RoundListItemDetails extends StatelessWidget {
           ),
           RoundListItemLine3(
             points: roundModel.totalPoints.toString(),
-            questions: roundModel.questionIds.length.toString(),
+            questions: roundModel.questionIds.length.toString() ?? 'awd',
           ),
         ],
       ),

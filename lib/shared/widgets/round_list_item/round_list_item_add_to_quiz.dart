@@ -33,8 +33,9 @@ class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAd
     quizCollectionService = Provider.of<QuizCollectionService>(context, listen: false);
   }
 
-  bool _containsQuestion() {
-    return quizModel.questionIds.contains(roundModel.id);
+  bool _containsRound() {
+    print(quizModel.toString());
+    return quizModel.roundIds.contains(roundModel.id);
   }
 
   _setLoading(bool loading) {
@@ -64,7 +65,7 @@ class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAd
                 child: _isLoading
                     ? Container(height: 40, width: 40, child: LoadingSpinnerHourGlass())
                     : Icon(
-                        _containsQuestion() ? Icons.remove_circle_outline : Icons.add_to_queue,
+                        _containsRound() ? Icons.remove_circle_outline : Icons.add_to_queue,
                         size: 24,
                       ),
               ),
@@ -73,7 +74,7 @@ class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAd
         ),
         onPressed: () async {
           _setLoading(true);
-          if (!_containsQuestion()) {
+          if (!_containsRound()) {
             await quizCollectionService.addRoundToQuiz(quizModel, roundModel);
           } else {
             await quizCollectionService.removeRoundFromQuiz(quizModel, roundModel);

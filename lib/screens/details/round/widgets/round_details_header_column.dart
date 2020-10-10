@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
+import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/image_switcher.dart';
 
@@ -84,18 +86,33 @@ class _RoundDetailsHeaderColumnState extends State<RoundDetailsHeaderColumn> {
         Padding(
           padding: EdgeInsets.fromLTRB(
             16,
+            widget.roundModel.description != null
+                ? getIt<AppSize>().spacingLg
+                : getIt<AppSize>().spacingSm,
             16,
-            16,
-            getIt<AppSize>().spacingLg,
+            widget.roundModel.description != null ? 24 : 0,
           ),
-          child: Text(
-            widget.roundModel.description ?? 'no description',
-            style: TextStyle(
-              fontSize: 16,
-              fontStyle:
-                  widget.roundModel.description != null ? FontStyle.normal : FontStyle.italic,
-            ),
-          ),
+          child: widget.roundModel.description != null
+              ? Text(
+                  widget.roundModel.description,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                )
+              : ButtonText(
+                  text: "Edit Round Details",
+                  type: ButtonTextType.SECONDARY,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RoundEditorPage(
+                          type: RoundEditorType.EDIT,
+                          roundModel: widget.roundModel,
+                        ),
+                      ),
+                    );
+                  },
+                ),
         ),
       ],
     );

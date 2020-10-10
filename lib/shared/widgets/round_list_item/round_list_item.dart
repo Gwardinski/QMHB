@@ -90,7 +90,7 @@ class RoundListItemContent extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: roundModel != null
+              child: quizModel != null
                   ? RoundListItemActionAddToQuiz(
                       quizModel: quizModel,
                       roundModel: roundModel,

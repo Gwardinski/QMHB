@@ -28,7 +28,7 @@ class RoundDetailsQuestionsList extends StatelessWidget {
         }
         if (questionSnapshot.hasError) {
           return Container(
-            child: Text("An error occured loading this Quizzes Rounds"),
+            child: Text("An error occured loading this Rounds Questions"),
           );
         }
         return ListView.separated(

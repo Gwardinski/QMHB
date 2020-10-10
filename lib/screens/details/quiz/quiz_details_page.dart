@@ -80,13 +80,13 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
                   : QuizDetailsHeaderColumn(quizModel: quizModel),
               Divider(),
               SummaryRowHeader(
-                headerTitle: "Questions",
+                headerTitle: "Rounds",
                 primaryHeaderButtonText: "Add Rounds",
                 primaryHeaderButtonFunction: () async {
                   _addRoundsToQuiz();
                 },
               ),
-              quizModel.questionIds.length > 0
+              quizModel.roundIds.length > 0
                   ? QuizDetailsRoundsList(quizModel: quizModel)
                   : Center(
                       child: Text("This Quiz has no Rounds"),

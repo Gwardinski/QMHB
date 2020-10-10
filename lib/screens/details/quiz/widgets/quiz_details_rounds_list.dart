@@ -43,7 +43,10 @@ class QuizDetailsRoundsList extends StatelessWidget {
           itemCount: roundSnapshot.data.length,
           itemBuilder: (BuildContext context, int index) {
             RoundModel round = roundSnapshot.data[index];
-            return RoundListItem(roundModel: round);
+            return RoundListItem(
+              roundModel: round,
+              canDrag: false,
+            );
           },
         );
       },
