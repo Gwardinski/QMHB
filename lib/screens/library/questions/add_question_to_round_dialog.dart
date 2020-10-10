@@ -99,7 +99,7 @@ class AddQuestionToNewRoundButton extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.add,
+                Icons.add_circle,
               ),
               Container(
                 padding: EdgeInsets.only(left: 16),
@@ -121,7 +121,7 @@ class AddQuestionToNewRoundButton extends StatelessWidget {
   }
 }
 
-class AddQuestionToRoundButton extends StatelessWidget {
+class AddQuestionToRoundButton extends StatefulWidget {
   const AddQuestionToRoundButton({
     Key key,
     @required this.roundModel,
@@ -132,15 +132,44 @@ class AddQuestionToRoundButton extends StatelessWidget {
   final QuestionModel questionModel;
 
   @override
+  _AddQuestionToRoundButtonState createState() => _AddQuestionToRoundButtonState();
+}
+
+class _AddQuestionToRoundButtonState extends State<AddQuestionToRoundButton> {
+  bool _isLoading = false;
+  RoundModel roundModel;
+  QuestionModel questionModel;
+  RoundCollectionService roundCollectionService;
+
+  @override
+  void initState() {
+    super.initState();
+    roundModel = widget.roundModel;
+    questionModel = widget.questionModel;
+    roundCollectionService = Provider.of<RoundCollectionService>(context, listen: false);
+  }
+
+  bool _containsQuestion() {
+    return roundModel.questionIds.contains(questionModel.id);
+  }
+
+  _setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool remove = roundModel.questionIds.contains(questionModel.id);
     return InkWell(
-      onTap: () {
-        if (!remove) {
-          RoundCollectionService().addQuestionToRound(roundModel, questionModel);
+      onTap: () async {
+        _setLoading(true);
+        if (!_containsQuestion()) {
+          await roundCollectionService.addQuestionToRound(roundModel, questionModel);
         } else {
-          RoundCollectionService().removeQuestionToRound(roundModel, questionModel);
+          await roundCollectionService.removeQuestionFromRound(roundModel, questionModel);
         }
+        _setLoading(false);
       },
       child: Container(
         height: 64,
@@ -160,18 +189,12 @@ class AddQuestionToRoundButton extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
-                remove
-                    ? Text(
-                        "remove",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).accentColor,
-                        ),
-                      )
-                    : Container(),
+                _isLoading
+                    ? Container(height: 40, width: 40, child: LoadingSpinnerHourGlass())
+                    : Icon(
+                        _containsQuestion() ? Icons.remove_circle_outline : Icons.add_to_queue,
+                        size: 24,
+                      ),
               ],
             ),
           ),

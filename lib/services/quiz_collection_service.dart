@@ -41,6 +41,12 @@ class QuizCollectionService {
     });
   }
 
+  Stream<QuizModel> getQuizById(String id) {
+    return _quizzesCollection.where("id", isEqualTo: id).snapshots().map((snapshot) {
+      return QuizModel.fromFirebase(snapshot.docs.single);
+    });
+  }
+
   Stream<List<QuizModel>> getQuizzesByIds(List<String> ids) {
     return _quizzesCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) => QuizModel.fromFirebase(doc)).toList();
@@ -85,37 +91,41 @@ class QuizCollectionService {
     // remove from user model
   }
 
-  Future<void> addRoundToQuiz(QuizModel quizModel, RoundModel round) async {
-    final serverTimestamp = Timestamp.now().toDate();
-    return await _quizzesCollection.doc(quizModel.id).set({
-      "id": quizModel.id,
-      "uid": quizModel.uid,
-      "title": quizModel.title,
-      "description": quizModel.description,
-      "imageURL": quizModel.imageURL,
-      "questionIds": quizModel.questionIds,
-      "roundIds": List.from(quizModel.roundIds)..addAll([round.id]),
-      "isPublished": false,
-      "createdAt": quizModel.createdAt,
-      "lastUpdated": serverTimestamp,
-    });
-  }
-
-  Future<void> removeRoundFromQuiz(QuizModel quizModel, RoundModel round) async {
+  Future<void> addRoundToQuiz(QuizModel quizModel, RoundModel roundModel) async {
     final serverTimestamp = Timestamp.now().toDate();
     final ids = quizModel.roundIds;
-    ids.remove(round.id);
-    return await _quizzesCollection.doc(quizModel.id).set({
-      "id": quizModel.id,
-      "uid": quizModel.uid,
-      "title": quizModel.title,
-      "description": quizModel.description,
-      "imageURL": quizModel.imageURL,
-      "questionIds": quizModel.questionIds,
-      "roundIds": ids,
-      "isPublished": false,
-      "createdAt": quizModel.createdAt,
-      "lastUpdated": serverTimestamp,
-    });
+    ids.add(roundModel.id);
+    try {
+      return await _quizzesCollection.doc(quizModel.id).set(
+        {
+          "roundIds": ids,
+          "lastUpdated": serverTimestamp,
+        },
+        SetOptions(
+          merge: true,
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> removeRoundFromQuiz(QuizModel quizModel, RoundModel roundModel) async {
+    final serverTimestamp = Timestamp.now().toDate();
+    final ids = quizModel.roundIds;
+    ids.remove(roundModel.id);
+    try {
+      return await _quizzesCollection.doc(quizModel.id).set(
+        {
+          "roundIds": ids,
+          "lastUpdated": serverTimestamp,
+        },
+        SetOptions(
+          merge: true,
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }

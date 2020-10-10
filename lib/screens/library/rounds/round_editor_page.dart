@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/services/user_collection_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
@@ -17,11 +19,20 @@ import 'package:qmhb/shared/widgets/image_switcher.dart';
 
 import '../../../get_it.dart';
 
+enum RoundEditorType {
+  ADD,
+  EDIT,
+}
+
 class RoundEditorPage extends StatefulWidget {
+  final RoundEditorType type;
   final RoundModel roundModel;
+  final QuizModel quizModel;
 
   RoundEditorPage({
+    @required this.type,
     this.roundModel,
+    this.quizModel,
   });
   @override
   _RoundEditorPageState createState() => _RoundEditorPageState();
@@ -37,7 +48,11 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   @override
   void initState() {
     super.initState();
-    _round = widget.roundModel;
+    if (widget.roundModel != null) {
+      _round = widget.roundModel;
+    } else {
+      _round = RoundModel.newRound();
+    }
   }
 
   _updateError(String val) {
@@ -54,7 +69,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      _editRound();
+      widget.type == RoundEditorType.ADD ? _createRound() : _editRound();
     }
   }
 
@@ -89,6 +104,34 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
     return await storageTaskSnapshot.ref.getDownloadURL();
   }
 
+  _createRound() async {
+    final roundService = Provider.of<RoundCollectionService>(context);
+    final userService = Provider.of<UserCollectionService>(context);
+    final userModel = Provider.of<UserDataStateModel>(context).user;
+    try {
+      _updateIsLoading(true);
+      _updateError('');
+      String newDocId = await roundService.addRoundToFirebaseCollection(
+        _round,
+        userModel.uid,
+      );
+      userModel.roundIds.add(newDocId);
+      await userService.updateUserDataOnFirebase(userModel);
+      if (widget.quizModel != null) {
+        final quizService = Provider.of<QuizCollectionService>(context);
+        final newQuiz = widget.quizModel;
+        newQuiz.roundIds.add(newDocId);
+        await quizService.editQuizOnFirebaseCollection(newQuiz);
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e.toString());
+      _updateError('Failed to edit Question');
+    } finally {
+      _updateIsLoading(false);
+    }
+  }
+
   _editRound() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
@@ -121,7 +164,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "Edit Round",
+          widget.type == RoundEditorType.ADD ? "Create Round" : "Edit Round",
         ),
       ),
       body: SingleChildScrollView(

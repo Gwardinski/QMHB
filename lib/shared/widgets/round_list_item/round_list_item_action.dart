@@ -115,6 +115,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
     final quiz = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
+          type: RoundEditorType.EDIT,
           roundModel: widget.roundModel,
         ),
       ),

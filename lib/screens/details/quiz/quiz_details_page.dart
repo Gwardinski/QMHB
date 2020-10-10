@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_header_column.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_header_row.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_rounds_list.dart';
+import 'package:qmhb/screens/library/rounds/add_round_to_quiz_page.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 
 import '../../../get_it.dart';
@@ -22,12 +26,22 @@ class QuizDetailsPage extends StatefulWidget {
 }
 
 class _QuizDetailsPageState extends State<QuizDetailsPage> {
-  QuizModel quiz;
+  QuizModel quizModel;
 
   @override
   void initState() {
-    quiz = widget.quizModel;
+    quizModel = widget.quizModel;
     super.initState();
+  }
+
+  _addRoundsToQuiz() async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddRoundToQuizPage(
+          quizModel: quizModel,
+        ),
+      ),
+    );
   }
 
   @override
@@ -41,29 +55,50 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
             quizModel: widget.quizModel,
             emitData: (newQuiz) {
               setState(() {
-                quiz = newQuiz;
+                quizModel = newQuiz;
               });
             },
           )
         ],
       ),
-      body: ListView(
-        children: [
-          getIt<AppSize>().isLarge
-              ? QuizDetailsHeaderRow(quizModel: widget.quizModel)
-              : QuizDetailsHeaderColumn(quizModel: widget.quizModel),
-          Divider(),
-          SummaryRowHeader(
-            headerTitle: "Rounds",
-          ),
-          widget.quizModel.roundIds.length > 0
-              ? QuizDetailsRoundsList(
-                  quizModel: widget.quizModel,
-                )
-              : Center(
-                  child: Text("The Quiz has no Rounds"),
-                ),
-        ],
+      body: StreamBuilder(
+        initialData: quizModel,
+        stream: Provider.of<QuizCollectionService>(context).getQuizById(quizModel.id),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: 128,
+              child: LoadingSpinnerHourGlass(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Container(
+              height: 128,
+              width: 128,
+              child: Text("err"),
+            );
+          }
+          return ListView(
+            children: [
+              getIt<AppSize>().isLarge
+                  ? QuizDetailsHeaderRow(quizModel: quizModel)
+                  : QuizDetailsHeaderColumn(quizModel: quizModel),
+              Divider(),
+              SummaryRowHeader(
+                headerTitle: "Questions",
+                primaryHeaderButtonText: "Add Rounds",
+                primaryHeaderButtonFunction: () async {
+                  _addRoundsToQuiz();
+                },
+              ),
+              quizModel.questionIds.length > 0
+                  ? QuizDetailsRoundsList(quizModel: quizModel)
+                  : Center(
+                      child: Text("This Round has no Questions"),
+                    ),
+            ],
+          );
+        },
       ),
     );
   }

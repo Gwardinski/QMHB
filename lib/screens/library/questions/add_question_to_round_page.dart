@@ -20,10 +20,10 @@ class AddQuestionToRoundPage extends StatefulWidget {
   final RoundModel roundModel;
 
   @override
-  _UserQuestionsPageAddToRoundState createState() => _UserQuestionsPageAddToRoundState();
+  _AddQuestionToRoundPageState createState() => _AddQuestionToRoundPageState();
 }
 
-class _UserQuestionsPageAddToRoundState extends State<AddQuestionToRoundPage> {
+class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
   RoundModel _roundModel;
 
   @override
@@ -32,23 +32,13 @@ class _UserQuestionsPageAddToRoundState extends State<AddQuestionToRoundPage> {
     super.initState();
   }
 
-  addQuestionToRound(questionId) {
-    setState(() {
-      if (_roundModel.questionIds.contains(questionId)) {
-        _roundModel.questionIds.add(questionId);
-      } else {
-        _roundModel.questionIds.remove(questionId);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Add Questions"),
+        title: Text("Select Questions"),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.add_circle),
@@ -58,6 +48,7 @@ class _UserQuestionsPageAddToRoundState extends State<AddQuestionToRoundPage> {
                 MaterialPageRoute(
                   builder: (context) => QuestionEditorPage(
                     type: QuestionEditorType.ADD,
+                    roundModel: _roundModel,
                   ),
                 ),
               );

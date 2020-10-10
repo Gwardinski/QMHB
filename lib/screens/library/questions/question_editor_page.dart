@@ -26,7 +26,7 @@ class QuestionEditorPage extends StatefulWidget {
   final RoundModel roundModel;
 
   QuestionEditorPage({
-    this.type,
+    @required this.type,
     this.questionModel,
     this.roundModel,
   });
@@ -86,10 +86,8 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
         final newRound = widget.roundModel;
         newRound.questionIds.add(newDocId);
         await roundService.editRoundOnFirebaseCollection(newRound);
-        Navigator.of(context).pop(newRound);
-      } else {
-        Navigator.of(context).pop();
       }
+      Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
       _updateError('Failed to edit Question');

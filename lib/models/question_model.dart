@@ -52,7 +52,7 @@ class QuestionModel {
     this.answer = document.data()['answer'] ?? '';
     this.category = document.data()['category'] ?? '';
     this.difficulty = document.data()['difficulty'] ?? '';
-    this.points = document.data()['points'] ?? 1;
+    this.points = document.data()['points'].toDouble() ?? 1.0;
     this.isPublished = document.data()['isPublished'] ?? false;
   }
 

@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
-class QuestionListItemActionAddToRound extends StatefulWidget {
-  QuestionListItemActionAddToRound({
+class RoundListItemActionAddToQuiz extends StatefulWidget {
+  RoundListItemActionAddToQuiz({
     Key key,
+    @required this.quizModel,
     @required this.roundModel,
-    @required this.questionModel,
   }) : super(key: key);
 
+  final QuizModel quizModel;
   final RoundModel roundModel;
-  final QuestionModel questionModel;
 
   @override
   _QuestionListItemActionAddToRoundState createState() => _QuestionListItemActionAddToRoundState();
 }
 
-class _QuestionListItemActionAddToRoundState extends State<QuestionListItemActionAddToRound> {
+class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAddToQuiz> {
   bool _isLoading = false;
+  QuizModel quizModel;
   RoundModel roundModel;
-  QuestionModel questionModel;
-  RoundCollectionService roundCollectionService;
+  QuizCollectionService quizCollectionService;
 
   @override
   void initState() {
     super.initState();
+    quizModel = widget.quizModel;
     roundModel = widget.roundModel;
-    questionModel = widget.questionModel;
-    roundCollectionService = Provider.of<RoundCollectionService>(context, listen: false);
+    quizCollectionService = Provider.of<QuizCollectionService>(context, listen: false);
   }
 
   bool _containsQuestion() {
-    return roundModel.questionIds.contains(questionModel.id);
+    return quizModel.questionIds.contains(roundModel.id);
   }
 
   _setLoading(bool loading) {
@@ -74,9 +74,9 @@ class _QuestionListItemActionAddToRoundState extends State<QuestionListItemActio
         onPressed: () async {
           _setLoading(true);
           if (!_containsQuestion()) {
-            await roundCollectionService.addQuestionToRound(roundModel, questionModel);
+            await quizCollectionService.addRoundToQuiz(quizModel, roundModel);
           } else {
-            await roundCollectionService.removeQuestionFromRound(roundModel, questionModel);
+            await quizCollectionService.removeRoundFromQuiz(quizModel, roundModel);
           }
           _setLoading(false);
         },

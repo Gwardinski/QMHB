@@ -41,6 +41,12 @@ class RoundCollectionService {
     });
   }
 
+  Stream<RoundModel> getRoundById(String id) {
+    return _roundsCollection.where("id", isEqualTo: id).snapshots().map((snapshot) {
+      return RoundModel.fromFirebase(snapshot.docs.single);
+    });
+  }
+
   Stream<List<RoundModel>> getRoundsByIds(List<String> ids) {
     return _roundsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
@@ -87,37 +93,39 @@ class RoundCollectionService {
 
   Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
     final serverTimestamp = Timestamp.now().toDate();
+    final ids = roundModel.questionIds;
+    ids.add(question.id);
     try {
-      return await _roundsCollection.doc(roundModel.id).set({
-        "id": roundModel.id,
-        "uid": roundModel.uid,
-        "title": roundModel.title,
-        "description": roundModel.description,
-        "imageURL": roundModel.imageURL,
-        "questionIds": List.from(roundModel.questionIds)..addAll([question.id]),
-        "isPublished": false,
-        "createdAt": roundModel.createdAt,
-        "lastUpdated": serverTimestamp,
-      });
+      return await _roundsCollection.doc(roundModel.id).set(
+        {
+          "questionIds": ids,
+          "lastUpdated": serverTimestamp,
+        },
+        SetOptions(
+          merge: true,
+        ),
+      );
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> removeQuestionToRound(RoundModel roundModel, QuestionModel question) async {
+  Future<void> removeQuestionFromRound(RoundModel roundModel, QuestionModel question) async {
     final serverTimestamp = Timestamp.now().toDate();
     final ids = roundModel.questionIds;
     ids.remove(question.id);
-    return await _roundsCollection.doc(roundModel.id).set({
-      "id": roundModel.id,
-      "uid": roundModel.uid,
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "imageURL": roundModel.imageURL,
-      "questionIds": ids,
-      "isPublished": false,
-      "createdAt": roundModel.createdAt,
-      "lastUpdated": serverTimestamp,
-    });
+    try {
+      return await _roundsCollection.doc(roundModel.id).set(
+        {
+          "questionIds": ids,
+          "lastUpdated": serverTimestamp,
+        },
+        SetOptions(
+          merge: true,
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }

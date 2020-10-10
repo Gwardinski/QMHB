@@ -76,7 +76,6 @@ class QuestionListItemContent extends StatelessWidget {
     @required this.viewQuestionDetails,
     @required this.updateRevealAnswer,
     this.roundModel,
-    this.onAddToRound,
   }) : super(key: key);
 
   final bool revealAnswer;
@@ -84,7 +83,6 @@ class QuestionListItemContent extends StatelessWidget {
   final viewQuestionDetails;
   final updateRevealAnswer;
   final RoundModel roundModel;
-  final onAddToRound;
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/details/round/widgets/round_details_header_column.dart';
 import 'package:qmhb/screens/details/round/widgets/round_details_header_row.dart';
 import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
 import '../../../get_it.dart';
@@ -58,26 +61,44 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
           ),
         ],
       ),
-      // add future builder to round model. listen for updates
-      body: ListView(
-        children: [
-          getIt<AppSize>().isLarge
-              ? RoundDetailsHeaderRow(roundModel: roundModel)
-              : RoundDetailsHeaderColumn(roundModel: roundModel),
-          Divider(),
-          SummaryRowHeader(
-            headerTitle: "Questions",
-            primaryHeaderButtonText: "Add Question",
-            primaryHeaderButtonFunction: () async {
-              _addQuestionsToRound();
-            },
-          ),
-          roundModel.questionIds.length > 0
-              ? RoundDetailsQuestionsList(roundModel: roundModel)
-              : Center(
-                  child: Text("This Round has no Questions"),
-                ),
-        ],
+      body: StreamBuilder(
+        initialData: roundModel,
+        stream: Provider.of<RoundCollectionService>(context).getRoundById(roundModel.id),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: 128,
+              child: LoadingSpinnerHourGlass(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Container(
+              height: 128,
+              width: 128,
+              child: Text("err"),
+            );
+          }
+          return ListView(
+            children: [
+              getIt<AppSize>().isLarge
+                  ? RoundDetailsHeaderRow(roundModel: roundModel)
+                  : RoundDetailsHeaderColumn(roundModel: roundModel),
+              Divider(),
+              SummaryRowHeader(
+                headerTitle: "Questions",
+                primaryHeaderButtonText: "Add Questions",
+                primaryHeaderButtonFunction: () async {
+                  _addQuestionsToRound();
+                },
+              ),
+              roundModel.questionIds.length > 0
+                  ? RoundDetailsQuestionsList(roundModel: roundModel)
+                  : Center(
+                      child: Text("This Round has no Questions"),
+                    ),
+            ],
+          );
+        },
       ),
     );
   }
