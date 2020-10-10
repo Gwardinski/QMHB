@@ -66,23 +66,19 @@ class _ImageCaptureState extends State<ImageCapture> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FlatButton.icon(
-              label: Text("Camera"),
+            IconButton(
               icon: Icon(Icons.camera),
               onPressed: () => _pickImage(ImageSource.camera),
             ),
-            FlatButton.icon(
-              label: Text("Gallery"),
+            IconButton(
               icon: Icon(Icons.photo_library),
               onPressed: () => _pickImage(ImageSource.gallery),
             ),
-            FlatButton.icon(
-              label: Text("Crop"),
+            IconButton(
               icon: Icon(Icons.crop),
               onPressed: (_fileImage != null || _networkImage != null) ? _cropImage : null,
             ),
-            FlatButton.icon(
-              label: Text("Clear"),
+            IconButton(
               icon: Icon(Icons.refresh),
               onPressed: (_fileImage != null || _networkImage != null) ? _clear : null,
             ),

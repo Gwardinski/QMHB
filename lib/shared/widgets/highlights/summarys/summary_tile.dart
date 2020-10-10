@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 
@@ -20,8 +22,8 @@ class SummaryTile extends StatelessWidget {
     @required this.line2Value,
     @required this.line3,
     @required this.line3Value,
-    this.line4 = "line4",
-    this.line4Value = 0,
+    this.line4,
+    this.line4Value,
     this.imageURL,
     @required this.onTap,
   });
@@ -33,19 +35,39 @@ class SummaryTile extends StatelessWidget {
       child: Container(
         height: 128,
         width: 128,
-        padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(getIt<AppSize>().borderRadius)),
           border: Border.all(color: Theme.of(context).accentColor),
+          image: imageURL != null
+              ? DecorationImage(
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                  matchTextDirection: true,
+                  repeat: ImageRepeat.noRepeat,
+                  image: NetworkImage(imageURL),
+                )
+              : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(child: SummaryTileTitle(line1: line1)),
-            SummaryTileInfoRow(value: line2Value.toString(), title: line2),
-            SummaryTileInfoRow(value: line3Value.toString(), title: line3),
-            SummaryTileInfoRow(value: line4Value.toString(), title: line4),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(getIt<AppSize>().borderRadius)),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              padding: EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(child: SummaryTileTitle(line1: line1)),
+                  SummaryTileInfoRow(value: line2Value.toString(), title: line2),
+                  SummaryTileInfoRow(value: line3Value.toString(), title: line3),
+                  line4Value != null
+                      ? SummaryTileInfoRow(value: line4Value.toString(), title: line4)
+                      : Container(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

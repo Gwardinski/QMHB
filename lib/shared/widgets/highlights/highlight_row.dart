@@ -110,6 +110,7 @@ class RoundHighlightRow extends StatelessWidget {
               line2Value: roundModel.questionIds.length,
               line3: "Points",
               line3Value: roundModel.totalPoints,
+              imageURL: roundModel.imageURL,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
