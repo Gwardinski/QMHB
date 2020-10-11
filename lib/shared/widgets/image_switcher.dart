@@ -25,7 +25,13 @@ class ImageSwitcher extends StatelessWidget {
         : (networkImage != null)
             ? Stack(
                 children: [
-                  Center(child: LoadingSpinnerHourGlass()),
+                  Container(
+                    width: double.infinity,
+                    height: 80,
+                    child: Center(
+                      child: LoadingSpinnerHourGlass(),
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     child: FadeInImage.memoryNetwork(
