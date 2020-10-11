@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/rounds/rounds_library_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
@@ -55,11 +56,7 @@ class RecentRoundsRow extends StatelessWidget {
                   );
                 }
                 if (snapshot.hasError) {
-                  return Container(
-                    height: 128,
-                    width: 128,
-                    child: Text("err"),
-                  );
+                  return ErrorMessage(message: "An error occured loading your Rounds");
                 }
                 return (snapshot.data.length == 0)
                     ? Row(

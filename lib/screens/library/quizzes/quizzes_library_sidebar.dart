@@ -6,6 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuizzesLibrarySidebar extends StatelessWidget {
@@ -38,10 +39,7 @@ class QuizzesLibrarySidebar extends StatelessWidget {
                   );
                 }
                 if (snapshot.hasError == true) {
-                  print(snapshot.error);
-                  return Center(
-                    child: Text("Can't load your Quizzes"),
-                  );
+                  return ErrorMessage(message: "An error occured loading your Quizzes");
                 }
                 return snapshot.data.length > 0
                     ? ListView.builder(

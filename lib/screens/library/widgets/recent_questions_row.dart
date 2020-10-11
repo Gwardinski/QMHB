@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/questions/questions_library_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_footer.dart';
@@ -45,11 +46,7 @@ class RecentQuestionsRow extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                print("err");
-                print(snapshot.error.toString());
-                return Container(
-                  child: Text("err"),
-                );
+                return ErrorMessage(message: "An error occured loading your Questions");
               }
               return (snapshot.data.length == 0)
                   ? CreateFirstQuestionButton()

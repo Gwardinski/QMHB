@@ -5,6 +5,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
 import 'package:qmhb/screens/library/rounds/rounds_library_sidebar.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -58,9 +59,7 @@ class QuestionsLibraryPage extends StatelessWidget {
                         );
                       }
                       if (snapshot.hasError == true) {
-                        return Center(
-                          child: Text("Could not load your questions"),
-                        );
+                        return ErrorMessage(message: "An error occured loading your Questions");
                       }
                       return snapshot.data.length > 0
                           ? ListView.separated(

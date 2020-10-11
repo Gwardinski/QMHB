@@ -6,6 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
 import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 // Dialog is used for building up: Question => Round => Quiz
@@ -40,10 +41,7 @@ class AddQuestionToRoundPageDialog extends StatelessWidget {
                     );
                   }
                   if (snapshot.hasError == true) {
-                    print(snapshot.error);
-                    return Center(
-                      child: Text("Can't load your Rounds"),
-                    );
+                    return ErrorMessage(message: "An error occured loading your Questions");
                   }
                   return snapshot.data.length > 0
                       ? ListView.builder(

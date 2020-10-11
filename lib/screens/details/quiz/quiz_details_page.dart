@@ -7,6 +7,7 @@ import 'package:qmhb/screens/details/quiz/widgets/quiz_details_header_row.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_rounds_list.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
@@ -62,16 +63,12 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              height: 128,
+              height: 160,
               child: LoadingSpinnerHourGlass(),
             );
           }
           if (snapshot.hasError) {
-            return Container(
-              height: 128,
-              width: 128,
-              child: Text("err"),
-            );
+            return ErrorMessage(message: "An error occured loading this Quiz");
           }
           return ListView(
             children: [

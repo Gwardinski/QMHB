@@ -6,6 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quizzes_library_sidebar.dart';
 import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
@@ -58,10 +59,7 @@ class RoundCollectionPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasError == true) {
-                          print(snapshot.error);
-                          return Center(
-                            child: Text("Could not load content"),
-                          );
+                          return ErrorMessage(message: "An error occured loading your Rounds");
                         }
                         return snapshot.data.length > 0
                             ? ListView.separated(

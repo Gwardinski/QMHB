@@ -7,6 +7,7 @@ import 'package:qmhb/screens/details/round/widgets/round_details_header_row.dart
 import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
@@ -67,11 +68,7 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
             );
           }
           if (snapshot.hasError) {
-            return Container(
-              height: 128,
-              width: 128,
-              child: Text("err"),
-            );
+            return ErrorMessage(message: "An error occured loading this Round");
           }
           return ListView(
             children: [

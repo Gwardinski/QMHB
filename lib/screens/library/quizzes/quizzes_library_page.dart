@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_column.dart';
@@ -48,10 +49,7 @@ class QuizzesLibraryPage extends StatelessWidget {
                     );
                   }
                   if (snapshot.hasError == true) {
-                    print(snapshot.error);
-                    return Center(
-                      child: Text("Could not load content"),
-                    );
+                    return ErrorMessage(message: "An error occured loading your Quizzes");
                   }
                   return snapshot.data.length > 0
                       ? QuizListItemsColumn(quizzes: snapshot.data)
