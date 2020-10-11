@@ -79,7 +79,7 @@ class _RoundDetailsHeaderColumnState extends State<RoundDetailsHeaderColumn> {
             InfoColumn(title: "Points", value: widget.roundModel.totalPoints.toString()),
             InfoColumn(
               title: "Created",
-              value: DateFormat('dd-mm-yyyy').format(widget.roundModel.createdAt),
+              value: DateFormat('d-MM-y').format(widget.roundModel.createdAt),
             ),
           ],
         ),

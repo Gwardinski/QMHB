@@ -190,7 +190,9 @@ class _AddQuestionToRoundButtonState extends State<AddQuestionToRoundButton> {
                 _isLoading
                     ? Container(height: 40, width: 40, child: LoadingSpinnerHourGlass())
                     : Icon(
-                        _containsQuestion() ? Icons.remove_circle_outline : Icons.add_to_queue,
+                        _containsQuestion()
+                            ? Icons.remove_circle_outline
+                            : Icons.add_circle_outline,
                         size: 24,
                       ),
               ],

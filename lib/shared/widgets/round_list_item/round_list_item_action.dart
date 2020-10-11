@@ -40,7 +40,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
               value: RoundOptions.addToQuiz,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.add_to_queue),
+                  Icon(Icons.add_circle_outline),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Round to Quiz'),
                 ],

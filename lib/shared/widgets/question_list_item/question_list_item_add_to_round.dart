@@ -62,9 +62,11 @@ class _QuestionListItemActionAddToRoundState extends State<QuestionListItemActio
             children: [
               Center(
                 child: _isLoading
-                    ? Container(height: 40, width: 40, child: LoadingSpinnerHourGlass())
+                    ? Container(height: 24, width: 24, child: CircularProgressIndicator())
                     : Icon(
-                        _containsQuestion() ? Icons.remove_circle_outline : Icons.add_to_queue,
+                        _containsQuestion()
+                            ? Icons.remove_circle_outline
+                            : Icons.add_circle_outline,
                         size: 24,
                       ),
               ),

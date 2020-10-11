@@ -78,10 +78,12 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
               Divider(),
               SummaryRowHeader(
                 headerTitle: "Rounds",
-                primaryHeaderButtonText: "Add Rounds",
-                primaryHeaderButtonFunction: () async {
+                secondaryHeaderButtonText: "Add Rounds",
+                secondaryHeaderButtonFunction: () async {
                   _addRoundsToQuiz();
                 },
+                primaryHeaderButtonText: "Reorder",
+                primaryHeaderButtonFunction: () {},
               ),
               quizModel.roundIds.length > 0
                   ? QuizDetailsRoundsList(quizModel: quizModel)

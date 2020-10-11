@@ -74,11 +74,6 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
                     userId: user.uid,
                   ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: LoadingSpinnerHourGlass(),
-                      );
-                    }
                     if (snapshot.hasError == true) {
                       return ErrorMessage(message: "An error occured loading your Questions");
                     }

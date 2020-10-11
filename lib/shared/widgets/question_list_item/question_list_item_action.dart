@@ -40,7 +40,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               value: QuestionOptions.addToRound,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.add_to_queue),
+                  Icon(Icons.add_circle_outline),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Question to Round'),
                 ],

@@ -79,7 +79,7 @@ class _QuizDetailsHeaderColumnState extends State<QuizDetailsHeaderColumn> {
             InfoColumn(title: "Points", value: widget.quizModel.totalPoints.toString()),
             InfoColumn(
               title: "Created",
-              value: DateFormat('dd-mm-yyyy').format(widget.quizModel.createdAt),
+              value: DateFormat('d-MM-y').format(widget.quizModel.createdAt),
             ),
           ],
         ),
