@@ -5,6 +5,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_dialog.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
+import 'package:qmhb/shared/widgets/image_switcher.dart';
 
 import '../../../get_it.dart';
 
@@ -35,7 +36,9 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
       contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 0),
       content: Container(
         width: double.infinity,
-        constraints: BoxConstraints(maxHeight: 256),
+        constraints: BoxConstraints(
+          maxHeight: 440,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -44,7 +47,6 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(padding: EdgeInsets.only(bottom: 16)),
                     Container(
                       child: Text(
                         widget.questionModel.question,
@@ -53,6 +55,12 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                         ),
                       ),
                     ),
+                    Padding(padding: EdgeInsets.only(bottom: 16)),
+                    widget.questionModel.imageURL != null
+                        ? ImageSwitcher(
+                            networkImage: widget.questionModel.imageURL,
+                          )
+                        : Container(),
                     Padding(padding: EdgeInsets.only(bottom: 16)),
                     _revealAnswer
                         ? Container(

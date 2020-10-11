@@ -9,10 +9,8 @@ class SummaryTile extends StatelessWidget {
   final String line1;
   final String line2;
   final String line3;
-  final String line4;
-  final int line2Value;
-  final double line3Value;
-  final double line4Value;
+  final String line2Value;
+  final String line3Value;
   final String imageURL;
   final Function onTap;
 
@@ -22,8 +20,6 @@ class SummaryTile extends StatelessWidget {
     @required this.line2Value,
     @required this.line3,
     @required this.line3Value,
-    this.line4,
-    this.line4Value,
     this.imageURL,
     @required this.onTap,
   });
@@ -51,19 +47,16 @@ class SummaryTile extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(getIt<AppSize>().borderRadius)),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
             child: Container(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.6),
               padding: EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(child: SummaryTileTitle(line1: line1)),
-                  SummaryTileInfoRow(value: line2Value.toString(), title: line2),
-                  SummaryTileInfoRow(value: line3Value.toString(), title: line3),
-                  line4Value != null
-                      ? SummaryTileInfoRow(value: line4Value.toString(), title: line4)
-                      : Container(),
+                  SummaryTileInfoRow(value: line2Value, title: line2),
+                  SummaryTileInfoRow(value: line3Value, title: line3),
                 ],
               ),
             ),
@@ -88,7 +81,7 @@ class SummaryTileTitle extends StatelessWidget {
       width: double.infinity,
       child: Text(
         line1,
-        maxLines: 2,
+        maxLines: 3,
         textAlign: TextAlign.start,
         style: TextStyle(fontSize: 18),
       ),

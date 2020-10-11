@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -74,12 +75,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   }
 
   _createQuestion() async {
+    _updateIsLoading(true);
+    _updateError('');
     final questionService = Provider.of<QuestionCollectionService>(context);
     final userService = Provider.of<UserCollectionService>(context);
     final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
-      _updateIsLoading(true);
-      _updateError('');
+      if (_newImage != null) {
+        final newImageUrl = await _saveImage();
+        _question.imageURL = newImageUrl;
+      }
       String newDocId = await questionService.addQuestionToFirebaseCollection(
         _question,
         userModel.uid,
@@ -102,12 +107,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   }
 
   _editQuestion() async {
+    _updateIsLoading(true);
+    _updateError('');
     final questionService = Provider.of<QuestionCollectionService>(context);
     final userService = Provider.of<UserCollectionService>(context);
     final userModel = Provider.of<UserDataStateModel>(context).user;
     try {
-      _updateIsLoading(true);
-      _updateError('');
+      if (_newImage != null) {
+        final newImageUrl = await _saveImage();
+        _question.imageURL = newImageUrl;
+      }
       await questionService.editQuestionOnFirebaseCollection(
         _question,
       );
@@ -142,6 +151,56 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     });
   }
 
+  _saveImage() async {
+    String filepath = 'images/round/${_question.uid}-${_question.answer}.png';
+    final FirebaseStorage storage = FirebaseStorage(
+      storageBucket: 'gs://qmhb-b432b.appspot.com',
+    );
+    StorageUploadTask uploadTask = storage.ref().child(filepath).putFile(_newImage);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    return await storageTaskSnapshot.ref.getDownloadURL();
+  }
+
+  _setAsImagePrompt(String type) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Question Type'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Changing Question type will remove any picture or music you have selected.'),
+                Text('Are you sure you wish to change question type?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Change Type'),
+              onPressed: () {
+                _setTypeAs(type);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _setTypeAs(String type) {
+    setState(() {
+      _question.questionType = type;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,31 +224,6 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  widget.type == QuestionEditorType.ADD
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Question Type"),
-                            OutlineButton(
-                              onPressed: () {
-                                setState(() {
-                                  _question.questionType = "STANDARD";
-                                });
-                              },
-                              child: Text("Standard"),
-                            ),
-                            OutlineButton(
-                              onPressed: () {
-                                setState(() {
-                                  _question.questionType = "PICTURE";
-                                });
-                              },
-                              child: Text("Picture"),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  Padding(padding: EdgeInsets.only(bottom: 16)),
                   FormInput(
                     initialValue: _question.question,
                     validate: validateForm,
@@ -212,12 +246,58 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                       });
                     },
                   ),
+                  widget.type == QuestionEditorType.ADD
+                      ? Column(
+                          children: [
+                            Text("Question Type"),
+                            Padding(padding: EdgeInsets.only(bottom: 8)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                OutlineButton(
+                                  onPressed: () {
+                                    _question.questionType != "STANDARD"
+                                        ? _setAsImagePrompt("STANDARD")
+                                        : _setTypeAs("STANDARD");
+                                  },
+                                  child: Text("Standard"),
+                                ),
+                                OutlineButton(
+                                  onPressed: () {
+                                    _question.questionType == "MUSIC"
+                                        ? _setAsImagePrompt("PICTURE")
+                                        : _setTypeAs("PICTURE");
+                                  },
+                                  child: Text("Picture"),
+                                ),
+                                OutlineButton(
+                                  onPressed: () {
+                                    _question.questionType == "PICTURE"
+                                        ? _setAsImagePrompt("MUSIC")
+                                        : _setTypeAs("MUSIC");
+                                  },
+                                  child: Text("Music"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  Padding(padding: EdgeInsets.only(bottom: 16)),
                   _question.questionType == "PICTURE"
                       ? ImageSelector(
                           fileImage: _newImage,
                           networkImage: _question.imageURL,
                           selectImage: _selectImage,
                           removeImage: _removeImage,
+                        )
+                      : Container(),
+                  _question.questionType == "MUSIC"
+                      ? Container(
+                          height: 80,
+                          padding: EdgeInsets.only(bottom: 16),
+                          width: double.infinity,
+                          child: Center(child: Text("TODO - Spotify Song Selector to go here")),
                         )
                       : Container(),
                   FormInput(

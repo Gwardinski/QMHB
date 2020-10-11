@@ -105,30 +105,36 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   }
 
   _createRound() async {
-    final roundService = Provider.of<RoundCollectionService>(context);
-    final userService = Provider.of<UserCollectionService>(context);
-    final userModel = Provider.of<UserDataStateModel>(context).user;
-    try {
+    if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      String newDocId = await roundService.addRoundToFirebaseCollection(
-        _round,
-        userModel.uid,
-      );
-      userModel.roundIds.add(newDocId);
-      await userService.updateUserDataOnFirebase(userModel);
-      if (widget.quizModel != null) {
-        final quizService = Provider.of<QuizCollectionService>(context);
-        final newQuiz = widget.quizModel;
-        newQuiz.roundIds.add(newDocId);
-        await quizService.editQuizOnFirebaseCollection(newQuiz);
+      final roundService = Provider.of<RoundCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
+      try {
+        if (_newImage != null) {
+          final newImageUrl = await _saveImage();
+          _round.imageURL = newImageUrl;
+        }
+        String newDocId = await roundService.addRoundToFirebaseCollection(
+          _round,
+          userModel.uid,
+        );
+        userModel.roundIds.add(newDocId);
+        await userService.updateUserDataOnFirebase(userModel);
+        if (widget.quizModel != null) {
+          final quizService = Provider.of<QuizCollectionService>(context);
+          final newQuiz = widget.quizModel;
+          newQuiz.roundIds.add(newDocId);
+          await quizService.editQuizOnFirebaseCollection(newQuiz);
+        }
+        Navigator.of(context).pop();
+      } catch (e) {
+        print(e.toString());
+        _updateError('Failed to create Question');
+      } finally {
+        _updateIsLoading(false);
       }
-      Navigator.of(context).pop();
-    } catch (e) {
-      print(e.toString());
-      _updateError('Failed to edit Question');
-    } finally {
-      _updateIsLoading(false);
     }
   }
 

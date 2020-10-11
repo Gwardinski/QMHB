@@ -5,10 +5,12 @@ class QuestionListItemAction2 extends StatelessWidget {
     Key key,
     @required this.revealAnswer,
     @required this.onTap,
+    @required this.type,
   }) : super(key: key);
 
   final bool revealAnswer;
   final onTap;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,11 @@ class QuestionListItemAction2 extends StatelessWidget {
             children: [
               Center(
                 child: Icon(
-                  Icons.remove_red_eye,
+                  type == "MUSIC"
+                      ? Icons.music_note
+                      : type == "PICTURE"
+                          ? Icons.image
+                          : Icons.remove_red_eye,
                   size: 24,
                   color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
                 ),

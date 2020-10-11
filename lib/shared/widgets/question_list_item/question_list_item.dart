@@ -100,6 +100,7 @@ class QuestionListItemContent extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: QuestionListItemAction2(
                 revealAnswer: revealAnswer,
+                type: questionModel.questionType,
                 onTap: () {
                   updateRevealAnswer();
                 },

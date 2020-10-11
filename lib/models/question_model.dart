@@ -66,6 +66,7 @@ class QuestionModel {
 
   QuestionModel.newQuestion() {
     this.points = 1;
+    this.questionType = "STANDARD";
     this.category = acceptedCategories[0];
   }
 }
