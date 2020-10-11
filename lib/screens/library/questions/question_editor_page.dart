@@ -152,7 +152,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   }
 
   _saveImage() async {
-    String filepath = 'images/round/${_question.uid}-${_question.answer}.png';
+    String filepath = 'images/question/${_question.uid}-${_question.answer}.png';
     final FirebaseStorage storage = FirebaseStorage(
       storageBucket: 'gs://qmhb-b432b.appspot.com',
     );
