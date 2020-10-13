@@ -7,7 +7,6 @@ import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_column.dart';
-import 'package:qmhb/shared/widgets/toolbar.dart';
 
 class QuizzesLibraryPage extends StatelessWidget {
   @override
@@ -36,7 +35,6 @@ class QuizzesLibraryPage extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Toolbar(),
             Expanded(
               child: StreamBuilder(
                 stream: QuizCollectionService().getQuizzesCreatedByUser(

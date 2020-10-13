@@ -10,7 +10,6 @@ import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
-import 'package:qmhb/shared/widgets/toolbar.dart';
 
 // Page is used for building down: Quiz => Round => Question
 class AddQuestionToRoundPage extends StatefulWidget {
@@ -67,13 +66,17 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
           }
           return Column(
             children: [
-              Toolbar(),
               Expanded(
                 child: StreamBuilder(
                   stream: QuestionCollectionService().getQuestionsCreatedByUser(
                     userId: user.uid,
                   ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: LoadingSpinnerHourGlass(),
+                      );
+                    }
                     if (snapshot.hasError == true) {
                       return ErrorMessage(message: "An error occured loading your Questions");
                     }

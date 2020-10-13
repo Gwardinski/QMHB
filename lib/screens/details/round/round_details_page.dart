@@ -78,18 +78,12 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
               Divider(),
               SummaryRowHeader(
                 headerTitle: "Questions",
-                secondaryHeaderButtonText: "Add / Remove",
-                secondaryHeaderButtonFunction: () async {
+                primaryHeaderButtonText: "Select Questions",
+                primaryHeaderButtonFunction: () async {
                   _addQuestionsToRound();
                 },
-                primaryHeaderButtonText: "Reorder",
-                primaryHeaderButtonFunction: () {},
               ),
-              roundModel.questionIds.length > 0
-                  ? RoundDetailsQuestionsList(roundModel: roundModel)
-                  : Center(
-                      child: Text("This Round has no Questions"),
-                    ),
+              RoundDetailsQuestionsList(roundModel: roundModel)
             ],
           );
         },

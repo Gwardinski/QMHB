@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundListItemActionAddToQuiz extends StatefulWidget {
   RoundListItemActionAddToQuiz({
@@ -16,10 +15,10 @@ class RoundListItemActionAddToQuiz extends StatefulWidget {
   final RoundModel roundModel;
 
   @override
-  _QuestionListItemActionAddToRoundState createState() => _QuestionListItemActionAddToRoundState();
+  _RoundListItemActionAddToQuizState createState() => _RoundListItemActionAddToQuizState();
 }
 
-class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAddToQuiz> {
+class _RoundListItemActionAddToQuizState extends State<RoundListItemActionAddToQuiz> {
   bool _isLoading = false;
   QuizModel quizModel;
   RoundModel roundModel;
@@ -65,7 +64,7 @@ class _QuestionListItemActionAddToRoundState extends State<RoundListItemActionAd
                 child: _isLoading
                     ? Container(height: 24, width: 24, child: CircularProgressIndicator())
                     : Icon(
-                        _containsRound() ? Icons.remove_circle_outline : Icons.add_circle_outline,
+                        _containsRound() ? Icons.check_box : Icons.check_box_outline_blank,
                         size: 24,
                       ),
               ),

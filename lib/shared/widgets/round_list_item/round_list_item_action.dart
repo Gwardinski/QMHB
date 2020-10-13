@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog.dart';
+import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_dialog.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
@@ -40,7 +40,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
               value: RoundOptions.addToQuiz,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.add_circle_outline),
+                  Icon(Icons.file_upload),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Round to Quiz'),
                 ],

@@ -10,7 +10,6 @@ import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
-import 'package:qmhb/shared/widgets/toolbar.dart';
 
 import '../../../get_it.dart';
 
@@ -46,7 +45,6 @@ class RoundCollectionPage extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  Toolbar(),
                   Expanded(
                     child: StreamBuilder(
                       stream: RoundCollectionService().getRoundsCreatedByUser(

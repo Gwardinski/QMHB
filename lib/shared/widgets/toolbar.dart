@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class Toolbar extends StatelessWidget {
   const Toolbar({
     Key key,
+    this.onUpdateSearchString,
   }) : super(key: key);
+
+  final Function onUpdateSearchString;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,7 @@ class Toolbar extends StatelessWidget {
                 icon: Icon(Icons.search),
                 hintText: 'Search...',
               ),
+              onChanged: onUpdateSearchString,
             ),
           ),
         ],

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuestionListItemActionAddToRound extends StatefulWidget {
   QuestionListItemActionAddToRound({
@@ -64,9 +63,7 @@ class _QuestionListItemActionAddToRoundState extends State<QuestionListItemActio
                 child: _isLoading
                     ? Container(height: 24, width: 24, child: CircularProgressIndicator())
                     : Icon(
-                        _containsQuestion()
-                            ? Icons.remove_circle_outline
-                            : Icons.add_circle_outline,
+                        _containsQuestion() ? Icons.check_box : Icons.check_box_outline_blank,
                         size: 24,
                       ),
               ),

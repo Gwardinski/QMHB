@@ -10,7 +10,6 @@ import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
-import 'package:qmhb/shared/widgets/toolbar.dart';
 
 import '../../../get_it.dart';
 
@@ -46,7 +45,6 @@ class QuestionsLibraryPage extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Toolbar(),
                 Expanded(
                   child: StreamBuilder(
                     stream: QuestionCollectionService().getQuestionsCreatedByUser(

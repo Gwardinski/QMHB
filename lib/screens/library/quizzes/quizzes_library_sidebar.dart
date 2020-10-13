@@ -120,7 +120,7 @@ class UserQuizzesSidebarNewQuiz extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    Icons.add,
+                    Icons.add_circle,
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 16),

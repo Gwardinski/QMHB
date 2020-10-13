@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
-import 'package:qmhb/screens/library/questions/add_question_to_round_dialog.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
@@ -40,7 +40,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               value: QuestionOptions.addToRound,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.add_circle_outline),
+                  Icon(Icons.file_upload),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Question to Round'),
                 ],
