@@ -74,7 +74,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
                       userId: user.uid,
                     ),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (!snapshot.hasData) {
                         return Center(
                           child: LoadingSpinnerHourGlass(),
                         );

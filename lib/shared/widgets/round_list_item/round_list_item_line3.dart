@@ -18,25 +18,25 @@ class RoundListItemLine3 extends StatelessWidget {
         children: [
           Row(
             children: <Widget>[
-              Text("Questions: "),
               Text(
                 questions,
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                 ),
               ),
+              Text(" Questions"),
             ],
           ),
           Padding(padding: EdgeInsets.only(left: 32)),
           Row(
             children: <Widget>[
-              Text("Points: "),
               Text(
                 points,
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                 ),
               ),
+              Text(" Total Points"),
             ],
           ),
         ],

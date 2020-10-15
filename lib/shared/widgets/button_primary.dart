@@ -4,11 +4,17 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 import '../../get_it.dart';
 
+enum ButtonPrimaryType {
+  FILLED,
+  OUTLINE,
+}
+
 class ButtonPrimary extends StatelessWidget {
   final String text;
   final onPressed;
   final isLoading;
   final fullWidth;
+  final ButtonPrimaryType type;
 
   const ButtonPrimary({
     Key key,
@@ -16,6 +22,7 @@ class ButtonPrimary extends StatelessWidget {
     @required this.onPressed,
     this.isLoading = false,
     this.fullWidth = false,
+    this.type = ButtonPrimaryType.FILLED,
   }) : super(key: key);
 
   @override
@@ -24,7 +31,12 @@ class ButtonPrimary extends StatelessWidget {
       height: 48,
       width: fullWidth ? double.infinity : 128,
       child: RaisedButton(
-        color: Color(0xff333333),
+        color: type == ButtonPrimaryType.FILLED
+            ? Theme.of(context).accentColor
+            : Theme.of(context).primaryColor,
+        textColor: type == ButtonPrimaryType.FILLED
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).accentColor,
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? LoadingSpinnerHourGlass()
@@ -36,7 +48,10 @@ class ButtonPrimary extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(getIt<AppSize>().borderRadius),
           ),
-          side: BorderSide(width: 1.0, color: Theme.of(context).accentColor),
+          side: BorderSide(
+            width: 1.0,
+            color: Theme.of(context).accentColor,
+          ),
         ),
       ),
     );

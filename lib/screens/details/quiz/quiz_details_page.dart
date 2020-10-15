@@ -1,49 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/quiz/widgets/quiz_details_header_column.dart';
-import 'package:qmhb/screens/details/quiz/widgets/quiz_details_header_row.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_rounds_list.dart';
+import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.dart';
+import 'package:qmhb/screens/details/widgets/details_list_empty.dart';
+import 'package:qmhb/screens/details/widgets/details_header.dart';
+import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 
-import '../../../get_it.dart';
-
-class QuizDetailsPage extends StatefulWidget {
+class QuizDetailsPage extends StatelessWidget {
   const QuizDetailsPage({
     Key key,
     @required this.quizModel,
   }) : super(key: key);
 
   final QuizModel quizModel;
-
-  @override
-  _QuizDetailsPageState createState() => _QuizDetailsPageState();
-}
-
-class _QuizDetailsPageState extends State<QuizDetailsPage> {
-  QuizModel quizModel;
-
-  @override
-  void initState() {
-    quizModel = widget.quizModel;
-    super.initState();
-  }
-
-  _addRoundsToQuiz() async {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddRoundToQuizPage(
-          quizModel: quizModel,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,38 +32,68 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
         title: Text("Quiz Details"),
         actions: <Widget>[
           QuizListItemAction(
-            quizModel: widget.quizModel,
-          )
+            quizModel: quizModel,
+          ),
         ],
       ),
       body: StreamBuilder(
         initialData: quizModel,
         stream: Provider.of<QuizCollectionService>(context).getQuizById(quizModel.id),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (BuildContext context, AsyncSnapshot<QuizModel> snapshot) {
+          if (!snapshot.hasData) {
             return Container(
-              height: 160,
+              height: 128,
               child: LoadingSpinnerHourGlass(),
             );
           }
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading this Quiz");
           }
-          return ListView(
-            children: [
-              getIt<AppSize>().isLarge
-                  ? QuizDetailsHeaderRow(quizModel: quizModel)
-                  : QuizDetailsHeaderColumn(quizModel: quizModel),
-              Divider(),
-              SummaryRowHeader(
-                headerTitle: "Rounds",
-                primaryHeaderButtonText: "Select Rounds",
-                primaryHeaderButtonFunction: () async {
-                  _addRoundsToQuiz();
-                },
-              ),
-              QuizDetailsRoundsList(quizModel: quizModel),
-            ],
+          print(snapshot.data.questionIds.length);
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                DetailsHeader(
+                  type: "Quiz",
+                  title: snapshot.data.title,
+                  description: snapshot.data.description,
+                  info1Title: "Rounds",
+                  info2Title: "Points",
+                  info3Title: "Created",
+                  info1Value: snapshot.data.roundIds.length.toString(),
+                  info2Value: snapshot.data.totalPoints.toString(),
+                  info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
+                  imageURL: snapshot.data.imageURL,
+                ),
+                Divider(),
+                SummaryRowHeader(
+                  headerTitle: "Rounds",
+                  secondaryHeaderButtonText: "Add / Remove",
+                  secondaryHeaderButtonFunction: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddRoundToQuizPage(
+                          quizModel: snapshot.data,
+                        ),
+                      ),
+                    );
+                  },
+                  primaryHeaderButtonText: "Reorder",
+                  primaryHeaderButtonFunction: () async {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ReorderQuestionsPage(
+                    //       roundModel: roundModel,
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                ),
+                snapshot.data.roundIds.length > 0
+                    ? QuizDetailsRoundsList(quizModel: snapshot.data)
+                    : DetailsListEmpty(text: "This Quiz has no Rounds"),
+              ],
+            ),
           );
         },
       ),

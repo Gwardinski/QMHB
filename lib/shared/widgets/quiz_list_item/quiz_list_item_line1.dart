@@ -23,7 +23,7 @@ class QuizListItemLine1 extends StatelessWidget {
             textAlign: TextAlign.start,
             textDirection: TextDirection.ltr,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               color: Colors.white,
             ),
           ),

@@ -32,6 +32,7 @@ class AddQuestionToNewRoundButton extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Center(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.add_circle,
@@ -39,7 +40,7 @@ class AddQuestionToNewRoundButton extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
-                  "New Round",
+                  "Create New Round",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,

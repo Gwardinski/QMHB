@@ -72,11 +72,11 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
                         onPressed: _isLoading ? null : _onSubmit,
                       ),
                       FormError(error: _error),
-                      ButtonPrimary(
-                        text: "Google",
-                        isLoading: false,
-                        onPressed: _isLoading ? null : _googleSignIn,
-                      ),
+                      // ButtonPrimary(
+                      //   text: "Google",
+                      //   isLoading: false,
+                      //   onPressed: _isLoading ? null : _googleSignIn,
+                      // ),
                     ],
                   ),
                 ),

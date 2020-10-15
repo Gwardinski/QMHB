@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/round/widgets/round_details_header_column.dart';
-import 'package:qmhb/screens/details/round/widgets/round_details_header_row.dart';
 import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.dart';
+import 'package:qmhb/screens/details/widgets/details_list_empty.dart';
+import 'package:qmhb/screens/details/widgets/details_header.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -12,38 +12,13 @@ import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
-import '../../../get_it.dart';
-
-class RoundDetailsPage extends StatefulWidget {
+class RoundDetailsPage extends StatelessWidget {
   const RoundDetailsPage({
     Key key,
     @required this.roundModel,
   }) : super(key: key);
 
   final RoundModel roundModel;
-
-  @override
-  _RoundDetailsWidgetState createState() => _RoundDetailsWidgetState();
-}
-
-class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
-  RoundModel roundModel;
-
-  @override
-  void initState() {
-    roundModel = widget.roundModel;
-    super.initState();
-  }
-
-  _addQuestionsToRound() async {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AddQuestionToRoundPage(
-          roundModel: roundModel,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +28,15 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
         title: Text("Round Details"),
         actions: <Widget>[
           RoundListItemAction(
-            roundModel: widget.roundModel,
+            roundModel: roundModel,
           ),
         ],
       ),
       body: StreamBuilder(
         initialData: roundModel,
         stream: Provider.of<RoundCollectionService>(context).getRoundById(roundModel.id),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (BuildContext context, AsyncSnapshot<RoundModel> snapshot) {
+          if (!snapshot.hasData) {
             return Container(
               height: 128,
               child: LoadingSpinnerHourGlass(),
@@ -70,21 +45,51 @@ class _RoundDetailsWidgetState extends State<RoundDetailsPage> {
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading this Round");
           }
-          return ListView(
-            children: [
-              getIt<AppSize>().isLarge
-                  ? RoundDetailsHeaderRow(roundModel: roundModel)
-                  : RoundDetailsHeaderColumn(roundModel: roundModel),
-              Divider(),
-              SummaryRowHeader(
-                headerTitle: "Questions",
-                primaryHeaderButtonText: "Select Questions",
-                primaryHeaderButtonFunction: () async {
-                  _addQuestionsToRound();
-                },
-              ),
-              RoundDetailsQuestionsList(roundModel: roundModel)
-            ],
+          print(snapshot.data.questionIds.length);
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                DetailsHeader(
+                  type: "Round",
+                  title: snapshot.data.title,
+                  description: snapshot.data.description,
+                  info1Title: "Questions",
+                  info2Title: "Points",
+                  info3Title: "Created",
+                  info1Value: snapshot.data.questionIds.length.toString(),
+                  info2Value: snapshot.data.totalPoints.toString(),
+                  info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
+                  imageURL: snapshot.data.imageURL,
+                ),
+                Divider(),
+                SummaryRowHeader(
+                  headerTitle: "Questions",
+                  secondaryHeaderButtonText: "Add / Remove",
+                  secondaryHeaderButtonFunction: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddQuestionToRoundPage(
+                          roundModel: snapshot.data,
+                        ),
+                      ),
+                    );
+                  },
+                  primaryHeaderButtonText: "Reorder",
+                  primaryHeaderButtonFunction: () async {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => ReorderQuestionsPage(
+                    //       roundModel: roundModel,
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                ),
+                snapshot.data.questionIds.length > 0
+                    ? RoundDetailsQuestionsList(roundModel: snapshot.data)
+                    : DetailsListEmpty(text: "This Round has no Questions"),
+              ],
+            ),
           );
         },
       ),

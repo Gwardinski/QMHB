@@ -72,7 +72,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
                     userId: user.uid,
                   ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                    if (!snapshot.hasData) {
                       return Center(
                         child: LoadingSpinnerHourGlass(),
                       );

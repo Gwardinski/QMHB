@@ -97,11 +97,11 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                       children: [
                         InfoColumn(
                           title: 'Created',
-                          value: DateFormat('d-MM-y').format(widget.questionModel.createdAt),
+                          value: DateFormat('d-MM-yy').format(widget.questionModel.createdAt),
                         ),
                         InfoColumn(
                           title: 'Updated',
-                          value: DateFormat('d-MM-y').format(widget.questionModel.lastUpdated),
+                          value: DateFormat('d-MM-yy').format(widget.questionModel.lastUpdated),
                         ),
                       ],
                     ),

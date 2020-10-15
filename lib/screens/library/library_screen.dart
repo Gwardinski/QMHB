@@ -7,7 +7,6 @@ import 'package:qmhb/screens/library/widgets/recent_quizzes_row.dart';
 import 'package:qmhb/screens/library/widgets/recent_rounds_row.dart';
 import 'package:qmhb/shared/widgets/account_page_button.dart';
 import 'package:qmhb/shared/widgets/large_signin_prompt.dart';
-import 'package:qmhb/shared/widgets/settings_page_button.dart';
 
 class LibraryScreen extends StatelessWidget {
   @override
@@ -20,7 +19,7 @@ class LibraryScreen extends StatelessWidget {
         title: Text('Library'),
         actions: <Widget>[
           AccountPageButton(isAuthenticated: isAuthenticated, user: user),
-          SettingsPageButton(),
+          // SettingsPageButton(),
         ],
       ),
       body: isAuthenticated
