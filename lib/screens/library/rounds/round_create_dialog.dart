@@ -89,9 +89,23 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 widget.initialQuestion != null
-                    ? Text("Round will be created with: \n${widget.initialQuestion?.question} \n\n")
+                    ? Container(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Round will be created with:",
+                            ),
+                            Text(
+                              "\n\"${widget.initialQuestion?.question}\"\n",
+                            ),
+                          ],
+                        ),
+                      )
                     : Container(),
                 FormInput(
                   initialValue: _round.title,

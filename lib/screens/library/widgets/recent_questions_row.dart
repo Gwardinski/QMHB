@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/screens/library/questions/questions_library_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -38,7 +39,7 @@ class RecentQuestionsRow extends StatelessWidget {
         ),
         StreamBuilder(
             stream: Provider.of<QuestionCollectionService>(context).getRecentQuestionStream(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Container(
                   height: 128,
@@ -51,7 +52,7 @@ class RecentQuestionsRow extends StatelessWidget {
               return (snapshot.data.length == 0)
                   ? CreateFirstQuestionButton()
                   : HighlightRowQuestion(
-                      questions: snapshot.data,
+                      questions: snapshot.data.reversed.toList(),
                     );
             }),
         SummaryRowFooter(),

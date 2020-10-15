@@ -42,7 +42,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
         title: Text("Select Questions"),
         actions: <Widget>[
           FlatButton.icon(
-            icon: Icon(Icons.add_circle),
+            icon: Icon(Icons.add),
             label: Text('New'),
             onPressed: () {
               Navigator.of(context).push(
@@ -57,7 +57,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
           ),
         ],
       ),
-      body: StreamBuilder<Object>(
+      body: StreamBuilder<RoundModel>(
         initialData: _roundModel,
         stream: RoundCollectionService().getRoundById(_roundModel.id),
         builder: (context, snapshot) {
@@ -67,7 +67,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
           return Column(
             children: [
               Expanded(
-                child: StreamBuilder(
+                child: StreamBuilder<List<QuestionModel>>(
                   stream: QuestionCollectionService().getQuestionsCreatedByUser(
                     userId: user.uid,
                   ),

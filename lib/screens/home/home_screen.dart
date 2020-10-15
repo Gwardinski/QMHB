@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Scaffold(
               body: pages.elementAt(_selectedIndex),
               bottomNavigationBar: BottomNavigationBar(
+                backgroundColor: Theme.of(context).primaryColor,
                 currentIndex: _selectedIndex,
                 selectedItemColor: Theme.of(context).accentColor,
                 onTap: _onItemTapped,

@@ -30,7 +30,7 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
   @override
   void initState() {
     super.initState();
-    _quiz = QuizModel.newRound();
+    _quiz = QuizModel.newQuiz();
   }
 
   _updateError(String val) {
@@ -91,7 +91,19 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
             child: Column(
               children: <Widget>[
                 widget.initialRound != null
-                    ? Text("Quiz will be created with: \n${widget.initialRound?.title} \n\n")
+                    ? Container(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Quiz will be created with:",
+                            ),
+                            Text(
+                              "\n\"${widget.initialRound?.title}\"\n",
+                            ),
+                          ],
+                        ),
+                      )
                     : Container(),
                 FormInput(
                   initialValue: _quiz.title,

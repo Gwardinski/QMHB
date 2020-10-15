@@ -4,7 +4,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quizzes_library_sidebar.dart';
-import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
+import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
@@ -26,14 +26,15 @@ class RoundCollectionPage extends StatelessWidget {
           title: Text("Your Rounds"),
           actions: <Widget>[
             FlatButton.icon(
-              icon: Icon(Icons.add_circle),
+              icon: Icon(Icons.add),
               label: Text('New'),
               onPressed: () {
-                showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return RoundCreateDialog();
-                  },
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => RoundEditorPage(
+                      type: RoundEditorType.ADD,
+                    ),
+                  ),
                 );
               },
             ),

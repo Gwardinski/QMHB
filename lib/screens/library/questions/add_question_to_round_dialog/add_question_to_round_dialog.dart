@@ -4,8 +4,9 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_new_round_button.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_round_button.dart';
+import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
+import 'package:qmhb/screens/library/widgets/add_to_dialog_button_new.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -18,6 +19,18 @@ class AddQuestionToRoundPageDialog extends StatelessWidget {
     @required this.questionModel,
   });
 
+  createNewRoundwithQuestion(context) {
+    Navigator.of(context).pop();
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return RoundCreateDialog(
+          initialQuestion: questionModel,
+        );
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
     return AlertDialog(
@@ -27,8 +40,11 @@ class AddQuestionToRoundPageDialog extends StatelessWidget {
         height: 400,
         child: Column(
           children: [
-            AddQuestionToNewRoundButton(
-              initialQuestion: questionModel,
+            AddToDialogButtonNew(
+              title: "Create New Round",
+              onTap: () {
+                createNewRoundwithQuestion(context);
+              },
             ),
             Expanded(
               child: StreamBuilder(

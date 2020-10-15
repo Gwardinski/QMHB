@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/rounds/rounds_library_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
@@ -48,7 +49,7 @@ class RecentRoundsRow extends StatelessWidget {
           ),
           child: StreamBuilder(
               stream: Provider.of<RoundCollectionService>(context).getRecentRoundStream(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container(
                     height: 128,
@@ -69,7 +70,7 @@ class RecentRoundsRow extends StatelessWidget {
                         ],
                       )
                     : HighlightRow(
-                        rounds: snapshot.data,
+                        rounds: snapshot.data.reversed.toList(),
                       );
               }),
         ),

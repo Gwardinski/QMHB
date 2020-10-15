@@ -40,7 +40,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
               value: RoundOptions.addToQuiz,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.file_upload),
+                  Icon(Icons.playlist_add),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Round to Quiz'),
                 ],

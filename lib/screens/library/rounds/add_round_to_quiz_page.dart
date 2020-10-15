@@ -44,7 +44,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
           title: Text("Select Rounds"),
           actions: <Widget>[
             FlatButton.icon(
-              icon: Icon(Icons.add_circle),
+              icon: Icon(Icons.add),
               label: Text('New'),
               onPressed: () {
                 Navigator.of(context).push(
@@ -59,7 +59,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
             ),
           ],
         ),
-        body: StreamBuilder<Object>(
+        body: StreamBuilder<QuizModel>(
           initialData: _quizModel,
           stream: QuizCollectionService().getQuizById(_quizModel.id),
           builder: (context, snapshot) {
@@ -69,7 +69,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
             return Column(
               children: [
                 Expanded(
-                  child: StreamBuilder(
+                  child: StreamBuilder<List<RoundModel>>(
                     stream: RoundCollectionService().getRoundsCreatedByUser(
                       userId: user.uid,
                     ),

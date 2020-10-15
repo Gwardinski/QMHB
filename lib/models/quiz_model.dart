@@ -81,5 +81,5 @@ class QuizModel {
     }
   }
 
-  QuizModel.newRound();
+  QuizModel.newQuiz();
 }

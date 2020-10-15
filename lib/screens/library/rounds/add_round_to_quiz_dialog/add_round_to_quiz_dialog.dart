@@ -4,8 +4,9 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/models/user_model.dart';
-import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog/add_round_to_new_quiz_button.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_button.dart';
+import 'package:qmhb/screens/library/widgets/add_to_dialog_button_new.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -18,6 +19,18 @@ class AddRoundToQuizDialog extends StatelessWidget {
     @required this.roundModel,
   });
 
+  createNewQuizWithRound(context) {
+    Navigator.of(context).pop();
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return QuizCreateDialog(
+          initialRound: roundModel,
+        );
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserDataStateModel>(context).user;
     return AlertDialog(
@@ -27,8 +40,11 @@ class AddRoundToQuizDialog extends StatelessWidget {
         height: 400,
         child: Column(
           children: [
-            AddRoundToNewQuizButton(
-              initialRound: roundModel,
+            AddToDialogButtonNew(
+              title: "Create New Quiz",
+              onTap: () {
+                createNewQuizWithRound(context);
+              },
             ),
             Expanded(
               child: StreamBuilder(

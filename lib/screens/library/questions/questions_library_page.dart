@@ -25,7 +25,7 @@ class QuestionsLibraryPage extends StatelessWidget {
         title: Text("Your Questions"),
         actions: <Widget>[
           FlatButton.icon(
-            icon: Icon(Icons.add_circle),
+            icon: Icon(Icons.add),
             label: Text('New'),
             onPressed: () {
               Navigator.of(context).push(

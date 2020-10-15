@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
+import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
@@ -20,14 +20,15 @@ class QuizzesLibraryPage extends StatelessWidget {
           title: Text("Your Quizzes"),
           actions: <Widget>[
             FlatButton.icon(
-              icon: Icon(Icons.add_circle),
+              icon: Icon(Icons.add),
               label: Text('New'),
               onPressed: () {
-                showDialog<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return QuizCreateDialog();
-                  },
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => QuizEditorPage(
+                      type: QuizEditorType.ADD,
+                    ),
+                  ),
                 );
               },
             ),

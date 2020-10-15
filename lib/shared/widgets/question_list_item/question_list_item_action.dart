@@ -40,7 +40,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               value: QuestionOptions.addToRound,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.file_upload),
+                  Icon(Icons.playlist_add),
                   Padding(padding: EdgeInsets.only(left: 16)),
                   Text('Add Question to Round'),
                 ],

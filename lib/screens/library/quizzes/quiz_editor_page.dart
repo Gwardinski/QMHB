@@ -17,17 +17,24 @@ import 'package:qmhb/shared/widgets/form/image_selector.dart';
 
 import '../../../get_it.dart';
 
+enum QuizEditorType {
+  ADD,
+  EDIT,
+}
+
 class QuizEditorPage extends StatefulWidget {
+  final QuizEditorType type;
   final QuizModel quizModel;
 
   QuizEditorPage({
+    @required this.type,
     this.quizModel,
   });
   @override
-  _QuizEditorState createState() => _QuizEditorState();
+  _QuizEditorPageState createState() => _QuizEditorPageState();
 }
 
-class _QuizEditorState extends State<QuizEditorPage> {
+class _QuizEditorPageState extends State<QuizEditorPage> {
   final _formKey = GlobalKey<FormState>();
   QuizModel _quiz;
   bool _isLoading = false;
@@ -37,7 +44,11 @@ class _QuizEditorState extends State<QuizEditorPage> {
   @override
   void initState() {
     super.initState();
-    _quiz = widget.quizModel;
+    if (widget.quizModel != null) {
+      _quiz = widget.quizModel;
+    } else {
+      _quiz = QuizModel.newQuiz();
+    }
   }
 
   _updateError(String val) {
@@ -54,7 +65,7 @@ class _QuizEditorState extends State<QuizEditorPage> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      _editQuiz();
+      widget.type == QuizEditorType.ADD ? _createQuiz() : _editQuiz();
     }
   }
 
@@ -89,6 +100,34 @@ class _QuizEditorState extends State<QuizEditorPage> {
     return await storageTaskSnapshot.ref.getDownloadURL();
   }
 
+  _createQuiz() async {
+    if (_formKey.currentState.validate()) {
+      _updateIsLoading(true);
+      _updateError('');
+      final quizService = Provider.of<QuizCollectionService>(context);
+      final userService = Provider.of<UserCollectionService>(context);
+      final userModel = Provider.of<UserDataStateModel>(context).user;
+      try {
+        if (_newImage != null) {
+          final newImageUrl = await _saveImage();
+          _quiz.imageURL = newImageUrl;
+        }
+        String newDocId = await quizService.addQuizToFirebaseCollection(
+          _quiz,
+          userModel.uid,
+        );
+        userModel.quizIds.add(newDocId);
+        await userService.updateUserDataOnFirebase(userModel);
+        Navigator.of(context).pop();
+      } catch (e) {
+        print(e.toString());
+        _updateError('Failed to create Question');
+      } finally {
+        _updateIsLoading(false);
+      }
+    }
+  }
+
   _editQuiz() async {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
@@ -121,7 +160,7 @@ class _QuizEditorState extends State<QuizEditorPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "Edit Quiz",
+          widget.type == QuizEditorType.ADD ? "Create Quiz" : "Edit Quiz",
         ),
       ),
       body: SingleChildScrollView(
@@ -166,7 +205,7 @@ class _QuizEditorState extends State<QuizEditorPage> {
                     removeImage: _removeImage,
                   ),
                   ButtonPrimary(
-                    text: "Save Quiz!",
+                    text: widget.type == QuizEditorType.ADD ? "Create" : "Save Changes",
                     isLoading: _isLoading,
                     onPressed: _onSubmit,
                     fullWidth: true,

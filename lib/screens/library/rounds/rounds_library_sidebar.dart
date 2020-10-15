@@ -88,7 +88,7 @@ class RoundsLibrarySidebarNewRound extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    Icons.add_circle,
+                    Icons.add,
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 16),

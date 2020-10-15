@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/library/quizzes/quizzes_library_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
@@ -48,7 +49,7 @@ class RecentQuizzesRow extends StatelessWidget {
           ),
           child: StreamBuilder(
               stream: Provider.of<QuizCollectionService>(context).getRecentQuizStream(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<QuizModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container(
                     height: 128,
@@ -69,7 +70,7 @@ class RecentQuizzesRow extends StatelessWidget {
                         ],
                       )
                     : HighlightRow(
-                        quizzes: snapshot.data,
+                        quizzes: snapshot.data.reversed.toList(),
                       );
               }),
         ),

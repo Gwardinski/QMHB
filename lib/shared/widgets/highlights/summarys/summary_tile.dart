@@ -102,7 +102,7 @@ class SummaryTileInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Text(
           value,
@@ -110,7 +110,7 @@ class SummaryTileInfoRow extends StatelessWidget {
             color: Theme.of(context).accentColor,
           ),
         ),
-        Text(title),
+        Text(" $title"),
       ],
     );
   }

@@ -1,45 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
 
-class AddRoundToNewQuizButton extends StatelessWidget {
-  AddRoundToNewQuizButton({
-    this.initialRound,
+class AddToDialogButtonNew extends StatelessWidget {
+  AddToDialogButtonNew({
+    @required this.title,
+    @required this.onTap,
   });
 
-  final RoundModel initialRound;
-
-  openNewRoundForm(context) {
-    Navigator.of(context).pop();
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return QuizCreateDialog(
-          initialRound: initialRound,
-        );
-      },
-    );
-  }
+  final String title;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        openNewRoundForm(context);
+        onTap();
       },
       child: Container(
         height: 64,
         padding: EdgeInsets.all(16),
         child: Center(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.add_circle,
+                Icons.add,
               ),
               Container(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
-                  "New Quiz",
+                  title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
