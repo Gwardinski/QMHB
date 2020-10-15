@@ -89,6 +89,7 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
       MaterialPageRoute(
         builder: (context) => QuizEditorPage(
           quizModel: widget.quizModel,
+          type: QuizEditorType.EDIT,
         ),
       ),
     );

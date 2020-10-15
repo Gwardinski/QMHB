@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
-class QuizListItemLine3 extends StatelessWidget {
-  const QuizListItemLine3({
+class ListItemLine3 extends StatelessWidget {
+  const ListItemLine3({
     Key key,
-    @required this.points,
-    @required this.rounds,
-    @required this.questions,
+    @required this.info1Title,
+    @required this.info1Value,
+    @required this.info2Title,
+    @required this.info2Value,
+    @required this.info3Title,
+    @required this.info3Value,
   }) : super(key: key);
 
-  final String points;
-  final String rounds;
-  final String questions;
+  final String info1Title;
+  final String info1Value;
+  final String info2Title;
+  final String info2Value;
+  final String info3Title;
+  final String info3Value;
 
   @override
   Widget build(BuildContext context) {
@@ -20,33 +26,33 @@ class QuizListItemLine3 extends StatelessWidget {
         children: [
           Row(
             children: <Widget>[
-              Text("Rounds: "),
+              Text(info1Title),
               Text(
-                rounds,
+                info1Value,
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                 ),
               ),
             ],
           ),
-          Padding(padding: EdgeInsets.only(left: 32)),
+          Padding(padding: EdgeInsets.only(left: 16)),
           Row(
             children: <Widget>[
-              Text("Questions: "),
+              Text(info2Title),
               Text(
-                questions,
+                info2Value,
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                 ),
               ),
             ],
           ),
-          Padding(padding: EdgeInsets.only(left: 32)),
+          Padding(padding: EdgeInsets.only(left: 16)),
           Row(
             children: <Widget>[
-              Text("Points: "),
+              Text(info3Title ?? ""),
               Text(
-                points,
+                info3Value ?? "",
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                 ),

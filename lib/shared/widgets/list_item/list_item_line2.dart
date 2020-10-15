@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RoundListItemLine2 extends StatelessWidget {
-  const RoundListItemLine2({
+class ListItemLine2 extends StatelessWidget {
+  const ListItemLine2({
     Key key,
     @required this.description,
   }) : super(key: key);

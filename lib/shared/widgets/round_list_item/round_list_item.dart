@@ -5,9 +5,9 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/details/round/round_details_page.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
+import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_add_to_quiz.dart';
-import 'package:qmhb/shared/widgets/round_list_item/round_list_item_details.dart';
 
 enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
@@ -85,8 +85,15 @@ class RoundListItemContent extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingSm),
             ),
-            RoundListItemDetails(
-              roundModel: roundModel,
+            ListItemDetails(
+              title: roundModel.title,
+              description: roundModel.description,
+              info1Title: "Points: ",
+              info1Value: roundModel.totalPoints.toString(),
+              info2Title: "Questions: ",
+              info2Value: roundModel.questionIds.length.toString(),
+              info3Title: null,
+              info3Value: null,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),

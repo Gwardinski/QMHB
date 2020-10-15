@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RoundListItemLine1 extends StatelessWidget {
-  const RoundListItemLine1({
+class ListItemLine1 extends StatelessWidget {
+  const ListItemLine1({
     Key key,
-    @required this.text,
+    @required this.title,
   }) : super(key: key);
 
-  final String text;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class RoundListItemLine1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            text,
+            title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.start,
