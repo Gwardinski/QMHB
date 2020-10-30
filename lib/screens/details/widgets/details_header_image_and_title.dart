@@ -23,11 +23,9 @@ class DetailsHeaderImageAndTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          imageURL != null
-              ? DetailsHeaderProfileImage(
-                  imageURL: imageURL,
-                )
-              : Container(),
+          DetailsHeaderProfileImage(
+            imageURL: imageURL,
+          ),
           DetailsHeaderTypeAndTitle(
             type: type,
             title: title,

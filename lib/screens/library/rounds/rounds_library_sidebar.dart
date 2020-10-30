@@ -28,8 +28,8 @@ class RoundsLibrarySidebar extends StatelessWidget {
           RoundsLibrarySidebarNewRound(),
           Expanded(
             child: StreamBuilder(
-              stream: RoundCollectionService().getRoundsCreatedByUser(
-                userId: user.uid,
+              stream: RoundCollectionService().streamRoundsByIds(
+                ids: user.roundIds,
               ),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

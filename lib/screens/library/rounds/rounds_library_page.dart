@@ -48,8 +48,8 @@ class RoundCollectionPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: StreamBuilder(
-                      stream: RoundCollectionService().getRoundsCreatedByUser(
-                        userId: user.uid,
+                      stream: RoundCollectionService().streamRoundsByIds(
+                        ids: user.roundIds,
                       ),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {

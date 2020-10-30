@@ -10,6 +10,7 @@ class UserDataStateModel extends ChangeNotifier {
   bool get isAuthenticated => _isAuthenticated;
 
   updateCurrentUser(UserModel updatedUser) {
+    print("updateCurrentUser");
     try {
       _userModel = updatedUser;
       _isAuthenticated = true;
@@ -22,6 +23,7 @@ class UserDataStateModel extends ChangeNotifier {
   }
 
   void removeCurrentUser() {
+    print("removeCurrentUser");
     _userModel = null;
     _isAuthenticated = false;
     notifyListeners();

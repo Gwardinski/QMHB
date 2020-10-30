@@ -5,7 +5,13 @@ class UserCollectionService {
   // DB collections
   final CollectionReference _usersCollection = FirebaseFirestore.instance.collection('users');
 
-  // Log in user
+  Stream<UserModel> getUserStream(uid) {
+    print("getUserStream");
+    return _usersCollection.doc(uid).snapshots().map((user) {
+      return UserModel.fromFirebase(user);
+    });
+  }
+
   Future<DocumentSnapshot> getUserFromUsersCollectionUsingUID(uid) async {
     try {
       return await _usersCollection.doc(uid).get();
@@ -15,14 +21,6 @@ class UserCollectionService {
     }
   }
 
-  // stream user changes - called on base widget UserListener
-  Stream<UserModel> getUserStream(id) {
-    return _usersCollection.doc(id).snapshots().map((user) {
-      return UserModel.fromFirebase(user);
-    });
-  }
-
-  // Update user on Firebase
   Future updateUserDataOnFirebase(UserModel userModel) async {
     return await _usersCollection.doc(userModel.uid).set({
       "uid": userModel.uid,

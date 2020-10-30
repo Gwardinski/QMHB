@@ -21,8 +21,8 @@ class DetailsHeaderProfileImage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 120,
-                  width: 120,
+                  height: 128,
+                  width: 128,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(getIt<AppSize>().borderRadius),

@@ -35,7 +35,6 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -61,64 +60,80 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
         ),
         body: StreamBuilder<QuizModel>(
           initialData: _quizModel,
-          stream: QuizCollectionService().getQuizById(_quizModel.id),
+          stream: QuizCollectionService().streamQuizById(id: _quizModel.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return ErrorMessage(message: "An error occured loading this Quiz");
             }
-            return Column(
-              children: [
-                Expanded(
-                  child: StreamBuilder<List<RoundModel>>(
-                    stream: RoundCollectionService().getRoundsCreatedByUser(
-                      userId: user.uid,
-                    ),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: LoadingSpinnerHourGlass(),
-                        );
-                      }
-                      if (snapshot.hasError == true) {
-                        return ErrorMessage(message: "An error occured loading your Rounds");
-                      }
-                      return snapshot.data.length > 0
-                          ? ListView.separated(
-                              separatorBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                );
-                              },
-                              itemCount: snapshot.data.length ?? 0,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (BuildContext context, int index) {
-                                RoundModel roundModel = snapshot.data[index];
-                                return RoundListItem(
-                                  canDrag: false,
-                                  roundModel: roundModel,
-                                  quizModel: widget.quizModel,
-                                );
-                              },
-                            )
-                          : Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CreateNewQuizOrRound(
-                                    type: CreateNewQuizOrRoundType.ROUND,
-                                  ),
-                                ],
-                              ),
-                            );
-                    },
-                  ),
-                ),
-              ],
-            );
+            return AddRoundToQuizList(quizModel: snapshot.data);
           },
         ),
       ),
+    );
+  }
+}
+
+class AddRoundToQuizList extends StatelessWidget {
+  const AddRoundToQuizList({
+    Key key,
+    @required this.quizModel,
+  }) : super(key: key);
+
+  final QuizModel quizModel;
+
+  @override
+  Widget build(BuildContext context) {
+    print("AddRoundToQuizList");
+    final user = Provider.of<UserDataStateModel>(context).user;
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder<List<RoundModel>>(
+            stream: RoundCollectionService().streamRoundsByIds(
+              ids: user.roundIds,
+            ),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: LoadingSpinnerHourGlass(),
+                );
+              }
+              if (snapshot.hasError == true) {
+                return ErrorMessage(message: "An error occured loading your Rounds");
+              }
+              return snapshot.data.length > 0
+                  ? ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                        );
+                      },
+                      itemCount: snapshot.data.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        RoundModel roundModel = snapshot.data[index];
+                        return RoundListItem(
+                          canDrag: false,
+                          roundModel: roundModel,
+                          quizModel: quizModel,
+                        );
+                      },
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CreateNewQuizOrRound(
+                            type: CreateNewQuizOrRoundType.ROUND,
+                          ),
+                        ],
+                      ),
+                    );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
