@@ -48,8 +48,8 @@ class AddQuestionToRoundPageDialog extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: RoundCollectionService().getRoundsCreatedByUser(
-                  userId: user.uid,
+                stream: RoundCollectionService().streamRoundsByIds(
+                  ids: user.roundIds,
                 ),
                 builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

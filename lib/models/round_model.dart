@@ -6,8 +6,6 @@ class RoundModel {
   String title;
   String description;
   String imageURL;
-  int rating;
-  int difficulty;
   List<String> questionIds;
   double totalPoints;
   bool isPublished;
@@ -21,8 +19,6 @@ class RoundModel {
     this.description,
     this.imageURL,
     this.questionIds,
-    this.rating,
-    this.difficulty,
     this.totalPoints,
     this.isPublished,
   });
@@ -35,8 +31,6 @@ class RoundModel {
     this.title = json['title'];
     this.description = json['description'];
     this.imageURL = json['imageURL'];
-    this.rating = json['rating'] ?? 0;
-    this.difficulty = json['difficulty'] ?? 0;
     this.totalPoints = json['totalPoints'] ?? 0;
     this.isPublished = json['isPublished'] ?? false;
     questionIds = List<String>();
@@ -54,8 +48,6 @@ class RoundModel {
     this.title = document.data()['title'];
     this.description = document.data()['description'];
     this.imageURL = document.data()['imageURL'];
-    this.rating = document.data()['rating'] ?? 0;
-    this.difficulty = document.data()['difficulty'] ?? 0;
     this.totalPoints = document.data()['totalPoints'] ?? 0;
     this.isPublished = document.data()['isPublished'] ?? false;
     questionIds = List<String>();
@@ -64,6 +56,25 @@ class RoundModel {
         questionIds.add(id);
       });
     }
+  }
+
+  toFirebase({
+    RoundModel roundModel,
+    String docId,
+    String uid,
+    DateTime lastUpdated,
+  }) {
+    return {
+      "id": docId,
+      "uid": uid,
+      "title": roundModel.title,
+      "description": roundModel.description,
+      "imageURL": roundModel.imageURL,
+      "questionIds": roundModel.questionIds,
+      "isPublished": false,
+      "createdAt": roundModel.createdAt ?? lastUpdated,
+      "lastUpdated": lastUpdated,
+    };
   }
 
   RoundModel.newRound();

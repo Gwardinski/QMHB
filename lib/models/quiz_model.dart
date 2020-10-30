@@ -6,8 +6,6 @@ class QuizModel {
   String title;
   String description;
   String imageURL;
-  int rating;
-  int difficulty;
   double totalPoints;
   bool isPublished;
   List<String> roundIds;
@@ -21,8 +19,6 @@ class QuizModel {
     this.title,
     this.description,
     this.imageURL,
-    this.rating,
-    this.difficulty,
     this.totalPoints,
     this.roundIds,
     this.questionIds,
@@ -35,8 +31,6 @@ class QuizModel {
     this.lastUpdated = json['lastUpdated'];
     this.createdAt = json['createdAt'];
     this.title = json['title'];
-    this.rating = json['rating'] ?? 0;
-    this.difficulty = json['difficulty'] ?? 0;
     this.totalPoints = json['totalPoints'] ?? 0;
     this.description = json['description'];
     this.imageURL = json['imageURL'];
@@ -61,8 +55,6 @@ class QuizModel {
     this.lastUpdated = document.data()['lastUpdated'].toDate();
     this.createdAt = document.data()['createdAt'].toDate();
     this.title = document.data()['title'];
-    this.rating = document.data()['rating'] ?? 0;
-    this.difficulty = document.data()['difficulty'] ?? 0;
     this.totalPoints = document.data()['totalPoints'] ?? 0;
     this.description = document.data()['description'];
     this.imageURL = document.data()['imageURL'];
@@ -79,6 +71,25 @@ class QuizModel {
         questionIds.add(id);
       });
     }
+  }
+
+  toFirebase({
+    QuizModel quizModel,
+    String docId,
+    String uid,
+    DateTime lastUpdated,
+  }) {
+    return {
+      "id": docId,
+      "uid": uid,
+      "title": quizModel.title,
+      "description": quizModel.description,
+      "imageURL": quizModel.imageURL,
+      "roundIds": quizModel.roundIds,
+      "isPublished": false,
+      "createdAt": quizModel.createdAt ?? lastUpdated,
+      "lastUpdated": lastUpdated,
+    };
   }
 
   QuizModel.newQuiz();

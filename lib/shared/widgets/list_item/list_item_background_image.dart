@@ -2,27 +2,27 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class DetailsHeaderBannerImage extends StatelessWidget {
-  const DetailsHeaderBannerImage({
+class ItemBackgroundImage extends StatelessWidget {
+  const ItemBackgroundImage({
     Key key,
-    @required this.imageURL,
+    @required this.imageUrl,
   }) : super(key: key);
 
-  final String imageURL;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 300,
+      width: 200,
+      height: 112,
       decoration: BoxDecoration(
-        image: imageURL != null
+        image: imageUrl != null
             ? DecorationImage(
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
                 matchTextDirection: true,
                 repeat: ImageRepeat.noRepeat,
-                image: NetworkImage(imageURL),
+                image: NetworkImage(imageUrl),
               )
             : null,
       ),
@@ -31,11 +31,11 @@ class DetailsHeaderBannerImage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter,
+                begin: FractionalOffset.centerLeft,
+                end: FractionalOffset.centerRight,
                 colors: [
                   Theme.of(context).accentColor.withOpacity(0.2),
-                  Theme.of(context).canvasColor.withOpacity(1),
+                  Theme.of(context).canvasColor,
                 ],
                 stops: [0.0, 1.0],
               ),
@@ -45,15 +45,17 @@ class DetailsHeaderBannerImage extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1, sigmaY: 0),
               child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.1),
-                      Theme.of(context).canvasColor.withOpacity(1),
-                    ],
-                    stops: [0.0, 1.0],
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: FractionalOffset.centerLeft,
+                      end: FractionalOffset.centerRight,
+                      colors: [
+                        Colors.black.withOpacity(0.5),
+                        Theme.of(context).canvasColor,
+                      ],
+                      stops: [0.0, 1.0],
+                    ),
                   ),
                 ),
               ),
