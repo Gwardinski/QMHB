@@ -44,49 +44,53 @@ class DetailsHeader extends StatelessWidget {
               type: type,
               title: title,
               imageURL: imageURL,
+            ),
+            Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 240)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: InfoColumn(
+                        title: info1Title,
+                        value: info1Value,
+                      ),
+                    ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: InfoColumn(
+                        title: info2Title,
+                        value: info2Value,
+                      ),
+                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: InfoColumn(
+                        title: info3Title,
+                        value: info3Value,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    32,
+                    description != null ? getIt<AppSize>().spacingLg : getIt<AppSize>().spacingSm,
+                    32,
+                    description != null ? 24 : 0,
+                  ),
+                  child: Text(
+                    description ?? '',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
-        ),
-        Padding(padding: EdgeInsets.only(bottom: getIt<AppSize>().spacingLg)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: InfoColumn(
-                title: info1Title,
-                value: info1Value,
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: InfoColumn(
-                title: info2Title,
-                value: info2Value,
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: InfoColumn(
-                title: info3Title,
-                value: info3Value,
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            32,
-            description != null ? getIt<AppSize>().spacingLg : getIt<AppSize>().spacingSm,
-            32,
-            description != null ? 24 : 0,
-          ),
-          child: Text(
-            description ?? '',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/questions_library_page.dart';
 import 'package:qmhb/services/question_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -25,6 +26,7 @@ class RecentQuestionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
         SummaryRowHeader(
@@ -38,7 +40,10 @@ class RecentQuestionsRow extends StatelessWidget {
           },
         ),
         StreamBuilder(
-            stream: Provider.of<QuestionCollectionService>(context).getRecentQuestionStream(),
+            stream: Provider.of<QuestionCollectionService>(context).streamQuestionsByIds(
+              ids: user.questionIds,
+              limit: 8,
+            ),
             builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Container(

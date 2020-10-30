@@ -48,8 +48,8 @@ class AddRoundToQuizDialog extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: QuizCollectionService().getQuizzesCreatedByUser(
-                  userId: user.uid,
+                stream: QuizCollectionService().streamQuizzesByIds(
+                  ids: user.quizIds,
                 ),
                 builder: (BuildContext context, AsyncSnapshot<List<QuizModel>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

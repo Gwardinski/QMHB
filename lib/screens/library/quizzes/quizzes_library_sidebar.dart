@@ -29,8 +29,8 @@ class QuizzesLibrarySidebar extends StatelessWidget {
           UserQuizzesSidebarTitle(),
           Expanded(
             child: StreamBuilder(
-              stream: QuizCollectionService().getQuizzesCreatedByUser(
-                userId: user.uid,
+              stream: QuizCollectionService().streamQuizzesByIds(
+                ids: user.quizIds,
               ),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

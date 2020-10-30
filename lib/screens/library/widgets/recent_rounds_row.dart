@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/rounds_library_page.dart';
 import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -28,6 +29,7 @@ class RecentRoundsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
         SummaryRowHeader(
@@ -48,7 +50,10 @@ class RecentRoundsRow extends StatelessWidget {
             getIt<AppSize>().rSpacingSm,
           ),
           child: StreamBuilder(
-              stream: Provider.of<RoundCollectionService>(context).getRecentRoundStream(),
+              stream: Provider.of<RoundCollectionService>(context).streamRoundsByIds(
+                ids: user.roundIds,
+                limit: 8,
+              ),
               builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container(

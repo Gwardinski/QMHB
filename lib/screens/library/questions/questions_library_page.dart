@@ -18,6 +18,7 @@ class QuestionsLibraryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("QuestionsLibraryPage");
     final user = Provider.of<UserDataStateModel>(context).user;
     return Scaffold(
       appBar: AppBar(
@@ -47,8 +48,8 @@ class QuestionsLibraryPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: StreamBuilder(
-                    stream: QuestionCollectionService().getQuestionsCreatedByUser(
-                      userId: user.uid,
+                    stream: QuestionCollectionService().streamQuestionsByIds(
+                      ids: user.questionIds,
                     ),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

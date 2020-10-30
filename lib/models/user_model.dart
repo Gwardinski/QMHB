@@ -44,9 +44,6 @@ class UserModel {
   }
 
   UserModel.fromFirebase(DocumentSnapshot document) {
-    print(document);
-    print(document.data()['lastUpdated']);
-    print(document.data()['createdAt']);
     uid = document.data()['uid'];
     email = document.data()['email'];
     displayName = document.data()['displayName'];
@@ -88,6 +85,5 @@ class UserModel {
         savedQuestionIds.add(id);
       });
     }
-    print(2);
   }
 }

@@ -15,8 +15,7 @@ class DetailsHeaderBannerImage extends StatelessWidget {
     return imageURL != null
         ? Container(
             width: double.infinity,
-            height: 120,
-            margin: EdgeInsets.only(bottom: 32),
+            height: 300,
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
@@ -26,21 +25,38 @@ class DetailsHeaderBannerImage extends StatelessWidget {
                 image: NetworkImage(imageURL),
               ),
             ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.8),
-                      Theme.of(context).accentColor.withOpacity(0.1),
-                    ],
-                    stops: [0.0, 1.0],
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: FractionalOffset.topCenter,
+                      end: FractionalOffset.bottomCenter,
+                      colors: [
+                        Theme.of(context).accentColor.withOpacity(0.2),
+                        Theme.of(context).canvasColor.withOpacity(1),
+                      ],
+                      stops: [0.0, 1.0],
+                    ),
                   ),
                 ),
-              ),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 1, sigmaY: 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: FractionalOffset.topCenter,
+                        end: FractionalOffset.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.1),
+                          Theme.of(context).canvasColor.withOpacity(1),
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           )
         : Container(

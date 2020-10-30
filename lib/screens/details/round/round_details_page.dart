@@ -34,7 +34,9 @@ class RoundDetailsPage extends StatelessWidget {
       ),
       body: StreamBuilder(
         initialData: roundModel,
-        stream: Provider.of<RoundCollectionService>(context).getRoundById(roundModel.id),
+        stream: Provider.of<RoundCollectionService>(context).streamRoundById(
+          id: roundModel.id,
+        ),
         builder: (BuildContext context, AsyncSnapshot<RoundModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(
@@ -45,7 +47,6 @@ class RoundDetailsPage extends StatelessWidget {
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading this Round");
           }
-          print(snapshot.data.questionIds.length);
           return SingleChildScrollView(
             child: Column(
               children: [

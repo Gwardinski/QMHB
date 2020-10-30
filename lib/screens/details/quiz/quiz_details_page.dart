@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/details/quiz/widgets/quiz_details_rounds_list.dart';
-import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.dart';
 import 'package:qmhb/screens/details/widgets/details_list_empty.dart';
 import 'package:qmhb/screens/details/widgets/details_header.dart';
-import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_page.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/round_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -38,7 +34,9 @@ class QuizDetailsPage extends StatelessWidget {
       ),
       body: StreamBuilder(
         initialData: quizModel,
-        stream: Provider.of<QuizCollectionService>(context).getQuizById(quizModel.id),
+        stream: Provider.of<QuizCollectionService>(context).streamQuizById(
+          id: quizModel.id,
+        ),
         builder: (BuildContext context, AsyncSnapshot<QuizModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(
@@ -49,7 +47,6 @@ class QuizDetailsPage extends StatelessWidget {
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading this Quiz");
           }
-          print(snapshot.data.questionIds.length);
           return SingleChildScrollView(
             child: Column(
               children: [

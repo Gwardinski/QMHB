@@ -15,21 +15,14 @@ class AuthenticationService {
     this.userDataStateModel,
   }) {
     _auth.authStateChanges().listen((user) {
-      print(user);
       if (user != null) {
-        _updateUserState(user);
+        _userService.getUserStream(user.uid).listen((userModel) {
+          userDataStateModel.updateCurrentUser(userModel);
+        });
       } else {
         userDataStateModel.removeCurrentUser();
       }
     });
-  }
-
-  _updateUserState(User user) async {
-    final userDoc = await _userService.getUserFromUsersCollectionUsingUID(
-      user.uid,
-    );
-    final userModel = UserModel.fromFirebase(userDoc);
-    userDataStateModel.updateCurrentUser(userModel);
   }
 
   Future<void> googleSignIn() async {

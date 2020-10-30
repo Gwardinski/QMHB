@@ -35,7 +35,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
+    print("AddQuestionToRoundPage");
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -59,61 +59,79 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
       ),
       body: StreamBuilder<RoundModel>(
         initialData: _roundModel,
-        stream: RoundCollectionService().getRoundById(_roundModel.id),
+        stream: RoundCollectionService().streamRoundById(
+          id: _roundModel.id,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading your Round");
           }
-          return Column(
-            children: [
-              Expanded(
-                child: StreamBuilder<List<QuestionModel>>(
-                  stream: QuestionCollectionService().getQuestionsCreatedByUser(
-                    userId: user.uid,
-                  ),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: LoadingSpinnerHourGlass(),
-                      );
-                    }
-                    if (snapshot.hasError == true) {
-                      return ErrorMessage(message: "An error occured loading your Questions");
-                    }
-                    return snapshot.data.length > 0
-                        ? ListView.separated(
-                            separatorBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 8),
-                              );
-                            },
-                            itemCount: snapshot.data.length ?? 0,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              QuestionModel questionModel = snapshot.data[index];
-                              return QuestionListItem(
-                                questionModel: questionModel,
-                                roundModel: widget.roundModel,
-                                canDrag: false,
-                              );
-                            },
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(top: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CreateFirstQuestionButton(),
-                              ],
-                            ),
-                          );
-                  },
-                ),
-              ),
-            ],
-          );
+          return AddQuestionToRoundList(roundModel: snapshot.data);
         },
       ),
+    );
+  }
+}
+
+class AddQuestionToRoundList extends StatelessWidget {
+  const AddQuestionToRoundList({
+    Key key,
+    @required this.roundModel,
+  }) : super(key: key);
+
+  final RoundModel roundModel;
+
+  @override
+  Widget build(BuildContext context) {
+    print("AddQuestionToRoundList");
+    final user = Provider.of<UserDataStateModel>(context).user;
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder<List<QuestionModel>>(
+            stream: QuestionCollectionService().streamQuestionsByIds(
+              ids: user.questionIds,
+            ),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: LoadingSpinnerHourGlass(),
+                );
+              }
+              if (snapshot.hasError == true) {
+                return ErrorMessage(message: "An error occured loading your Questions");
+              }
+              return snapshot.data.length > 0
+                  ? ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                        );
+                      },
+                      itemCount: snapshot.data.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        QuestionModel questionModel = snapshot.data[index];
+                        return QuestionListItem(
+                          questionModel: questionModel,
+                          roundModel: roundModel,
+                          canDrag: false,
+                        );
+                      },
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CreateFirstQuestionButton(),
+                        ],
+                      ),
+                    );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

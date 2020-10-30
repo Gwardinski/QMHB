@@ -1,131 +1,92 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 
 class RoundCollectionService {
-  final CollectionReference _roundsCollection = FirebaseFirestore.instance.collection('rounds');
+  // DB
+  final CollectionReference _roundsCollection = FirebaseFirestore.instance.collection(
+    'rounds',
+  );
 
-  Stream<List<RoundModel>> getRoundsCreatedByUser({
-    String userId,
-    String orderBy = "lastUpdated",
-    int limit = 100,
+  // GET SINGLE
+  Stream<RoundModel> streamRoundById({
+    @required String id,
   }) {
-    return _roundsCollection
-        .where("uid", isEqualTo: userId)
-        // .orderBy(orderBy)
-        // .limit(limit)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
-    });
-  }
-
-  Stream<List<RoundModel>> getRoundsSavedByUser({
-    List<String> savedIds,
-    String orderBy = "lastUpdated",
-    int limit = 100,
-  }) {
-    return _roundsCollection
-        // where id is equal to one of savedIds
-        // .orderBy(orderBy)
-        // .limit(limit)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
-    });
-  }
-
-  Stream<List<RoundModel>> getRecentRoundStream() {
-    return _roundsCollection.orderBy("lastUpdated").limit(10).snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
-    });
-  }
-
-  Stream<RoundModel> getRoundById(String id) {
     return _roundsCollection.where("id", isEqualTo: id).snapshots().map((snapshot) {
       return RoundModel.fromFirebase(snapshot.docs.single);
     });
   }
 
-  Stream<List<RoundModel>> getRoundsByIds(List<String> ids) {
-    return _roundsCollection.where("id", whereIn: ids).snapshots().map((snapshot) {
+  // GET MANY
+  Stream<List<RoundModel>> streamRoundsByIds({
+    @required List<String> ids,
+    String orderBy = "lastUpdated",
+    int limit = 100,
+  }) {
+    return _roundsCollection
+        .where("id", whereIn: ids)
+        // .orderBy(orderBy)
+        // .limit(limit)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs.map((doc) => RoundModel.fromFirebase(doc)).toList();
     });
   }
 
-  Future<String> addRoundToFirebaseCollection(RoundModel roundModel, String uid) async {
-    final serverTimestamp = Timestamp.now().toDate();
+  // POST
+  Future<String> addRoundToFirebaseCollection(
+    RoundModel roundModel,
+    String uid,
+  ) async {
     final newDocId = _roundsCollection.doc().id;
-    await _roundsCollection.doc(newDocId).set({
-      "id": newDocId,
-      "uid": uid,
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "imageURL": roundModel.imageURL,
-      "questionIds": roundModel.questionIds,
-      "isPublished": false,
-      "createdAt": serverTimestamp,
-      "lastUpdated": serverTimestamp,
-    });
+    final round = roundModel.toFirebase(
+      roundModel: roundModel,
+      uid: uid,
+      docId: newDocId,
+      lastUpdated: Timestamp.now().toDate(),
+    );
+    await _roundsCollection.doc(newDocId).set(round);
     return newDocId;
   }
 
-  Future<void> editRoundOnFirebaseCollection(RoundModel roundModel) async {
-    final serverTimestamp = Timestamp.now().toDate();
-    return await _roundsCollection.doc(roundModel.id).set({
-      "id": roundModel.id,
-      "uid": roundModel.uid,
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "imageURL": roundModel.imageURL,
-      "questionIds": roundModel.questionIds,
-      "isPublished": false,
-      "createdAt": roundModel.createdAt,
-      "lastUpdated": serverTimestamp,
-    });
+  // PUT
+  Future<void> editRoundOnFirebaseCollection(
+    RoundModel roundModel,
+  ) async {
+    final round = roundModel.toFirebase(
+      roundModel: roundModel,
+      uid: roundModel.uid,
+      docId: roundModel.id,
+      lastUpdated: Timestamp.now().toDate(),
+    );
+    return await _roundsCollection.doc(roundModel.id).set(round);
   }
 
-  Future<void> deleteRoundOnFirebaseCollection(String id) async {
+  Future<void> addQuestionToRound(
+    RoundModel roundModel,
+    QuestionModel question,
+  ) async {
+    final ids = roundModel.questionIds;
+    ids.add(question.id);
+    editRoundOnFirebaseCollection(roundModel);
+  }
+
+  Future<void> removeQuestionFromRound(
+    RoundModel roundModel,
+    QuestionModel question,
+  ) async {
+    final ids = roundModel.questionIds;
+    ids.remove(question.id);
+    editRoundOnFirebaseCollection(roundModel);
+  }
+
+  // DELETE
+  Future<void> deleteRoundOnFirebaseCollection(
+    String id,
+  ) async {
     await _roundsCollection.doc(id).delete();
     // remove from all quizzes where used
     // remove from user model
-  }
-
-  Future<void> addQuestionToRound(RoundModel roundModel, QuestionModel question) async {
-    final serverTimestamp = Timestamp.now().toDate();
-    final ids = roundModel.questionIds;
-    ids.add(question.id);
-    try {
-      return await _roundsCollection.doc(roundModel.id).set(
-        {
-          "questionIds": ids,
-          "lastUpdated": serverTimestamp,
-        },
-        SetOptions(
-          merge: true,
-        ),
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> removeQuestionFromRound(RoundModel roundModel, QuestionModel question) async {
-    final serverTimestamp = Timestamp.now().toDate();
-    final ids = roundModel.questionIds;
-    ids.remove(question.id);
-    try {
-      return await _roundsCollection.doc(roundModel.id).set(
-        {
-          "questionIds": ids,
-          "lastUpdated": serverTimestamp,
-        },
-        SetOptions(
-          merge: true,
-        ),
-      );
-    } catch (e) {
-      print(e);
-    }
   }
 }

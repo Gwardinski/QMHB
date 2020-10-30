@@ -19,7 +19,7 @@ class RoundDetailsQuestionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     QuestionCollectionService questionService = Provider.of<QuestionCollectionService>(context);
     return StreamBuilder(
-      stream: questionService.getQuestionsByIds(roundModel.questionIds),
+      stream: questionService.streamQuestionsByIds(ids: roundModel.questionIds),
       builder: (
         BuildContext context,
         AsyncSnapshot<List<QuestionModel>> snapshot,

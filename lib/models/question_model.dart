@@ -64,6 +64,28 @@ class QuestionModel {
     this.isPublished = document.data()['isPublished'] ?? false;
   }
 
+  toFirebase({
+    QuestionModel questionModel,
+    String docId,
+    String uid,
+    DateTime lastUpdated,
+  }) {
+    return {
+      "id": docId,
+      "uid": uid,
+      "question": questionModel.question,
+      "questionType": questionModel.questionType,
+      "answer": questionModel.answer,
+      "imageURL": questionModel.imageURL,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+      "isPublished": false,
+      "createdAt": questionModel.createdAt ?? lastUpdated,
+      "lastUpdated": lastUpdated,
+    };
+  }
+
   QuestionModel.newQuestion() {
     this.points = 1;
     this.questionType = "STANDARD";
