@@ -15,7 +15,7 @@ class DetailsHeaderTypeAndTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: hasImage ? 200 : null,
+        height: hasImage ? 200 : 160,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: hasImage ? CrossAxisAlignment.start : CrossAxisAlignment.center,
