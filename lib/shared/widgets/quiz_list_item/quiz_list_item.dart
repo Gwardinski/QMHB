@@ -3,6 +3,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
+import 'package:qmhb/screens/play/play_quiz_page.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
@@ -13,11 +14,13 @@ enum QuizOptions { save, edit, delete, details, addToQuiz, publish }
 class QuizListItem extends StatefulWidget {
   final QuizModel quizModel;
   final bool canDrag;
+  final bool play;
 
   QuizListItem({
     Key key,
     @required this.quizModel,
     this.canDrag = false,
+    this.play = false,
   }) : super(key: key);
 
   @override
@@ -29,7 +32,8 @@ class _QuizListItemState extends State<QuizListItem> {
   Widget build(BuildContext context) {
     final listItemStack = QuizListItemStack(
       quizModel: widget.quizModel,
-      viewQuizDetails: _viewQuizDetails,
+      onTap: widget.play ? _playQuiz : _viewQuizDetails,
+      play: widget.play,
     );
     return widget.canDrag
         ? Draggable<QuizModel>(
@@ -52,24 +56,35 @@ class _QuizListItemState extends State<QuizListItem> {
       ),
     );
   }
+
+  _playQuiz() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PlayPage(
+          quizModel: widget.quizModel,
+          // type: SelectQuizToPlayPageType.LOCAL,
+        ),
+      ),
+    );
+  }
 }
 
 class QuizListItemStack extends StatelessWidget {
   const QuizListItemStack({
     Key key,
     @required this.quizModel,
-    @required this.viewQuizDetails,
+    @required this.onTap,
+    @required this.play,
   }) : super(key: key);
 
-  final viewQuizDetails;
+  final onTap;
   final QuizModel quizModel;
+  final bool play;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        viewQuizDetails();
-      },
+      onTap: onTap,
       child: Container(
         height: 112,
         child: Stack(
@@ -83,6 +98,7 @@ class QuizListItemStack extends StatelessWidget {
             ),
             QuizListItemContent(
               quizModel: quizModel,
+              play: play,
             ),
           ],
         ),
@@ -95,9 +111,11 @@ class QuizListItemContent extends StatelessWidget {
   const QuizListItemContent({
     Key key,
     @required this.quizModel,
+    @required this.play,
   }) : super(key: key);
 
   final QuizModel quizModel;
+  final bool play;
 
   @override
   Widget build(BuildContext context) {
@@ -120,12 +138,29 @@ class QuizListItemContent extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-            child: QuizListItemAction(
-              quizModel: quizModel,
-            ),
+            child: play
+                ? QuizPlayButton()
+                : QuizListItemAction(
+                    quizModel: quizModel,
+                  ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class QuizPlayButton extends StatelessWidget {
+  const QuizPlayButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 64,
+      height: 64,
+      child: Icon(Icons.play_arrow),
     );
   }
 }

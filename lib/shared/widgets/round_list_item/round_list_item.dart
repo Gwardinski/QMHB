@@ -82,11 +82,13 @@ class RoundListItemStack extends StatelessWidget {
         child: Stack(
           children: [
             ItemBackgroundImage(imageUrl: roundModel.imageURL),
-            Container(
-              height: 112,
-              width: double.infinity,
-              margin: EdgeInsets.only(left: 200),
-              color: Theme.of(context).canvasColor,
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                height: 112,
+                width: 64,
+                color: Theme.of(context).canvasColor,
+              ),
             ),
             RoundListItemContent(
               roundModel: roundModel,

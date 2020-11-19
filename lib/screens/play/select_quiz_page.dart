@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_collection_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_items_column.dart';
+import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
 class SelectQuizToPlayPage extends StatelessWidget {
   @override
@@ -21,9 +22,7 @@ class SelectQuizToPlayPage extends StatelessWidget {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: QuizCollectionService().getQuizzesCreatedByUser(
-                  userId: user.uid,
-                ),
+                stream: QuizCollectionService().streamQuizzesByIds(ids: user.quizIds),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -34,7 +33,22 @@ class SelectQuizToPlayPage extends StatelessWidget {
                     return ErrorMessage(message: "An error occured loading your Quizzes");
                   }
                   return snapshot.data.length > 0
-                      ? QuizListItemsColumn(quizzes: snapshot.data)
+                      ? ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 8),
+                            );
+                          },
+                          itemCount: snapshot.data.length ?? 0,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (BuildContext context, int index) {
+                            QuizModel quizModel = snapshot.data[index];
+                            return QuizListItem(
+                              quizModel: quizModel,
+                              play: true,
+                            );
+                          },
+                        )
                       : Padding(
                           padding: EdgeInsets.only(top: 16),
                           child: Column(
