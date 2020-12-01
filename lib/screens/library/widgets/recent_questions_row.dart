@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/questions/questions_library_page.dart';
-import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row_question.dart';
@@ -26,7 +25,6 @@ class RecentQuestionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
         SummaryRowHeader(
@@ -39,10 +37,10 @@ class RecentQuestionsRow extends StatelessWidget {
             navigate(context);
           },
         ),
-        StreamBuilder(
-            stream: Provider.of<QuestionCollectionService>(context).streamQuestionsByIds(
-              ids: user.questionIds,
+        FutureBuilder(
+            future: Provider.of<QuestionService>(context).getUserQuestions(
               limit: 8,
+              orderBy: 'TIME',
             ),
             builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

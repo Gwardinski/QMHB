@@ -126,7 +126,7 @@ class RoundListItemContent extends StatelessWidget {
             info1Title: "Points: ",
             info1Value: roundModel.totalPoints.toString(),
             info2Title: "Questions: ",
-            info2Value: roundModel.questionIds.length.toString(),
+            info2Value: roundModel.noOfQuestions.toString(),
             info3Title: null,
             info3Value: null,
           ),

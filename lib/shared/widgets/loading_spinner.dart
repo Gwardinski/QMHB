@@ -9,6 +9,7 @@ class LoadingSpinnerHourGlass extends StatelessWidget {
         color: Theme.of(context).accentColor,
         size: 40,
       ),
+      // child: CircularProgressIndicator(),
     );
   }
 }

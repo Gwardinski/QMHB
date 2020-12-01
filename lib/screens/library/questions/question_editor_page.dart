@@ -6,10 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/question_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -77,25 +75,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   _createQuestion() async {
     _updateIsLoading(true);
     _updateError('');
-    final questionService = Provider.of<QuestionCollectionService>(context);
-    final userService = Provider.of<UserCollectionService>(context);
-    final userModel = Provider.of<UserDataStateModel>(context).user;
+    final questionService = Provider.of<QuestionService>(context);
     try {
       if (_newImage != null) {
         final newImageUrl = await _saveImage();
         _question.imageURL = newImageUrl;
       }
-      String newDocId = await questionService.addQuestionToFirebaseCollection(
-        _question,
-        userModel.uid,
-      );
-      userModel.questionIds.add(newDocId);
-      await userService.updateUserDataOnFirebase(userModel);
+      await questionService.createQuestion(_question);
       if (widget.roundModel != null) {
-        final roundService = Provider.of<RoundCollectionService>(context);
-        final newRound = widget.roundModel;
-        newRound.questionIds.add(newDocId);
-        await roundService.editRoundOnFirebaseCollection(newRound);
+        final roundService = Provider.of<RoundService>(context);
+        await roundService.addQuestionToRound(widget.roundModel, _question);
       }
       Navigator.of(context).pop();
     } catch (e) {
@@ -109,18 +98,13 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   _editQuestion() async {
     _updateIsLoading(true);
     _updateError('');
-    final questionService = Provider.of<QuestionCollectionService>(context);
-    final userService = Provider.of<UserCollectionService>(context);
-    final userModel = Provider.of<UserDataStateModel>(context).user;
+    final questionService = Provider.of<QuestionService>(context);
     try {
       if (_newImage != null) {
         final newImageUrl = await _saveImage();
         _question.imageURL = newImageUrl;
       }
-      await questionService.editQuestionOnFirebaseCollection(
-        _question,
-      );
-      await userService.updateUserDataOnFirebase(userModel);
+      await questionService.editQuestion(_question);
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
@@ -152,7 +136,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   }
 
   _saveImage() async {
-    String filepath = 'images/question/${_question.uid}-${_question.answer}.png';
+    String filepath = 'images/question/${_question.id}-${_question.answer}.png';
     final FirebaseStorage storage = FirebaseStorage(
       storageBucket: 'gs://qmhb-b432b.appspot.com',
     );

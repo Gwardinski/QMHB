@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
 class QuizListItemAction extends StatefulWidget {
@@ -97,13 +97,13 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
 
   _deleteQuiz() {
     var text = "Are you sure you wish to delete ${widget.quizModel.title} ?";
-    if (widget.quizModel.roundIds.length > 0) {
+    if (widget.quizModel.noOfRounds > 0) {
       text +=
-          "\n\nThis will not delete the ${widget.quizModel.roundIds.length} rounds this quiz contains.";
+          "\n\nThis will not delete the ${widget.quizModel.noOfRounds} rounds this quiz contains.";
     }
-    if (widget.quizModel.questionIds.length > 0) {
+    if (widget.quizModel.noOfQuestions > 0) {
       text +=
-          "\n\nThis will not delete the ${widget.quizModel.questionIds.length} questions this quiz contains.";
+          "\n\nThis will not delete the ${widget.quizModel.noOfQuestions} questions this quiz contains.";
     }
     showDialog(
       context: context,
@@ -121,8 +121,7 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
             child: Text('Delete'),
             onPressed: () async {
               Navigator.of(context).pop();
-              await Provider.of<QuizCollectionService>(context)
-                  .deleteQuizOnFirebaseCollection(widget.quizModel.id);
+              await Provider.of<QuizService>(context).deleteQuiz(widget.quizModel);
             },
           ),
         ],

@@ -6,7 +6,7 @@ import 'package:qmhb/screens/details/round/widgets/round_details_questions_list.
 import 'package:qmhb/screens/details/widgets/details_list_empty.dart';
 import 'package:qmhb/screens/details/widgets/details_header.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_page.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -32,11 +32,9 @@ class RoundDetailsPage extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder(
+      body: FutureBuilder(
         initialData: roundModel,
-        stream: Provider.of<RoundCollectionService>(context).streamRoundById(
-          id: roundModel.id,
-        ),
+        future: Provider.of<RoundService>(context).getRound(roundModel.id),
         builder: (BuildContext context, AsyncSnapshot<RoundModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(
@@ -57,7 +55,7 @@ class RoundDetailsPage extends StatelessWidget {
                   info1Title: "Questions",
                   info2Title: "Points",
                   info3Title: "Created",
-                  info1Value: snapshot.data.questionIds.length.toString(),
+                  info1Value: snapshot.data.noOfQuestions.toString(),
                   info2Value: snapshot.data.totalPoints.toString(),
                   info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
                   imageURL: snapshot.data.imageURL,
@@ -86,7 +84,7 @@ class RoundDetailsPage extends StatelessWidget {
                     // );
                   },
                 ),
-                snapshot.data.questionIds.length > 0
+                snapshot.data.noOfQuestions > 0
                     ? RoundDetailsQuestionsList(roundModel: snapshot.data)
                     : DetailsListEmpty(text: "This Round has no Questions"),
               ],

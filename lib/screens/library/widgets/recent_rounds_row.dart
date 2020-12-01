@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/rounds_library_page.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/highlight_row.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
@@ -29,7 +28,6 @@ class RecentRoundsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
         SummaryRowHeader(
@@ -49,10 +47,10 @@ class RecentRoundsRow extends StatelessWidget {
             0,
             getIt<AppSize>().rSpacingSm,
           ),
-          child: StreamBuilder(
-              stream: Provider.of<RoundCollectionService>(context).streamRoundsByIds(
-                ids: user.roundIds,
+          child: FutureBuilder(
+              future: Provider.of<RoundService>(context).getUserRounds(
                 limit: 8,
+                orderBy: 'TIME',
               ),
               builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

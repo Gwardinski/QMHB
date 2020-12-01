@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/quizzes/quizzes_library_sidebar.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -17,7 +16,6 @@ class RoundCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canDrag = getIt<AppSize>().isLarge;
-    final user = Provider.of<UserDataStateModel>(context).user;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -47,10 +45,8 @@ class RoundCollectionPage extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: StreamBuilder(
-                      stream: RoundCollectionService().streamRoundsByIds(
-                        ids: user.roundIds,
-                      ),
+                    child: FutureBuilder(
+                      future: Provider.of<RoundService>(context).getUserRounds(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(

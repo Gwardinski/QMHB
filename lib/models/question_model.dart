@@ -1,5 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
 import 'package:qmhb/models/category_model.dart';
+import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/user_model.dart';
 
 enum QuestionType {
   STANDARD,
@@ -8,8 +11,7 @@ enum QuestionType {
 }
 
 class QuestionModel {
-  String id;
-  String uid;
+  int id;
   String questionType;
   String question;
   String imageURL;
@@ -20,10 +22,12 @@ class QuestionModel {
   bool isPublished;
   DateTime lastUpdated;
   DateTime createdAt;
+  // relational
+  List<RoundModel> rounds;
+  UserModel user;
 
   QuestionModel({
     this.id,
-    this.uid,
     this.questionType,
     this.question,
     this.imageURL,
@@ -34,45 +38,33 @@ class QuestionModel {
     this.isPublished,
   });
 
-  QuestionModel.fromJSON(json) {
+  QuestionModel.fromDto(json) {
     this.id = json['id'];
-    this.uid = json['uid'];
-    this.lastUpdated = json['lastUpdated'];
-    this.createdAt = json['createdAt'];
+    // this.lastUpdated = json['lastUpdated'].toDate();
+    // this.createdAt = json['createdAt'].toDate();
     this.questionType = json['questionType'];
     this.question = json['question'];
     this.imageURL = json['imageURL'];
     this.answer = json['answer'];
     this.category = json['category'];
     this.difficulty = json['difficulty'];
-    this.points = json['points'] ?? 1;
-    this.isPublished = json['isPublished'] ?? false;
+    this.points = json['points'].toDouble();
+    this.isPublished = json['isPublished'];
   }
 
-  QuestionModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'];
-    this.uid = document.data()['uid'];
-    this.lastUpdated = document.data()['lastUpdated'].toDate();
-    this.createdAt = document.data()['createdAt'].toDate();
-    this.questionType = document.data()['questionType'];
-    this.question = document.data()['question'];
-    this.imageURL = document.data()['imageURL'];
-    this.answer = document.data()['answer'];
-    this.category = document.data()['category'];
-    this.difficulty = document.data()['difficulty'];
-    this.points = document.data()['points'].toDouble() ?? 1.0;
-    this.isPublished = document.data()['isPublished'] ?? false;
+  static List<QuestionModel> listFromDtos(List<dynamic> rawQuestions) {
+    List<QuestionModel> formattedQuestions = List<QuestionModel>();
+    if (rawQuestions.length > 0) {
+      formattedQuestions = rawQuestions.map((q) => QuestionModel.fromDto(q)).toList();
+    }
+    return formattedQuestions;
   }
 
-  toFirebase({
+  toDto({
     QuestionModel questionModel,
-    String docId,
-    String uid,
-    DateTime lastUpdated,
   }) {
     return {
-      "id": docId,
-      "uid": uid,
+      "id": questionModel.id,
       "question": questionModel.question,
       "questionType": questionModel.questionType,
       "answer": questionModel.answer,
@@ -80,10 +72,37 @@ class QuestionModel {
       "category": questionModel.category,
       "difficulty": questionModel.difficulty,
       "points": questionModel.points,
-      "isPublished": false,
-      "createdAt": questionModel.createdAt ?? lastUpdated,
-      "lastUpdated": lastUpdated,
+      "isPublished": questionModel.isPublished,
     };
+  }
+
+  static toDtoAdd(
+    QuestionModel questionModel,
+    int parentRoundId,
+  ) {
+    return jsonEncode({
+      "question": questionModel.question,
+      "questionType": questionModel.questionType,
+      "answer": questionModel.answer,
+      "imageURL": questionModel.imageURL,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+      "parentRoundId": parentRoundId ?? 0,
+    });
+  }
+
+  static toDtoEdit(QuestionModel questionModel) {
+    return jsonEncode({
+      "id": questionModel.id,
+      "question": questionModel.question,
+      "questionType": questionModel.questionType,
+      "answer": questionModel.answer,
+      "imageURL": questionModel.imageURL,
+      "category": questionModel.category,
+      "difficulty": questionModel.difficulty,
+      "points": questionModel.points,
+    });
   }
 
   QuestionModel.newQuestion() {

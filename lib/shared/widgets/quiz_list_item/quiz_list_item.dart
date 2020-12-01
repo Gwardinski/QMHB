@@ -132,7 +132,7 @@ class QuizListItemContent extends StatelessWidget {
             info1Title: "Points: ",
             info1Value: quizModel.totalPoints.toString(),
             info2Title: "Rounds: ",
-            info2Value: quizModel.roundIds.length.toString(),
+            info2Value: quizModel.noOfRounds.toString(),
             info3Title: null,
             info3Value: null,
           ),

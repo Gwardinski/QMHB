@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/screens/library/widgets/add_to_dialog_button.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 
 class AddQuestionToRoundButton extends StatefulWidget {
   const AddQuestionToRoundButton({
@@ -23,18 +23,18 @@ class _AddQuestionToRoundButtonState extends State<AddQuestionToRoundButton> {
   bool _isLoading = false;
   RoundModel roundModel;
   QuestionModel questionModel;
-  RoundCollectionService roundCollectionService;
+  RoundService roundService;
 
   @override
   void initState() {
     super.initState();
     roundModel = widget.roundModel;
     questionModel = widget.questionModel;
-    roundCollectionService = Provider.of<RoundCollectionService>(context, listen: false);
+    roundService = Provider.of<RoundService>(context, listen: false);
   }
 
   bool _containsQuestion() {
-    return roundModel.questionIds.contains(questionModel.id);
+    return roundModel.questions.contains(questionModel);
   }
 
   _setLoading(bool loading) {
@@ -49,9 +49,9 @@ class _AddQuestionToRoundButtonState extends State<AddQuestionToRoundButton> {
       onTap: () async {
         _setLoading(true);
         if (!_containsQuestion()) {
-          await roundCollectionService.addQuestionToRound(roundModel, questionModel);
+          await roundService.addQuestionToRound(roundModel, questionModel);
         } else {
-          await roundCollectionService.removeQuestionFromRound(roundModel, questionModel);
+          await roundService.removeQuestionFromRound(roundModel, questionModel);
         }
         _setLoading(false);
       },

@@ -5,11 +5,11 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/home/home_screen.dart';
-import 'package:qmhb/services/authentication_service.dart';
-import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/http_service.dart';
+import 'package:qmhb/services/question_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
+import 'package:qmhb/services/round_service.dart';
+import 'package:qmhb/services/user_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 void main() {
@@ -19,6 +19,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final HttpService httpService = HttpService();
   final UserDataStateModel userDataStateModel = UserDataStateModel();
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
@@ -32,22 +33,29 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider<UserDataStateModel>(
                 create: (BuildContext context) => userDataStateModel,
               ),
-              Provider<AuthenticationService>(
-                create: (BuildContext context) => AuthenticationService(
+              Provider<UserService>(
+                create: (BuildContext context) => UserService(
+                  httpService: httpService,
                   userDataStateModel: userDataStateModel,
                 ),
               ),
-              Provider<UserCollectionService>(
-                create: (BuildContext context) => UserCollectionService(),
+              Provider<QuestionService>(
+                create: (BuildContext context) => QuestionService(
+                  httpService: httpService,
+                  userDataStateModel: userDataStateModel,
+                ),
               ),
-              Provider<QuestionCollectionService>(
-                create: (BuildContext context) => QuestionCollectionService(),
+              Provider<RoundService>(
+                create: (BuildContext context) => RoundService(
+                  httpService: httpService,
+                  userDataStateModel: userDataStateModel,
+                ),
               ),
-              Provider<RoundCollectionService>(
-                create: (BuildContext context) => RoundCollectionService(),
-              ),
-              Provider<QuizCollectionService>(
-                create: (BuildContext context) => QuizCollectionService(),
+              ChangeNotifierProvider<QuizService>(
+                create: (BuildContext context) => QuizService(
+                  httpService: httpService,
+                  userDataStateModel: userDataStateModel,
+                ),
               ),
             ],
             child: MaterialApp(

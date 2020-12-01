@@ -42,7 +42,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 padding: EdgeInsets.fromLTRB(16, 32, 16, 32),
                 child: Text(
                   (activeTab == 0 ? "Sign in to view " : "Create an account to begin creating ") +
-                      "your library of Quizzes, Rounds and Questions",
+                      "your library.",
                   style: TextStyle(
                     fontSize: 16,
                   ),

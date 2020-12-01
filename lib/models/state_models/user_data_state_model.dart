@@ -8,9 +8,9 @@ class UserDataStateModel extends ChangeNotifier {
 
   UserModel get user => _userModel;
   bool get isAuthenticated => _isAuthenticated;
+  String get token => _userModel?.authToken ?? null;
 
-  updateCurrentUser(UserModel updatedUser) {
-    print("updateCurrentUser");
+  void updateCurrentUser(UserModel updatedUser) {
     try {
       _userModel = updatedUser;
       _isAuthenticated = true;

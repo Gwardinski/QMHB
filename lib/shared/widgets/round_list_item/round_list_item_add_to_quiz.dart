@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 
 class RoundListItemActionAddToQuiz extends StatefulWidget {
   RoundListItemActionAddToQuiz({
@@ -22,19 +22,19 @@ class _RoundListItemActionAddToQuizState extends State<RoundListItemActionAddToQ
   bool _isLoading = false;
   QuizModel quizModel;
   RoundModel roundModel;
-  QuizCollectionService quizCollectionService;
+  QuizService quizService;
 
   @override
   void initState() {
     super.initState();
     quizModel = widget.quizModel;
     roundModel = widget.roundModel;
-    quizCollectionService = Provider.of<QuizCollectionService>(context, listen: false);
+    quizService = Provider.of<QuizService>(context, listen: false);
   }
 
   bool _containsRound() {
     print(quizModel.toString());
-    return quizModel.roundIds.contains(roundModel.id);
+    return quizModel.rounds.contains(roundModel);
   }
 
   _setLoading(bool loading) {
@@ -74,9 +74,9 @@ class _RoundListItemActionAddToQuizState extends State<RoundListItemActionAddToQ
         onPressed: () async {
           _setLoading(true);
           if (!_containsRound()) {
-            await quizCollectionService.addRoundToQuiz(quizModel, roundModel);
+            await quizService.addRoundToQuiz(quizModel, roundModel);
           } else {
-            await quizCollectionService.removeRoundFromQuiz(quizModel, roundModel);
+            await quizService.removeRoundFromQuiz(quizModel, roundModel);
           }
           _setLoading(false);
         },

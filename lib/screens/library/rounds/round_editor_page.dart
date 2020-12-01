@@ -6,10 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -95,7 +92,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   }
 
   _saveImage() async {
-    String filepath = 'images/round/${_round.uid}-${_round.title}.png';
+    String filepath = 'images/round/${_round.id}-${_round.title}.png';
     final FirebaseStorage storage = FirebaseStorage(
       storageBucket: 'gs://qmhb-b432b.appspot.com',
     );
@@ -108,26 +105,13 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final roundService = Provider.of<RoundCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
+      final roundService = Provider.of<RoundService>(context);
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _round.imageURL = newImageUrl;
         }
-        String newDocId = await roundService.addRoundToFirebaseCollection(
-          _round,
-          userModel.uid,
-        );
-        userModel.roundIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
-        if (widget.quizModel != null) {
-          final quizService = Provider.of<QuizCollectionService>(context);
-          final newQuiz = widget.quizModel;
-          newQuiz.roundIds.add(newDocId);
-          await quizService.editQuizOnFirebaseCollection(newQuiz);
-        }
+        await roundService.createRound(_round, parentQuizId: widget.quizModel?.id);
         Navigator.of(context).pop();
       } catch (e) {
         print(e.toString());
@@ -142,18 +126,13 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final roundService = Provider.of<RoundCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
+      final roundService = Provider.of<RoundService>(context);
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _round.imageURL = newImageUrl;
         }
-        await roundService.editRoundOnFirebaseCollection(
-          _round,
-        );
-        await userService.updateUserDataOnFirebase(userModel);
+        await roundService.editRound(_round);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);
