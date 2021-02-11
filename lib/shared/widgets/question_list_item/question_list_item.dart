@@ -61,9 +61,11 @@ class _QuestionListItemState extends State<QuestionListItem> {
   void _viewQuestionDetails() {
     showDialog(
       context: context,
-      child: QuestionDetailsDialog(
-        questionModel: widget.questionModel,
-      ),
+      builder: (BuildContext context) {
+        return QuestionDetailsDialog(
+          questionModel: widget.questionModel,
+        );
+      },
     );
   }
 }
@@ -97,7 +99,8 @@ class QuestionListItemContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+              padding:
+                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: QuestionListItemAction2(
                 revealAnswer: revealAnswer,
                 type: questionModel.questionType,
@@ -111,7 +114,8 @@ class QuestionListItemContent extends StatelessWidget {
               questionModel: questionModel,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+              padding:
+                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: roundModel != null
                   ? QuestionListItemActionAddToRound(
                       roundModel: roundModel,

@@ -95,13 +95,14 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   }
 
   _saveImage() async {
-    String filepath = 'images/round/${_round.uid}-${_round.title}.png';
-    final FirebaseStorage storage = FirebaseStorage(
-      storageBucket: 'gs://qmhb-b432b.appspot.com',
-    );
-    StorageUploadTask uploadTask = storage.ref().child(filepath).putFile(_newImage);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    return await storageTaskSnapshot.ref.getDownloadURL();
+    return '';
+    // String filepath = 'images/round/${_round.uid}-${_round.title}.png';
+    // final FirebaseStorage storage = FirebaseStorage(
+    //   storageBucket: 'gs://qmhb-b432b.appspot.com',
+    // );
+    // StorageUploadTask uploadTask = storage.ref().child(filepath).putFile(_newImage);
+    // StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    // return await storageTaskSnapshot.ref.getDownloadURL();
   }
 
   _createRound() async {
@@ -215,7 +216,9 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
                     removeImage: _removeImage,
                   ),
                   ButtonPrimary(
-                    text: widget.type == RoundEditorType.ADD ? "Create" : "Save Changes",
+                    text: widget.type == RoundEditorType.ADD
+                        ? "Create"
+                        : "Save Changes",
                     isLoading: _isLoading,
                     onPressed: _onSubmit,
                     fullWidth: true,

@@ -128,26 +128,28 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
     }
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Delete Round"),
-        content: Text(text),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          FlatButton(
-            child: Text('Delete'),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await Provider.of<RoundCollectionService>(context)
-                  .deleteRoundOnFirebaseCollection(widget.roundModel.id);
-            },
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Round"),
+          content: Text(text),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Delete'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Provider.of<RoundCollectionService>(context)
+                    .deleteRoundOnFirebaseCollection(widget.roundModel.id);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

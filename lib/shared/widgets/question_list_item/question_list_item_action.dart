@@ -35,7 +35,8 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
             height: 64,
             child: Icon(Icons.more_vert),
           ),
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
+          itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<QuestionOptions>>[
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.addToRound,
               child: Row(
@@ -123,26 +124,30 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
   _deleteQuestion() {
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Delete Question"),
-        content: Text("Are you sure you wish to delete ${widget.questionModel.question} ?"),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          FlatButton(
-            child: Text('Delete'),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await Provider.of<QuestionCollectionService>(context)
-                  .deleteQuestionOnFirebaseCollection(widget.questionModel.id);
-            },
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Question"),
+          content: Text(
+              "Are you sure you wish to delete ${widget.questionModel.question} ?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Provider.of<QuestionCollectionService>(context)
+                    .deleteQuestionOnFirebaseCollection(
+                        widget.questionModel.id);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

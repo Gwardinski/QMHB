@@ -107,26 +107,28 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
     }
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("Delete Quiz"),
-        content: Text(text),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          FlatButton(
-            child: Text('Delete'),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await Provider.of<QuizCollectionService>(context)
-                  .deleteQuizOnFirebaseCollection(widget.quizModel.id);
-            },
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Quiz"),
+          content: Text(text),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Delete'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Provider.of<QuizCollectionService>(context)
+                    .deleteQuizOnFirebaseCollection(widget.quizModel.id);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

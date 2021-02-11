@@ -70,7 +70,9 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      widget.type == QuestionEditorType.ADD ? _createQuestion() : _editQuestion();
+      widget.type == QuestionEditorType.ADD
+          ? _createQuestion()
+          : _editQuestion();
     }
   }
 
@@ -152,13 +154,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   }
 
   _saveImage() async {
-    String filepath = 'images/question/${_question.uid}-${_question.answer}.png';
-    final FirebaseStorage storage = FirebaseStorage(
-      storageBucket: 'gs://qmhb-b432b.appspot.com',
-    );
-    StorageUploadTask uploadTask = storage.ref().child(filepath).putFile(_newImage);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    return await storageTaskSnapshot.ref.getDownloadURL();
+    return '';
+    // String filepath =
+    //     'images/question/${_question.uid}-${_question.answer}.png';
+    // final FirebaseStorage storage = FirebaseStorage(
+    //   storageBucket: 'gs://qmhb-b432b.appspot.com',
+    // );
+    // StorageUploadTask uploadTask =
+    //     storage.ref().child(filepath).putFile(_newImage);
+    // StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    // return await storageTaskSnapshot.ref.getDownloadURL();
   }
 
   _setAsImagePrompt(String type) {
@@ -170,7 +175,8 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Changing Question type will remove any picture or music you have selected.'),
+                Text(
+                    'Changing Question type will remove any picture or music you have selected.'),
                 Text('Are you sure you wish to change question type?'),
               ],
             ),
@@ -207,7 +213,9 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          widget.type == QuestionEditorType.ADD ? "Create Question" : "Edit Question",
+          widget.type == QuestionEditorType.ADD
+              ? "Create Question"
+              : "Edit Question",
         ),
       ),
       body: SingleChildScrollView(
@@ -297,7 +305,9 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                           height: 80,
                           padding: EdgeInsets.only(bottom: 16),
                           width: double.infinity,
-                          child: Center(child: Text("TODO - Spotify Song Selector to go here")),
+                          child: Center(
+                              child: Text(
+                                  "TODO - Spotify Song Selector to go here")),
                         )
                       : Container(),
                   FormInput(
@@ -320,7 +330,9 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                     },
                   ),
                   ButtonPrimary(
-                    text: widget.type == QuestionEditorType.ADD ? "Create" : "Save Changes",
+                    text: widget.type == QuestionEditorType.ADD
+                        ? "Create"
+                        : "Save Changes",
                     isLoading: _isLoading,
                     fullWidth: true,
                     onPressed: _onSubmit,
