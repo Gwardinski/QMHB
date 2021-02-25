@@ -12,7 +12,7 @@ class LargeSignInPrompt extends StatelessWidget {
       width: double.infinity,
       constraints: BoxConstraints(maxHeight: 800),
       child: Center(
-        child: FlatButton(
+        child: TextButton(
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(

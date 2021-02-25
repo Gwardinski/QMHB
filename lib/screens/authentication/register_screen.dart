@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/services/authentication_service.dart';
+import 'package:qmhb/services/user_service.dart';
+import 'package:qmhb/shared/exceptions/exceptions.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
@@ -94,16 +95,19 @@ class _RegisterScreenState extends State<RegisterScreen> with AutomaticKeepAlive
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
       try {
-        final authenticationService = Provider.of<AuthenticationService>(context);
-        await authenticationService.registerWithEmailAndPassword(
+        final userService = Provider.of<UserService>(context);
+        await userService.registerWithEmailAndPassword(
           email: _email.trim(),
           password: _password.trim(),
           displayName: _displayName.trim(),
         );
         Navigator.of(context).pop();
+      } on BadRequestException {
+        _updateError('Invalid Request');
+      } on ConflictException {
+        _updateError('This email is already in use');
       } catch (e) {
         _updateError('Failed to register');
-        print(e.toString());
       } finally {
         _updateIsLoading(false);
       }

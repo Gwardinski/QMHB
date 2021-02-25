@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/services/authentication_service.dart';
+import 'package:qmhb/services/user_service.dart';
+import 'package:qmhb/shared/exceptions/exceptions.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
@@ -11,23 +12,17 @@ class SignInScreen extends StatefulWidget {
   _SignInScreenState createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClientMixin {
+class _SignInScreenState extends State<SignInScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   final _formKey = GlobalKey<FormState>();
 
-  AuthenticationService _authService;
-  String _email = '';
-  String _password = '';
+  String _email = 'g1@test.com';
+  String _password = 'qqqqq';
   String _error = '';
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _authService = Provider.of<AuthenticationService>(context, listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +43,7 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
                         validate: validateEmail,
                         labelText: "Email",
                         disabled: _isLoading,
+                        initialValue: "g1@test.com",
                         onChanged: (String val) {
                           setState(() {
                             _email = val;
@@ -59,6 +55,7 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
                         labelText: "Password",
                         obscureText: true,
                         disabled: _isLoading,
+                        initialValue: "qqqqq",
                         onChanged: (String val) {
                           setState(() {
                             _password = val;
@@ -72,11 +69,6 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
                         onPressed: _isLoading ? null : _onSubmit,
                       ),
                       FormError(error: _error),
-                      // ButtonPrimary(
-                      //   text: "Google",
-                      //   isLoading: false,
-                      //   onPressed: _isLoading ? null : _googleSignIn,
-                      // ),
                     ],
                   ),
                 ),
@@ -100,30 +92,22 @@ class _SignInScreenState extends State<SignInScreen> with AutomaticKeepAliveClie
     });
   }
 
-  _googleSignIn() async {
-    try {
-      _updateIsLoading(true);
-      await _authService.googleSignIn();
-      Navigator.of(context).pop();
-    } catch (e) {
-      _updateError('Failed to log in');
-    } finally {
-      _updateIsLoading(false);
-    }
-  }
-
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
       try {
         _updateIsLoading(true);
-        await _authService.signInWithEmailAndPassword(
+        final userService = Provider.of<UserService>(context, listen: false);
+        await userService.signInWithEmailAndPassword(
           email: _email.trim(),
           password: _password.trim(),
         );
         Navigator.of(context).pop();
+      } on BadRequestException {
+        _updateError('Invalid Request');
+      } on NotFoundException {
+        _updateError('Could not find a user with that email and/or password');
       } catch (e) {
-        _updateError('Failed to log in');
-        print(e.toString());
+        _updateError('An error occured logging you in');
       } finally {
         _updateIsLoading(false);
       }

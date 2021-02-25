@@ -17,7 +17,7 @@ class MainNavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: () {
         onPressed();
       },
@@ -29,16 +29,18 @@ class MainNavigationButton extends StatelessWidget {
             Icon(
               icon,
               size: 28,
-              color:
-                  isSelected ? Theme.of(context).accentColor : Theme.of(context).selectedRowColor,
+              color: isSelected
+                  ? Theme.of(context).accentColor
+                  : Theme.of(context).selectedRowColor,
             ),
             Padding(padding: EdgeInsets.all(getIt<AppSize>().spacingMd)),
             Text(
               title,
               style: TextStyle(
                 fontSize: 20,
-                color:
-                    isSelected ? Theme.of(context).accentColor : Theme.of(context).selectedRowColor,
+                color: isSelected
+                    ? Theme.of(context).accentColor
+                    : Theme.of(context).selectedRowColor,
               ),
             ),
           ],

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
-class QuizzesLibraryPage extends StatelessWidget {
+class SelectQuizToPlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -16,22 +14,7 @@ class QuizzesLibraryPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text("Your Quizzes"),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: Icon(Icons.add),
-              label: Text('New'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuizEditorPage(
-                      type: QuizEditorType.ADD,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+          title: Text("Select Quiz"),
         ),
         body: Column(
           children: [
@@ -45,8 +28,7 @@ class QuizzesLibraryPage extends StatelessWidget {
                     );
                   }
                   if (snapshot.hasError == true) {
-                    return ErrorMessage(
-                        message: "An error occured loading your Quizzes");
+                    return ErrorMessage(message: "An error occured loading your Quizzes");
                   }
                   return snapshot.data.length > 0
                       ? ListView.separated(
@@ -61,6 +43,7 @@ class QuizzesLibraryPage extends StatelessWidget {
                             QuizModel quizModel = snapshot.data[index];
                             return QuizListItem(
                               quizModel: quizModel,
+                              play: true,
                             );
                           },
                         )
@@ -69,8 +52,8 @@ class QuizzesLibraryPage extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              CreateNewQuizOrRound(
-                                type: CreateNewQuizOrRoundType.QUIZ,
+                              Text(
+                                "You have not created any Quizzes. Head to the Library tab to create your own or head to the explore tab to save a pre-created Quiz",
                               ),
                             ],
                           ),

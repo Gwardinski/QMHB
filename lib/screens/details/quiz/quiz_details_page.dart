@@ -6,7 +6,7 @@ import 'package:qmhb/screens/details/quiz/widgets/quiz_details_rounds_list.dart'
 import 'package:qmhb/screens/details/widgets/details_list_empty.dart';
 import 'package:qmhb/screens/details/widgets/details_header.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_page.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -32,11 +32,9 @@ class QuizDetailsPage extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder(
+      body: FutureBuilder(
         initialData: quizModel,
-        stream: Provider.of<QuizCollectionService>(context).streamQuizById(
-          id: quizModel.id,
-        ),
+        future: Provider.of<QuizService>(context).getQuiz(quizModel.id),
         builder: (BuildContext context, AsyncSnapshot<QuizModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(
@@ -57,7 +55,7 @@ class QuizDetailsPage extends StatelessWidget {
                   info1Title: "Rounds",
                   info2Title: "Points",
                   info3Title: "Created",
-                  info1Value: snapshot.data.roundIds.length.toString(),
+                  info1Value: snapshot.data.noOfRounds.toString(),
                   info2Value: snapshot.data.totalPoints.toString(),
                   info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
                   imageURL: snapshot.data.imageURL,
@@ -86,7 +84,7 @@ class QuizDetailsPage extends StatelessWidget {
                     // );
                   },
                 ),
-                snapshot.data.roundIds.length > 0
+                snapshot.data.noOfRounds > 0
                     ? QuizDetailsRoundsList(quizModel: snapshot.data)
                     : DetailsListEmpty(text: "This Quiz has no Rounds"),
               ],

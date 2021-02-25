@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/details/round/round_details_page.dart';
 import 'package:qmhb/screens/library/rounds/round_create_dialog.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class RoundsLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -27,10 +25,8 @@ class RoundsLibrarySidebar extends StatelessWidget {
         children: [
           RoundsLibrarySidebarNewRound(),
           Expanded(
-            child: StreamBuilder(
-              stream: RoundCollectionService().streamRoundsByIds(
-                ids: user.roundIds,
-              ),
+            child: FutureBuilder(
+              future: Provider.of<RoundService>(context).getUserRounds(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -122,9 +118,9 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<QuestionModel>(
-      onWillAccept: (question) => !roundModel.questionIds.contains(question.id),
+      onWillAccept: (question) => !roundModel.questions.contains(question),
       onAccept: (question) {
-        RoundCollectionService().addQuestionToRound(roundModel, question);
+        Provider.of<RoundService>(context).addQuestionToRound(roundModel, question);
       },
       builder: (context, canditates, rejects) {
         return InkWell(
@@ -156,7 +152,7 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      roundModel.questionIds.length.toString(),
+                      roundModel.noOfQuestions.toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,

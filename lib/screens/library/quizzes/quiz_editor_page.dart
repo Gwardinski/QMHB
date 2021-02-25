@@ -1,13 +1,10 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -105,20 +102,13 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
+      final quizService = Provider.of<QuizService>(context);
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _quiz.imageURL = newImageUrl;
         }
-        String newDocId = await quizService.addQuizToFirebaseCollection(
-          _quiz,
-          userModel.uid,
-        );
-        userModel.quizIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
+        await quizService.createQuiz(_quiz);
         Navigator.of(context).pop();
       } catch (e) {
         print(e.toString());
@@ -133,18 +123,13 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
+      final quizService = Provider.of<QuizService>(context);
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _quiz.imageURL = newImageUrl;
         }
-        await quizService.editQuizOnFirebaseCollection(
-          _quiz,
-        );
-        await userService.updateUserDataOnFirebase(userModel);
+        await quizService.editQuiz(_quiz);
         Navigator.of(context).pop();
       } catch (e) {
         print(e);

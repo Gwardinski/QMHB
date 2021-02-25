@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
 import 'package:qmhb/screens/library/questions/question_editor_page.dart';
-import 'package:qmhb/services/question_collection_service.dart';
+import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
 class QuestionListItemAction extends StatefulWidget {
@@ -140,9 +140,8 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<QuestionCollectionService>(context)
-                    .deleteQuestionOnFirebaseCollection(
-                        widget.questionModel.id);
+                await Provider.of<QuestionService>(context)
+                    .deleteQuestion(widget.questionModel);
               },
             ),
           ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_dialog.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
 class RoundListItemAction extends StatefulWidget {
@@ -122,9 +122,9 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
 
   _deleteRound() {
     var text = "Are you sure you wish to delete ${widget.roundModel.title} ?";
-    if (widget.roundModel.questionIds.length > 0) {
+    if (widget.roundModel.noOfQuestions > 0) {
       text +=
-          "\n\nThis will not delete the ${widget.roundModel.questionIds.length} questions this round contains.";
+          "\n\nThis will not delete the ${widget.roundModel.noOfQuestions} questions this round contains.";
     }
     showDialog(
       context: context,
@@ -133,18 +133,18 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
           title: Text("Delete Round"),
           content: Text(text),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<RoundCollectionService>(context)
-                    .deleteRoundOnFirebaseCollection(widget.roundModel.id);
+                await Provider.of<RoundService>(context)
+                    .deletetRound(widget.roundModel);
               },
             ),
           ],

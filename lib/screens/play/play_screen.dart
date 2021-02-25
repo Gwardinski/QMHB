@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/screens/play/select_quiz_page.dart';
+import 'package:qmhb/shared/widgets/button_primary.dart';
 
 class PlayScreen extends StatefulWidget {
   @override
@@ -14,13 +16,41 @@ class _PlayScreenState extends State<PlayScreen> {
         title: Text("Play"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 8)),
-            Center(
-              child: Text("Play services are currently down for maintenance."),
-            )
-          ],
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(bottom: 16)),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Text("Casual fun for the pub and car journeys"),
+              ),
+              ButtonPrimary(
+                text: "Host Local",
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SelectQuizToPlayPage(
+                          // type: SelectQuizToPlayPageType.LOCAL,
+                          ),
+                    ),
+                  );
+                },
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 16)),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Text("Have contenstants take part using their own device"),
+              ),
+              ButtonPrimary(text: "Host Online", onPressed: null),
+              Padding(padding: EdgeInsets.only(bottom: 16)),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Text("Join as a contestant"),
+              ),
+              ButtonPrimary(text: "Join Online", onPressed: null),
+            ],
+          ),
         ),
       ),
     );

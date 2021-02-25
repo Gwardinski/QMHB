@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/screens/library/quizzes/quiz_create_dialog.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class QuizzesLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -28,10 +26,8 @@ class QuizzesLibrarySidebar extends StatelessWidget {
           UserQuizzesSidebarNewQuiz(),
           UserQuizzesSidebarTitle(),
           Expanded(
-            child: StreamBuilder(
-              stream: QuizCollectionService().streamQuizzesByIds(
-                ids: user.quizIds,
-              ),
+            child: FutureBuilder(
+              future: Provider.of<QuizService>(context).getUserQuizzes(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -154,9 +150,9 @@ class UserQuizzesSidebarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<RoundModel>(
-      onWillAccept: (round) => !quizModel.roundIds.contains(round.id),
+      onWillAccept: (round) => !quizModel.rounds.contains(round),
       onAccept: (round) {
-        QuizCollectionService().addRoundToQuiz(quizModel, round);
+        Provider.of<QuizService>(context).addRoundToQuiz(quizModel, round);
       },
       builder: (context, canditates, rejects) {
         return InkWell(

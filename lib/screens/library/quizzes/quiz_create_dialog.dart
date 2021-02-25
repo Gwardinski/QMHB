@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
@@ -55,21 +53,9 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
-      List<String> roundIds = List<String>();
-      if (widget.initialRound != null) {
-        roundIds.add(widget.initialRound.id);
-      }
+      final quizService = Provider.of<QuizService>(context);
       try {
-        _quiz.roundIds = roundIds;
-        String newDocId = await quizService.addQuizToFirebaseCollection(
-          _quiz,
-          userModel.uid,
-        );
-        userModel.quizIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
+        await quizService.createQuiz(_quiz, initialRoundId: widget.initialRound?.id);
         Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to add Quiz');

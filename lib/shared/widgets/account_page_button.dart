@@ -15,13 +15,16 @@ class AccountPageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
-      label: Text(isAuthenticated ? user?.displayName ?? 'Account' : 'Sign In or Register'),
+    return TextButton.icon(
+      label: Text(isAuthenticated
+          ? user?.displayName ?? 'Account'
+          : 'Sign In or Register'),
       icon: Icon(isAuthenticated ? Icons.account_circle : null),
       onPressed: () async {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => isAuthenticated ? AccountPage() : AuthenticationScreen(),
+            builder: (context) =>
+                isAuthenticated ? AccountPage() : AuthenticationScreen(),
           ),
         );
       },

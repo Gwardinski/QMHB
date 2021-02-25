@@ -57,7 +57,7 @@ class QuizHighlightRow extends StatelessWidget {
             child: SummaryTile(
               line1: quizModel.title,
               line2: "Rounds",
-              line2Value: quizModel.roundIds.length.toString(),
+              line2Value: quizModel.noOfRounds.toString(),
               line3: "Points",
               line3Value: quizModel.totalPoints.toString(),
               imageURL: quizModel.imageURL,
@@ -107,7 +107,7 @@ class RoundHighlightRow extends StatelessWidget {
             child: SummaryTile(
               line1: roundModel.title,
               line2: "Questions",
-              line2Value: roundModel.questionIds.length.toString(),
+              line2Value: roundModel.noOfQuestions.toString(),
               line3: "Points",
               line3Value: roundModel.totalPoints.toString(),
               imageURL: roundModel.imageURL,

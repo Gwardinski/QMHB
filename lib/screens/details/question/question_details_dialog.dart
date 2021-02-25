@@ -97,11 +97,13 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                       children: [
                         InfoColumn(
                           title: 'Created',
-                          value: DateFormat('d-MM-yy').format(widget.questionModel.createdAt),
+                          value: DateFormat('d-MM-yy')
+                              .format(widget.questionModel.createdAt),
                         ),
                         InfoColumn(
                           title: 'Updated',
-                          value: DateFormat('d-MM-yy').format(widget.questionModel.lastUpdated),
+                          value: DateFormat('d-MM-yy')
+                              .format(widget.questionModel.lastUpdated),
                         ),
                       ],
                     ),
@@ -113,8 +115,8 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton(
-                  child: const Text('Add To Round'),
+                TextButton(
+                  child: Text('Add To Round'),
                   onPressed: () {
                     Navigator.pop(context);
                     _addQuestionToRound();

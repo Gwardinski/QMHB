@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/services/user_collection_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
@@ -55,21 +53,12 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final roundService = Provider.of<RoundCollectionService>(context);
-      final userService = Provider.of<UserCollectionService>(context);
-      final userModel = Provider.of<UserDataStateModel>(context).user;
-      List<String> questionIds = List<String>();
-      if (widget.initialQuestion != null) {
-        questionIds.add(widget.initialQuestion.id);
-      }
+      final roundService = Provider.of<RoundService>(context);
       try {
-        _round.questionIds = questionIds;
-        String newDocId = await roundService.addRoundToFirebaseCollection(
+        await roundService.createRound(
           _round,
-          userModel.uid,
+          initialQuestionId: widget.initialQuestion?.id,
         );
-        userModel.roundIds.add(newDocId);
-        await userService.updateUserDataOnFirebase(userModel);
         Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to add Round');

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/quiz_collection_service.dart';
-import 'package:qmhb/services/round_collection_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -42,7 +41,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
           elevation: 0,
           title: Text("Select Rounds"),
           actions: <Widget>[
-            FlatButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.add),
               label: Text('New'),
               onPressed: () {
@@ -58,12 +57,13 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
             ),
           ],
         ),
-        body: StreamBuilder<QuizModel>(
+        body: FutureBuilder<QuizModel>(
           initialData: _quizModel,
-          stream: QuizCollectionService().streamQuizById(id: _quizModel.id),
+          future: Provider.of<QuizService>(context).getQuiz(_quizModel.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return ErrorMessage(message: "An error occured loading this Quiz");
+              return ErrorMessage(
+                  message: "An error occured loading this Quiz");
             }
             return AddRoundToQuizList(quizModel: snapshot.data);
           },
@@ -84,14 +84,11 @@ class AddRoundToQuizList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("AddRoundToQuizList");
-    final user = Provider.of<UserDataStateModel>(context).user;
     return Column(
       children: [
         Expanded(
-          child: StreamBuilder<List<RoundModel>>(
-            stream: RoundCollectionService().streamRoundsByIds(
-              ids: user.roundIds,
-            ),
+          child: FutureBuilder<List<RoundModel>>(
+            future: Provider.of<RoundService>(context).getUserRounds(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -99,7 +96,8 @@ class AddRoundToQuizList extends StatelessWidget {
                 );
               }
               if (snapshot.hasError == true) {
-                return ErrorMessage(message: "An error occured loading your Rounds");
+                return ErrorMessage(
+                    message: "An error occured loading your Rounds");
               }
               return snapshot.data.length > 0
                   ? ListView.separated(

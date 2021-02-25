@@ -37,7 +37,9 @@ class QuestionListItemAction2 extends StatelessWidget {
                           ? Icons.image
                           : Icons.remove_red_eye,
                   size: 24,
-                  color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
+                  color: revealAnswer
+                      ? Theme.of(context).accentColor
+                      : Colors.white,
                 ),
               ),
             ],
