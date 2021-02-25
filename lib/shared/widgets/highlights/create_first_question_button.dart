@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/library/questions/question_editor_page.dart';
+import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 
 class CreateFirstQuestionButton extends StatelessWidget {
   @override

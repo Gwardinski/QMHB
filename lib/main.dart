@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/screens/home/home_screen.dart';
+import 'package:qmhb/pages/home/home_page.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark().copyWith(
           accentColor: Color(0xffFFA630),
         ),
-        home: HomeScreen(),
+        home: HomePage(),
       ),
     );
   }

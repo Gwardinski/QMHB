@@ -3,8 +3,8 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
-import 'package:qmhb/screens/details/round/round_details_page.dart';
+import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
+import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class HighlightRow extends StatelessWidget {

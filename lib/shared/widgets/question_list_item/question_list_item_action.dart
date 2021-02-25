@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
-import 'package:qmhb/screens/library/questions/question_editor_page.dart';
+import 'package:qmhb/pages/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
+import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
@@ -35,8 +35,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
             height: 64,
             child: Icon(Icons.more_vert),
           ),
-          itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<QuestionOptions>>[
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.addToRound,
               child: Row(
@@ -127,8 +126,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Delete Question"),
-          content: Text(
-              "Are you sure you wish to delete ${widget.questionModel.question} ?"),
+          content: Text("Are you sure you wish to delete ${widget.questionModel.question} ?"),
           actions: <Widget>[
             TextButton(
               child: Text('Cancel'),
@@ -140,8 +138,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<QuestionService>(context)
-                    .deleteQuestion(widget.questionModel);
+                await Provider.of<QuestionService>(context).deleteQuestion(widget.questionModel);
               },
             ),
           ],

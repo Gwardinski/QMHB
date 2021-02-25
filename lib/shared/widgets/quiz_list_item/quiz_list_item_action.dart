@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/quizzes/quiz_editor_page.dart';
+import 'package:qmhb/pages/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 
@@ -122,8 +122,7 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<QuizService>(context)
-                    .deleteQuiz(widget.quizModel);
+                await Provider.of<QuizService>(context).deleteQuiz(widget.quizModel);
               },
             ),
           ],

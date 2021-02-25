@@ -3,7 +3,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/question/question_details_dialog.dart';
+import 'package:qmhb/pages/details/question/question_details_dialog.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
@@ -99,8 +99,7 @@ class QuestionListItemContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: QuestionListItemAction2(
                 revealAnswer: revealAnswer,
                 type: questionModel.questionType,
@@ -114,8 +113,7 @@ class QuestionListItemContent extends StatelessWidget {
               questionModel: questionModel,
             ),
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: roundModel != null
                   ? QuestionListItemActionAddToRound(
                       roundModel: roundModel,

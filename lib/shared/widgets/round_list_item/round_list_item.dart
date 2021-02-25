@@ -3,7 +3,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/round/round_details_page.dart';
+import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
