@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
@@ -6,7 +7,7 @@ import 'package:qmhb/shared/exceptions/exceptions.dart';
 
 class RoundService {
   // final baseUrl = "https://quizflow.azurewebsites.net";
-  final baseUrl = "http://127.0.0.1:8000/api";
+  final baseUrl = "localhost:8000";
 
   final HttpService httpService;
   final UserDataStateModel userDataStateModel;
@@ -16,11 +17,15 @@ class RoundService {
     this.userDataStateModel,
   });
 
-  Future<List<RoundModel>> getUserRounds({int limit, String orderBy}) async {
+  Future<List<RoundModel>> getUserRounds({
+    @required String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        Uri.http(baseUrl, '/api/rounds/user'),
+        headers: _getHeaders(token),
       );
       return RoundModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -37,11 +42,15 @@ class RoundService {
     }
   }
 
-  Future<List<RoundModel>> getAllRounds({int limit, String orderBy}) async {
+  Future<List<RoundModel>> getAllRounds({
+    String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return RoundModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -58,11 +67,14 @@ class RoundService {
     }
   }
 
-  Future<RoundModel> getRound(int id) async {
+  Future<RoundModel> getRound({
+    @required int id,
+    String token,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return RoundModel.fromDto(res.data);
     } on Http400Exception {
@@ -79,11 +91,14 @@ class RoundService {
     }
   }
 
-  Future<RoundModel> getRoundWithFullDetails(int id) async {
+  Future<RoundModel> getRoundWithFullDetails({
+    @required int id,
+    String token,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return RoundModel.fromDto(res.data);
     } on Http400Exception {
@@ -100,15 +115,16 @@ class RoundService {
     }
   }
 
-  Future<RoundModel> createRound(
-    RoundModel round, {
+  Future<RoundModel> createRound({
+    @required RoundModel round,
+    @required String token,
     int initialQuestionId,
     int parentQuizId,
   }) async {
     try {
       ServiceResponse res = await httpService.post(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: RoundModel.toDtoAdd(
           round,
           initialQuestionId,
@@ -130,11 +146,14 @@ class RoundService {
     }
   }
 
-  Future<RoundModel> editRound(RoundModel round) async {
+  Future<RoundModel> editRound({
+    @required RoundModel round,
+    @required String token,
+  }) async {
     try {
       final res = await httpService.put(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: RoundModel.toDtoEdit(round),
       );
       return RoundModel.fromDto(res.data);
@@ -152,11 +171,14 @@ class RoundService {
     }
   }
 
-  Future<void> deletetRound(RoundModel round) async {
+  Future<void> deletetRound({
+    @required RoundModel round,
+    @required String token,
+  }) async {
     try {
       await httpService.delete(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
     } on Http400Exception {
       print('BAD REQUEST');
@@ -173,20 +195,23 @@ class RoundService {
   }
 
   Future<RoundModel> addQuestionToRound(
-    RoundModel round,
-    QuestionModel question,
+    @required RoundModel round,
+    @required QuestionModel question,
   ) {}
 
   Future<RoundModel> removeQuestionFromRound(
-    RoundModel round,
-    QuestionModel question,
+    @required RoundModel round,
+    @required QuestionModel question,
   ) {}
 
-  Map<String, String> _getHeaders() {
-    return {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      "Authorization": "Bearer ${userDataStateModel.token}",
+  Map<String, String> _getHeaders(token) {
+    Map<String, String> headers = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
     };
+    if (token != null) {
+      headers.putIfAbsent('Authorization', () => 'Bearer $token');
+    }
+    return headers;
   }
 }

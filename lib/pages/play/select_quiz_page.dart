@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -9,6 +10,7 @@ import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 class SelectQuizToPlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -20,7 +22,9 @@ class SelectQuizToPlayPage extends StatelessWidget {
           children: [
             Expanded(
               child: FutureBuilder(
-                future: Provider.of<QuizService>(context).getUserQuizzes(),
+                future: Provider.of<QuizService>(context).getUserQuizzes(
+                  token: token,
+                ),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(

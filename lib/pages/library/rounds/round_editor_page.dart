@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -106,13 +107,17 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       _updateIsLoading(true);
       _updateError('');
       final roundService = Provider.of<RoundService>(context);
+      final token = Provider.of<UserDataStateModel>(context).token;
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _round.imageURL = newImageUrl;
         }
-        await roundService.createRound(_round,
-            parentQuizId: widget.quizModel?.id);
+        await roundService.createRound(
+          round: _round,
+          token: token,
+          parentQuizId: widget.quizModel?.id,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         print(e.toString());
@@ -128,12 +133,16 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       _updateIsLoading(true);
       _updateError('');
       final roundService = Provider.of<RoundService>(context);
+      final token = Provider.of<UserDataStateModel>(context).token;
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _round.imageURL = newImageUrl;
         }
-        await roundService.editRound(_round);
+        await roundService.editRound(
+          round: _round,
+          token: token,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         print(e);
@@ -195,9 +204,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
                     removeImage: _removeImage,
                   ),
                   ButtonPrimary(
-                    text: widget.type == RoundEditorType.ADD
-                        ? "Create"
-                        : "Save Changes",
+                    text: widget.type == RoundEditorType.ADD ? "Create" : "Save Changes",
                     isLoading: _isLoading,
                     onPressed: _onSubmit,
                     fullWidth: true,

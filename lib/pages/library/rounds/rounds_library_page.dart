@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quizzes_library_sidebar.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -15,6 +16,7 @@ import '../../../get_it.dart';
 class RoundCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     final canDrag = getIt<AppSize>().isLarge;
     return DefaultTabController(
       length: 2,
@@ -46,7 +48,9 @@ class RoundCollectionPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder(
-                      future: Provider.of<RoundService>(context).getUserRounds(),
+                      future: Provider.of<RoundService>(context).getUserRounds(
+                        token: token,
+                      ),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(

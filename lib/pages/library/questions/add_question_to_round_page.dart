@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -34,7 +35,7 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("AddQuestionToRoundPage");
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -58,7 +59,10 @@ class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
       ),
       body: FutureBuilder<RoundModel>(
         initialData: _roundModel,
-        future: Provider.of<RoundService>(context).getRound(_roundModel.id),
+        future: Provider.of<RoundService>(context).getRound(
+          id: _roundModel.id,
+          token: token,
+        ),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return ErrorMessage(message: "An error occured loading your Round");
@@ -80,12 +84,14 @@ class AddQuestionToRoundList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("AddQuestionToRoundList");
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Column(
       children: [
         Expanded(
           child: FutureBuilder<List<QuestionModel>>(
-            future: Provider.of<QuestionService>(context).getUserQuestions(),
+            future: Provider.of<QuestionService>(context).getUserQuestions(
+              token: token,
+            ),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return Center(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -103,12 +104,16 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
       _updateIsLoading(true);
       _updateError('');
       final quizService = Provider.of<QuizService>(context);
+      final token = Provider.of<UserDataStateModel>(context).token;
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _quiz.imageURL = newImageUrl;
         }
-        await quizService.createQuiz(_quiz);
+        await quizService.createQuiz(
+          quiz: _quiz,
+          token: token,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         print(e.toString());
@@ -124,12 +129,16 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
       _updateIsLoading(true);
       _updateError('');
       final quizService = Provider.of<QuizService>(context);
+      final token = Provider.of<UserDataStateModel>(context).token;
       try {
         if (_newImage != null) {
           final newImageUrl = await _saveImage();
           _quiz.imageURL = newImageUrl;
         }
-        await quizService.editQuiz(_quiz);
+        await quizService.editQuiz(
+          quiz: _quiz,
+          token: token,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         print(e);
@@ -191,9 +200,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
                     removeImage: _removeImage,
                   ),
                   ButtonPrimary(
-                    text: widget.type == QuizEditorType.ADD
-                        ? "Create"
-                        : "Save Changes",
+                    text: widget.type == QuizEditorType.ADD ? "Create" : "Save Changes",
                     isLoading: _isLoading,
                     onPressed: _onSubmit,
                     fullWidth: true,

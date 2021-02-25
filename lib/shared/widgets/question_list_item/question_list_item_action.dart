@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_service.dart';
@@ -138,7 +139,11 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<QuestionService>(context).deleteQuestion(widget.questionModel);
+                final token = Provider.of<UserDataStateModel>(context).token;
+                await Provider.of<QuestionService>(context).deleteQuestion(
+                  question: widget.questionModel,
+                  token: token,
+                );
               },
             ),
           ],

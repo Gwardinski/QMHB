@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/pages/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_button.dart';
 import 'package:qmhb/pages/library/widgets/add_to_dialog_button_new.dart';
@@ -30,6 +31,7 @@ class AddRoundToQuizDialog extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return AlertDialog(
       contentPadding: EdgeInsets.all(0),
       content: Container(
@@ -45,7 +47,9 @@ class AddRoundToQuizDialog extends StatelessWidget {
             ),
             Expanded(
               child: FutureBuilder(
-                future: Provider.of<QuizService>(context).getUserQuizzes(),
+                future: Provider.of<QuizService>(context).getUserQuizzes(
+                  token: token,
+                ),
                 builder: (BuildContext context, AsyncSnapshot<List<QuizModel>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(

@@ -19,9 +19,10 @@ class UserModel {
   });
 
   UserModel.fromJson(json) {
+    print(json);
     email = json['email'];
     displayName = json['displayName'];
-    authToken = json['authToken'];
+    authToken = json['token'];
     totalQuestions = json['totalQuestions'];
     totalRounds = json['totalRounds'];
     totalQuizzes = json['totalQuizzes'];
@@ -29,7 +30,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() => {
         'email': email,
-        'authToken': authToken,
+        'token': authToken,
         'displayName': displayName,
         'totalQuestions': totalQuestions ?? '',
         'totalRounds': totalRounds ?? '',

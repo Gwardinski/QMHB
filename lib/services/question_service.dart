@@ -1,26 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
 
 class QuestionService {
   // final baseUrl = "https://quizflow.azurewebsites.net";
-  final baseUrl = "http://127.0.0.1:8000/api";
+  final baseUrl = "localhost:8000";
 
   final HttpService httpService;
-  final UserDataStateModel userDataStateModel;
 
   QuestionService({
     this.httpService,
-    this.userDataStateModel,
   });
 
-  Future<List<QuestionModel>> getUserQuestions(
-      {int limit, String orderBy}) async {
+  Future<List<QuestionModel>> getUserQuestions({
+    @required String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        Uri.http(baseUrl, '/api/questions/user'),
+        headers: _getHeaders(token),
       );
       return QuestionModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -37,12 +38,15 @@ class QuestionService {
     }
   }
 
-  Future<List<QuestionModel>> getAllQuestions(
-      {int limit, String orderBy}) async {
+  Future<List<QuestionModel>> getAllQuestions({
+    String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return QuestionModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -59,11 +63,14 @@ class QuestionService {
     }
   }
 
-  Future<QuestionModel> getQuestion(int id) async {
+  Future<QuestionModel> getQuestion({
+    @required int id,
+    String token,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return QuestionModel.fromDto(res.data);
     } on Http400Exception {
@@ -80,11 +87,14 @@ class QuestionService {
     }
   }
 
-  Future<QuestionModel> getQuestionWithFullDetails(int id) async {
+  Future<QuestionModel> getQuestionWithFullDetails({
+    @required int id,
+    String token,
+  }) async {
     try {
       final res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return QuestionModel.fromDto(res.data);
     } on Http400Exception {
@@ -101,14 +111,15 @@ class QuestionService {
     }
   }
 
-  Future<QuestionModel> createQuestion(
-    QuestionModel question, {
+  Future<QuestionModel> createQuestion({
+    @required QuestionModel question,
+    @required String token,
     int parentRoundId,
   }) async {
     try {
       final res = await httpService.post(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: QuestionModel.toDtoAdd(
           question,
           parentRoundId,
@@ -129,11 +140,14 @@ class QuestionService {
     }
   }
 
-  Future<QuestionModel> editQuestion(QuestionModel question) async {
+  Future<QuestionModel> editQuestion({
+    @required QuestionModel question,
+    @required String token,
+  }) async {
     try {
       final res = await httpService.put(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: QuestionModel.toDtoEdit(question),
       );
       return QuestionModel.fromDto(res.data);
@@ -151,11 +165,14 @@ class QuestionService {
     }
   }
 
-  Future<void> deleteQuestion(QuestionModel question) async {
+  Future<void> deleteQuestion({
+    @required QuestionModel question,
+    @required String token,
+  }) async {
     try {
       await httpService.delete(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
     } on Http400Exception {
       print('BAD REQUEST');
@@ -171,11 +188,14 @@ class QuestionService {
     }
   }
 
-  Map<String, String> _getHeaders() {
-    return {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      "Authorization": "Bearer ${userDataStateModel.token}",
+  Map<String, String> _getHeaders(token) {
+    Map<String, String> headers = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
     };
+    if (token != null) {
+      headers.putIfAbsent('Authorization', () => 'Bearer $token');
+    }
+    return headers;
   }
 }

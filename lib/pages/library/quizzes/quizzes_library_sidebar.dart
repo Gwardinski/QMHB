@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_service.dart';
@@ -11,6 +12,7 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 class QuizzesLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -27,7 +29,9 @@ class QuizzesLibrarySidebar extends StatelessWidget {
           UserQuizzesSidebarTitle(),
           Expanded(
             child: FutureBuilder(
-              future: Provider.of<QuizService>(context).getUserQuizzes(),
+              future: Provider.of<QuizService>(context).getUserQuizzes(
+                token: token,
+              ),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(

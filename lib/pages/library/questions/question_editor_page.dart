@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
@@ -67,9 +68,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
 
   _onSubmit() async {
     if (_formKey.currentState.validate()) {
-      widget.type == QuestionEditorType.ADD
-          ? _createQuestion()
-          : _editQuestion();
+      widget.type == QuestionEditorType.ADD ? _createQuestion() : _editQuestion();
     }
   }
 
@@ -77,12 +76,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateIsLoading(true);
     _updateError('');
     final questionService = Provider.of<QuestionService>(context);
+    final token = Provider.of<UserDataStateModel>(context).token;
     try {
       if (_newImage != null) {
         final newImageUrl = await _saveImage();
         _question.imageURL = newImageUrl;
       }
-      await questionService.createQuestion(_question);
+      await questionService.createQuestion(
+        question: _question,
+        token: token,
+      );
       if (widget.roundModel != null) {
         final roundService = Provider.of<RoundService>(context);
         await roundService.addQuestionToRound(widget.roundModel, _question);
@@ -100,12 +103,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateIsLoading(true);
     _updateError('');
     final questionService = Provider.of<QuestionService>(context);
+    final token = Provider.of<UserDataStateModel>(context).token;
     try {
       if (_newImage != null) {
         final newImageUrl = await _saveImage();
         _question.imageURL = newImageUrl;
       }
-      await questionService.editQuestion(_question);
+      await questionService.editQuestion(
+        question: _question,
+        token: token,
+      );
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
@@ -158,8 +165,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'Changing Question type will remove any picture or music you have selected.'),
+                Text('Changing Question type will remove any picture or music you have selected.'),
                 Text('Are you sure you wish to change question type?'),
               ],
             ),
@@ -196,9 +202,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          widget.type == QuestionEditorType.ADD
-              ? "Create Question"
-              : "Edit Question",
+          widget.type == QuestionEditorType.ADD ? "Create Question" : "Edit Question",
         ),
       ),
       body: SingleChildScrollView(
@@ -288,9 +292,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                           height: 80,
                           padding: EdgeInsets.only(bottom: 16),
                           width: double.infinity,
-                          child: Center(
-                              child: Text(
-                                  "TODO - Spotify Song Selector to go here")),
+                          child: Center(child: Text("TODO - Spotify Song Selector to go here")),
                         )
                       : Container(),
                   FormInput(
@@ -313,9 +315,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                     },
                   ),
                   ButtonPrimary(
-                    text: widget.type == QuestionEditorType.ADD
-                        ? "Create"
-                        : "Save Changes",
+                    text: widget.type == QuestionEditorType.ADD ? "Create" : "Save Changes",
                     isLoading: _isLoading,
                     fullWidth: true,
                     onPressed: _onSubmit,

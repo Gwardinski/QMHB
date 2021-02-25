@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quizzes_library_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
@@ -28,6 +29,7 @@ class RecentQuizzesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Column(
       children: [
         SummaryRowHeader(
@@ -51,6 +53,7 @@ class RecentQuizzesRow extends StatelessWidget {
               future: Provider.of<QuizService>(context).getUserQuizzes(
                 limit: 8,
                 orderBy: 'lastUpdated',
+                token: token,
               ),
               builder: (BuildContext context, AsyncSnapshot<List<QuizModel>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -55,7 +56,12 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
       _updateError('');
       final quizService = Provider.of<QuizService>(context);
       try {
-        await quizService.createQuiz(_quiz, initialRoundId: widget.initialRound?.id);
+        final token = Provider.of<UserDataStateModel>(context).token;
+        await quizService.createQuiz(
+          quiz: _quiz,
+          initialRoundId: widget.initialRound?.id,
+          token: token,
+        );
         Navigator.of(context).pop();
       } catch (e) {
         _updateError('Failed to add Quiz');

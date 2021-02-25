@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -11,6 +12,7 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 class RoundsLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -26,7 +28,9 @@ class RoundsLibrarySidebar extends StatelessWidget {
           RoundsLibrarySidebarNewRound(),
           Expanded(
             child: FutureBuilder(
-              future: Provider.of<RoundService>(context).getUserRounds(),
+              future: Provider.of<RoundService>(context).getUserRounds(
+                token: token,
+              ),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(

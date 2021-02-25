@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/widgets/quiz_details_rounds_list.dart';
 import 'package:qmhb/pages/details/widgets/details_list_empty.dart';
 import 'package:qmhb/pages/details/widgets/details_header.dart';
@@ -22,6 +23,7 @@ class QuizDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -34,7 +36,10 @@ class QuizDetailsPage extends StatelessWidget {
       ),
       body: FutureBuilder(
         initialData: quizModel,
-        future: Provider.of<QuizService>(context).getQuiz(quizModel.id),
+        future: Provider.of<QuizService>(context).getQuiz(
+          id: quizModel.id,
+          token: token,
+        ),
         builder: (BuildContext context, AsyncSnapshot<QuizModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(

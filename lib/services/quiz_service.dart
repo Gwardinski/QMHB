@@ -1,27 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
 
 class QuizService extends ChangeNotifier {
   // final baseUrl = "https://quizflow.azurewebsites.net";
-  final baseUrl = "http://127.0.0.1:8000/api";
+  final baseUrl = "localhost:8000";
 
   final HttpService httpService;
-  final UserDataStateModel userDataStateModel;
 
   QuizService({
     @required this.httpService,
-    @required this.userDataStateModel,
   });
 
-  Future<List<QuizModel>> getUserQuizzes({int limit, String orderBy}) async {
+  Future<List<QuizModel>> getUserQuizzes({
+    @required String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       ServiceResponse res = await httpService.get(
-        Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        Uri.http(baseUrl, '/api/quizzes/user'),
+        headers: _getHeaders(token),
       );
       return QuizModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -38,11 +39,15 @@ class QuizService extends ChangeNotifier {
     }
   }
 
-  Future<List<QuizModel>> getAllQuizzes({int limit, String orderBy}) async {
+  Future<List<QuizModel>> getAllQuizzes({
+    String token,
+    int limit,
+    String orderBy,
+  }) async {
     try {
       ServiceResponse res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return QuizModel.listFromDtos(res.data);
     } on Http400Exception {
@@ -59,11 +64,14 @@ class QuizService extends ChangeNotifier {
     }
   }
 
-  Future<QuizModel> getQuiz(int id) async {
+  Future<QuizModel> getQuiz({
+    @required int id,
+    String token,
+  }) async {
     try {
       ServiceResponse res = await httpService.get(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
       return QuizModel.fromDto(res.data);
     } on Http400Exception {
@@ -80,14 +88,15 @@ class QuizService extends ChangeNotifier {
     }
   }
 
-  Future<QuizModel> createQuiz(
-    QuizModel quiz, {
+  Future<QuizModel> createQuiz({
+    @required QuizModel quiz,
+    @required String token,
     int initialRoundId,
   }) async {
     try {
       ServiceResponse res = await httpService.post(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: QuizModel.toDtoAdd(
           quiz,
           initialRoundId,
@@ -108,11 +117,14 @@ class QuizService extends ChangeNotifier {
     }
   }
 
-  Future<QuizModel> editQuiz(QuizModel quiz) async {
+  Future<QuizModel> editQuiz({
+    @required QuizModel quiz,
+    @required String token,
+  }) async {
     try {
       ServiceResponse res = await httpService.put(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
         body: QuizModel.toDtoEdit(quiz),
       );
       return QuizModel.fromDto(res.data);
@@ -130,11 +142,14 @@ class QuizService extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteQuiz(QuizModel quiz) async {
+  Future<void> deleteQuiz({
+    @required QuizModel quiz,
+    @required String token,
+  }) async {
     try {
       await httpService.delete(
         Uri.https(baseUrl, ''),
-        headers: _getHeaders(),
+        headers: _getHeaders(token),
       );
     } on Http400Exception {
       print('BAD REQUEST');
@@ -151,20 +166,23 @@ class QuizService extends ChangeNotifier {
   }
 
   Future<QuizModel> addRoundToQuiz(
-    QuizModel quiz,
-    RoundModel round,
+    @required QuizModel quiz,
+    @required RoundModel round,
   ) {}
 
   Future<QuizModel> removeRoundFromQuiz(
-    QuizModel quiz,
-    RoundModel round,
+    @required QuizModel quiz,
+    @required RoundModel round,
   ) {}
 
-  Map<String, String> _getHeaders() {
-    return {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      "Authorization": "Bearer ${userDataStateModel.token}",
+  Map<String, String> _getHeaders(token) {
+    Map<String, String> headers = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
     };
+    if (token != null) {
+      headers.putIfAbsent('Authorization', () => 'Bearer $token');
+    }
+    return headers;
   }
 }

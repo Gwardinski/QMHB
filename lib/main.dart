@@ -70,19 +70,16 @@ class MyApp extends StatelessWidget {
         Provider<QuestionService>(
           create: (BuildContext context) => QuestionService(
             httpService: httpService,
-            userDataStateModel: userDataStateModel,
           ),
         ),
         Provider<RoundService>(
           create: (BuildContext context) => RoundService(
             httpService: httpService,
-            userDataStateModel: userDataStateModel,
           ),
         ),
         ChangeNotifierProvider<QuizService>(
           create: (BuildContext context) => QuizService(
             httpService: httpService,
-            userDataStateModel: userDataStateModel,
           ),
         ),
       ],

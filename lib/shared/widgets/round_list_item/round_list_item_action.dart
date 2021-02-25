@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_dialog.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -143,7 +144,11 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await Provider.of<RoundService>(context).deletetRound(widget.roundModel);
+                final token = Provider.of<UserDataStateModel>(context).token;
+                await Provider.of<RoundService>(context).deletetRound(
+                  round: widget.roundModel,
+                  token: token,
+                );
               },
             ),
           ],

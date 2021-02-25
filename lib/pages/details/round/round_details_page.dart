@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/widgets/round_details_questions_list.dart';
 import 'package:qmhb/pages/details/widgets/details_list_empty.dart';
 import 'package:qmhb/pages/details/widgets/details_header.dart';
@@ -22,6 +23,7 @@ class RoundDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -34,7 +36,10 @@ class RoundDetailsPage extends StatelessWidget {
       ),
       body: FutureBuilder(
         initialData: roundModel,
-        future: Provider.of<RoundService>(context).getRound(roundModel.id),
+        future: Provider.of<RoundService>(context).getRound(
+          id: roundModel.id,
+          token: token,
+        ),
         builder: (BuildContext context, AsyncSnapshot<RoundModel> snapshot) {
           if (!snapshot.hasData) {
             return Container(

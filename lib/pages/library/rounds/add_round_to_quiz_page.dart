@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -34,6 +35,7 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    final token = Provider.of<UserDataStateModel>(context).token;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -59,7 +61,10 @@ class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
         ),
         body: FutureBuilder<QuizModel>(
           initialData: _quizModel,
-          future: Provider.of<QuizService>(context).getQuiz(_quizModel.id),
+          future: Provider.of<QuizService>(context).getQuiz(
+            id: _quizModel.id,
+            token: token,
+          ),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return ErrorMessage(message: "An error occured loading this Quiz");
@@ -82,12 +87,14 @@ class AddRoundToQuizList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("AddRoundToQuizList");
+    final token = Provider.of<UserDataStateModel>(context).token;
     return Column(
       children: [
         Expanded(
           child: FutureBuilder<List<RoundModel>>(
-            future: Provider.of<RoundService>(context).getUserRounds(),
+            future: Provider.of<RoundService>(context).getUserRounds(
+              token: token,
+            ),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return Center(
