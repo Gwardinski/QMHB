@@ -123,9 +123,9 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
 
   _deleteRound() {
     var text = "Are you sure you wish to delete ${widget.roundModel.title} ?";
-    if (widget.roundModel.noOfQuestions > 0) {
+    if (widget.roundModel.questions.length > 0) {
       text +=
-          "\n\nThis will not delete the ${widget.roundModel.noOfQuestions} questions this round contains.";
+          "\n\nThis will not delete the ${widget.roundModel.questions.length} questions this round contains.";
     }
     showDialog(
       context: context,
@@ -144,8 +144,8 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                final token = Provider.of<UserDataStateModel>(context).token;
-                await Provider.of<RoundService>(context).deletetRound(
+                final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+                await Provider.of<RoundService>(context, listen: false).deletetRound(
                   round: widget.roundModel,
                   token: token,
                 );

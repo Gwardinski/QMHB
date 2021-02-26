@@ -72,7 +72,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
       MaterialPageRoute(
         builder: (context) => ImageCapture(
           fileImage: _newImage,
-          networkImage: _quiz.imageURL,
+          networkImage: _quiz.imageUrl,
         ),
       ),
     );
@@ -84,7 +84,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   _removeImage() {
     setState(() {
       _newImage = null;
-      _quiz.imageURL = null;
+      _quiz.imageUrl = null;
     });
   }
 
@@ -103,12 +103,12 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizService>(context);
-      final token = Provider.of<UserDataStateModel>(context).token;
+      final quizService = Provider.of<QuizService>(context, listen: false);
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       try {
         if (_newImage != null) {
-          final newImageUrl = await _saveImage();
-          _quiz.imageURL = newImageUrl;
+          final newimageUrl = await _saveImage();
+          _quiz.imageUrl = newimageUrl;
         }
         await quizService.createQuiz(
           quiz: _quiz,
@@ -128,12 +128,12 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizService>(context);
-      final token = Provider.of<UserDataStateModel>(context).token;
+      final quizService = Provider.of<QuizService>(context, listen: false);
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       try {
         if (_newImage != null) {
-          final newImageUrl = await _saveImage();
-          _quiz.imageURL = newImageUrl;
+          final newimageUrl = await _saveImage();
+          _quiz.imageUrl = newimageUrl;
         }
         await quizService.editQuiz(
           quiz: _quiz,
@@ -195,7 +195,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
                   ),
                   ImageSelector(
                     fileImage: _newImage,
-                    networkImage: _quiz.imageURL,
+                    networkImage: _quiz.imageUrl,
                     selectImage: _selectImage,
                     removeImage: _removeImage,
                   ),

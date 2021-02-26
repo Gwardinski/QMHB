@@ -7,16 +7,16 @@ class DetailsHeaderImageAndTitle extends StatelessWidget {
     Key key,
     @required this.type,
     @required this.title,
-    @required this.imageURL,
+    @required this.imageUrl,
   }) : super(key: key);
 
   final String type;
   final String title;
-  final String imageURL;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = imageURL != null;
+    final hasImage = imageUrl != null;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -24,7 +24,7 @@ class DetailsHeaderImageAndTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DetailsHeaderProfileImage(
-            imageURL: imageURL,
+            imageUrl: imageUrl,
           ),
           DetailsHeaderTypeAndTitle(
             type: type,

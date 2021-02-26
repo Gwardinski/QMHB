@@ -10,7 +10,7 @@ class DetailsHeader extends StatelessWidget {
   final String type;
   final String title;
   final String description;
-  final String imageURL;
+  final String imageUrl;
   final String info1Title;
   final String info2Title;
   final String info3Title;
@@ -22,7 +22,7 @@ class DetailsHeader extends StatelessWidget {
     this.type,
     this.title,
     this.description,
-    this.imageURL,
+    this.imageUrl,
     this.info1Title,
     this.info2Title,
     this.info3Title,
@@ -39,11 +39,11 @@ class DetailsHeader extends StatelessWidget {
       children: <Widget>[
         Stack(
           children: [
-            DetailsHeaderBannerImage(imageURL: imageURL),
+            DetailsHeaderBannerImage(imageUrl: imageUrl),
             DetailsHeaderImageAndTitle(
               type: type,
               title: title,
-              imageURL: imageURL,
+              imageUrl: imageUrl,
             ),
             Column(
               children: [

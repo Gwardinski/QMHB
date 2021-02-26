@@ -81,7 +81,7 @@ class RoundListItemStack extends StatelessWidget {
         height: 112,
         child: Stack(
           children: [
-            ItemBackgroundImage(imageUrl: roundModel.imageURL),
+            ItemBackgroundImage(imageUrl: roundModel.imageUrl),
             Align(
               alignment: Alignment.centerRight,
               child: Container(
@@ -126,7 +126,7 @@ class RoundListItemContent extends StatelessWidget {
             info1Title: "Points: ",
             info1Value: roundModel.totalPoints.toString(),
             info2Title: "Questions: ",
-            info2Value: roundModel.noOfQuestions.toString(),
+            info2Value: roundModel.questions.length.toString(),
             info3Title: null,
             info3Value: null,
           ),

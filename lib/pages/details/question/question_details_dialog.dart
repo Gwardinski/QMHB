@@ -56,9 +56,9 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(bottom: 16)),
-                    widget.questionModel.imageURL != null
+                    widget.questionModel.imageUrl != null
                         ? ImageSwitcher(
-                            networkImage: widget.questionModel.imageURL,
+                            networkImage: widget.questionModel.imageUrl,
                           )
                         : Container(),
                     Padding(padding: EdgeInsets.only(bottom: 16)),
@@ -97,11 +97,15 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                       children: [
                         InfoColumn(
                           title: 'Created',
-                          value: DateFormat('d-MM-yy').format(widget.questionModel.createdAt),
+                          value: widget.questionModel.createdAt != null
+                              ? DateFormat('d-MM-yy').format(widget.questionModel.createdAt)
+                              : "No Date",
                         ),
                         InfoColumn(
                           title: 'Updated',
-                          value: DateFormat('d-MM-yy').format(widget.questionModel.lastUpdated),
+                          value: widget.questionModel.lastUpdated != null
+                              ? DateFormat('d-MM-yy').format(widget.questionModel.lastUpdated)
+                              : "No Date",
                         ),
                       ],
                     ),

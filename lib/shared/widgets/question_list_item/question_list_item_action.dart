@@ -138,12 +138,16 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
             TextButton(
               child: Text('Delete'),
               onPressed: () async {
-                Navigator.of(context).pop();
-                final token = Provider.of<UserDataStateModel>(context).token;
-                await Provider.of<QuestionService>(context).deleteQuestion(
-                  question: widget.questionModel,
-                  token: token,
-                );
+                try {
+                  final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+                  await Provider.of<QuestionService>(context, listen: false).deleteQuestion(
+                    question: widget.questionModel,
+                    token: token,
+                  );
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  print(e);
+                }
               },
             ),
           ],

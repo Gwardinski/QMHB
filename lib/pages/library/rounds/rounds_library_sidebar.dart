@@ -156,7 +156,7 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      roundModel.noOfQuestions.toString(),
+                      roundModel.questions.length.toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,

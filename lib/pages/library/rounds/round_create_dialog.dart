@@ -54,13 +54,13 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final token = Provider.of<UserDataStateModel>(context).token;
-      final roundService = Provider.of<RoundService>(context);
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+      final roundService = Provider.of<RoundService>(context, listen: false);
       try {
         await roundService.createRound(
           round: _round,
           token: token,
-          initialQuestionId: widget.initialQuestion?.id,
+          // initialQuestionId: widget.initialQuestion?.id,
         );
         Navigator.of(context).pop();
       } catch (e) {

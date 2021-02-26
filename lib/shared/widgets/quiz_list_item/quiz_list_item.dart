@@ -89,7 +89,7 @@ class QuizListItemStack extends StatelessWidget {
         height: 112,
         child: Stack(
           children: [
-            ItemBackgroundImage(imageUrl: quizModel.imageURL),
+            ItemBackgroundImage(imageUrl: quizModel.imageUrl),
             Container(
               height: 112,
               width: double.infinity,
@@ -132,7 +132,7 @@ class QuizListItemContent extends StatelessWidget {
             info1Title: "Points: ",
             info1Value: quizModel.totalPoints.toString(),
             info2Title: "Rounds: ",
-            info2Value: quizModel.noOfRounds.toString(),
+            info2Value: quizModel.rounds.length.toString(),
             info3Title: null,
             info3Value: null,
           ),

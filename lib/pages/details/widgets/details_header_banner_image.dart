@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 class DetailsHeaderBannerImage extends StatelessWidget {
   const DetailsHeaderBannerImage({
     Key key,
-    @required this.imageURL,
+    @required this.imageUrl,
   }) : super(key: key);
 
-  final String imageURL;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +16,13 @@ class DetailsHeaderBannerImage extends StatelessWidget {
       width: double.infinity,
       height: 300,
       decoration: BoxDecoration(
-        image: imageURL != null
+        image: imageUrl != null
             ? DecorationImage(
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
                 matchTextDirection: true,
                 repeat: ImageRepeat.noRepeat,
-                image: NetworkImage(imageURL),
+                image: NetworkImage(imageUrl),
               )
             : null,
       ),

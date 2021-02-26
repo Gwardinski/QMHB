@@ -1,7 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
 
@@ -10,13 +10,12 @@ class RoundService {
   final baseUrl = "localhost:8000";
 
   final HttpService httpService;
-  final UserDataStateModel userDataStateModel;
 
   RoundService({
     this.httpService,
-    this.userDataStateModel,
   });
 
+  // LIBRARY
   Future<List<RoundModel>> getUserRounds({
     @required String token,
     int limit,
@@ -27,7 +26,7 @@ class RoundService {
         Uri.http(baseUrl, '/api/rounds/user'),
         headers: _getHeaders(token),
       );
-      return RoundModel.listFromDtos(res.data);
+      return RoundModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -42,6 +41,7 @@ class RoundService {
     }
   }
 
+  // EXPLORE - all published
   Future<List<RoundModel>> getAllRounds({
     String token,
     int limit,
@@ -49,10 +49,10 @@ class RoundService {
   }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, '/api/rounds/'),
         headers: _getHeaders(token),
       );
-      return RoundModel.listFromDtos(res.data);
+      return RoundModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -67,40 +67,17 @@ class RoundService {
     }
   }
 
+  // Fails when !user and !published
   Future<RoundModel> getRound({
     @required int id,
     String token,
   }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, '/api/rounds/$id/'),
         headers: _getHeaders(token),
       );
-      return RoundModel.fromDto(res.data);
-    } on Http400Exception {
-      print('BAD REQUEST');
-      throw Exception();
-    } on Http403Exception {
-      print('FORBIDDEN');
-      throw Exception();
-    } on Http404Exception {
-      print('NOT FOUND');
-      throw Exception();
-    } catch (e) {
-      throw Exception();
-    }
-  }
-
-  Future<RoundModel> getRoundWithFullDetails({
-    @required int id,
-    String token,
-  }) async {
-    try {
-      final res = await httpService.get(
-        Uri.https(baseUrl, ''),
-        headers: _getHeaders(token),
-      );
-      return RoundModel.fromDto(res.data);
+      return RoundModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -118,20 +95,14 @@ class RoundService {
   Future<RoundModel> createRound({
     @required RoundModel round,
     @required String token,
-    int initialQuestionId,
-    int parentQuizId,
   }) async {
     try {
-      ServiceResponse res = await httpService.post(
-        Uri.https(baseUrl, ''),
+      final res = await httpService.post(
+        Uri.http(baseUrl, '/api/rounds/'),
         headers: _getHeaders(token),
-        body: RoundModel.toDtoAdd(
-          round,
-          initialQuestionId,
-          parentQuizId,
-        ),
+        body: json.encode(round),
       );
-      return RoundModel.fromDto(res.data);
+      return RoundModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -152,11 +123,11 @@ class RoundService {
   }) async {
     try {
       final res = await httpService.put(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/rounds/'),
         headers: _getHeaders(token),
-        body: RoundModel.toDtoEdit(round),
+        body: json.encode(round),
       );
-      return RoundModel.fromDto(res.data);
+      return RoundModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -177,7 +148,7 @@ class RoundService {
   }) async {
     try {
       await httpService.delete(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/rounds/'),
         headers: _getHeaders(token),
       );
     } on Http400Exception {
@@ -206,7 +177,7 @@ class RoundService {
 
   Map<String, String> _getHeaders(token) {
     Map<String, String> headers = {
-      'Content-type': 'application/x-www-form-urlencoded',
+      'Content-type': 'application/json',
       'Accept': 'application/json',
     };
     if (token != null) {

@@ -75,7 +75,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       MaterialPageRoute(
         builder: (context) => ImageCapture(
           fileImage: _newImage,
-          networkImage: _round.imageURL,
+          networkImage: _round.imageUrl,
         ),
       ),
     );
@@ -87,7 +87,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
   _removeImage() {
     setState(() {
       _newImage = null;
-      _round.imageURL = null;
+      _round.imageUrl = null;
     });
   }
 
@@ -106,17 +106,17 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final roundService = Provider.of<RoundService>(context);
-      final token = Provider.of<UserDataStateModel>(context).token;
+      final roundService = Provider.of<RoundService>(context, listen: false);
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       try {
         if (_newImage != null) {
-          final newImageUrl = await _saveImage();
-          _round.imageURL = newImageUrl;
+          final newimageUrl = await _saveImage();
+          _round.imageUrl = newimageUrl;
         }
         await roundService.createRound(
           round: _round,
           token: token,
-          parentQuizId: widget.quizModel?.id,
+          // parentQuizId: widget.quizModel?.id,
         );
         Navigator.of(context).pop();
       } catch (e) {
@@ -132,12 +132,12 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final roundService = Provider.of<RoundService>(context);
-      final token = Provider.of<UserDataStateModel>(context).token;
+      final roundService = Provider.of<RoundService>(context, listen: false);
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       try {
         if (_newImage != null) {
-          final newImageUrl = await _saveImage();
-          _round.imageURL = newImageUrl;
+          final newimageUrl = await _saveImage();
+          _round.imageUrl = newimageUrl;
         }
         await roundService.editRound(
           round: _round,
@@ -199,7 +199,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
                   ),
                   ImageSelector(
                     fileImage: _newImage,
-                    networkImage: _round.imageURL,
+                    networkImage: _round.imageUrl,
                     selectImage: _selectImage,
                     removeImage: _removeImage,
                   ),

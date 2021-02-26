@@ -5,14 +5,14 @@ import '../../../get_it.dart';
 
 class DetailsHeaderProfileImage extends StatelessWidget {
   const DetailsHeaderProfileImage({
-    @required this.imageURL,
+    @required this.imageUrl,
   });
 
-  final String imageURL;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    return imageURL != null
+    return imageUrl != null
         ? Container(
             height: 200,
             margin: EdgeInsets.only(right: 16),
@@ -28,13 +28,13 @@ class DetailsHeaderProfileImage extends StatelessWidget {
                       Radius.circular(getIt<AppSize>().borderRadius),
                     ),
                     border: Border.all(color: Theme.of(context).accentColor),
-                    image: imageURL != null
+                    image: imageUrl != null
                         ? DecorationImage(
                             fit: BoxFit.cover,
                             alignment: Alignment.center,
                             matchTextDirection: true,
                             repeat: ImageRepeat.noRepeat,
-                            image: NetworkImage(imageURL),
+                            image: NetworkImage(imageUrl),
                           )
                         : null,
                   ),

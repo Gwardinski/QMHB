@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:qmhb/models/category_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/user_model.dart';
@@ -14,7 +13,7 @@ class QuestionModel {
   int id;
   String questionType;
   String question;
-  String imageURL;
+  String imageUrl;
   String answer;
   String category;
   String difficulty;
@@ -23,28 +22,29 @@ class QuestionModel {
   DateTime lastUpdated;
   DateTime createdAt;
   // relational
-  List<RoundModel> rounds;
+  List<int> rounds;
+  List<RoundModel> roundModels;
   UserModel user;
 
   QuestionModel({
-    this.id,
-    this.questionType,
-    this.question,
-    this.imageURL,
-    this.answer,
-    this.category,
+    @required this.id,
+    @required this.questionType,
+    @required this.question,
+    @required this.answer,
+    @required this.category,
+    @required this.points,
+    this.imageUrl,
     this.difficulty,
-    this.points,
     this.isPublished,
   });
 
-  QuestionModel.fromDto(json) {
+  QuestionModel.fromJson(json) {
     this.id = json['id'];
-    // this.lastUpdated = json['lastUpdated'].toDate();
-    // this.createdAt = json['createdAt'].toDate();
+    this.lastUpdated = DateTime.parse(json['lastUpdated']);
+    this.createdAt = DateTime.parse(json['createdAt']);
     this.questionType = json['questionType'];
     this.question = json['question'];
-    this.imageURL = json['imageURL'];
+    this.imageUrl = json['imageUrl'];
     this.answer = json['answer'];
     this.category = json['category'];
     this.difficulty = json['difficulty'];
@@ -52,59 +52,25 @@ class QuestionModel {
     this.isPublished = json['isPublished'];
   }
 
-  static List<QuestionModel> listFromDtos(List<dynamic> rawQuestions) {
+  static List<QuestionModel> listFromJson(List<dynamic> rawQuestions) {
     List<QuestionModel> formattedQuestions = [];
     if (rawQuestions.length > 0) {
-      formattedQuestions =
-          rawQuestions.map((q) => QuestionModel.fromDto(q)).toList();
+      formattedQuestions = rawQuestions.map((q) => QuestionModel.fromJson(q)).toList();
     }
     return formattedQuestions;
   }
 
-  toDto({
-    QuestionModel questionModel,
-  }) {
-    return {
-      "id": questionModel.id,
-      "question": questionModel.question,
-      "questionType": questionModel.questionType,
-      "answer": questionModel.answer,
-      "imageURL": questionModel.imageURL,
-      "category": questionModel.category,
-      "difficulty": questionModel.difficulty,
-      "points": questionModel.points,
-      "isPublished": questionModel.isPublished,
-    };
-  }
-
-  static toDtoAdd(
-    QuestionModel questionModel,
-    int parentRoundId,
-  ) {
-    return jsonEncode({
-      "question": questionModel.question,
-      "questionType": questionModel.questionType,
-      "answer": questionModel.answer,
-      "imageURL": questionModel.imageURL,
-      "category": questionModel.category,
-      "difficulty": questionModel.difficulty,
-      "points": questionModel.points,
-      "parentRoundId": parentRoundId ?? 0,
-    });
-  }
-
-  static toDtoEdit(QuestionModel questionModel) {
-    return jsonEncode({
-      "id": questionModel.id,
-      "question": questionModel.question,
-      "questionType": questionModel.questionType,
-      "answer": questionModel.answer,
-      "imageURL": questionModel.imageURL,
-      "category": questionModel.category,
-      "difficulty": questionModel.difficulty,
-      "points": questionModel.points,
-    });
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "question": question,
+        "questionType": questionType,
+        "answer": answer,
+        "imageUrl": imageUrl,
+        "category": category,
+        "difficulty": difficulty,
+        "points": points,
+        "isPublished": isPublished ?? false,
+      };
 
   QuestionModel.newQuestion() {
     this.points = 1;

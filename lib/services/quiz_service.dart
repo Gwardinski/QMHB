@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
@@ -24,7 +26,7 @@ class QuizService extends ChangeNotifier {
         Uri.http(baseUrl, '/api/quizzes/user'),
         headers: _getHeaders(token),
       );
-      return QuizModel.listFromDtos(res.data);
+      return QuizModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -46,10 +48,10 @@ class QuizService extends ChangeNotifier {
   }) async {
     try {
       ServiceResponse res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/quizzes/'),
         headers: _getHeaders(token),
       );
-      return QuizModel.listFromDtos(res.data);
+      return QuizModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -70,10 +72,10 @@ class QuizService extends ChangeNotifier {
   }) async {
     try {
       ServiceResponse res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/quizzes/$id/'),
         headers: _getHeaders(token),
       );
-      return QuizModel.fromDto(res.data);
+      return QuizModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -95,14 +97,11 @@ class QuizService extends ChangeNotifier {
   }) async {
     try {
       ServiceResponse res = await httpService.post(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/quizzes/'),
         headers: _getHeaders(token),
-        body: QuizModel.toDtoAdd(
-          quiz,
-          initialRoundId,
-        ),
+        body: json.encode(quiz),
       );
-      return QuizModel.fromDto(res.data);
+      return QuizModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -123,11 +122,11 @@ class QuizService extends ChangeNotifier {
   }) async {
     try {
       ServiceResponse res = await httpService.put(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/quizzes/${quiz.id}/'),
         headers: _getHeaders(token),
-        body: QuizModel.toDtoEdit(quiz),
+        body: json.encode(quiz),
       );
-      return QuizModel.fromDto(res.data);
+      return QuizModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -148,7 +147,7 @@ class QuizService extends ChangeNotifier {
   }) async {
     try {
       await httpService.delete(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/quizzes/${quiz.id}/'),
         headers: _getHeaders(token),
       );
     } on Http400Exception {
@@ -177,7 +176,7 @@ class QuizService extends ChangeNotifier {
 
   Map<String, String> _getHeaders(token) {
     Map<String, String> headers = {
-      'Content-type': 'application/x-www-form-urlencoded',
+      'Content-type': 'application/json',
       'Accept': 'application/json',
     };
     if (token != null) {

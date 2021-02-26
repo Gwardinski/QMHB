@@ -60,10 +60,10 @@ class RoundDetailsPage extends StatelessWidget {
                   info1Title: "Questions",
                   info2Title: "Points",
                   info3Title: "Created",
-                  info1Value: snapshot.data.noOfQuestions.toString(),
+                  info1Value: snapshot.data.questions.length.toString(),
                   info2Value: snapshot.data.totalPoints.toString(),
                   info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
-                  imageURL: snapshot.data.imageURL,
+                  imageUrl: snapshot.data.imageUrl,
                 ),
                 Divider(),
                 SummaryRowHeader(
@@ -89,7 +89,7 @@ class RoundDetailsPage extends StatelessWidget {
                     // );
                   },
                 ),
-                snapshot.data.noOfQuestions > 0
+                snapshot.data.questions.length > 0
                     ? RoundDetailsQuestionsList(roundModel: snapshot.data)
                     : DetailsListEmpty(text: "This Round has no Questions"),
               ],

@@ -21,9 +21,6 @@ class HttpService {
     dynamic body,
     Map<String, String> headers,
   }) async {
-    var test =
-        await http.get(Uri.https('jsonplaceholder.typicode.com', 'albums/1'));
-    print(test);
     final response = await http.post(
       uri,
       headers: headers ?? _getHeaders(),
@@ -64,12 +61,13 @@ class HttpService {
   }
 
   ServiceResponse _handleResponse(http.Response response) {
-    print(response.statusCode);
-    print(response.body);
-    if (response.statusCode == 200) {
-      return ServiceResponse.fromJson(
-        jsonDecode(response.body),
-      );
+    if (response.statusCode >= 200 || response.statusCode < 300) {
+      if (response.body != null && response.body.length > 0) {
+        return ServiceResponse.fromJson(
+          jsonDecode(response.body),
+        );
+      }
+      return ServiceResponse.fromJson("");
     } else {
       switch (response.statusCode) {
         case 400:

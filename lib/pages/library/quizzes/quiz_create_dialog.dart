@@ -54,9 +54,9 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
-      final quizService = Provider.of<QuizService>(context);
+      final quizService = Provider.of<QuizService>(context, listen: false);
       try {
-        final token = Provider.of<UserDataStateModel>(context).token;
+        final token = Provider.of<UserDataStateModel>(context, listen: false).token;
         await quizService.createQuiz(
           quiz: _quiz,
           initialRoundId: widget.initialRound?.id,

@@ -7,19 +7,14 @@ class UserModel {
   int totalQuestions;
   int totalRounds;
   int totalQuizzes;
-  DateTime lastUpdated;
-  DateTime createdAt;
 
   UserModel({
     @required this.email,
     @required this.displayName,
     @required this.authToken,
-    this.lastUpdated,
-    this.createdAt,
   });
 
   UserModel.fromJson(json) {
-    print(json);
     email = json['email'];
     displayName = json['displayName'];
     authToken = json['token'];

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/services/http_service.dart';
@@ -13,6 +15,7 @@ class QuestionService {
     this.httpService,
   });
 
+  // LIBRARY
   Future<List<QuestionModel>> getUserQuestions({
     @required String token,
     int limit,
@@ -20,10 +23,10 @@ class QuestionService {
   }) async {
     try {
       final res = await httpService.get(
-        Uri.http(baseUrl, '/api/questions/user'),
+        Uri.http(baseUrl, '/api/questions/user/'),
         headers: _getHeaders(token),
       );
-      return QuestionModel.listFromDtos(res.data);
+      return QuestionModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -34,10 +37,12 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
 
+  // EXPLORE - all published
   Future<List<QuestionModel>> getAllQuestions({
     String token,
     int limit,
@@ -45,10 +50,10 @@ class QuestionService {
   }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, '/api/questions/'),
         headers: _getHeaders(token),
       );
-      return QuestionModel.listFromDtos(res.data);
+      return QuestionModel.listFromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -59,20 +64,22 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
 
+  // Fails when !user and !published
   Future<QuestionModel> getQuestion({
     @required int id,
     String token,
   }) async {
     try {
       final res = await httpService.get(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, '/api/questions/$id/'),
         headers: _getHeaders(token),
       );
-      return QuestionModel.fromDto(res.data);
+      return QuestionModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -83,30 +90,7 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
-      throw Exception();
-    }
-  }
-
-  Future<QuestionModel> getQuestionWithFullDetails({
-    @required int id,
-    String token,
-  }) async {
-    try {
-      final res = await httpService.get(
-        Uri.https(baseUrl, ''),
-        headers: _getHeaders(token),
-      );
-      return QuestionModel.fromDto(res.data);
-    } on Http400Exception {
-      print('BAD REQUEST');
-      throw Exception();
-    } on Http403Exception {
-      print('FORBIDDEN');
-      throw Exception();
-    } on Http404Exception {
-      print('NOT FOUND');
-      throw Exception();
-    } catch (e) {
+      print(e);
       throw Exception();
     }
   }
@@ -114,18 +98,14 @@ class QuestionService {
   Future<QuestionModel> createQuestion({
     @required QuestionModel question,
     @required String token,
-    int parentRoundId,
   }) async {
     try {
       final res = await httpService.post(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, '/api/questions/'),
         headers: _getHeaders(token),
-        body: QuestionModel.toDtoAdd(
-          question,
-          parentRoundId,
-        ),
+        body: json.encode(question),
       );
-      return QuestionModel.fromDto(res.data);
+      return QuestionModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -136,6 +116,7 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
@@ -145,12 +126,13 @@ class QuestionService {
     @required String token,
   }) async {
     try {
+      print(json.encode(question));
       final res = await httpService.put(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/questions/${question.id}/'),
         headers: _getHeaders(token),
-        body: QuestionModel.toDtoEdit(question),
+        body: json.encode(question),
       );
-      return QuestionModel.fromDto(res.data);
+      return QuestionModel.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();
@@ -161,6 +143,7 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
@@ -171,7 +154,7 @@ class QuestionService {
   }) async {
     try {
       await httpService.delete(
-        Uri.https(baseUrl, ''),
+        Uri.http(baseUrl, 'api/questions/${question.id}/'),
         headers: _getHeaders(token),
       );
     } on Http400Exception {
@@ -184,13 +167,14 @@ class QuestionService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
 
   Map<String, String> _getHeaders(token) {
     Map<String, String> headers = {
-      'Content-type': 'application/x-www-form-urlencoded',
+      'Content-type': 'application/json',
       'Accept': 'application/json',
     };
     if (token != null) {

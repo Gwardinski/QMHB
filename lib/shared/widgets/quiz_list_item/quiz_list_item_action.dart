@@ -98,14 +98,14 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
 
   _deleteQuiz() {
     var text = "Are you sure you wish to delete ${widget.quizModel.title} ?";
-    if (widget.quizModel.noOfRounds > 0) {
+    if (widget.quizModel.rounds.length > 0) {
       text +=
-          "\n\nThis will not delete the ${widget.quizModel.noOfRounds} rounds this quiz contains.";
+          "\n\nThis will not delete the ${widget.quizModel.rounds.length} rounds this quiz contains.";
     }
-    if (widget.quizModel.noOfQuestions > 0) {
-      text +=
-          "\n\nThis will not delete the ${widget.quizModel.noOfQuestions} questions this quiz contains.";
-    }
+    // if (widget.quizModel.noOfQuestions > 0) {
+    //   text +=
+    //       "\n\nThis will not delete the ${widget.quizModel.noOfQuestions} questions this quiz contains.";
+    // }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -123,8 +123,8 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
               child: Text('Delete'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                final token = Provider.of<UserDataStateModel>(context).token;
-                await Provider.of<QuizService>(context).deleteQuiz(
+                final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+                await Provider.of<QuizService>(context, listen: false).deleteQuiz(
                   quiz: widget.quizModel,
                   token: token,
                 );

@@ -60,10 +60,10 @@ class QuizDetailsPage extends StatelessWidget {
                   info1Title: "Rounds",
                   info2Title: "Points",
                   info3Title: "Created",
-                  info1Value: snapshot.data.noOfRounds.toString(),
+                  info1Value: snapshot.data.rounds.length.toString(),
                   info2Value: snapshot.data.totalPoints.toString(),
                   info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
-                  imageURL: snapshot.data.imageURL,
+                  imageUrl: snapshot.data.imageUrl,
                 ),
                 Divider(),
                 SummaryRowHeader(
@@ -89,7 +89,7 @@ class QuizDetailsPage extends StatelessWidget {
                     // );
                   },
                 ),
-                snapshot.data.noOfRounds > 0
+                snapshot.data.rounds.length > 0
                     ? QuizDetailsRoundsList(quizModel: snapshot.data)
                     : DetailsListEmpty(text: "This Quiz has no Rounds"),
               ],

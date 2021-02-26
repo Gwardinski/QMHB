@@ -75,25 +75,26 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   _createQuestion() async {
     _updateIsLoading(true);
     _updateError('');
-    final questionService = Provider.of<QuestionService>(context);
-    final token = Provider.of<UserDataStateModel>(context).token;
+    final questionService = Provider.of<QuestionService>(context, listen: false);
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     try {
-      if (_newImage != null) {
-        final newImageUrl = await _saveImage();
-        _question.imageURL = newImageUrl;
-      }
+      // if (_newImage != null) {
+      //   final newimageUrl = await _saveImage();
+      //   _question.imageUrl = newimageUrl;
+      // }
+      print(0);
       await questionService.createQuestion(
         question: _question,
         token: token,
       );
-      if (widget.roundModel != null) {
-        final roundService = Provider.of<RoundService>(context);
-        await roundService.addQuestionToRound(widget.roundModel, _question);
-      }
+      // if (widget.roundModel != null) {
+      //   final roundService = Provider.of<RoundService>(context);
+      //   await roundService.addQuestionToRound(widget.roundModel, _question);
+      // }
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
-      _updateError('Failed to edit Question');
+      _updateError('Failed to add Question');
     } finally {
       _updateIsLoading(false);
     }
@@ -102,12 +103,12 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   _editQuestion() async {
     _updateIsLoading(true);
     _updateError('');
-    final questionService = Provider.of<QuestionService>(context);
-    final token = Provider.of<UserDataStateModel>(context).token;
+    final questionService = Provider.of<QuestionService>(context, listen: false);
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     try {
       if (_newImage != null) {
-        final newImageUrl = await _saveImage();
-        _question.imageURL = newImageUrl;
+        final newimageUrl = await _saveImage();
+        _question.imageUrl = newimageUrl;
       }
       await questionService.editQuestion(
         question: _question,
@@ -127,7 +128,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
       MaterialPageRoute(
         builder: (context) => ImageCapture(
           fileImage: _newImage,
-          networkImage: _question.imageURL,
+          networkImage: _question.imageUrl,
         ),
       ),
     );
@@ -139,7 +140,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   _removeImage() {
     setState(() {
       _newImage = null;
-      _question.imageURL = null;
+      _question.imageUrl = null;
     });
   }
 
@@ -282,7 +283,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                   _question.questionType == "PICTURE"
                       ? ImageSelector(
                           fileImage: _newImage,
-                          networkImage: _question.imageURL,
+                          networkImage: _question.imageUrl,
                           selectImage: _selectImage,
                           removeImage: _removeImage,
                         )
