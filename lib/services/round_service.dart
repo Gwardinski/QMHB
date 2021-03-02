@@ -138,6 +138,7 @@ class RoundService {
       print('NOT FOUND');
       throw Exception();
     } catch (e) {
+      print(e);
       throw Exception();
     }
   }
@@ -164,16 +165,6 @@ class RoundService {
       throw Exception();
     }
   }
-
-  Future<RoundModel> addQuestionToRound(
-    @required RoundModel round,
-    @required QuestionModel question,
-  ) {}
-
-  Future<RoundModel> removeQuestionFromRound(
-    @required RoundModel round,
-    @required QuestionModel question,
-  ) {}
 
   Map<String, String> _getHeaders(token) {
     Map<String, String> headers = {

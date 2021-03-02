@@ -6,7 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/widgets/quiz_details_rounds_list.dart';
 import 'package:qmhb/pages/details/widgets/details_list_empty.dart';
 import 'package:qmhb/pages/details/widgets/details_header.dart';
-import 'package:qmhb/pages/library/rounds/add_round_to_quiz_page.dart';
+import 'package:qmhb/pages/library/add_rounds_to_quiz_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';

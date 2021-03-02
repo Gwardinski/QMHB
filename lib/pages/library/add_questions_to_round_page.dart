@@ -12,8 +12,8 @@ import 'package:qmhb/shared/widgets/loading_spinner.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
 // Page is used for building down: Quiz => Round => Question
-class AddQuestionToRoundPage extends StatefulWidget {
-  const AddQuestionToRoundPage({
+class AddQuestionsToRoundPage extends StatefulWidget {
+  const AddQuestionsToRoundPage({
     Key key,
     @required this.roundModel,
   }) : super(key: key);
@@ -21,10 +21,10 @@ class AddQuestionToRoundPage extends StatefulWidget {
   final RoundModel roundModel;
 
   @override
-  _AddQuestionToRoundPageState createState() => _AddQuestionToRoundPageState();
+  _AddQuestionsToRoundPageState createState() => _AddQuestionsToRoundPageState();
 }
 
-class _AddQuestionToRoundPageState extends State<AddQuestionToRoundPage> {
+class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
   RoundModel _roundModel;
 
   @override
@@ -114,7 +114,6 @@ class AddQuestionToRoundList extends StatelessWidget {
                         QuestionModel questionModel = snapshot.data[index];
                         return QuestionListItem(
                           questionModel: questionModel,
-                          roundModel: roundModel,
                           canDrag: false,
                         );
                       },

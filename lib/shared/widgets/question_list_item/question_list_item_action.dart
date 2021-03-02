@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/pages/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
+import 'package:qmhb/pages/library/add_question_to_rounds_page.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_service.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+
+enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
 class QuestionListItemAction extends StatefulWidget {
   const QuestionListItemAction({
@@ -43,7 +44,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
                 children: <Widget>[
                   Icon(Icons.playlist_add),
                   Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Add Question to Round'),
+                  Text('Add Question to Rounds'),
                 ],
               ),
             ),
@@ -83,7 +84,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
 
   onMenuSelect(QuestionOptions result) {
     if (result == QuestionOptions.addToRound) {
-      return _addQuestionToRound();
+      return _addToRounds();
     }
     if (result == QuestionOptions.edit) {
       return _editQuestion();
@@ -99,14 +100,13 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
     }
   }
 
-  _addQuestionToRound() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AddQuestionToRoundPageDialog(
-          questionModel: widget.questionModel,
-        );
-      },
+  _addToRounds() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddQuestionToRoundsPage(
+          selectedQuestion: widget.questionModel,
+        ),
+      ),
     );
   }
 

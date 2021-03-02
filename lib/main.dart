@@ -7,6 +7,7 @@ import 'package:qmhb/pages/home/home_page.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/services/storage.dart';
 import 'package:qmhb/services/user_service.dart';
@@ -60,6 +61,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UserDataStateModel>(
           create: (BuildContext context) => userDataStateModel,
+        ),
+        Provider<RefresherService>(
+          create: (BuildContext context) => RefresherService(),
         ),
         Provider<UserService>(
           create: (BuildContext context) => UserService(

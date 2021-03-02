@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/pages/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_dialog.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
@@ -83,7 +82,7 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
 
   onMenuSelect(RoundOptions result) async {
     if (result == RoundOptions.addToQuiz) {
-      return _addRoundToRound();
+      return _addRoundToQuiz();
     }
     if (result == RoundOptions.edit) {
       return await _editRound();
@@ -99,15 +98,15 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
     }
   }
 
-  _addRoundToRound() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AddRoundToQuizDialog(
-          roundModel: widget.roundModel,
-        );
-      },
-    );
+  _addRoundToQuiz() {
+    // showDialog<void>(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AddRoundToQuizDialog(
+    //       roundModel: widget.roundModel,
+    //     );
+    //   },
+    // );
   }
 
   _editRound() async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/pages/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
+import 'package:qmhb/pages/library/add_question_to_rounds_page.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
 import 'package:qmhb/shared/widgets/image_switcher.dart';
@@ -121,7 +121,7 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                   child: Text('Add To Round'),
                   onPressed: () {
                     Navigator.pop(context);
-                    _addQuestionToRound();
+                    _addQuestionToRounds();
                   },
                 ),
               ],
@@ -132,14 +132,13 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
     );
   }
 
-  _addQuestionToRound() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AddQuestionToRoundPageDialog(
-          questionModel: widget.questionModel,
-        );
-      },
+  _addQuestionToRounds() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddQuestionToRoundsPage(
+          selectedQuestion: widget.questionModel,
+        ),
+      ),
     );
   }
 }

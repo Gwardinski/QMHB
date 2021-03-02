@@ -88,55 +88,56 @@ class AddRoundToQuizList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final token = Provider.of<UserDataStateModel>(context).token;
-    return Column(
-      children: [
-        Expanded(
-          child: FutureBuilder<List<RoundModel>>(
-            future: Provider.of<RoundService>(context).getUserRounds(
-              token: token,
-            ),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: LoadingSpinnerHourGlass(),
-                );
-              }
-              if (snapshot.hasError == true) {
-                return ErrorMessage(message: "An error occured loading your Rounds");
-              }
-              return snapshot.data.length > 0
-                  ? ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                        );
-                      },
-                      itemCount: snapshot.data.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        RoundModel roundModel = snapshot.data[index];
-                        return RoundListItem(
-                          canDrag: false,
-                          roundModel: roundModel,
-                          quizModel: quizModel,
-                        );
-                      },
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CreateNewQuizOrRound(
-                            type: CreateNewQuizOrRoundType.ROUND,
-                          ),
-                        ],
-                      ),
-                    );
-            },
-          ),
-        ),
-      ],
-    );
+    // return Column(
+    //   children: [
+    //     Expanded(
+    //       child: FutureBuilder<List<RoundModel>>(
+    //         future: Provider.of<RoundService>(context).getUserRounds(
+    //           token: token,
+    //         ),
+    //         builder: (BuildContext context, AsyncSnapshot snapshot) {
+    //           if (!snapshot.hasData) {
+    //             return Center(
+    //               child: LoadingSpinnerHourGlass(),
+    //             );
+    //           }
+    //           if (snapshot.hasError == true) {
+    //             return ErrorMessage(message: "An error occured loading your Rounds");
+    //           }
+    //           return snapshot.data.length > 0
+    //               ? ListView.separated(
+    //                   separatorBuilder: (BuildContext context, int index) {
+    //                     return Padding(
+    //                       padding: EdgeInsets.only(bottom: 8),
+    //                     );
+    //                   },
+    //                   itemCount: snapshot.data.length ?? 0,
+    //                   scrollDirection: Axis.vertical,
+    //                   itemBuilder: (BuildContext context, int index) {
+    //                     RoundModel roundModel = snapshot.data[index];
+    //                     return RoundListItem(
+    //                       canDrag: false,
+    //                       roundModel: roundModel,
+    //                       quizModel: quizModel,
+    //                     );
+    //                   },
+    //                 )
+    //               : Padding(
+    //                   padding: EdgeInsets.only(top: 16),
+    //                   child: Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.center,
+    //                     children: [
+    //                       CreateNewQuizOrRound(
+    //                         type: CreateNewQuizOrRoundType.ROUND,
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 );
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // );
+    return Container();
   }
 }

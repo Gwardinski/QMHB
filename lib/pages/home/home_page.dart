@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> pages = [
     LibraryPage(),
     ExplorePage(),
-    PlayPage(),
+    // PlayPage(),
   ];
   final globalKey = GlobalKey<ScaffoldState>();
 
@@ -62,14 +62,14 @@ class _HomePageState extends State<HomePage> {
                                 _onItemTapped(1);
                               },
                             ),
-                            MainNavigationButton(
-                              title: "Play",
-                              icon: Icons.play_arrow,
-                              isSelected: _selectedIndex == 2,
-                              onPressed: () {
-                                _onItemTapped(2);
-                              },
-                            ),
+                            // MainNavigationButton(
+                            //   title: "Play",
+                            //   icon: Icons.play_arrow,
+                            //   isSelected: _selectedIndex == 2,
+                            //   onPressed: () {
+                            //     _onItemTapped(2);
+                            //   },
+                            // ),
                           ],
                         ),
                       )
@@ -96,10 +96,10 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.search),
                     label: 'Explore',
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.play_arrow),
-                    label: 'Play',
-                  ),
+                  // BottomNavigationBarItem(
+                  //   icon: Icon(Icons.play_arrow),
+                  //   label: 'Play',
+                  // ),
                 ],
               ),
             ),

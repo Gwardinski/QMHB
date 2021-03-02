@@ -210,12 +210,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
         child: Center(
           child: Container(
             constraints: BoxConstraints(maxWidth: 600),
-            padding: EdgeInsets.fromLTRB(
-              16,
-              getIt<AppSize>().isLarge ? 128 : 16,
-              16,
-              16,
-            ),
+            padding: EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(
@@ -242,43 +237,43 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                       });
                     },
                   ),
-                  widget.type == QuestionEditorType.ADD
-                      ? Column(
-                          children: [
-                            Text("Question Type"),
-                            Padding(padding: EdgeInsets.only(bottom: 8)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                OutlinedButton(
-                                  onPressed: () {
-                                    _question.questionType != "STANDARD"
-                                        ? _setAsImagePrompt("STANDARD")
-                                        : _setTypeAs("STANDARD");
-                                  },
-                                  child: Text("Standard"),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    _question.questionType == "MUSIC"
-                                        ? _setAsImagePrompt("PICTURE")
-                                        : _setTypeAs("PICTURE");
-                                  },
-                                  child: Text("Picture"),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    _question.questionType == "PICTURE"
-                                        ? _setAsImagePrompt("MUSIC")
-                                        : _setTypeAs("MUSIC");
-                                  },
-                                  child: Text("Music"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      : Container(),
+                  // widget.type == QuestionEditorType.ADD
+                  //     ? Column(
+                  //         children: [
+                  //           Text("Question Type"),
+                  //           Padding(padding: EdgeInsets.only(bottom: 8)),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //             children: [
+                  //               OutlinedButton(
+                  //                 onPressed: () {
+                  //                   _question.questionType != "STANDARD"
+                  //                       ? _setAsImagePrompt("STANDARD")
+                  //                       : _setTypeAs("STANDARD");
+                  //                 },
+                  //                 child: Text("Standard"),
+                  //               ),
+                  //               OutlinedButton(
+                  //                 onPressed: () {
+                  //                   _question.questionType == "MUSIC"
+                  //                       ? _setAsImagePrompt("PICTURE")
+                  //                       : _setTypeAs("PICTURE");
+                  //                 },
+                  //                 child: Text("Picture"),
+                  //               ),
+                  //               OutlinedButton(
+                  //                 onPressed: () {
+                  //                   _question.questionType == "PICTURE"
+                  //                       ? _setAsImagePrompt("MUSIC")
+                  //                       : _setTypeAs("MUSIC");
+                  //                 },
+                  //                 child: Text("Music"),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : Container(),
                   Padding(padding: EdgeInsets.only(bottom: 16)),
                   _question.questionType == "PICTURE"
                       ? ImageSelector(

@@ -6,7 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/widgets/round_details_questions_list.dart';
 import 'package:qmhb/pages/details/widgets/details_list_empty.dart';
 import 'package:qmhb/pages/details/widgets/details_header.dart';
-import 'package:qmhb/pages/library/questions/add_question_to_round_page.dart';
+import 'package:qmhb/pages/library/add_questions_to_round_page.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
@@ -72,7 +72,7 @@ class RoundDetailsPage extends StatelessWidget {
                   secondaryHeaderButtonFunction: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => AddQuestionToRoundPage(
+                        builder: (context) => AddQuestionsToRoundPage(
                           roundModel: snapshot.data,
                         ),
                       ),

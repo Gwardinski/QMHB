@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AddToDialogButtonNew extends StatelessWidget {
-  AddToDialogButtonNew({
+class AddItemIntoNewItemButton extends StatelessWidget {
+  AddItemIntoNewItemButton({
     @required this.title,
     @required this.onTap,
   });
@@ -12,9 +12,7 @@ class AddToDialogButtonNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        onTap();
-      },
+      onTap: () => onTap(),
       child: Container(
         height: 64,
         padding: EdgeInsets.all(16),
@@ -22,9 +20,6 @@ class AddToDialogButtonNew extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.add,
-              ),
               Container(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(

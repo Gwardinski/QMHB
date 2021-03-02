@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/details/question/question_details_dialog.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item_add_to_round.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
-
-enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
 class QuestionListItem extends StatefulWidget {
   final QuestionModel questionModel;
+  final Function onDragStarted;
+  final Function onDragEnd;
   final bool canDrag;
-  final RoundModel roundModel;
 
   QuestionListItem({
     Key key,
     @required this.questionModel,
+    this.onDragStarted,
+    this.onDragEnd,
     this.canDrag = false,
-    this.roundModel,
   }) : super(key: key);
 
   @override
@@ -33,23 +31,24 @@ class _QuestionListItemState extends State<QuestionListItem> {
 
   @override
   Widget build(BuildContext context) {
-    final listItemContent = QuestionListItemContent(
-      revealAnswer: revealAnswer,
+    final questionListItemContent = QuestionListItemContent(
       questionModel: widget.questionModel,
       viewQuestionDetails: _viewQuestionDetails,
+      revealAnswer: revealAnswer,
       updateRevealAnswer: _updateRevealAnswer,
-      roundModel: widget.roundModel,
     );
     return widget.canDrag
         ? Draggable<QuestionModel>(
+            onDragStarted: widget.onDragStarted,
+            onDragEnd: (v) => widget.onDragEnd(),
             dragAnchor: DragAnchor.pointer,
             data: widget.questionModel,
             feedback: DragFeedback(
               title: widget.questionModel.question,
             ),
-            child: listItemContent,
+            child: questionListItemContent,
           )
-        : listItemContent;
+        : questionListItemContent;
   }
 
   void _updateRevealAnswer() {
@@ -73,18 +72,16 @@ class _QuestionListItemState extends State<QuestionListItem> {
 class QuestionListItemContent extends StatelessWidget {
   const QuestionListItemContent({
     Key key,
-    @required this.revealAnswer,
     @required this.questionModel,
+    @required this.revealAnswer,
     @required this.viewQuestionDetails,
     @required this.updateRevealAnswer,
-    this.roundModel,
   }) : super(key: key);
 
-  final bool revealAnswer;
   final QuestionModel questionModel;
+  final bool revealAnswer;
   final viewQuestionDetails;
   final updateRevealAnswer;
-  final RoundModel roundModel;
 
   @override
   Widget build(BuildContext context) {
@@ -98,15 +95,12 @@ class QuestionListItemContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: QuestionListItemAction2(
-                revealAnswer: revealAnswer,
-                type: questionModel.questionType,
-                onTap: () {
-                  updateRevealAnswer();
-                },
-              ),
+            QuestionListItemAction2(
+              revealAnswer: revealAnswer,
+              type: questionModel.questionType,
+              onTap: () {
+                updateRevealAnswer();
+              },
             ),
             QuestionListItemDetails(
               revealAnswer: revealAnswer,
@@ -114,14 +108,9 @@ class QuestionListItemContent extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: roundModel != null
-                  ? QuestionListItemActionAddToRound(
-                      roundModel: roundModel,
-                      questionModel: questionModel,
-                    )
-                  : QuestionListItemAction(
-                      questionModel: questionModel,
-                    ),
+              child: QuestionListItemAction(
+                questionModel: questionModel,
+              ),
             ),
           ],
         ),

@@ -76,7 +76,7 @@ class RecentQuizzesRow extends StatelessWidget {
                         ],
                       )
                     : HighlightRow(
-                        quizzes: snapshot.data.reversed.toList(),
+                        quizzes: snapshot.data.toList(),
                       );
               }),
         ),

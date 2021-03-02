@@ -58,7 +58,7 @@ class RecentQuestionsRow extends StatelessWidget {
               return (snapshot.data.length == 0)
                   ? CreateFirstQuestionButton()
                   : HighlightRowQuestion(
-                      questions: snapshot.data.reversed.toList(),
+                      questions: snapshot.data.toList(),
                     );
             }),
         SummaryRowFooter(),

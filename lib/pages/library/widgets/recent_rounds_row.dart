@@ -76,7 +76,7 @@ class RecentRoundsRow extends StatelessWidget {
                         ],
                       )
                     : HighlightRow(
-                        rounds: snapshot.data.reversed.toList(),
+                        rounds: snapshot.data.toList(),
                       );
               }),
         ),

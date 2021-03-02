@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
-import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/details/round/round_details_page.dart';
@@ -8,20 +7,18 @@ import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
-import 'package:qmhb/shared/widgets/round_list_item/round_list_item_add_to_quiz.dart';
 
 enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
 class RoundListItem extends StatefulWidget {
   final RoundModel roundModel;
-  final QuizModel quizModel;
+
   final bool canDrag;
 
   RoundListItem({
     Key key,
     @required this.roundModel,
     this.canDrag = false,
-    this.quizModel,
   }) : super(key: key);
 
   @override
@@ -34,7 +31,6 @@ class _RoundListItemState extends State<RoundListItem> {
     final listItemStack = RoundListItemStack(
       roundModel: widget.roundModel,
       viewRoundDetails: _viewRoundDetails,
-      quizModel: widget.quizModel,
     );
     return widget.canDrag
         ? Draggable<RoundModel>(
@@ -64,12 +60,10 @@ class RoundListItemStack extends StatelessWidget {
     Key key,
     @required this.roundModel,
     @required this.viewRoundDetails,
-    this.quizModel,
   }) : super(key: key);
 
   final RoundModel roundModel;
   final viewRoundDetails;
-  final QuizModel quizModel;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +86,6 @@ class RoundListItemStack extends StatelessWidget {
             ),
             RoundListItemContent(
               roundModel: roundModel,
-              quizModel: quizModel,
             ),
           ],
         ),
@@ -105,11 +98,9 @@ class RoundListItemContent extends StatelessWidget {
   const RoundListItemContent({
     Key key,
     @required this.roundModel,
-    @required this.quizModel,
   }) : super(key: key);
 
   final RoundModel roundModel;
-  final QuizModel quizModel;
 
   @override
   Widget build(BuildContext context) {
@@ -132,14 +123,9 @@ class RoundListItemContent extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-            child: quizModel != null
-                ? RoundListItemActionAddToQuiz(
-                    quizModel: quizModel,
-                    roundModel: roundModel,
-                  )
-                : RoundListItemAction(
-                    roundModel: roundModel,
-                  ),
+            child: RoundListItemAction(
+              roundModel: roundModel,
+            ),
           ),
         ],
       ),
