@@ -19,15 +19,15 @@ class QuizModel {
   UserModel userModel;
 
   QuizModel({
-    @required this.id,
+    this.id,
     @required this.title,
-    @required this.isPublished,
+    this.isPublished,
     this.description,
     this.imageUrl,
     this.totalPoints,
     this.tags,
     this.rounds,
-    @required this.user,
+    this.user,
   });
 
   QuizModel.fromJson(json) {

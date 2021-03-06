@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 
 class QuizDeleteDialog extends StatelessWidget {
   final QuizModel quizModel;
@@ -39,7 +39,7 @@ class QuizDeleteDialog extends StatelessWidget {
               quiz: quizModel,
               token: token,
             );
-            Provider.of<RefresherService>(context, listen: false).quizRefresh();
+            Provider.of<RefreshService>(context, listen: false).quizRefresh();
             Navigator.of(context).pop();
           },
         ),

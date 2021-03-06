@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -6,10 +8,8 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
 
 class AddQuestionToRoundsPage extends StatefulWidget {
   final QuestionModel selectedQuestion;
@@ -25,7 +25,35 @@ class AddQuestionToRoundsPage extends StatefulWidget {
 class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
   String _token;
   RoundService _roundService;
-  RefresherService _refresherService;
+  RefreshService _refreshService;
+  List<RoundModel> _rounds = [];
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _roundService = Provider.of<RoundService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.roundListener.listen((event) {
+      _getRounds();
+    });
+    _refreshService.roundRefresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  _getRounds() async {
+    final rounds = await _roundService.getUserRounds(token: _token);
+    setState(() {
+      _rounds = rounds;
+    });
+  }
 
   void createNewRoundwithQuestion(context) {
     showDialog<void>(
@@ -52,14 +80,11 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
       round: roundModel,
       token: _token,
     );
-    _refresherService.roundAndQuestionRefresh();
+    _refreshService.roundAndQuestionRefresh();
   }
 
   // TODO - make question collapse when scroll on list
   Widget build(BuildContext context) {
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    _roundService = Provider.of<RoundService>(context, listen: false);
-    _refresherService = Provider.of<RefresherService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Question to Rounds"),
@@ -85,34 +110,17 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
             },
           ),
           Expanded(
-            child: FutureBuilder(
-              future: Provider.of<RoundService>(context).getUserRounds(
-                token: _token,
-              ),
-              builder: (BuildContext context, AsyncSnapshot<List<RoundModel>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LoadingSpinnerHourGlass(),
-                  );
-                }
-                if (snapshot.hasError == true) {
-                  return ErrorMessage(message: "An error occured loading your Rounds");
-                }
-                return snapshot.data.length > 0
-                    ? ListView.builder(
-                        itemCount: snapshot.data.length ?? 0,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return AddItemIntoItemButton(
-                            title: snapshot.data[index].title,
-                            onTap: () {
-                              _updateRound(snapshot.data[index]);
-                            },
-                            contains: () => _containsQuestion(snapshot.data[index]),
-                          );
-                        },
-                      )
-                    : Container();
+            child: ListView.builder(
+              itemCount: _rounds.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return AddItemIntoItemButton(
+                  title: _rounds[index].title,
+                  onTap: () {
+                    _updateRound(_rounds[index]);
+                  },
+                  contains: () => _containsQuestion(_rounds[index]),
+                );
               },
             ),
           ),

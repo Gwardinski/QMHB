@@ -7,7 +7,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -21,7 +21,7 @@ class QuizzesLibraryPage extends StatefulWidget {
 class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
   final canDrag = getIt<AppSize>().isLarge;
   QuizService _quizService;
-  RefresherService _refreshService;
+  RefreshService _refreshService;
   List<QuizModel> _quizzes = [];
   StreamSubscription _subscription;
 
@@ -29,7 +29,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
   void initState() {
     super.initState();
     _quizService = Provider.of<QuizService>(context, listen: false);
-    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
     _subscription?.cancel();
     _subscription = _refreshService.quizListener.listen((event) {
       _getQuizzes();

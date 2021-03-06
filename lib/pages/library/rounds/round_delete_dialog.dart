@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 
 class RoundDeleteDialog extends StatelessWidget {
@@ -35,7 +35,7 @@ class RoundDeleteDialog extends StatelessWidget {
               round: roundModel,
               token: token,
             );
-            Provider.of<RefresherService>(context, listen: false).quizAndRoundRefresh();
+            Provider.of<RefreshService>(context, listen: false).quizAndRoundRefresh();
             Navigator.of(context).pop();
           },
         ),

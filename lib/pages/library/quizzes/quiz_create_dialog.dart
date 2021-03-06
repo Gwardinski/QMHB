@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -17,10 +18,10 @@ class QuizCreateDialog extends StatefulWidget {
     this.initialRound,
   });
   @override
-  _RoundAddModalState createState() => _RoundAddModalState();
+  _QuizAddModalState createState() => _QuizAddModalState();
 }
 
-class _RoundAddModalState extends State<QuizCreateDialog> {
+class _QuizAddModalState extends State<QuizCreateDialog> {
   final _formKey = GlobalKey<FormState>();
   QuizModel _quiz;
   bool _isLoading = false;
@@ -29,7 +30,11 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
   @override
   void initState() {
     super.initState();
-    _quiz = QuizModel.newQuiz();
+    _quiz = QuizModel(title: "");
+    if (widget.initialRound != null) {
+      _quiz.rounds = [widget.initialRound.id];
+      _quiz.totalPoints = widget.initialRound.totalPoints;
+    }
   }
 
   _updateError(String val) {
@@ -54,16 +59,18 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
     if (_formKey.currentState.validate()) {
       _updateIsLoading(true);
       _updateError('');
+      final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       final quizService = Provider.of<QuizService>(context, listen: false);
+      final refreshService = Provider.of<RefreshService>(context, listen: false);
       try {
-        final token = Provider.of<UserDataStateModel>(context, listen: false).token;
         await quizService.createQuiz(
           quiz: _quiz,
-          initialRoundId: widget.initialRound?.id,
           token: token,
         );
+        refreshService.quizAndRoundRefresh();
         Navigator.of(context).pop();
       } catch (e) {
+        print(e);
         _updateError('Failed to add Quiz');
       } finally {
         _updateIsLoading(false);
@@ -81,6 +88,8 @@ class _RoundAddModalState extends State<QuizCreateDialog> {
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 widget.initialRound != null
                     ? Container(

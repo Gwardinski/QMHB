@@ -1,6 +1,6 @@
 import 'dart:async';
 
-class RefresherService {
+class RefreshService {
   StreamController<bool> _questionController = StreamController<bool>();
   StreamController<bool> _roundController = StreamController<bool>();
   StreamController<bool> _quizController = StreamController<bool>();
@@ -8,7 +8,7 @@ class RefresherService {
   Stream roundListener;
   Stream quizListener;
 
-  RefresherService() {
+  RefreshService() {
     questionListener = _questionController.stream.asBroadcastStream();
     roundListener = _roundController.stream.asBroadcastStream();
     quizListener = _quizController.stream.asBroadcastStream();

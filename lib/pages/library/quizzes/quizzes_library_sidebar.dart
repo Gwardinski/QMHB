@@ -8,7 +8,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 
 class QuizzesLibrarySidebar extends StatefulWidget {
   final RoundModel selectedRound;
@@ -24,7 +24,7 @@ class QuizzesLibrarySidebar extends StatefulWidget {
 class _QuizzesLibrarySidebarState extends State<QuizzesLibrarySidebar> {
   String _token;
   QuizService _quizService;
-  RefresherService _refreshService;
+  RefreshService _refreshService;
   List<QuizModel> _quizzes = [];
   StreamSubscription _subscription;
 
@@ -33,7 +33,7 @@ class _QuizzesLibrarySidebarState extends State<QuizzesLibrarySidebar> {
     super.initState();
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _quizService = Provider.of<QuizService>(context, listen: false);
-    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
     _subscription?.cancel();
     _subscription = _refreshService.quizListener.listen((event) {
       _getQuizzes();
@@ -195,7 +195,7 @@ class QuizzesLibrarySidebarItem extends StatelessWidget {
   onAcceptNewQuestion(context, question) async {
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     final quizService = Provider.of<QuizService>(context, listen: false);
-    final refresherService = Provider.of<RefresherService>(context, listen: false);
+    final refreshService = Provider.of<RefreshService>(context, listen: false);
     try {
       final updatedQuiz = quizModel;
       updatedQuiz.rounds.add(selectedRound.id);
@@ -203,7 +203,7 @@ class QuizzesLibrarySidebarItem extends StatelessWidget {
         quiz: updatedQuiz,
         token: token,
       );
-      refresherService.quizRefresh();
+      refreshService.quizRefresh();
     } catch (e) {
       print(e);
     }

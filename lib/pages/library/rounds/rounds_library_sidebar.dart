@@ -7,7 +7,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 
 class RoundsLibrarySidebar extends StatefulWidget {
@@ -24,7 +24,7 @@ class RoundsLibrarySidebar extends StatefulWidget {
 class _RoundsLibrarySidebarState extends State<RoundsLibrarySidebar> {
   String _token;
   RoundService _roundService;
-  RefresherService _refreshService;
+  RefreshService _refreshService;
   List<RoundModel> _rounds = [];
   StreamSubscription _subscription;
 
@@ -33,7 +33,7 @@ class _RoundsLibrarySidebarState extends State<RoundsLibrarySidebar> {
     super.initState();
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _roundService = Provider.of<RoundService>(context, listen: false);
-    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
     _subscription?.cancel();
     _subscription = _refreshService.roundListener.listen((event) {
       _getRounds();
@@ -195,7 +195,7 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
   onAcceptNewQuestion(context, question) async {
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     final roundService = Provider.of<RoundService>(context, listen: false);
-    final refresherService = Provider.of<RefresherService>(context, listen: false);
+    final refreshService = Provider.of<RefreshService>(context, listen: false);
     try {
       final updatedRound = roundModel;
       updatedRound.questions.add(selectedQuestion.id);
@@ -203,7 +203,7 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
         round: updatedRound,
         token: token,
       );
-      refresherService.roundRefresh();
+      refreshService.roundRefresh();
     } catch (e) {
       print(e);
     }

@@ -8,7 +8,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/pages/library/rounds/rounds_library_sidebar.dart';
 import 'package:qmhb/services/question_service.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -22,7 +22,7 @@ class QuestionsLibraryPage extends StatefulWidget {
 class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
   final canDrag = getIt<AppSize>().isLarge;
   QuestionService _questionService;
-  RefresherService _refreshService;
+  RefreshService _refreshService;
   QuestionModel _selectedQuestion;
   List<QuestionModel> _questions = [];
   StreamSubscription _subscription;
@@ -33,7 +33,7 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
   void initState() {
     super.initState();
     _questionService = Provider.of<QuestionService>(context, listen: false);
-    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
     _subscription?.cancel();
     _subscription = _refreshService.questionListener.listen((event) {
       _getQuestions();
@@ -51,7 +51,6 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     final questions = await _questionService.getUserQuestions(token: token);
     setState(() {
-      _questions = [];
       _questions = questions;
     });
   }

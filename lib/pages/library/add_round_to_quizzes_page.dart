@@ -1,14 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/pages/library/Quizzes/Quiz_create_dialog.dart';
+import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
-import 'package:qmhb/services/Quiz_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/services/refresh_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 
 class AddRoundToQuizzesPage extends StatefulWidget {
   final RoundModel selectedRound;
@@ -24,6 +25,35 @@ class AddRoundToQuizzesPage extends StatefulWidget {
 class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
   String _token;
   QuizService _quizService;
+  RefreshService _refreshService;
+  List<QuizModel> _quizzes = [];
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _quizService = Provider.of<QuizService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.quizListener.listen((event) {
+      _getQuizzes();
+    });
+    _refreshService.quizRefresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  _getQuizzes() async {
+    final quiz = await _quizService.getUserQuizzes(token: _token);
+    setState(() {
+      _quizzes = quiz;
+    });
+  }
 
   void createNewQuizwithRound(context) {
     showDialog<void>(
@@ -41,33 +71,32 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
   }
 
   Future<void> _updateQuiz(quizModel) async {
-    QuizModel quiz = quizModel;
     if (_containsRound(quizModel)) {
-      quiz.rounds.remove(widget.selectedRound.id);
+      quizModel.rounds.remove(widget.selectedRound.id);
     } else {
-      quiz.rounds.add(widget.selectedRound.id);
+      quizModel.rounds.add(widget.selectedRound.id);
     }
     await _quizService.editQuiz(
-      quiz: quiz,
+      quiz: quizModel,
       token: _token,
     );
+    _refreshService.quizAndRoundRefresh();
   }
 
+  // TODO - make round collapse when scroll on list
   Widget build(BuildContext context) {
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    _quizService = Provider.of<QuizService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Question to Quizzes"),
+        title: Text("Add Round to Quizzes"),
       ),
       body: Column(
         children: [
           Container(
-            child: Text(
-              widget.selectedRound.title,
-            ),
+            padding: EdgeInsets.all(16),
+            child: Text(widget.selectedRound.title),
           ),
           Container(
+            padding: EdgeInsets.all(16),
             child: Text(
               "From here you can select the Quizzes that you wish to add this Round to. You can also de-select a Quiz to remove it.",
             ),
@@ -79,34 +108,17 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
             },
           ),
           Expanded(
-            child: FutureBuilder(
-              future: Provider.of<QuizService>(context).getUserQuizzes(
-                token: _token,
-              ),
-              builder: (BuildContext context, AsyncSnapshot<List<QuizModel>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LoadingSpinnerHourGlass(),
-                  );
-                }
-                if (snapshot.hasError == true) {
-                  return ErrorMessage(message: "An error occured loading your Quizzes");
-                }
-                return snapshot.data.length > 0
-                    ? ListView.builder(
-                        itemCount: snapshot.data.length ?? 0,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return AddItemIntoItemButton(
-                            title: snapshot.data[index].title,
-                            onTap: () async {
-                              await _updateQuiz(snapshot.data[index]);
-                            },
-                            contains: _containsRound,
-                          );
-                        },
-                      )
-                    : Container();
+            child: ListView.builder(
+              itemCount: _quizzes.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return AddItemIntoItemButton(
+                  title: _quizzes[index].title,
+                  onTap: () {
+                    _updateQuiz(_quizzes[index]);
+                  },
+                  contains: () => _containsRound(_quizzes[index]),
+                );
               },
             ),
           ),

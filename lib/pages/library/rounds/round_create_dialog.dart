@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -61,7 +61,7 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
       _updateError('');
       final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       final roundService = Provider.of<RoundService>(context, listen: false);
-      final refreshService = Provider.of<RefresherService>(context, listen: false);
+      final refreshService = Provider.of<RefreshService>(context, listen: false);
       try {
         await roundService.createRound(
           round: _round,

@@ -1,138 +1,135 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
+import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
+import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
+import 'package:qmhb/services/round_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
 
-// Page is used for building down: Quiz => Round => Question
-class AddRoundToQuizPage extends StatefulWidget {
-  const AddRoundToQuizPage({
-    Key key,
-    @required this.quizModel,
-  }) : super(key: key);
+class AddRoundsToQuizPage extends StatefulWidget {
+  final QuizModel selectedQuiz;
 
-  final QuizModel quizModel;
+  AddRoundsToQuizPage({
+    @required this.selectedQuiz,
+  });
 
   @override
-  _AddRoundToQuizPageState createState() => _AddRoundToQuizPageState();
+  _AddRoundsToQuizPageState createState() => _AddRoundsToQuizPageState();
 }
 
-class _AddRoundToQuizPageState extends State<AddRoundToQuizPage> {
-  QuizModel _quizModel;
+class _AddRoundsToQuizPageState extends State<AddRoundsToQuizPage> {
+  String _token;
+  QuizService _quizService;
+  RoundService _roundService;
+  RefreshService _refreshService;
+  List<RoundModel> _rounds = [];
+  StreamSubscription _subscription;
 
   @override
   void initState() {
-    _quizModel = widget.quizModel;
     super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _roundService = Provider.of<RoundService>(context, listen: false);
+    _quizService = Provider.of<QuizService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.roundListener.listen((event) {
+      _getRounds();
+    });
+    _refreshService.roundRefresh();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text("Select Rounds"),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: Icon(Icons.add),
-              label: Text('New'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => RoundEditorPage(
-                      type: RoundEditorType.ADD,
-                      quizModel: _quizModel,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder<QuizModel>(
-          initialData: _quizModel,
-          future: Provider.of<QuizService>(context).getQuiz(
-            id: _quizModel.id,
-            token: token,
-          ),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return ErrorMessage(message: "An error occured loading this Quiz");
-            }
-            return AddRoundToQuizList(quizModel: snapshot.data);
-          },
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  _getRounds() async {
+    final rounds = await _roundService.getUserRounds(token: _token);
+    setState(() {
+      _rounds = rounds;
+    });
+  }
+
+  void _createNewRoundInQuiz(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => RoundEditorPage(
+          type: RoundEditorType.ADD,
+          quizModel: widget.selectedQuiz,
         ),
       ),
     );
   }
-}
 
-class AddRoundToQuizList extends StatelessWidget {
-  const AddRoundToQuizList({
-    Key key,
-    @required this.quizModel,
-  }) : super(key: key);
+  bool _containsRound(roundModel) {
+    return widget.selectedQuiz.rounds.contains(roundModel.id);
+  }
 
-  final QuizModel quizModel;
+  Future<void> _updateQuiz(round) async {
+    QuizModel updatedQuiz = widget.selectedQuiz;
+    if (_containsRound(round)) {
+      updatedQuiz.rounds.remove(round.id);
+    } else {
+      updatedQuiz.rounds.add(round.id);
+    }
+    await _quizService.editQuiz(
+      quiz: updatedQuiz,
+      token: _token,
+    );
+    _refreshService.quizAndRoundRefresh();
+  }
 
-  @override
+  // TODO - make Quiz collapse when scroll on list
   Widget build(BuildContext context) {
-    // final token = Provider.of<UserDataStateModel>(context).token;
-    // return Column(
-    //   children: [
-    //     Expanded(
-    //       child: FutureBuilder<List<RoundModel>>(
-    //         future: Provider.of<RoundService>(context).getUserRounds(
-    //           token: token,
-    //         ),
-    //         builder: (BuildContext context, AsyncSnapshot snapshot) {
-    //           if (!snapshot.hasData) {
-    //             return Center(
-    //               child: LoadingSpinnerHourGlass(),
-    //             );
-    //           }
-    //           if (snapshot.hasError == true) {
-    //             return ErrorMessage(message: "An error occured loading your Rounds");
-    //           }
-    //           return snapshot.data.length > 0
-    //               ? ListView.separated(
-    //                   separatorBuilder: (BuildContext context, int index) {
-    //                     return Padding(
-    //                       padding: EdgeInsets.only(bottom: 8),
-    //                     );
-    //                   },
-    //                   itemCount: snapshot.data.length ?? 0,
-    //                   scrollDirection: Axis.vertical,
-    //                   itemBuilder: (BuildContext context, int index) {
-    //                     RoundModel roundModel = snapshot.data[index];
-    //                     return RoundListItem(
-    //                       canDrag: false,
-    //                       roundModel: roundModel,
-    //                       quizModel: quizModel,
-    //                     );
-    //                   },
-    //                 )
-    //               : Padding(
-    //                   padding: EdgeInsets.only(top: 16),
-    //                   child: Column(
-    //                     crossAxisAlignment: CrossAxisAlignment.center,
-    //                     children: [
-    //                       CreateNewQuizOrRound(
-    //                         type: CreateNewQuizOrRoundType.ROUND,
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 );
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    // );
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Rounds to Quiz"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              widget.selectedQuiz.title,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "From here you can select the Rounds that you wish to add to this Quiz. You can also de-select a Round to remove it.",
+            ),
+          ),
+          AddItemIntoNewItemButton(
+            title: "Add New Round",
+            onTap: () {
+              _createNewRoundInQuiz(context);
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _rounds.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return AddItemIntoItemButton(
+                  title: _rounds[index].title,
+                  onTap: () {
+                    _updateQuiz(_rounds[index]);
+                  },
+                  contains: () => _containsRound(_rounds[index]),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

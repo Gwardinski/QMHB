@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/pages/library/add_round_to_quizzes_page.dart';
 import 'package:qmhb/pages/library/rounds/round_delete_dialog.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/round_service.dart';
 
 enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
@@ -83,36 +81,32 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
   }
 
   onMenuSelect(RoundOptions result) async {
-    if (result == RoundOptions.addToQuiz) {
-      return _addRoundToQuiz();
-    }
-    if (result == RoundOptions.edit) {
-      return await _editRound();
-    }
-    if (result == RoundOptions.delete) {
-      return _deleteRound();
-    }
-    if (result == RoundOptions.save) {
-      return _saveRound();
-    }
-    if (result == RoundOptions.publish) {
-      return _publishRound();
+    switch (result) {
+      case RoundOptions.addToQuiz:
+        return _addToQuizzes();
+      case RoundOptions.edit:
+        return _editRound();
+      case RoundOptions.delete:
+        return _deleteRound();
+      case RoundOptions.save:
+        return _saveRound();
+      case RoundOptions.publish:
+        return _publishRound();
+      default:
+        print("Unknown Question Action");
     }
   }
 
-  _addRoundToQuiz() {
-    // showDialog<void>(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return AddRoundToQuizDialog(
-    //       roundModel: widget.roundModel,
-    //     );
-    //   },
-    // );
+  void _addToQuizzes() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddRoundToQuizzesPage(selectedRound: widget.roundModel),
+      ),
+    );
   }
 
-  _editRound() async {
-    await Navigator.of(context).push(
+  void _editRound() {
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
           type: RoundEditorType.EDIT,

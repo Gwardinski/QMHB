@@ -1,135 +1,137 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
+import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
+import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
+import 'package:qmhb/services/question_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
-import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 
-// Page is used for building down: Quiz => Round => Question
 class AddQuestionsToRoundPage extends StatefulWidget {
-  const AddQuestionsToRoundPage({
-    Key key,
-    @required this.roundModel,
-  }) : super(key: key);
+  final RoundModel selectedRound;
 
-  final RoundModel roundModel;
+  AddQuestionsToRoundPage({
+    @required this.selectedRound,
+  });
 
   @override
   _AddQuestionsToRoundPageState createState() => _AddQuestionsToRoundPageState();
 }
 
 class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
-  RoundModel _roundModel;
+  String _token;
+  RoundService _roundService;
+  QuestionService _questionService;
+  RefreshService _refreshService;
+  List<QuestionModel> _questions = [];
+  StreamSubscription _subscription;
 
   @override
   void initState() {
-    _roundModel = widget.roundModel;
     super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _questionService = Provider.of<QuestionService>(context, listen: false);
+    _roundService = Provider.of<RoundService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.questionListener.listen((event) {
+      _getQuestions();
+    });
+    _refreshService.questionRefresh();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text("Select Questions"),
-        actions: <Widget>[
-          TextButton.icon(
-            icon: Icon(Icons.add),
-            label: Text('New'),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => QuestionEditorPage(
-                    type: QuestionEditorType.ADD,
-                    roundModel: _roundModel,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: FutureBuilder<RoundModel>(
-        initialData: _roundModel,
-        future: Provider.of<RoundService>(context).getRound(
-          id: _roundModel.id,
-          token: token,
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  _getQuestions() async {
+    final questions = await _questionService.getUserQuestions(token: _token);
+    setState(() {
+      _questions = questions;
+    });
+  }
+
+  void _createNewQuestionInRound(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestionEditorPage(
+          type: QuestionEditorType.ADD,
+          roundModel: widget.selectedRound,
         ),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return ErrorMessage(message: "An error occured loading your Round");
-          }
-          return AddQuestionToRoundList(roundModel: snapshot.data);
-        },
       ),
     );
   }
-}
 
-class AddQuestionToRoundList extends StatelessWidget {
-  const AddQuestionToRoundList({
-    Key key,
-    @required this.roundModel,
-  }) : super(key: key);
+  bool _containsQuestion(questionModel) {
+    return widget.selectedRound.questions.contains(questionModel.id);
+  }
 
-  final RoundModel roundModel;
+  Future<void> _updateRound(question) async {
+    RoundModel updatedRound = widget.selectedRound;
+    if (_containsQuestion(question)) {
+      updatedRound.questions.remove(question.id);
+    } else {
+      updatedRound.questions.add(question.id);
+    }
+    await _roundService.editRound(
+      round: updatedRound,
+      token: _token,
+    );
+    _refreshService.roundAndQuestionRefresh();
+  }
 
-  @override
+  // TODO - make Round collapse when scroll on list
   Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
-    return Column(
-      children: [
-        Expanded(
-          child: FutureBuilder<List<QuestionModel>>(
-            future: Provider.of<QuestionService>(context).getUserQuestions(
-              token: token,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Questions to Round"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              widget.selectedRound.title,
             ),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: LoadingSpinnerHourGlass(),
-                );
-              }
-              if (snapshot.hasError == true) {
-                return ErrorMessage(message: "An error occured loading your Questions");
-              }
-              return snapshot.data.length > 0
-                  ? ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                        );
-                      },
-                      itemCount: snapshot.data.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        QuestionModel questionModel = snapshot.data[index];
-                        return Container(
-                          child: Text("TextBox Ticky"),
-                        );
-                      },
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CreateFirstQuestionButton(),
-                        ],
-                      ),
-                    );
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "From here you can select the Questions that you wish to add to this Round. You can also de-select a Question to remove it.",
+            ),
+          ),
+          AddItemIntoNewItemButton(
+            title: "Add New Question",
+            onTap: () {
+              _createNewQuestionInRound(context);
             },
           ),
-        ),
-      ],
+          Expanded(
+            child: ListView.builder(
+              itemCount: _questions.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return AddItemIntoItemButton(
+                  title: _questions[index].question,
+                  onTap: () {
+                    _updateRound(_questions[index]);
+                  },
+                  contains: () => _containsQuestion(_questions[index]),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

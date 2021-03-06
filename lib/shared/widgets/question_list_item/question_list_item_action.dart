@@ -92,8 +92,6 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
         return _saveQuestion();
       case QuestionOptions.publish:
         return _publishQuestion();
-      case QuestionOptions.addToRound:
-        return _addToRounds();
       default:
         print("Unknown Question Action");
     }

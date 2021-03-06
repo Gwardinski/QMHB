@@ -7,7 +7,7 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quizzes_library_sidebar.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
@@ -22,7 +22,7 @@ class RoundsLibraryPage extends StatefulWidget {
 class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
   final canDrag = getIt<AppSize>().isLarge;
   RoundService _roundService;
-  RefresherService _refreshService;
+  RefreshService _refreshService;
   RoundModel _selectedRound;
   List<RoundModel> _rounds = [];
   StreamSubscription _subscription;
@@ -33,7 +33,7 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
   void initState() {
     super.initState();
     _roundService = Provider.of<RoundService>(context, listen: false);
-    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _refreshService = Provider.of<RefreshService>(context, listen: false);
     _subscription?.cancel();
     _subscription = _refreshService.roundListener.listen((event) {
       _getRounds();

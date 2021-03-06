@@ -6,7 +6,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/question_service.dart';
-import 'package:qmhb/services/refresher_service.dart';
+import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -46,6 +46,9 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     super.initState();
     if (widget.questionModel != null) {
       _question = widget.questionModel;
+      if (widget.roundModel != null) {
+        _question.rounds = [widget.roundModel.id];
+      }
     } else {
       _question = QuestionModel.newQuestion();
     }
@@ -74,21 +77,16 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateError('');
     final questionService = Provider.of<QuestionService>(context, listen: false);
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    final refreshService = Provider.of<RefresherService>(context, listen: false);
+    final refreshService = Provider.of<RefreshService>(context, listen: false);
     try {
       // if (_newImage != null) {
       //   final newimageUrl = await _saveImage();
       //   _question.imageUrl = newimageUrl;
       // }
-      print(0);
       await questionService.createQuestion(
         question: _question,
         token: token,
       );
-      // if (widget.roundModel != null) {
-      //   final roundService = Provider.of<RoundService>(context);
-      //   await roundService.addQuestionToRound(widget.roundModel, _question);
-      // }
       refreshService.roundAndQuestionRefresh(); // initial round
       Navigator.of(context).pop();
     } catch (e) {
@@ -104,7 +102,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateError('');
     final questionService = Provider.of<QuestionService>(context, listen: false);
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    final refreshService = Provider.of<RefresherService>(context, listen: false);
+    final refreshService = Provider.of<RefreshService>(context, listen: false);
     try {
       if (_newImage != null) {
         final newimageUrl = await _saveImage();
