@@ -6,6 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/loading_spinner.dart';
@@ -24,6 +25,7 @@ class AddQuestionToRoundsPage extends StatefulWidget {
 class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
   String _token;
   RoundService _roundService;
+  RefresherService _refresherService;
 
   void createNewRoundwithQuestion(context) {
     showDialog<void>(
@@ -41,21 +43,23 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
   }
 
   Future<void> _updateRound(roundModel) async {
-    RoundModel round = roundModel;
     if (_containsQuestion(roundModel)) {
-      round.questions.remove(widget.selectedQuestion.id);
+      roundModel.questions.remove(widget.selectedQuestion.id);
     } else {
-      round.questions.add(widget.selectedQuestion.id);
+      roundModel.questions.add(widget.selectedQuestion.id);
     }
     await _roundService.editRound(
-      round: round,
+      round: roundModel,
       token: _token,
     );
+    _refresherService.roundAndQuestionRefresh();
   }
 
+  // TODO - make question collapse when scroll on list
   Widget build(BuildContext context) {
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _roundService = Provider.of<RoundService>(context, listen: false);
+    _refresherService = Provider.of<RefresherService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Question to Rounds"),
@@ -63,11 +67,13 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
       body: Column(
         children: [
           Container(
+            padding: EdgeInsets.all(16),
             child: Text(
               widget.selectedQuestion.question,
             ),
           ),
           Container(
+            padding: EdgeInsets.all(16),
             child: Text(
               "From here you can select the Rounds that you wish to add this Question to. You can also de-select a Round to remove it.",
             ),
@@ -99,10 +105,10 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
                         itemBuilder: (BuildContext context, int index) {
                           return AddItemIntoItemButton(
                             title: snapshot.data[index].title,
-                            onTap: () async {
-                              await _updateRound(snapshot.data[index]);
+                            onTap: () {
+                              _updateRound(snapshot.data[index]);
                             },
-                            doesContain: _containsQuestion(snapshot.data[index]),
+                            contains: () => _containsQuestion(snapshot.data[index]),
                           );
                         },
                       )

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
@@ -6,13 +8,65 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/services/refresher_service.dart';
 
-class QuizzesLibrarySidebar extends StatelessWidget {
+class QuizzesLibrarySidebar extends StatefulWidget {
+  final RoundModel selectedRound;
+
+  QuizzesLibrarySidebar({
+    this.selectedRound,
+  });
+
+  @override
+  _QuizzesLibrarySidebarState createState() => _QuizzesLibrarySidebarState();
+}
+
+class _QuizzesLibrarySidebarState extends State<QuizzesLibrarySidebar> {
+  String _token;
+  QuizService _quizService;
+  RefresherService _refreshService;
+  List<QuizModel> _quizzes = [];
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _quizService = Provider.of<QuizService>(context, listen: false);
+    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.quizListener.listen((event) {
+      _getQuizzes();
+    });
+    _refreshService.quizRefresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  void _getQuizzes() async {
+    final quizzes = await _quizService.getUserQuizzes(token: _token);
+    setState(() {
+      _quizzes = quizzes;
+    });
+  }
+
+  void _openNewQuizForm({RoundModel initialRound}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return QuizCreateDialog(
+          initialRound: initialRound,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -25,31 +79,19 @@ class QuizzesLibrarySidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          UserQuizzesSidebarNewQuiz(),
-          UserQuizzesSidebarTitle(),
+          QuizzesLibrarySidebarNewQuiz(
+            onCreateNewQuiz: _openNewQuizForm,
+          ),
+          QuizzesLibrarySidebarHeader(),
           Expanded(
-            child: FutureBuilder(
-              future: Provider.of<QuizService>(context).getUserQuizzes(
-                token: token,
-              ),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: LoadingSpinnerHourGlass(),
-                  );
-                }
-                if (snapshot.hasError == true) {
-                  return ErrorMessage(message: "An error occured loading your Quizzes");
-                }
-                return snapshot.data.length > 0
-                    ? ListView.builder(
-                        itemCount: snapshot.data.length ?? 0,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int index) {
-                          return UserQuizzesSidebarItem(quizModel: snapshot.data[index]);
-                        },
-                      )
-                    : Container();
+            child: ListView.builder(
+              itemCount: _quizzes.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return QuizzesLibrarySidebarItem(
+                  quizModel: _quizzes[index],
+                  selectedRound: widget.selectedRound,
+                );
               },
             ),
           ),
@@ -59,82 +101,39 @@ class QuizzesLibrarySidebar extends StatelessWidget {
   }
 }
 
-class UserQuizzesSidebarTitle extends StatelessWidget {
-  const UserQuizzesSidebarTitle({
-    Key key,
-  }) : super(key: key);
+class QuizzesLibrarySidebarNewQuiz extends StatelessWidget {
+  final onCreateNewQuiz;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      padding: EdgeInsets.all(16),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Your Quizzes:",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class UserQuizzesSidebarNewQuiz extends StatelessWidget {
-  openNewQuizForm(context, {initialRound}) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return QuizCreateDialog(
-          initialRound: initialRound,
-        );
-      },
-    );
-  }
+  QuizzesLibrarySidebarNewQuiz({
+    this.onCreateNewQuiz,
+  });
 
   @override
   Widget build(BuildContext context) {
     return DragTarget<RoundModel>(
-      onAccept: (round) {
-        openNewQuizForm(context, initialRound: round);
+      onAccept: (question) {
+        onCreateNewQuiz(initialRound: question);
       },
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
-            openNewQuizForm(context);
+            onCreateNewQuiz();
           },
           child: Container(
             height: 64,
             padding: EdgeInsets.all(16),
             child: Center(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.add,
+              child: Container(
+                padding: EdgeInsets.only(left: 16),
+                child: Text(
+                  "New Quiz",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 18,
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 16),
-                    child: Text(
-                      "New Quiz",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -144,20 +143,77 @@ class UserQuizzesSidebarNewQuiz extends StatelessWidget {
   }
 }
 
-class UserQuizzesSidebarItem extends StatelessWidget {
-  const UserQuizzesSidebarItem({
+class QuizzesLibrarySidebarHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 32,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              "Quiz title",
+              style: TextStyle(fontSize: 10),
+            ),
+          ),
+          Container(
+            width: 32,
+            child: Tooltip(
+              message: "Number of Rounds",
+              child: Text(
+                "Rs",
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+          Container(
+            width: 16,
+            child: Tooltip(
+              message: "Number of Points",
+              child: Text(
+                "Pts",
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class QuizzesLibrarySidebarItem extends StatelessWidget {
+  const QuizzesLibrarySidebarItem({
     @required this.quizModel,
+    @required this.selectedRound,
   });
 
   final QuizModel quizModel;
+  final RoundModel selectedRound;
+
+  onAcceptNewQuestion(context, question) async {
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final quizService = Provider.of<QuizService>(context, listen: false);
+    final refresherService = Provider.of<RefresherService>(context, listen: false);
+    try {
+      final updatedQuiz = quizModel;
+      updatedQuiz.rounds.add(selectedRound.id);
+      await quizService.editQuiz(
+        quiz: updatedQuiz,
+        token: token,
+      );
+      refresherService.quizRefresh();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return DragTarget<RoundModel>(
-      onWillAccept: (round) => !quizModel.rounds.contains(round),
-      onAccept: (round) {
-        Provider.of<QuizService>(context).addRoundToQuiz(quizModel, round);
-      },
+      onWillAccept: (question) => !quizModel.rounds.contains(question.id),
+      onAccept: (question) => onAcceptNewQuestion(context, question),
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
@@ -171,18 +227,58 @@ class UserQuizzesSidebarItem extends StatelessWidget {
           },
           child: Container(
             height: 64,
-            padding: EdgeInsets.fromLTRB(32, 16, 16, 16),
+            padding: EdgeInsets.all(16),
             child: Center(
               child: Container(
                 width: double.infinity,
-                child: Text(
-                  quizModel.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        quizModel.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: selectedRound == null
+                              ? Theme.of(context).appBarTheme.color
+                              : quizModel.rounds.contains(selectedRound?.id)
+                                  ? Colors.grey
+                                  : Theme.of(context).accentColor,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 32,
+                          child: Text(
+                            quizModel.rounds.length.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 16,
+                          child: Text(
+                            quizModel.totalPoints.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

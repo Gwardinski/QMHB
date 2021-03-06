@@ -1,14 +1,40 @@
 import 'dart:async';
 
 class RefresherService {
-  StreamController<bool> _controller = StreamController<bool>();
-  Stream refreshListener;
+  StreamController<bool> _questionController = StreamController<bool>();
+  StreamController<bool> _roundController = StreamController<bool>();
+  StreamController<bool> _quizController = StreamController<bool>();
+  Stream questionListener;
+  Stream roundListener;
+  Stream quizListener;
 
   RefresherService() {
-    refreshListener = _controller.stream;
+    questionListener = _questionController.stream.asBroadcastStream();
+    roundListener = _roundController.stream.asBroadcastStream();
+    quizListener = _quizController.stream.asBroadcastStream();
   }
 
-  callRefresh() {
-    _controller.add(true);
+  questionRefresh() {
+    _questionController.add(true);
+  }
+
+  roundRefresh() {
+    _roundController.add(true);
+  }
+
+  roundAndQuestionRefresh() {
+    _roundController.add(true);
+    _questionController.add(true);
+  }
+
+  quizAndRoundRefresh() {
+    _quizController.add(true);
+    _roundController.add(true);
+  }
+
+  quizRefresh() {
+    _quizController.add(true);
+    _roundController.add(true);
+    _questionController.add(true);
   }
 }

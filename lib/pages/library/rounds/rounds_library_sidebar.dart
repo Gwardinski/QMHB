@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -5,17 +7,66 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
 
-class RoundsLibrarySidebar extends StatelessWidget {
+class RoundsLibrarySidebar extends StatefulWidget {
   final QuestionModel selectedQuestion;
 
-  RoundsLibrarySidebar({this.selectedQuestion});
+  RoundsLibrarySidebar({
+    @required this.selectedQuestion,
+  });
+
+  @override
+  _RoundsLibrarySidebarState createState() => _RoundsLibrarySidebarState();
+}
+
+class _RoundsLibrarySidebarState extends State<RoundsLibrarySidebar> {
+  String _token;
+  RoundService _roundService;
+  RefresherService _refreshService;
+  List<RoundModel> _rounds = [];
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    _roundService = Provider.of<RoundService>(context, listen: false);
+    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.roundListener.listen((event) {
+      _getRounds();
+    });
+    _refreshService.roundRefresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  void _getRounds() async {
+    final rounds = await _roundService.getUserRounds(token: _token);
+    setState(() {
+      _rounds = rounds;
+    });
+  }
+
+  void _openNewRoundForm({QuestionModel initialQuestion}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RoundCreateDialog(
+          initialQuestion: initialQuestion,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
     return Container(
       width: 256,
       decoration: BoxDecoration(
@@ -28,35 +79,19 @@ class RoundsLibrarySidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          RoundsLibrarySidebarNewRound(),
+          RoundsLibrarySidebarNewRound(
+            onCreateNewRound: _openNewRoundForm,
+          ),
           RoundsLibrarySidebarHeader(),
           Expanded(
-            child: FutureBuilder(
-              future: Provider.of<RoundService>(context).getUserRounds(token: token),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasError == true) {
-                  return ErrorMessage(message: "An error occured loading Your Rounds");
-                }
-                if (snapshot.hasData && snapshot.data.length > 0) {
-                  return ListView.builder(
-                    itemCount: snapshot.data.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      return RoundsLibrarySidebarItem(
-                        roundModel: snapshot.data[index],
-                        selectedQuestion: selectedQuestion,
-                      );
-                    },
-                  );
-                }
-                if (snapshot.hasData && snapshot.data.length == 0) {
-                  return Container(
-                    child: Center(
-                      child: Text("Your Rounds will display here"),
-                    ),
-                  );
-                }
-                return Container();
+            child: ListView.builder(
+              itemCount: _rounds.length ?? 0,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return RoundsLibrarySidebarItem(
+                  roundModel: _rounds[index],
+                  selectedQuestion: widget.selectedQuestion,
+                );
               },
             ),
           ),
@@ -67,27 +102,22 @@ class RoundsLibrarySidebar extends StatelessWidget {
 }
 
 class RoundsLibrarySidebarNewRound extends StatelessWidget {
-  void openNewRoundForm(context, {initialQuestion}) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return RoundCreateDialog(
-          initialQuestion: initialQuestion,
-        );
-      },
-    );
-  }
+  final onCreateNewRound;
+
+  RoundsLibrarySidebarNewRound({
+    this.onCreateNewRound,
+  });
 
   @override
   Widget build(BuildContext context) {
     return DragTarget<QuestionModel>(
       onAccept: (question) {
-        openNewRoundForm(context, initialQuestion: question);
+        onCreateNewRound(initialQuestion: question);
       },
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
-            openNewRoundForm(context);
+            onCreateNewRound();
           },
           child: Container(
             height: 64,
@@ -162,22 +192,28 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
   final RoundModel roundModel;
   final QuestionModel selectedQuestion;
 
+  onAcceptNewQuestion(context, question) async {
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final roundService = Provider.of<RoundService>(context, listen: false);
+    final refresherService = Provider.of<RefresherService>(context, listen: false);
+    try {
+      final updatedRound = roundModel;
+      updatedRound.questions.add(selectedQuestion.id);
+      await roundService.editRound(
+        round: updatedRound,
+        token: token,
+      );
+      refresherService.roundRefresh();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
     return DragTarget<QuestionModel>(
       onWillAccept: (question) => !roundModel.questions.contains(question.id),
-      onAccept: (question) {
-        roundModel.questions.add(question.id);
-        try {
-          Provider.of<RoundService>(context, listen: false).editRound(
-            round: roundModel,
-            token: token,
-          );
-        } catch (e) {
-          print(e);
-        }
-      },
+      onAccept: (question) => onAcceptNewQuestion(context, question),
       builder: (context, canditates, rejects) {
         return InkWell(
           onTap: () {
@@ -214,29 +250,33 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      width: 32,
-                      child: Text(
-                        roundModel.questions.length.toString(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18,
+                    Row(
+                      children: [
+                        Container(
+                          width: 32,
+                          child: Text(
+                            roundModel.questions.length.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Container(
-                      width: 16,
-                      child: Text(
-                        roundModel.totalPoints.toString(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18,
+                        Container(
+                          width: 16,
+                          child: Text(
+                            roundModel.totalPoints.toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),

@@ -22,7 +22,7 @@ class RecentRoundsRow extends StatelessWidget {
   navigate(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => RoundCollectionPage(),
+        builder: (context) => RoundsLibraryPage(),
       ),
     );
   }

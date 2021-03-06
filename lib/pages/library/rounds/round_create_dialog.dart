@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -29,7 +30,11 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
   @override
   void initState() {
     super.initState();
-    _round = RoundModel.newRound();
+    _round = RoundModel(title: "");
+    if (widget.initialQuestion != null) {
+      _round.questions = [widget.initialQuestion.id];
+      _round.totalPoints = widget.initialQuestion.points;
+    }
   }
 
   _updateError(String val) {
@@ -56,14 +61,16 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
       _updateError('');
       final token = Provider.of<UserDataStateModel>(context, listen: false).token;
       final roundService = Provider.of<RoundService>(context, listen: false);
+      final refreshService = Provider.of<RefresherService>(context, listen: false);
       try {
         await roundService.createRound(
           round: _round,
           token: token,
-          // initialQuestionId: widget.initialQuestion?.id,
         );
+        refreshService.roundAndQuestionRefresh();
         Navigator.of(context).pop();
       } catch (e) {
+        print(e);
         _updateError('Failed to add Round');
       } finally {
         _updateIsLoading(false);

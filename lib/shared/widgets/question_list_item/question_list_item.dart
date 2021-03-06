@@ -8,18 +8,41 @@ import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
-class QuestionListItem extends StatefulWidget {
+class DraggableQuestionListItem extends StatelessWidget {
   final QuestionModel questionModel;
   final Function onDragStarted;
   final Function onDragEnd;
-  final bool canDrag;
+
+  DraggableQuestionListItem({
+    Key key,
+    @required this.questionModel,
+    @required this.onDragStarted,
+    @required this.onDragEnd,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable<QuestionModel>(
+      onDragStarted: onDragStarted,
+      onDragEnd: onDragEnd,
+      dragAnchor: DragAnchor.pointer,
+      data: questionModel,
+      feedback: DragFeedback(
+        title: questionModel.question,
+      ),
+      child: QuestionListItem(
+        questionModel: questionModel,
+      ),
+    );
+  }
+}
+
+class QuestionListItem extends StatefulWidget {
+  final QuestionModel questionModel;
 
   QuestionListItem({
     Key key,
     @required this.questionModel,
-    this.onDragStarted,
-    this.onDragEnd,
-    this.canDrag = false,
   }) : super(key: key);
 
   @override
@@ -28,28 +51,6 @@ class QuestionListItem extends StatefulWidget {
 
 class _QuestionListItemState extends State<QuestionListItem> {
   bool revealAnswer = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final questionListItemContent = QuestionListItemContent(
-      questionModel: widget.questionModel,
-      viewQuestionDetails: _viewQuestionDetails,
-      revealAnswer: revealAnswer,
-      updateRevealAnswer: _updateRevealAnswer,
-    );
-    return widget.canDrag
-        ? Draggable<QuestionModel>(
-            onDragStarted: widget.onDragStarted,
-            onDragEnd: (v) => widget.onDragEnd(),
-            dragAnchor: DragAnchor.pointer,
-            data: widget.questionModel,
-            feedback: DragFeedback(
-              title: widget.questionModel.question,
-            ),
-            child: questionListItemContent,
-          )
-        : questionListItemContent;
-  }
 
   void _updateRevealAnswer() {
     setState(() {
@@ -67,28 +68,11 @@ class _QuestionListItemState extends State<QuestionListItem> {
       },
     );
   }
-}
-
-class QuestionListItemContent extends StatelessWidget {
-  const QuestionListItemContent({
-    Key key,
-    @required this.questionModel,
-    @required this.revealAnswer,
-    @required this.viewQuestionDetails,
-    @required this.updateRevealAnswer,
-  }) : super(key: key);
-
-  final QuestionModel questionModel;
-  final bool revealAnswer;
-  final viewQuestionDetails;
-  final updateRevealAnswer;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        viewQuestionDetails();
-      },
+      onTap: _viewQuestionDetails,
       child: Container(
         height: 64,
         child: Row(
@@ -97,19 +81,17 @@ class QuestionListItemContent extends StatelessWidget {
           children: [
             QuestionListItemAction2(
               revealAnswer: revealAnswer,
-              type: questionModel.questionType,
-              onTap: () {
-                updateRevealAnswer();
-              },
+              type: widget.questionModel.questionType,
+              onTap: _updateRevealAnswer,
             ),
             QuestionListItemDetails(
               revealAnswer: revealAnswer,
-              questionModel: questionModel,
+              questionModel: widget.questionModel,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
               child: QuestionListItemAction(
-                questionModel: questionModel,
+                questionModel: widget.questionModel,
               ),
             ),
           ],

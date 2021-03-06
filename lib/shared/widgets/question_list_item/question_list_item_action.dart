@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/add_question_to_rounds_page.dart';
+import 'package:qmhb/pages/library/questions/question_delete_dialog.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
-import 'package:qmhb/services/question_service.dart';
 
 enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
@@ -82,25 +80,26 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
     );
   }
 
-  onMenuSelect(QuestionOptions result) {
-    if (result == QuestionOptions.addToRound) {
-      return _addToRounds();
-    }
-    if (result == QuestionOptions.edit) {
-      return _editQuestion();
-    }
-    if (result == QuestionOptions.delete) {
-      return _deleteQuestion();
-    }
-    if (result == QuestionOptions.save) {
-      return _saveQuestion();
-    }
-    if (result == QuestionOptions.publish) {
-      return _publishQuestion();
+  Future<void> onMenuSelect(QuestionOptions result) async {
+    switch (result) {
+      case QuestionOptions.addToRound:
+        return _addToRounds();
+      case QuestionOptions.edit:
+        return _editQuestion();
+      case QuestionOptions.delete:
+        return _deleteQuestion();
+      case QuestionOptions.save:
+        return _saveQuestion();
+      case QuestionOptions.publish:
+        return _publishQuestion();
+      case QuestionOptions.addToRound:
+        return _addToRounds();
+      default:
+        print("Unknown Question Action");
     }
   }
 
-  _addToRounds() {
+  void _addToRounds() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddQuestionToRoundsPage(
@@ -110,7 +109,7 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
     );
   }
 
-  _editQuestion() {
+  void _editQuestion() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuestionEditorPage(
@@ -122,35 +121,11 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
   }
 
   _deleteQuestion() {
-    showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Question"),
-          content: Text("Are you sure you wish to delete ${widget.questionModel.question} ?"),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                try {
-                  final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-                  await Provider.of<QuestionService>(context, listen: false).deleteQuestion(
-                    question: widget.questionModel,
-                    token: token,
-                  );
-                  Navigator.of(context).pop();
-                } catch (e) {
-                  print(e);
-                }
-              },
-            ),
-          ],
+        return QuestionDeleteDialog(
+          questionModel: widget.questionModel,
         );
       },
     );

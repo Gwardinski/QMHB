@@ -19,15 +19,15 @@ class RoundModel {
   UserModel userModel;
 
   RoundModel({
-    @required this.id,
+    this.id,
     @required this.title,
-    @required this.isPublished,
+    this.isPublished,
     this.description,
     this.imageUrl,
     this.totalPoints,
     this.tags,
     this.questions,
-    @required this.user,
+    this.user,
   });
 
   RoundModel.fromJson(json) {
@@ -65,13 +65,11 @@ class RoundModel {
 
   // user, isPublished & datetimes can not be amended
   Map<String, dynamic> toJson() => {
-        "id": id,
         "title": title,
         "description": description,
         "imageUrl": imageUrl,
-        "totalPoints": totalPoints,
-        "tags": tags,
-        "questions": questions,
+        "tags": tags ?? [],
+        "questions": questions ?? [],
       };
 
   RoundModel.newRound();

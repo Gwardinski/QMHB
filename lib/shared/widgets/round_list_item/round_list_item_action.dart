@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/pages/library/rounds/round_delete_dialog.dart';
 import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
 import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
+
+enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
 class RoundListItemAction extends StatefulWidget {
   const RoundListItemAction({
@@ -121,36 +123,11 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
   }
 
   _deleteRound() {
-    var text = "Are you sure you wish to delete ${widget.roundModel.title} ?";
-    if (widget.roundModel.questions.length > 0) {
-      text +=
-          "\n\nThis will not delete the ${widget.roundModel.questions.length} questions this round contains.";
-    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Round"),
-          content: Text(text),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-                await Provider.of<RoundService>(context, listen: false).deletetRound(
-                  round: widget.roundModel,
-                  token: token,
-                );
-              },
-            ),
-          ],
+        return RoundDeleteDialog(
+          roundModel: widget.roundModel,
         );
       },
     );

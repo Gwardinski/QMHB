@@ -4,7 +4,6 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/explore_page/explore_page.dart';
 import 'package:qmhb/pages/home/widgets/main_nav_button.dart';
 import 'package:qmhb/pages/library/library_page.dart';
-import 'package:qmhb/pages/play/play_page.dart';
 
 class HomePage extends StatefulWidget {
   @override

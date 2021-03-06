@@ -8,68 +8,54 @@ import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
-enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
-
-class RoundListItem extends StatefulWidget {
+class DraggableRoundListItem extends StatelessWidget {
   final RoundModel roundModel;
+  final Function onDragStarted;
+  final Function onDragEnd;
 
-  final bool canDrag;
-
-  RoundListItem({
+  DraggableRoundListItem({
     Key key,
     @required this.roundModel,
-    this.canDrag = false,
+    @required this.onDragStarted,
+    @required this.onDragEnd,
   }) : super(key: key);
 
   @override
-  _RoundListItemState createState() => _RoundListItemState();
-}
-
-class _RoundListItemState extends State<RoundListItem> {
-  @override
   Widget build(BuildContext context) {
-    final listItemStack = RoundListItemStack(
-      roundModel: widget.roundModel,
-      viewRoundDetails: _viewRoundDetails,
-    );
-    return widget.canDrag
-        ? Draggable<RoundModel>(
-            dragAnchor: DragAnchor.pointer,
-            data: widget.roundModel,
-            feedback: DragFeedback(
-              title: widget.roundModel.title,
-            ),
-            child: listItemStack,
-          )
-        : listItemStack;
-  }
-
-  _viewRoundDetails() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => RoundDetailsPage(
-          roundModel: widget.roundModel,
-        ),
+    return Draggable<RoundModel>(
+      onDragStarted: onDragStarted,
+      onDragEnd: onDragEnd,
+      dragAnchor: DragAnchor.pointer,
+      data: roundModel,
+      feedback: DragFeedback(
+        title: roundModel.title,
+      ),
+      child: RoundListItem(
+        roundModel: roundModel,
       ),
     );
   }
 }
 
-class RoundListItemStack extends StatelessWidget {
-  const RoundListItemStack({
+class RoundListItem extends StatelessWidget {
+  final RoundModel roundModel;
+
+  RoundListItem({
     Key key,
     @required this.roundModel,
-    @required this.viewRoundDetails,
   }) : super(key: key);
-
-  final RoundModel roundModel;
-  final viewRoundDetails;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        viewRoundDetails();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => RoundDetailsPage(
+              roundModel: roundModel,
+            ),
+          ),
+        );
       },
       child: Container(
         height: 112,
@@ -84,50 +70,34 @@ class RoundListItemStack extends StatelessWidget {
                 color: Theme.of(context).canvasColor,
               ),
             ),
-            RoundListItemContent(
-              roundModel: roundModel,
+            Container(
+              height: 112,
+              margin: EdgeInsets.fromLTRB(16, 8, 0, 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ListItemDetails(
+                    title: roundModel.title,
+                    description: roundModel.description,
+                    info1Title: "Points: ",
+                    info1Value: roundModel.totalPoints.toString(),
+                    info2Title: "Questions: ",
+                    info2Value: roundModel.questions.length.toString(),
+                    info3Title: null,
+                    info3Value: null,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+                    child: RoundListItemAction(
+                      roundModel: roundModel,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class RoundListItemContent extends StatelessWidget {
-  const RoundListItemContent({
-    Key key,
-    @required this.roundModel,
-  }) : super(key: key);
-
-  final RoundModel roundModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 112,
-      margin: EdgeInsets.fromLTRB(16, 8, 0, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ListItemDetails(
-            title: roundModel.title,
-            description: roundModel.description,
-            info1Title: "Points: ",
-            info1Value: roundModel.totalPoints.toString(),
-            info2Title: "Questions: ",
-            info2Value: roundModel.questions.length.toString(),
-            info3Title: null,
-            info3Value: null,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-            child: RoundListItemAction(
-              roundModel: roundModel,
-            ),
-          ),
-        ],
       ),
     );
   }

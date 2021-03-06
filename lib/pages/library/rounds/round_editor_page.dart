@@ -6,6 +6,7 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
@@ -108,6 +109,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       _updateError('');
       final roundService = Provider.of<RoundService>(context, listen: false);
       final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+      final refreshService = Provider.of<RefresherService>(context, listen: false);
       try {
         if (_newImage != null) {
           final newimageUrl = await _saveImage();
@@ -118,6 +120,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
           token: token,
           // parentQuizId: widget.quizModel?.id,
         );
+        refreshService.roundRefresh();
         Navigator.of(context).pop();
       } catch (e) {
         print(e.toString());
@@ -134,6 +137,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       _updateError('');
       final roundService = Provider.of<RoundService>(context, listen: false);
       final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+      final refreshService = Provider.of<RefresherService>(context, listen: false);
       try {
         if (_newImage != null) {
           final newimageUrl = await _saveImage();
@@ -143,6 +147,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
           round: _round,
           token: token,
         );
+        refreshService.roundRefresh();
         Navigator.of(context).pop();
       } catch (e) {
         print(e);

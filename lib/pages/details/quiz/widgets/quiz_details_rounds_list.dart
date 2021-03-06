@@ -27,7 +27,6 @@ class QuizDetailsRoundsList extends StatelessWidget {
         RoundModel roundModel = quizModel.roundModels[index];
         return RoundListItem(
           roundModel: roundModel,
-          canDrag: false,
         );
       },
     );

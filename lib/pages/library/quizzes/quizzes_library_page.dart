@@ -1,88 +1,105 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_editor_page.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/highlights/create_new_quiz_or_round.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
+import 'package:qmhb/shared/widgets/toolbar.dart';
 
-class QuizzesLibraryPage extends StatelessWidget {
+import '../../../get_it.dart';
+
+class QuizzesLibraryPage extends StatefulWidget {
+  @override
+  _QuizzesLibraryPageState createState() => _QuizzesLibraryPageState();
+}
+
+class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
+  final canDrag = getIt<AppSize>().isLarge;
+  QuizService _quizService;
+  RefresherService _refreshService;
+  List<QuizModel> _quizzes = [];
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _quizService = Provider.of<QuizService>(context, listen: false);
+    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.quizListener.listen((event) {
+      _getQuizzes();
+    });
+    _refreshService.quizRefresh();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription?.cancel();
+  }
+
+  _getQuizzes() async {
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final quizs = await _quizService.getUserQuizzes(token: token);
+    setState(() {
+      _quizzes = [];
+      _quizzes = quizs;
+    });
+  }
+
+  void _createRound() async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuizEditorPage(
+          type: QuizEditorType.ADD,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final token = Provider.of<UserDataStateModel>(context).token;
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text("Your Quizzes"),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: Icon(Icons.add),
-              label: Text('New'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => QuizEditorPage(
-                      type: QuizEditorType.ADD,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: FutureBuilder(
-                future: Provider.of<QuizService>(context).getUserQuizzes(
-                  token: token,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("Your Quizzes"),
+        actions: <Widget>[
+          TextButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('New'),
+            onPressed: _createRound,
+          ),
+        ],
+      ),
+      body: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Toolbar(
+                  onUpdateSearchString: (s) => print(s),
+                  noOfResults: _quizzes.length,
                 ),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: LoadingSpinnerHourGlass(),
-                    );
-                  }
-                  if (snapshot.hasError == true) {
-                    return ErrorMessage(message: "An error occured loading your Quizzes");
-                  }
-                  return snapshot.data.length > 0
-                      ? ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: 8),
-                            );
-                          },
-                          itemCount: snapshot.data.length ?? 0,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            QuizModel quizModel = snapshot.data[index];
-                            return QuizListItem(
-                              quizModel: quizModel,
-                            );
-                          },
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CreateNewQuizOrRound(
-                                type: CreateNewQuizOrRoundType.QUIZ,
-                              ),
-                            ],
-                          ),
-                        );
-                },
-              ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _quizzes.length ?? 0,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, int index) {
+                      return QuizListItem(
+                        quizModel: _quizzes[index],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -112,9 +112,8 @@ class AddQuestionToRoundList extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
                         QuestionModel questionModel = snapshot.data[index];
-                        return QuestionListItem(
-                          questionModel: questionModel,
-                          canDrag: false,
+                        return Container(
+                          child: Text("TextBox Ticky"),
                         );
                       },
                     )

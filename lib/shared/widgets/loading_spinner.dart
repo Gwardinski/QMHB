@@ -13,3 +13,16 @@ class LoadingSpinnerHourGlass extends StatelessWidget {
     );
   }
 }
+
+class LoadingSpinnerSmall extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SpinKitRing(
+        color: Theme.of(context).accentColor,
+        size: 24,
+      ),
+      // child: CircularProgressIndicator(),
+    );
+  }
+}

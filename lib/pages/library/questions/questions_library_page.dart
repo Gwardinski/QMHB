@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -5,8 +7,8 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/pages/library/rounds/rounds_library_sidebar.dart';
-import 'package:qmhb/shared/widgets/highlights/create_first_question_button.dart';
 import 'package:qmhb/services/question_service.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -19,45 +21,49 @@ class QuestionsLibraryPage extends StatefulWidget {
 
 class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
   final canDrag = getIt<AppSize>().isLarge;
-  String _token;
   QuestionService _questionService;
-  List<QuestionModel> _questions = [];
+  RefresherService _refreshService;
   QuestionModel _selectedQuestion;
+  List<QuestionModel> _questions = [];
+  StreamSubscription _subscription;
+
+  void _setSelectedQuestion(QuestionModel question) => setState(() => _selectedQuestion = question);
 
   @override
   void initState() {
     super.initState();
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _questionService = Provider.of<QuestionService>(context, listen: false);
-    _getQuestions();
+    _refreshService = Provider.of<RefresherService>(context, listen: false);
+    _subscription?.cancel();
+    _subscription = _refreshService.questionListener.listen((event) {
+      _getQuestions();
+    });
+    _refreshService.questionRefresh();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _subscription?.cancel();
   }
 
-  void _getQuestions() async {
-    final questions = await _questionService.getUserQuestions(token: _token);
+  _getQuestions() async {
+    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final questions = await _questionService.getUserQuestions(token: token);
     setState(() {
+      _questions = [];
       _questions = questions;
     });
   }
 
   void _createQuestion() async {
-    await Navigator.of(context).push(
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuestionEditorPage(
           type: QuestionEditorType.ADD,
         ),
       ),
     );
-  }
-
-  void _setSelectedQuestion(QuestionModel question) {
-    setState(() {
-      _selectedQuestion = question;
-    });
   }
 
   @override
@@ -85,21 +91,17 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
                   noOfResults: _questions.length,
                 ),
                 Expanded(
-                  child: _questions.length > 0
-                      ? ListView.builder(
-                          itemCount: _questions.length ?? 0,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            QuestionModel questionModel = _questions[index];
-                            return QuestionListItem(
-                              questionModel: questionModel,
-                              canDrag: canDrag,
-                              onDragStarted: () => _setSelectedQuestion(_questions[index]),
-                              onDragEnd: () => _setSelectedQuestion(null),
-                            );
-                          },
-                        )
-                      : CreateFirstQuestionButton(),
+                  child: ListView.builder(
+                    itemCount: _questions.length ?? 0,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, int index) {
+                      return DraggableQuestionListItem(
+                        questionModel: _questions[index],
+                        onDragStarted: () => _setSelectedQuestion(_questions[index]),
+                        onDragEnd: (val) => _setSelectedQuestion(null),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

@@ -4,12 +4,12 @@ class AddItemIntoItemButton extends StatefulWidget {
   const AddItemIntoItemButton({
     Key key,
     @required this.title,
-    @required this.doesContain,
+    @required this.contains,
     @required this.onTap,
   });
 
   final String title;
-  final bool doesContain;
+  final Function contains;
   final Function onTap;
 
   @override
@@ -17,16 +17,26 @@ class AddItemIntoItemButton extends StatefulWidget {
 }
 
 class _AddItemIntoItemButtonState extends State<AddItemIntoItemButton> {
-  bool isLoading = false;
+  bool _isLoading = false;
 
-  Future<void> onTap() async {
-    setState(() {
-      isLoading = true;
-    });
-    await widget.onTap();
-    setState(() {
-      isLoading = false;
-    });
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  onTap() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await widget.onTap();
+    } catch (e) {
+      print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -55,10 +65,10 @@ class _AddItemIntoItemButtonState extends State<AddItemIntoItemButton> {
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 16),
-                  child: isLoading
+                  child: _isLoading
                       ? Container(height: 24, width: 24, child: CircularProgressIndicator())
                       : Icon(
-                          widget.doesContain
+                          widget.contains()
                               ? Icons.check_box
                               : Icons.check_box_outline_blank_outlined,
                           size: 24,

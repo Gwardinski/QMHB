@@ -62,14 +62,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UserDataStateModel>(
           create: (BuildContext context) => userDataStateModel,
         ),
-        Provider<RefresherService>(
-          create: (BuildContext context) => RefresherService(),
-        ),
         Provider<UserService>(
           create: (BuildContext context) => UserService(
             httpService: httpService,
             userDataStateModel: userDataStateModel,
           ),
+        ),
+        Provider<RefresherService>(
+          create: (BuildContext context) => RefresherService(),
         ),
         Provider<QuestionService>(
           create: (BuildContext context) => QuestionService(

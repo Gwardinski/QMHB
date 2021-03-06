@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
@@ -97,6 +96,7 @@ class RoundService {
     @required String token,
   }) async {
     try {
+      print(json.encode(round));
       final res = await httpService.post(
         Uri.http(baseUrl, '/api/rounds/'),
         headers: _getHeaders(token),
@@ -123,7 +123,7 @@ class RoundService {
   }) async {
     try {
       final res = await httpService.put(
-        Uri.http(baseUrl, 'api/rounds/'),
+        Uri.http(baseUrl, 'api/rounds/${round.id}/'),
         headers: _getHeaders(token),
         body: json.encode(round),
       );
@@ -149,7 +149,7 @@ class RoundService {
   }) async {
     try {
       await httpService.delete(
-        Uri.http(baseUrl, 'api/rounds/'),
+        Uri.http(baseUrl, 'api/rounds/${round.id}/'),
         headers: _getHeaders(token),
       );
     } on Http400Exception {

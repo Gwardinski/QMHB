@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/services/question_service.dart';
-import 'package:qmhb/services/round_service.dart';
+import 'package:qmhb/services/refresher_service.dart';
 import 'package:qmhb/shared/functions/image_capture.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
@@ -15,8 +14,6 @@ import 'package:qmhb/shared/widgets/form/category_selector.dart';
 import 'package:qmhb/shared/widgets/form/form_error.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
 import 'package:qmhb/shared/widgets/form/image_selector.dart';
-
-import '../../../get_it.dart';
 
 enum QuestionEditorType {
   ADD,
@@ -77,6 +74,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateError('');
     final questionService = Provider.of<QuestionService>(context, listen: false);
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final refreshService = Provider.of<RefresherService>(context, listen: false);
     try {
       // if (_newImage != null) {
       //   final newimageUrl = await _saveImage();
@@ -91,6 +89,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
       //   final roundService = Provider.of<RoundService>(context);
       //   await roundService.addQuestionToRound(widget.roundModel, _question);
       // }
+      refreshService.roundAndQuestionRefresh(); // initial round
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
@@ -105,6 +104,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     _updateError('');
     final questionService = Provider.of<QuestionService>(context, listen: false);
     final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    final refreshService = Provider.of<RefresherService>(context, listen: false);
     try {
       if (_newImage != null) {
         final newimageUrl = await _saveImage();
@@ -114,6 +114,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
         question: _question,
         token: token,
       );
+      refreshService.questionRefresh();
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
@@ -157,45 +158,45 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     // return await storageTaskSnapshot.ref.getDownloadURL();
   }
 
-  _setAsImagePrompt(String type) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Change Question Type'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Changing Question type will remove any picture or music you have selected.'),
-                Text('Are you sure you wish to change question type?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Change Type'),
-              onPressed: () {
-                _setTypeAs(type);
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // _setAsImagePrompt(String type) {
+  //   return showDialog<void>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('Change Question Type'),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: <Widget>[
+  //               Text('Changing Question type will remove any picture or music you have selected.'),
+  //               Text('Are you sure you wish to change question type?'),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('Change Type'),
+  //             onPressed: () {
+  //               _setTypeAs(type);
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text('Cancel'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  _setTypeAs(String type) {
-    setState(() {
-      _question.questionType = type;
-    });
-  }
+  // _setTypeAs(String type) {
+  //   setState(() {
+  //     _question.questionType = type;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

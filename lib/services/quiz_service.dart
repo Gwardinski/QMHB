@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:qmhb/models/quiz_model.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
 
@@ -163,16 +162,6 @@ class QuizService extends ChangeNotifier {
       throw Exception();
     }
   }
-
-  Future<QuizModel> addRoundToQuiz(
-    @required QuizModel quiz,
-    @required RoundModel round,
-  ) {}
-
-  Future<QuizModel> removeRoundFromQuiz(
-    @required QuizModel quiz,
-    @required RoundModel round,
-  ) {}
 
   Map<String, String> _getHeaders(token) {
     Map<String, String> headers = {

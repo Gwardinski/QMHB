@@ -23,8 +23,8 @@ class HttpService {
   }) async {
     final response = await http.post(
       uri,
-      headers: headers ?? _getHeaders(),
       body: body,
+      headers: headers ?? _getHeaders(),
     );
     return _handleResponse(response);
   }

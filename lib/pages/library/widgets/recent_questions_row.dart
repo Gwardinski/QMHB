@@ -40,27 +40,28 @@ class RecentQuestionsRow extends StatelessWidget {
           },
         ),
         FutureBuilder(
-            future: Provider.of<QuestionService>(context).getUserQuestions(
-              limit: 8,
-              orderBy: 'TIME',
-              token: token,
-            ),
-            builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  height: 128,
-                  child: LoadingSpinnerHourGlass(),
-                );
-              }
-              if (snapshot.hasError) {
-                return ErrorMessage(message: "An error occured loading your Questions");
-              }
-              return (snapshot.data.length == 0)
-                  ? CreateFirstQuestionButton()
-                  : HighlightRowQuestion(
-                      questions: snapshot.data.toList(),
-                    );
-            }),
+          future: Provider.of<QuestionService>(context).getUserQuestions(
+            limit: 8,
+            orderBy: 'TIME',
+            token: token,
+          ),
+          builder: (BuildContext context, AsyncSnapshot<List<QuestionModel>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                height: 128,
+                child: LoadingSpinnerHourGlass(),
+              );
+            }
+            if (snapshot.hasError) {
+              return ErrorMessage(message: "An error occured loading your Questions");
+            }
+            return (snapshot.data.length == 0)
+                ? CreateFirstQuestionButton()
+                : HighlightRowQuestion(
+                    questions: snapshot.data.toList(),
+                  );
+          },
+        ),
         SummaryRowFooter(),
       ],
     );

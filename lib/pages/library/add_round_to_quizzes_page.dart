@@ -102,7 +102,7 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
                             onTap: () async {
                               await _updateQuiz(snapshot.data[index]);
                             },
-                            doesContain: _containsRound(snapshot.data[index]),
+                            contains: _containsRound,
                           );
                         },
                       )
