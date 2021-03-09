@@ -76,11 +76,14 @@ class _ImageCaptureState extends State<ImageCapture> {
             ),
             IconButton(
               icon: Icon(Icons.crop),
-              onPressed: (_fileImage != null || _networkImage != null) ? _cropImage : null,
+              onPressed: (_fileImage != null || _networkImage != null)
+                  ? _cropImage
+                  : null,
             ),
             IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: (_fileImage != null || _networkImage != null) ? _clear : null,
+              onPressed:
+                  (_fileImage != null || _networkImage != null) ? _clear : null,
             ),
           ],
         ),

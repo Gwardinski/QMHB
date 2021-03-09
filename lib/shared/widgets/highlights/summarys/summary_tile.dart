@@ -11,7 +11,7 @@ class SummaryTile extends StatelessWidget {
   final String line3;
   final String line2Value;
   final String line3Value;
-  final String imageURL;
+  final String imageUrl;
   final Function onTap;
 
   SummaryTile({
@@ -20,7 +20,7 @@ class SummaryTile extends StatelessWidget {
     @required this.line2Value,
     @required this.line3,
     @required this.line3Value,
-    this.imageURL,
+    this.imageUrl,
     @required this.onTap,
   });
 
@@ -34,13 +34,13 @@ class SummaryTile extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(getIt<AppSize>().borderRadius)),
           border: Border.all(color: Theme.of(context).accentColor),
-          image: imageURL != null
+          image: imageUrl != null
               ? DecorationImage(
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                   matchTextDirection: true,
                   repeat: ImageRepeat.noRepeat,
-                  image: NetworkImage(imageURL),
+                  image: NetworkImage(imageUrl),
                 )
               : null,
         ),

@@ -1,81 +1,76 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/user_model.dart';
 
 class RoundModel {
-  String uid;
-  String id;
+  int id;
   String title;
   String description;
-  String imageURL;
-  List<String> questionIds;
-  double totalPoints;
+  String imageUrl;
   bool isPublished;
   DateTime lastUpdated;
   DateTime createdAt;
+  // relational
+  double totalPoints;
+  List<String> tags;
+  List<int> questions;
+  List<QuestionModel> questionModels;
+  int user;
+  UserModel userModel;
 
   RoundModel({
-    this.uid,
     this.id,
-    this.title,
-    this.description,
-    this.imageURL,
-    this.questionIds,
-    this.totalPoints,
+    @required this.title,
     this.isPublished,
+    this.description,
+    this.imageUrl,
+    this.totalPoints,
+    this.tags,
+    this.questions,
+    this.user,
   });
 
-  RoundModel.fromJSON(json) {
+  RoundModel.fromJson(json) {
     this.id = json['id'];
-    this.uid = json['uid'];
-    this.lastUpdated = json['lastUpdated'];
-    this.createdAt = json['createdAt'];
+    this.lastUpdated = DateTime.parse(json['lastUpdated']);
+    this.createdAt = DateTime.parse(json['createdAt']);
     this.title = json['title'];
+    this.totalPoints = json['totalPoints'].toDouble();
     this.description = json['description'];
-    this.imageURL = json['imageURL'];
-    this.totalPoints = json['totalPoints'] ?? 0;
+    this.imageUrl = json['imageUrl'];
     this.isPublished = json['isPublished'] ?? false;
-    questionIds = List<String>();
-    if (json['questionIds'] != null) {
-      json['questionIds'].forEach((id) {
-        questionIds.add(id);
+    this.user = json['user'];
+    this.tags = [];
+    if (json['tags'] != null) {
+      json['tags'].forEach((t) {
+        this.tags.add(t);
       });
     }
-  }
-  RoundModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'];
-    this.uid = document.data()['uid'];
-    this.lastUpdated = document.data()['lastUpdated'].toDate();
-    this.createdAt = document.data()['createdAt'].toDate();
-    this.title = document.data()['title'];
-    this.description = document.data()['description'];
-    this.imageURL = document.data()['imageURL'];
-    this.totalPoints = document.data()['totalPoints'] ?? 0;
-    this.isPublished = document.data()['isPublished'] ?? false;
-    questionIds = List<String>();
-    if (document.data()['questionIds'] != null) {
-      document.data()['questionIds'].forEach((id) {
-        questionIds.add(id);
+
+    this.questions = [];
+    if (json['questions'] != null) {
+      json['questions'].forEach((q) {
+        this.questions.add(q);
       });
     }
   }
 
-  toFirebase({
-    RoundModel roundModel,
-    String docId,
-    String uid,
-    DateTime lastUpdated,
-  }) {
-    return {
-      "id": docId,
-      "uid": uid,
-      "title": roundModel.title,
-      "description": roundModel.description,
-      "imageURL": roundModel.imageURL,
-      "questionIds": roundModel.questionIds,
-      "isPublished": false,
-      "createdAt": roundModel.createdAt ?? lastUpdated,
-      "lastUpdated": lastUpdated,
-    };
+  static List<RoundModel> listFromJson(List<dynamic> rawRounds) {
+    List<RoundModel> formattedRounds = [];
+    if (rawRounds.length > 0) {
+      formattedRounds = rawRounds.map((q) => RoundModel.fromJson(q)).toList();
+    }
+    return formattedRounds;
   }
+
+  // user, isPublished & datetimes can not be amended
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "description": description,
+        "imageUrl": imageUrl,
+        "tags": tags ?? [],
+        "questions": questions ?? [],
+      };
 
   RoundModel.newRound();
 }

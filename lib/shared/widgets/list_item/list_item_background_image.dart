@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class ItemBackgroundImage extends StatelessWidget {
@@ -13,7 +11,8 @@ class ItemBackgroundImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: double.infinity,
+      padding: EdgeInsets.only(right: 64),
       height: 112,
       decoration: BoxDecoration(
         image: imageUrl != null
@@ -35,27 +34,25 @@ class ItemBackgroundImage extends StatelessWidget {
                 end: FractionalOffset.centerRight,
                 colors: [
                   Theme.of(context).accentColor.withOpacity(0.2),
-                  Theme.of(context).canvasColor,
+                  Theme.of(context).accentColor.withOpacity(0),
                 ],
-                stops: [0.0, 1.0],
+                stops: [0, 1],
               ),
             ),
           ),
           ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 0),
+            child: Container(
               child: Container(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: FractionalOffset.centerLeft,
-                      end: FractionalOffset.centerRight,
-                      colors: [
-                        Colors.black.withOpacity(0.5),
-                        Theme.of(context).canvasColor,
-                      ],
-                      stops: [0.0, 1.0],
-                    ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: FractionalOffset.centerLeft,
+                    end: FractionalOffset.centerRight,
+                    colors: [
+                      Theme.of(context).canvasColor.withOpacity(0.4),
+                      Theme.of(context).canvasColor.withOpacity(0.9),
+                      Theme.of(context).canvasColor.withOpacity(1),
+                    ],
+                    stops: [0, 0.25, 1],
                   ),
                 ),
               ),

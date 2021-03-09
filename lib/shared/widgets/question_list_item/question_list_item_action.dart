@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/questions/add_question_to_round_dialog/add_question_to_round_dialog.dart';
-import 'package:qmhb/screens/library/questions/question_editor_page.dart';
-import 'package:qmhb/services/question_collection_service.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/pages/library/add_question_to_rounds_page.dart';
+import 'package:qmhb/pages/library/questions/question_delete_dialog.dart';
+import 'package:qmhb/pages/library/questions/question_editor_page.dart';
+
+enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
 class QuestionListItemAction extends StatefulWidget {
   const QuestionListItemAction({
@@ -35,15 +35,14 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
             height: 64,
             child: Icon(Icons.more_vert),
           ),
-          itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<QuestionOptions>>[
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
             PopupMenuItem<QuestionOptions>(
               value: QuestionOptions.addToRound,
               child: Row(
                 children: <Widget>[
                   Icon(Icons.playlist_add),
                   Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Add Question to Round'),
+                  Text('Add Question to Rounds'),
                 ],
               ),
             ),
@@ -81,36 +80,34 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
     );
   }
 
-  onMenuSelect(QuestionOptions result) {
-    if (result == QuestionOptions.addToRound) {
-      return _addQuestionToRound();
-    }
-    if (result == QuestionOptions.edit) {
-      return _editQuestion();
-    }
-    if (result == QuestionOptions.delete) {
-      return _deleteQuestion();
-    }
-    if (result == QuestionOptions.save) {
-      return _saveQuestion();
-    }
-    if (result == QuestionOptions.publish) {
-      return _publishQuestion();
+  Future<void> onMenuSelect(QuestionOptions result) async {
+    switch (result) {
+      case QuestionOptions.addToRound:
+        return _addToRounds();
+      case QuestionOptions.edit:
+        return _editQuestion();
+      case QuestionOptions.delete:
+        return _deleteQuestion();
+      case QuestionOptions.save:
+        return _saveQuestion();
+      case QuestionOptions.publish:
+        return _publishQuestion();
+      default:
+        print("Unknown Question Action");
     }
   }
 
-  _addQuestionToRound() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AddQuestionToRoundPageDialog(
-          questionModel: widget.questionModel,
-        );
-      },
+  void _addToRounds() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddQuestionToRoundsPage(
+          selectedQuestion: widget.questionModel,
+        ),
+      ),
     );
   }
 
-  _editQuestion() {
+  void _editQuestion() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuestionEditorPage(
@@ -122,30 +119,11 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
   }
 
   _deleteQuestion() {
-    showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Question"),
-          content: Text(
-              "Are you sure you wish to delete ${widget.questionModel.question} ?"),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await Provider.of<QuestionCollectionService>(context)
-                    .deleteQuestionOnFirebaseCollection(
-                        widget.questionModel.id);
-              },
-            ),
-          ],
+        return QuestionDeleteDialog(
+          questionModel: widget.questionModel,
         );
       },
     );

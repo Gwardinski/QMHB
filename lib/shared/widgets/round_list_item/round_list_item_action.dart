@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmhb/screens/library/rounds/add_round_to_quiz_dialog/add_round_to_quiz_dialog.dart';
-import 'package:qmhb/screens/library/rounds/round_editor_page.dart';
-import 'package:qmhb/services/round_collection_service.dart';
-import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
+import 'package:qmhb/pages/library/add_round_to_quizzes_page.dart';
+import 'package:qmhb/pages/library/rounds/round_delete_dialog.dart';
+import 'package:qmhb/pages/library/rounds/round_editor_page.dart';
+
+enum RoundOptions { save, edit, delete, details, addToQuiz, publish }
 
 class RoundListItemAction extends StatefulWidget {
   const RoundListItemAction({
@@ -81,36 +81,32 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
   }
 
   onMenuSelect(RoundOptions result) async {
-    if (result == RoundOptions.addToQuiz) {
-      return _addRoundToRound();
-    }
-    if (result == RoundOptions.edit) {
-      return await _editRound();
-    }
-    if (result == RoundOptions.delete) {
-      return _deleteRound();
-    }
-    if (result == RoundOptions.save) {
-      return _saveRound();
-    }
-    if (result == RoundOptions.publish) {
-      return _publishRound();
+    switch (result) {
+      case RoundOptions.addToQuiz:
+        return _addToQuizzes();
+      case RoundOptions.edit:
+        return _editRound();
+      case RoundOptions.delete:
+        return _deleteRound();
+      case RoundOptions.save:
+        return _saveRound();
+      case RoundOptions.publish:
+        return _publishRound();
+      default:
+        print("Unknown Question Action");
     }
   }
 
-  _addRoundToRound() {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AddRoundToQuizDialog(
-          roundModel: widget.roundModel,
-        );
-      },
+  void _addToQuizzes() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddRoundToQuizzesPage(selectedRound: widget.roundModel),
+      ),
     );
   }
 
-  _editRound() async {
-    await Navigator.of(context).push(
+  void _editRound() {
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RoundEditorPage(
           type: RoundEditorType.EDIT,
@@ -121,33 +117,11 @@ class _RoundListItemActionState extends State<RoundListItemAction> {
   }
 
   _deleteRound() {
-    var text = "Are you sure you wish to delete ${widget.roundModel.title} ?";
-    if (widget.roundModel.questionIds.length > 0) {
-      text +=
-          "\n\nThis will not delete the ${widget.roundModel.questionIds.length} questions this round contains.";
-    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Delete Round"),
-          content: Text(text),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await Provider.of<RoundCollectionService>(context)
-                    .deleteRoundOnFirebaseCollection(widget.roundModel.id);
-              },
-            ),
-          ],
+        return RoundDeleteDialog(
+          roundModel: widget.roundModel,
         );
       },
     );

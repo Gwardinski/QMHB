@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:qmhb/models/category_model.dart';
+import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/user_model.dart';
 
 enum QuestionType {
   STANDARD,
@@ -8,11 +10,10 @@ enum QuestionType {
 }
 
 class QuestionModel {
-  String id;
-  String uid;
+  int id;
   String questionType;
   String question;
-  String imageURL;
+  String imageUrl;
   String answer;
   String category;
   String difficulty;
@@ -20,71 +21,56 @@ class QuestionModel {
   bool isPublished;
   DateTime lastUpdated;
   DateTime createdAt;
+  // relational
+  List<int> rounds;
+  List<RoundModel> roundModels;
+  UserModel user;
 
   QuestionModel({
-    this.id,
-    this.uid,
-    this.questionType,
-    this.question,
-    this.imageURL,
-    this.answer,
-    this.category,
+    @required this.id,
+    @required this.questionType,
+    @required this.question,
+    @required this.answer,
+    @required this.category,
+    @required this.points,
+    this.imageUrl,
     this.difficulty,
-    this.points,
     this.isPublished,
   });
 
-  QuestionModel.fromJSON(json) {
+  QuestionModel.fromJson(json) {
     this.id = json['id'];
-    this.uid = json['uid'];
-    this.lastUpdated = json['lastUpdated'];
-    this.createdAt = json['createdAt'];
+    this.lastUpdated = DateTime.parse(json['lastUpdated']);
+    this.createdAt = DateTime.parse(json['createdAt']);
     this.questionType = json['questionType'];
     this.question = json['question'];
-    this.imageURL = json['imageURL'];
+    this.imageUrl = json['imageUrl'];
     this.answer = json['answer'];
     this.category = json['category'];
     this.difficulty = json['difficulty'];
-    this.points = json['points'] ?? 1;
-    this.isPublished = json['isPublished'] ?? false;
+    this.points = json['points'].toDouble();
+    this.isPublished = json['isPublished'];
   }
 
-  QuestionModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'];
-    this.uid = document.data()['uid'];
-    this.lastUpdated = document.data()['lastUpdated'].toDate();
-    this.createdAt = document.data()['createdAt'].toDate();
-    this.questionType = document.data()['questionType'];
-    this.question = document.data()['question'];
-    this.imageURL = document.data()['imageURL'];
-    this.answer = document.data()['answer'];
-    this.category = document.data()['category'];
-    this.difficulty = document.data()['difficulty'];
-    this.points = document.data()['points'].toDouble() ?? 1.0;
-    this.isPublished = document.data()['isPublished'] ?? false;
+  static List<QuestionModel> listFromJson(List<dynamic> rawQuestions) {
+    List<QuestionModel> formattedQuestions = [];
+    if (rawQuestions.length > 0) {
+      formattedQuestions = rawQuestions.map((q) => QuestionModel.fromJson(q)).toList();
+    }
+    return formattedQuestions;
   }
 
-  toFirebase({
-    QuestionModel questionModel,
-    String docId,
-    String uid,
-    DateTime lastUpdated,
-  }) {
-    return {
-      "id": docId,
-      "uid": uid,
-      "question": questionModel.question,
-      "questionType": questionModel.questionType,
-      "answer": questionModel.answer,
-      "imageURL": questionModel.imageURL,
-      "category": questionModel.category,
-      "difficulty": questionModel.difficulty,
-      "points": questionModel.points,
-      "isPublished": false,
-      "createdAt": questionModel.createdAt ?? lastUpdated,
-      "lastUpdated": lastUpdated,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "question": question,
+        "questionType": questionType,
+        "answer": answer,
+        "imageUrl": imageUrl,
+        "category": category,
+        "difficulty": difficulty,
+        "points": points,
+        "isPublished": isPublished ?? false,
+      };
 
   QuestionModel.newQuestion() {
     this.points = 1;

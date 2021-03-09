@@ -1,27 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/question/question_details_dialog.dart';
+import 'package:qmhb/pages/details/question/question_details_dialog.dart';
 import 'package:qmhb/shared/widgets/drag_feedback.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item_add_to_round.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
-enum QuestionOptions { save, edit, delete, details, addToRound, publish }
+class DraggableQuestionListItem extends StatelessWidget {
+  final QuestionModel questionModel;
+  final Function onDragStarted;
+  final Function onDragEnd;
+
+  DraggableQuestionListItem({
+    Key key,
+    @required this.questionModel,
+    @required this.onDragStarted,
+    @required this.onDragEnd,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable<QuestionModel>(
+      onDragStarted: onDragStarted,
+      onDragEnd: onDragEnd,
+      dragAnchor: DragAnchor.pointer,
+      data: questionModel,
+      feedback: DragFeedback(
+        title: questionModel.question,
+      ),
+      child: QuestionListItem(
+        questionModel: questionModel,
+      ),
+    );
+  }
+}
 
 class QuestionListItem extends StatefulWidget {
   final QuestionModel questionModel;
-  final bool canDrag;
-  final RoundModel roundModel;
 
   QuestionListItem({
     Key key,
     @required this.questionModel,
-    this.canDrag = false,
-    this.roundModel,
   }) : super(key: key);
 
   @override
@@ -30,27 +51,6 @@ class QuestionListItem extends StatefulWidget {
 
 class _QuestionListItemState extends State<QuestionListItem> {
   bool revealAnswer = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final listItemContent = QuestionListItemContent(
-      revealAnswer: revealAnswer,
-      questionModel: widget.questionModel,
-      viewQuestionDetails: _viewQuestionDetails,
-      updateRevealAnswer: _updateRevealAnswer,
-      roundModel: widget.roundModel,
-    );
-    return widget.canDrag
-        ? Draggable<QuestionModel>(
-            dragAnchor: DragAnchor.pointer,
-            data: widget.questionModel,
-            feedback: DragFeedback(
-              title: widget.questionModel.question,
-            ),
-            child: listItemContent,
-          )
-        : listItemContent;
-  }
 
   void _updateRevealAnswer() {
     setState(() {
@@ -68,62 +68,31 @@ class _QuestionListItemState extends State<QuestionListItem> {
       },
     );
   }
-}
-
-class QuestionListItemContent extends StatelessWidget {
-  const QuestionListItemContent({
-    Key key,
-    @required this.revealAnswer,
-    @required this.questionModel,
-    @required this.viewQuestionDetails,
-    @required this.updateRevealAnswer,
-    this.roundModel,
-  }) : super(key: key);
-
-  final bool revealAnswer;
-  final QuestionModel questionModel;
-  final viewQuestionDetails;
-  final updateRevealAnswer;
-  final RoundModel roundModel;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        viewQuestionDetails();
-      },
+      onTap: _viewQuestionDetails,
       child: Container(
         height: 64,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: QuestionListItemAction2(
-                revealAnswer: revealAnswer,
-                type: questionModel.questionType,
-                onTap: () {
-                  updateRevealAnswer();
-                },
-              ),
+            QuestionListItemAction2(
+              revealAnswer: revealAnswer,
+              type: widget.questionModel.questionType,
+              onTap: _updateRevealAnswer,
             ),
             QuestionListItemDetails(
               revealAnswer: revealAnswer,
-              questionModel: questionModel,
+              questionModel: widget.questionModel,
             ),
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: roundModel != null
-                  ? QuestionListItemActionAddToRound(
-                      roundModel: roundModel,
-                      questionModel: questionModel,
-                    )
-                  : QuestionListItemAction(
-                      questionModel: questionModel,
-                    ),
+              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+              child: QuestionListItemAction(
+                questionModel: widget.questionModel,
+              ),
             ),
           ],
         ),

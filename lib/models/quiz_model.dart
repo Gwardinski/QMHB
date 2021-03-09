@@ -1,96 +1,76 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/user_model.dart';
 
 class QuizModel {
-  String id;
-  String uid;
+  int id;
   String title;
   String description;
-  String imageURL;
-  double totalPoints;
+  String imageUrl;
   bool isPublished;
-  List<String> roundIds;
-  List<String> questionIds;
   DateTime lastUpdated;
   DateTime createdAt;
+  // relational
+  double totalPoints;
+  List<String> tags;
+  List<int> rounds;
+  List<RoundModel> roundModels;
+  int user;
+  UserModel userModel;
 
   QuizModel({
     this.id,
-    this.uid,
-    this.title,
-    this.description,
-    this.imageURL,
-    this.totalPoints,
-    this.roundIds,
-    this.questionIds,
+    @required this.title,
     this.isPublished,
+    this.description,
+    this.imageUrl,
+    this.totalPoints,
+    this.tags,
+    this.rounds,
+    this.user,
   });
 
-  QuizModel.fromJSON(json) {
+  QuizModel.fromJson(json) {
     this.id = json['id'];
-    this.uid = json['uid'];
-    this.lastUpdated = json['lastUpdated'];
-    this.createdAt = json['createdAt'];
+    this.lastUpdated = DateTime.parse(json['lastUpdated']);
+    this.createdAt = DateTime.parse(json['createdAt']);
     this.title = json['title'];
-    this.totalPoints = json['totalPoints'] ?? 0;
+    this.totalPoints = json['totalPoints'].toDouble();
     this.description = json['description'];
-    this.imageURL = json['imageURL'];
+    this.imageUrl = json['imageUrl'];
     this.isPublished = json['isPublished'] ?? false;
-    roundIds = List<String>();
-    if (json['roundIds'] != null) {
-      json['roundIds'].forEach((id) {
-        roundIds.add(id);
+    this.user = json['user'];
+    this.tags = [];
+    if (json['tags'] != null) {
+      json['tags'].forEach((t) {
+        this.tags.add(t);
       });
     }
-    questionIds = List<String>();
-    if (json['questionIds'] != null) {
-      json['questionIds'].forEach((id) {
-        questionIds.add(id);
-      });
-    }
-  }
-
-  QuizModel.fromFirebase(DocumentSnapshot document) {
-    this.id = document.data()['id'];
-    this.uid = document.data()['uid'];
-    this.lastUpdated = document.data()['lastUpdated'].toDate();
-    this.createdAt = document.data()['createdAt'].toDate();
-    this.title = document.data()['title'];
-    this.totalPoints = document.data()['totalPoints'] ?? 0;
-    this.description = document.data()['description'];
-    this.imageURL = document.data()['imageURL'];
-    this.isPublished = document.data()['isPublished'] ?? false;
-    roundIds = List<String>();
-    if (document.data()['roundIds'] != null) {
-      document.data()['roundIds'].forEach((id) {
-        roundIds.add(id);
-      });
-    }
-    questionIds = List<String>();
-    if (document.data()['questionIds'] != null) {
-      document.data()['questionIds'].forEach((id) {
-        questionIds.add(id);
+    this.rounds = [];
+    if (json['rounds'] != null) {
+      json['rounds'].forEach((r) {
+        this.rounds.add(r);
       });
     }
   }
 
-  toFirebase({
-    QuizModel quizModel,
-    String docId,
-    String uid,
-    DateTime lastUpdated,
-  }) {
-    return {
-      "id": docId,
-      "uid": uid,
-      "title": quizModel.title,
-      "description": quizModel.description,
-      "imageURL": quizModel.imageURL,
-      "roundIds": quizModel.roundIds,
-      "isPublished": false,
-      "createdAt": quizModel.createdAt ?? lastUpdated,
-      "lastUpdated": lastUpdated,
-    };
+  static List<QuizModel> listFromJson(List<dynamic> rawQuizzes) {
+    List<QuizModel> formattedQuizzes = [];
+    if (rawQuizzes.length > 0) {
+      formattedQuizzes = rawQuizzes.map((q) => QuizModel.fromJson(q)).toList();
+    }
+    return formattedQuizzes;
   }
+
+  // user, isPublished, totalPoints & datetimes can not be amended
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "description": description,
+        "imageUrl": imageUrl,
+        "tags": tags ?? [],
+        "rounds": rounds ?? [],
+      };
 
   QuizModel.newQuiz();
 }

@@ -3,8 +3,8 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/screens/details/quiz/quiz_details_page.dart';
-import 'package:qmhb/screens/details/round/round_details_page.dart';
+import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
+import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_tile.dart';
 
 class HighlightRow extends StatelessWidget {
@@ -57,10 +57,10 @@ class QuizHighlightRow extends StatelessWidget {
             child: SummaryTile(
               line1: quizModel.title,
               line2: "Rounds",
-              line2Value: quizModel.roundIds.length.toString(),
+              line2Value: quizModel.rounds.length.toString(),
               line3: "Points",
               line3Value: quizModel.totalPoints.toString(),
-              imageURL: quizModel.imageURL,
+              imageUrl: quizModel.imageUrl,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -107,10 +107,10 @@ class RoundHighlightRow extends StatelessWidget {
             child: SummaryTile(
               line1: roundModel.title,
               line2: "Questions",
-              line2Value: roundModel.questionIds.length.toString(),
+              line2Value: roundModel.questions.length.toString(),
               line3: "Points",
               line3Value: roundModel.totalPoints.toString(),
-              imageURL: roundModel.imageURL,
+              imageUrl: roundModel.imageUrl,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

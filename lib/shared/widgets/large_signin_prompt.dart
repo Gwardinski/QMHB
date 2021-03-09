@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/authentication/authentication_screen.dart';
+import 'package:qmhb/pages/authentication/authentication_page.dart';
 
 class LargeSignInPrompt extends StatelessWidget {
   const LargeSignInPrompt({
@@ -12,11 +12,11 @@ class LargeSignInPrompt extends StatelessWidget {
       width: double.infinity,
       constraints: BoxConstraints(maxHeight: 800),
       child: Center(
-        child: FlatButton(
+        child: TextButton(
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AuthenticationScreen(),
+                builder: (context) => AuthenticationPage(),
               ),
             );
           },

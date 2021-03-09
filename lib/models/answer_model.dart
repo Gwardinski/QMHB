@@ -1,5 +1,5 @@
 class AnswerModel {
-  String id;
+  int id;
   String answer;
   double points;
 }

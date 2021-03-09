@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/screens/settings/settings_page.dart';
+import 'package:qmhb/pages/settings/settings_page.dart';
 
 class SettingsPageButton extends StatelessWidget {
   const SettingsPageButton({
