@@ -9,6 +9,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/widgets/details_list_empty.dart';
 import 'package:qmhb/pages/details/widgets/details_header.dart';
 import 'package:qmhb/pages/library/add_questions_to_round_page.dart';
+import 'package:qmhb/pages/library/reorder_questions_page.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
@@ -102,13 +103,13 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
               },
               primaryHeaderButtonText: "Reorder",
               primaryHeaderButtonFunction: () async {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => ReorderQuestionsPage(
-                //       roundModel: roundModel,
-                //     ),
-                //   ),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ReOrderQuestionsPage(
+                      roundModel: _round,
+                    ),
+                  ),
+                );
               },
             ),
             _round.questions.length > 0
@@ -124,7 +125,7 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
                       QuestionModel questionModel = _round.questionModels[index];
-                      return QuestionListItem(
+                      return QuestionListItemWithAction(
                         questionModel: questionModel,
                       );
                     },

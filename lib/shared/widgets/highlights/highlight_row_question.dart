@@ -24,7 +24,7 @@ class HighlightRowQuestion extends StatelessWidget {
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return QuestionListItem(
+          return QuestionListItemWithAction(
             questionModel: questions[index],
           );
         },

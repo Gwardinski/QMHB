@@ -1,55 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/question_model.dart';
-import 'package:qmhb/models/state_models/app_size.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/pages/details/question/question_details_dialog.dart';
-import 'package:qmhb/shared/widgets/drag_feedback.dart';
+import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action2.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item_reveal_button.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
-class DraggableQuestionListItem extends StatelessWidget {
-  final QuestionModel questionModel;
-  final Function onDragStarted;
-  final Function onDragEnd;
-
-  DraggableQuestionListItem({
-    Key key,
-    @required this.questionModel,
-    @required this.onDragStarted,
-    @required this.onDragEnd,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Draggable<QuestionModel>(
-      onDragStarted: onDragStarted,
-      onDragEnd: onDragEnd,
-      dragAnchor: DragAnchor.pointer,
-      data: questionModel,
-      feedback: DragFeedback(
-        title: questionModel.question,
-      ),
-      child: QuestionListItem(
-        questionModel: questionModel,
-      ),
-    );
-  }
-}
-
-class QuestionListItem extends StatefulWidget {
+class QuestionListItemWithAction extends StatefulWidget {
   final QuestionModel questionModel;
 
-  QuestionListItem({
+  QuestionListItemWithAction({
     Key key,
     @required this.questionModel,
   }) : super(key: key);
 
   @override
-  _QuestionListItemState createState() => _QuestionListItemState();
+  _QuestionListItemWithActionState createState() => _QuestionListItemWithActionState();
 }
 
-class _QuestionListItemState extends State<QuestionListItem> {
+class _QuestionListItemWithActionState extends State<QuestionListItemWithAction> {
   bool revealAnswer = false;
 
   void _updateRevealAnswer() {
@@ -79,7 +49,7 @@ class _QuestionListItemState extends State<QuestionListItem> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            QuestionListItemAction2(
+            QuestionListItemRevealButton(
               revealAnswer: revealAnswer,
               type: widget.questionModel.questionType,
               onTap: _updateRevealAnswer,
@@ -88,14 +58,166 @@ class _QuestionListItemState extends State<QuestionListItem> {
               revealAnswer: revealAnswer,
               questionModel: widget.questionModel,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
-              child: QuestionListItemAction(
-                questionModel: widget.questionModel,
-              ),
+            QuestionListItemAction(
+              questionModel: widget.questionModel,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class QuestionListItemWithSelect extends StatefulWidget {
+  final QuestionModel questionModel;
+  final RoundModel selectedRound;
+  final Function containsQuestion;
+  final Function onTap;
+
+  QuestionListItemWithSelect({
+    Key key,
+    @required this.questionModel,
+    @required this.selectedRound,
+    @required this.containsQuestion,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  _QuestionListItemWithSelectState createState() => _QuestionListItemWithSelectState();
+}
+
+class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect> {
+  bool revealAnswer = false;
+
+  void _updateRevealAnswer() {
+    setState(() {
+      revealAnswer = !revealAnswer;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: widget.onTap,
+      child: Container(
+        height: 64,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            QuestionListItemRevealButton(
+              revealAnswer: revealAnswer,
+              type: widget.questionModel.questionType,
+              onTap: _updateRevealAnswer,
+            ),
+            QuestionListItemDetails(
+              revealAnswer: revealAnswer,
+              questionModel: widget.questionModel,
+            ),
+            AddItemIntoItemButton(
+              contains: widget.containsQuestion,
+              onTap: widget.onTap,
+              title: widget.questionModel.question,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class QuestionListItemWithReorder extends StatelessWidget {
+  final QuestionModel questionModel;
+
+  QuestionListItemWithReorder({
+    Key key,
+    @required this.questionModel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 64,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+          ),
+          QuestionListItemDetails(
+            revealAnswer: false,
+            questionModel: questionModel,
+          ),
+          Container(
+            width: 64,
+            height: 64,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DraggableQuestionListItem extends StatelessWidget {
+  final QuestionModel questionModel;
+  final Function onDragStarted;
+  final Function onDragEnd;
+
+  DraggableQuestionListItem({
+    Key key,
+    @required this.questionModel,
+    @required this.onDragStarted,
+    @required this.onDragEnd,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable<QuestionModel>(
+      onDragStarted: onDragStarted,
+      onDragEnd: onDragEnd,
+      dragAnchor: DragAnchor.pointer,
+      data: questionModel,
+      feedback: QuestionListItemShell(
+        questionModel: questionModel,
+      ),
+      child: QuestionListItemWithAction(
+        questionModel: questionModel,
+      ),
+    );
+  }
+}
+
+class QuestionListItemShell extends StatelessWidget {
+  final QuestionModel questionModel;
+
+  QuestionListItemShell({
+    Key key,
+    @required this.questionModel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 64,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+          ),
+          QuestionListItemDetails(
+            revealAnswer: false,
+            questionModel: questionModel,
+          ),
+          Container(
+            width: 64,
+            height: 64,
+          ),
+        ],
       ),
     );
   }

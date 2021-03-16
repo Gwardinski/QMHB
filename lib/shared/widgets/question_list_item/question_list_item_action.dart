@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/library/add_question_to_rounds_page.dart';
 import 'package:qmhb/pages/library/questions/question_delete_dialog.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
+
+import '../../../get_it.dart';
 
 enum QuestionOptions { save, edit, delete, details, addToRound, publish }
 
@@ -20,61 +23,64 @@ class QuestionListItemAction extends StatefulWidget {
 class _QuestionListItemActionState extends State<QuestionListItemAction> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Material(
-        color: Colors.transparent,
-        child: PopupMenuButton<QuestionOptions>(
-          padding: EdgeInsets.zero,
-          tooltip: "Question Actions",
-          onSelected: (result) {
-            onMenuSelect(result);
-          },
-          child: Container(
-            width: 64,
-            height: 64,
-            child: Icon(Icons.more_vert),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().lOnly16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: Material(
+          color: Colors.transparent,
+          child: PopupMenuButton<QuestionOptions>(
+            padding: EdgeInsets.zero,
+            tooltip: "Question Actions",
+            onSelected: (result) {
+              onMenuSelect(result);
+            },
+            child: Container(
+              width: 64,
+              height: 64,
+              child: Icon(Icons.more_vert),
+            ),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
+              PopupMenuItem<QuestionOptions>(
+                value: QuestionOptions.addToRound,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.playlist_add),
+                    Padding(padding: EdgeInsets.only(left: 16)),
+                    Text('Add Question to Rounds'),
+                  ],
+                ),
+              ),
+              PopupMenuItem<QuestionOptions>(
+                value: QuestionOptions.edit,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.edit),
+                    Padding(padding: EdgeInsets.only(left: 16)),
+                    Text('Edit Question Details'),
+                  ],
+                ),
+              ),
+              PopupMenuItem<QuestionOptions>(
+                value: QuestionOptions.delete,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.delete),
+                    Padding(padding: EdgeInsets.only(left: 16)),
+                    Text('Delete Question'),
+                  ],
+                ),
+              ),
+              // PopupMenuItem<QuestionOptions>(
+              //   value: QuestionOptions.save,
+              //   child: Text("Save To Collection"),
+              // ),
+              // PopupMenuItem<QuestionOptions>(
+              //   value: QuestionOptions.publish,
+              //   child: Text("Publish"),
+              // ),
+            ],
           ),
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<QuestionOptions>>[
-            PopupMenuItem<QuestionOptions>(
-              value: QuestionOptions.addToRound,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.playlist_add),
-                  Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Add Question to Rounds'),
-                ],
-              ),
-            ),
-            PopupMenuItem<QuestionOptions>(
-              value: QuestionOptions.edit,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.edit),
-                  Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Edit Question Details'),
-                ],
-              ),
-            ),
-            PopupMenuItem<QuestionOptions>(
-              value: QuestionOptions.delete,
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.delete),
-                  Padding(padding: EdgeInsets.only(left: 16)),
-                  Text('Delete Question'),
-                ],
-              ),
-            ),
-            // PopupMenuItem<QuestionOptions>(
-            //   value: QuestionOptions.save,
-            //   child: Text("Save To Collection"),
-            // ),
-            // PopupMenuItem<QuestionOptions>(
-            //   value: QuestionOptions.publish,
-            //   child: Text("Publish"),
-            // ),
-          ],
         ),
       ),
     );

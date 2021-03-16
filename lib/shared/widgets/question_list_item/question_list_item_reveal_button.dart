@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class QuestionListItemAction2 extends StatelessWidget {
-  const QuestionListItemAction2({
+class QuestionListItemRevealButton extends StatelessWidget {
+  const QuestionListItemRevealButton({
     Key key,
     @required this.revealAnswer,
     @required this.onTap,
@@ -37,9 +37,7 @@ class QuestionListItemAction2 extends StatelessWidget {
                           ? Icons.image
                           : Icons.remove_red_eye,
                   size: 24,
-                  color: revealAnswer
-                      ? Theme.of(context).accentColor
-                      : Colors.white,
+                  color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
                 ),
               ),
             ],

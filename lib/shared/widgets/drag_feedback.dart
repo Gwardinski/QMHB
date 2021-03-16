@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO - delete this and replace with permenant solution
 class DragFeedback extends StatelessWidget {
   const DragFeedback({
     Key key,

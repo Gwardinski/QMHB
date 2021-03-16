@@ -6,13 +6,11 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
-import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
-import 'package:qmhb/pages/library/widgets/add_item_into_new_item_button.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/error_message.dart';
-import 'package:qmhb/shared/widgets/loading_spinner.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/shared/widgets/toolbar.dart';
 
 class AddQuestionsToRoundPage extends StatefulWidget {
   final RoundModel selectedRound;
@@ -27,8 +25,8 @@ class AddQuestionsToRoundPage extends StatefulWidget {
 
 class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
   String _token;
-  RoundService _roundService;
   QuestionService _questionService;
+  RoundService _roundService;
   RefreshService _refreshService;
   List<QuestionModel> _questions = [];
   StreamSubscription _subscription;
@@ -60,7 +58,7 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
     });
   }
 
-  void _createNewQuestionInRound(context) {
+  void _createNewQuestionInRound() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => QuestionEditorPage(
@@ -71,11 +69,11 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
     );
   }
 
-  bool _containsQuestion(questionModel) {
-    return widget.selectedRound.questions.contains(questionModel.id);
+  bool _containsQuestion(QuestionModel question) {
+    return widget.selectedRound.questions.contains(question.id);
   }
 
-  Future<void> _updateRound(question) async {
+  Future<void> _updateRound(QuestionModel question) async {
     RoundModel updatedRound = widget.selectedRound;
     if (_containsQuestion(question)) {
       updatedRound.questions.remove(question.id);
@@ -94,6 +92,13 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Questions to Round"),
+        actions: <Widget>[
+          TextButton.icon(
+            icon: Icon(Icons.add),
+            label: Text('New'),
+            onPressed: _createNewQuestionInRound,
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -109,10 +114,10 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
               "From here you can select the Questions that you wish to add to this Round. You can also de-select a Question to remove it.",
             ),
           ),
-          AddItemIntoNewItemButton(
-            title: "Add New Question",
-            onTap: () {
-              _createNewQuestionInRound(context);
+          Toolbar(
+            noOfResults: _questions.length,
+            onUpdateSearchString: (val) {
+              print(val);
             },
           ),
           Expanded(
@@ -120,12 +125,15 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
               itemCount: _questions.length ?? 0,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
-                return AddItemIntoItemButton(
-                  title: _questions[index].question,
+                return QuestionListItemWithSelect(
+                  questionModel: _questions[index],
+                  selectedRound: widget.selectedRound,
                   onTap: () {
                     _updateRound(_questions[index]);
                   },
-                  contains: () => _containsQuestion(_questions[index]),
+                  containsQuestion: () {
+                    return _containsQuestion(_questions[index]);
+                  },
                 );
               },
             ),

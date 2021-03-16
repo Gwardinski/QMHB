@@ -46,11 +46,16 @@ class RoundModel {
         this.tags.add(t);
       });
     }
-
     this.questions = [];
     if (json['questions'] != null) {
       json['questions'].forEach((q) {
         this.questions.add(q);
+      });
+    }
+    this.questionModels = [];
+    if (json['questionModels'] != null) {
+      json['questionModels'].forEach((q) {
+        this.questionModels.add(QuestionModel.fromJson(q));
       });
     }
   }
