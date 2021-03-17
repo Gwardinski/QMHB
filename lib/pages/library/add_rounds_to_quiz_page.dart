@@ -119,7 +119,6 @@ class _AddRoundsToQuizPageState extends State<AddRoundsToQuizPage> {
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 return AddItemIntoItemButton(
-                  title: _rounds[index].title,
                   onTap: () {
                     _updateQuiz(_rounds[index]);
                   },

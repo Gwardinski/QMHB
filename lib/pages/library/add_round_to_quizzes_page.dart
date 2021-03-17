@@ -113,7 +113,6 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 return AddItemIntoItemButton(
-                  title: _quizzes[index].title,
                   onTap: () {
                     _updateQuiz(_quizzes[index]);
                   },

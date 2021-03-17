@@ -105,7 +105,7 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
               primaryHeaderButtonFunction: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ReOrderQuestionsPage(
+                    builder: (context) => ReorderQuestionsPage(
                       roundModel: _round,
                     ),
                   ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/pages/details/widgets/details_header_banner_image.dart';
 import 'package:qmhb/pages/library/questions/question_editor_page.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
@@ -103,15 +104,37 @@ class _AddQuestionsToRoundPageState extends State<AddQuestionsToRoundPage> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              widget.selectedRound.title,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "From here you can select the Questions that you wish to add to this Round. You can also de-select a Question to remove it.",
+            height: 120,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                DetailsHeaderBannerImage(
+                  imageUrl: widget.selectedRound.imageUrl,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          widget.selectedRound.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "Select the Questions to add to this Round.",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Toolbar(

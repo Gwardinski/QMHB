@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/widgets/details_header_banner_image.dart';
 import 'package:qmhb/services/refresh_service.dart';
-import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/services/quiz_service.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
-class ReorderQuestionsPage extends StatefulWidget {
-  final RoundModel roundModel;
+class ReorderRoundsPage extends StatefulWidget {
+  final QuizModel quizModel;
 
-  ReorderQuestionsPage({this.roundModel});
+  ReorderRoundsPage({this.quizModel});
 
   @override
-  _ReorderQuestionsPageState createState() => _ReorderQuestionsPageState();
+  _ReorderRoundsPageState createState() => _ReorderRoundsPageState();
 }
 
-class _ReorderQuestionsPageState extends State<ReorderQuestionsPage> {
-  RoundModel _roundModel;
-  RoundService _roundService;
+class _ReorderRoundsPageState extends State<ReorderRoundsPage> {
+  QuizModel _quizModel;
+  QuizService _quizService;
   RefreshService _refreshService;
   String _token;
 
   @override
   void initState() {
-    _roundModel = widget.roundModel;
-    _roundService = Provider.of<RoundService>(context, listen: false);
+    _quizModel = widget.quizModel;
+    _quizService = Provider.of<QuizService>(context, listen: false);
     _refreshService = Provider.of<RefreshService>(context, listen: false);
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     super.initState();
@@ -36,14 +36,14 @@ class _ReorderQuestionsPageState extends State<ReorderQuestionsPage> {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    final int q = _roundModel.questions.removeAt(oldIndex);
-    final QuestionModel question = _roundModel.questionModels.removeAt(oldIndex);
+    final int q = _quizModel.rounds.removeAt(oldIndex);
+    final RoundModel round = _quizModel.roundModels.removeAt(oldIndex);
     setState(() {
-      _roundModel.questions.insert(newIndex, q);
-      _roundModel.questionModels.insert(newIndex, question);
+      _quizModel.rounds.insert(newIndex, q);
+      _quizModel.roundModels.insert(newIndex, round);
     });
-    _roundService.editRound(round: _roundModel, token: _token);
-    _refreshService.roundRefresh();
+    _quizService.editQuiz(quiz: _quizModel, token: _token);
+    _refreshService.quizRefresh();
   }
 
   @override
@@ -60,7 +60,7 @@ class _ReorderQuestionsPageState extends State<ReorderQuestionsPage> {
             child: Stack(
               children: [
                 DetailsHeaderBannerImage(
-                  imageUrl: _roundModel.imageUrl,
+                  imageUrl: _quizModel.imageUrl,
                 ),
                 Container(
                   width: double.infinity,
@@ -70,14 +70,14 @@ class _ReorderQuestionsPageState extends State<ReorderQuestionsPage> {
                       Container(
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          _roundModel.title,
+                          _quizModel.title,
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
                       ),
                       Text(
-                        "Drag and drop to re-order the questions within this round.",
+                        "Drag and drop to re-order the rounds within this quiz.",
                         style: TextStyle(
                           fontSize: 16,
                         ),
@@ -90,11 +90,11 @@ class _ReorderQuestionsPageState extends State<ReorderQuestionsPage> {
           ),
           Expanded(
             child: ReorderableListView(
-              children: _roundModel.questionModels
+              children: _quizModel.roundModels
                   .map(
-                    (question) => QuestionListItemWithReorder(
-                      key: Key(question.id.toString()),
-                      questionModel: question,
+                    (round) => RoundListItemWithReorder(
+                      key: Key(round.id.toString()),
+                      roundModel: round,
                     ),
                   )
                   .toList(),

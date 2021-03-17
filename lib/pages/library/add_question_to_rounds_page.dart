@@ -115,7 +115,6 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 return AddItemIntoItemButton(
-                  title: _rounds[index].title,
                   onTap: () {
                     _updateRound(_rounds[index]);
                   },

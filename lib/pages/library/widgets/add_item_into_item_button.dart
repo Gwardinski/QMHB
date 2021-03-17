@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 class AddItemIntoItemButton extends StatefulWidget {
   const AddItemIntoItemButton({
     Key key,
-    @required this.title,
     @required this.contains,
     @required this.onTap,
   });
 
-  final String title;
   final Function contains;
   final Function onTap;
 
@@ -42,16 +40,34 @@ class _AddItemIntoItemButtonState extends State<AddItemIntoItemButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 16),
-      height: 64,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       width: 64,
-      child: Center(
-        child: _isLoading
-            ? Container(height: 24, width: 24, child: CircularProgressIndicator())
-            : Icon(
-                widget.contains() ? Icons.check_box : Icons.check_box_outline_blank_outlined,
-                size: 24,
+      height: 64,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: _isLoading
+                    ? Container(height: 24, width: 24, child: CircularProgressIndicator())
+                    : Icon(
+                        widget.contains()
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank_outlined,
+                        size: 24,
+                      ),
               ),
+            ],
+          ),
+        ),
+        onPressed: onTap,
       ),
     );
   }

@@ -52,6 +52,12 @@ class QuizModel {
         this.rounds.add(r);
       });
     }
+    this.roundModels = [];
+    if (json['roundModels'] != null) {
+      json['roundModels'].forEach((r) {
+        this.roundModels.add(RoundModel.fromJson(r));
+      });
+    }
   }
 
   static List<QuizModel> listFromJson(List<dynamic> rawQuizzes) {

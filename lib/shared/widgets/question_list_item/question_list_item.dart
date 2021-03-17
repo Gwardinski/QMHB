@@ -95,10 +95,21 @@ class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect>
     });
   }
 
+  void _viewQuestionDetails() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return QuestionDetailsDialog(
+          questionModel: widget.questionModel,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: _viewQuestionDetails,
       child: Container(
         height: 64,
         child: Row(
@@ -117,7 +128,6 @@ class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect>
             AddItemIntoItemButton(
               contains: widget.containsQuestion,
               onTap: widget.onTap,
-              title: widget.questionModel.question,
             )
           ],
         ),
@@ -143,7 +153,7 @@ class QuestionListItemWithReorder extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 64,
+            width: 16,
             height: 64,
           ),
           QuestionListItemDetails(
@@ -179,7 +189,7 @@ class DraggableQuestionListItem extends StatelessWidget {
       onDragEnd: onDragEnd,
       dragAnchor: DragAnchor.pointer,
       data: questionModel,
-      feedback: QuestionListItemShell(
+      feedback: QuestionListItemDragFeedback(
         questionModel: questionModel,
       ),
       child: QuestionListItemWithAction(
@@ -189,35 +199,39 @@ class DraggableQuestionListItem extends StatelessWidget {
   }
 }
 
-class QuestionListItemShell extends StatelessWidget {
+class QuestionListItemDragFeedback extends StatelessWidget {
   final QuestionModel questionModel;
 
-  QuestionListItemShell({
+  QuestionListItemDragFeedback({
     Key key,
     @required this.questionModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-          ),
-          QuestionListItemDetails(
-            revealAnswer: false,
-            questionModel: questionModel,
-          ),
-          Container(
-            width: 64,
-            height: 64,
-          ),
-        ],
+    return Material(
+      child: Container(
+        height: 64,
+        width: 320,
+        color: Theme.of(context).primaryColorLight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+            ),
+            QuestionListItemDetails(
+              revealAnswer: false,
+              questionModel: questionModel,
+            ),
+            Container(
+              width: 64,
+              height: 64,
+            ),
+          ],
+        ),
       ),
     );
   }
