@@ -1,0 +1,18 @@
+List<String> acceptedCategories = [
+  "AnimalKingdom",
+  "Books&Literature",
+  "Film",
+  "Games",
+  "GeneralKnowledge",
+  "Geography",
+  "History",
+  "Maths",
+  "Music",
+  "NaturalWorld",
+  "Politics",
+  "PopCulture",
+  "Science",
+  "Sports",
+  "Technology",
+  "Television",
+];
