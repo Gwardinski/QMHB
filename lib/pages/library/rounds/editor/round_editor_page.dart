@@ -174,7 +174,7 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Unsaved Changes"),
-          content: Text("You have unsaved changes. Are you sure you wish to go back ?"),
+          content: Text("You have unsaved changes.\nAre you sure you wish to go back ?"),
           actions: [
             TextButton(
               child: Text('Close Without Saving'),

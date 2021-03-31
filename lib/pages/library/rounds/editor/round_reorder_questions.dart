@@ -36,16 +36,23 @@ class _RoundReorderQuestionsState extends State<RoundReorderQuestions>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ReorderableListView(
-      onReorder: reorder,
-      children: widget.round.questionModels
-          .map(
-            (question) => QuestionListItemShell(
-              key: Key(question.id.toString()),
-              question: question,
-            ),
+    return widget.round.questionModels.length > 0
+        ? ReorderableListView(
+            onReorder: reorder,
+            children: widget.round.questionModels
+                .map(
+                  (question) => QuestionListItemShell(
+                    key: Key(question.id.toString()),
+                    question: question,
+                  ),
+                )
+                .toList(),
           )
-          .toList(),
-    );
+        : Container(
+            child: Center(
+              child: Text("You have not selected any Questions yet"),
+            ),
+          );
+    ;
   }
 }

@@ -35,16 +35,22 @@ class _QuizReorderRoundsState extends State<QuizReorderRounds> with AutomaticKee
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ReorderableListView(
-      onReorder: reorder,
-      children: widget.quiz.roundModels
-          .map(
-            (round) => RoundListItemShell(
-              key: Key(round.id.toString()),
-              round: round,
-            ),
+    return widget.quiz.roundModels.length > 0
+        ? ReorderableListView(
+            onReorder: reorder,
+            children: widget.quiz.roundModels
+                .map(
+                  (round) => RoundListItemShell(
+                    key: Key(round.id.toString()),
+                    round: round,
+                  ),
+                )
+                .toList(),
           )
-          .toList(),
-    );
+        : Container(
+            child: Center(
+              child: Text("You have not selected any Rounds yet"),
+            ),
+          );
   }
 }

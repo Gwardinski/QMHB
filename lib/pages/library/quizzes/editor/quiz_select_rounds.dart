@@ -98,17 +98,23 @@ class _QuizSelectRoundsState extends State<QuizSelectRounds> with AutomaticKeepA
           primaryText: useLandscape ? "Create New Round" : "New",
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: _rounds.length ?? 0,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              return RoundListItemWithSelect(
-                round: _rounds[index],
-                onTap: () => _updateQuiz(_rounds[index]),
-                containsItem: () => _containsRound(_rounds[index]),
-              );
-            },
-          ),
+          child: _rounds.length > 0
+              ? ListView.builder(
+                  itemCount: _rounds.length ?? 0,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RoundListItemWithSelect(
+                      round: _rounds[index],
+                      onTap: () => _updateQuiz(_rounds[index]),
+                      containsItem: () => _containsRound(_rounds[index]),
+                    );
+                  },
+                )
+              : Container(
+                  child: Center(
+                    child: Text("You have not created or saved any Rounds yet"),
+                  ),
+                ),
         ),
       ],
     );

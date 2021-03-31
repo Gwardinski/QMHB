@@ -98,17 +98,23 @@ class _RoundSelectQuestionsState extends State<RoundSelectQuestions>
           primaryText: useLandscape ? "Create New Round" : "New",
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: _questions.length ?? 0,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              return QuestionListItemWithSelect(
-                question: _questions[index],
-                onTap: () => _updateRound(_questions[index]),
-                containsItem: () => _containsQuestion(_questions[index]),
-              );
-            },
-          ),
+          child: _questions.length > 0
+              ? ListView.builder(
+                  itemCount: _questions.length ?? 0,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return QuestionListItemWithSelect(
+                      question: _questions[index],
+                      onTap: () => _updateRound(_questions[index]),
+                      containsItem: () => _containsQuestion(_questions[index]),
+                    );
+                  },
+                )
+              : Container(
+                  child: Center(
+                    child: Text("You have not created or saved any Questions yet"),
+                  ),
+                ),
         ),
       ],
     );
