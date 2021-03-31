@@ -6,6 +6,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/widgets/details_header_banner_image.dart';
+import 'package:qmhb/pages/details/widgets/details_header_banner_text.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -85,12 +86,13 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
     _refreshService.roundAndQuestionRefresh();
   }
 
-  // TODO - make question collapse when scroll on list
+  // TODO - make header text collapse when scroll on list
   Widget build(BuildContext context) {
+    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Add Question to Rounds"),
+        title: Text(useLandscape ? "Add Question to Rounds" : "Add to..."),
         actions: [
           AppBarButton(
             title: "New",
@@ -99,66 +101,39 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Container(
-            height: 120,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                DetailsHeaderBannerImage(
-                  imageUrl: widget.selectedQuestion.imageUrl,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                          '"${widget.selectedQuestion.question}"',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "Select the Rounds that this Question should be added to.",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        "Any Rounds you have published will not appear here. Published Rounds cannot be edited.",
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          DetailsHeaderBannerImage(
+            imageUrl: widget.selectedQuestion.imageUrl,
           ),
-          Toolbar(
-            noOfResults: _rounds.length,
-            onUpdateSearchString: (val) {
-              print(val);
-            },
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _rounds.length ?? 0,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return RoundListItemWithSelect(
-                  round: _rounds[index],
-                  onTap: () => _updateRound(_rounds[index]),
-                  containsItem: () => _containsQuestion(_rounds[index]),
-                );
-              },
-            ),
+          Column(
+            children: [
+              DetailsHeaderBannerText(
+                line1: '"${widget.selectedQuestion.question}"',
+                line2: "Select the Rounds that this Question should be added to.",
+                line3:
+                    "Changes will be saved automatically.\nAny Rounds you have published will not appear here. Published Rounds cannot be edited.",
+              ),
+              Toolbar(
+                noOfResults: _rounds.length,
+                onUpdateSearchString: (val) {
+                  print(val);
+                },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _rounds.length ?? 0,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return RoundListItemWithSelect(
+                      round: _rounds[index],
+                      onTap: () => _updateRound(_rounds[index]),
+                      containsItem: () => _containsQuestion(_rounds[index]),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),

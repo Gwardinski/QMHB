@@ -6,6 +6,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/widgets/details_header_banner_image.dart';
+import 'package:qmhb/pages/details/widgets/details_header_banner_text.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
@@ -85,12 +86,13 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
     _refreshService.quizAndRoundRefresh();
   }
 
-  // TODO - make round collapse when scroll on list
+  // TODO - make header text collapse when scroll on list
   Widget build(BuildContext context) {
+    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Add Round to Quizzes"),
+        title: Text(useLandscape ? "Add Round to Quizzes" : "Add to..."),
         actions: [
           AppBarButton(
             title: "New",
@@ -99,68 +101,41 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Container(
-            height: 120,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                DetailsHeaderBannerImage(
-                  imageUrl: widget.selectedRound.imageUrl,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                          '"${widget.selectedRound.title}"',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "Select the Quizzes that this Round should be added to.",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        "Any Quizzes you have published will not appear here. Published Quizzes cannot be edited.",
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          DetailsHeaderBannerImage(
+            imageUrl: widget.selectedRound.imageUrl,
           ),
-          Toolbar(
-            noOfResults: _quizzes.length,
-            onUpdateSearchString: (val) {
-              print(val);
-            },
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _quizzes.length ?? 0,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return QuizListItemWithSelect(
-                  quiz: _quizzes[index],
-                  containsItem: () => _containsRound(_quizzes[index]),
-                  onTap: () {
-                    _updateQuiz(_quizzes[index]);
+          Column(
+            children: [
+              DetailsHeaderBannerText(
+                line1: '"${widget.selectedRound.title}"',
+                line2: "Select the Quizzes that this Round should be added to.",
+                line3:
+                    "Changes will be saved automatically.\nAny Quizzes you have published will not appear here. Published Quizzes cannot be edited.",
+              ),
+              Toolbar(
+                noOfResults: _quizzes.length,
+                onUpdateSearchString: (val) {
+                  print(val);
+                },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _quizzes.length ?? 0,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return QuizListItemWithSelect(
+                      quiz: _quizzes[index],
+                      containsItem: () => _containsRound(_quizzes[index]),
+                      onTap: () {
+                        _updateQuiz(_quizzes[index]);
+                      },
+                    );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

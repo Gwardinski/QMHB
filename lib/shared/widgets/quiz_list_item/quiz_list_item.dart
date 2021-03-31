@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/state_models/user_data_state_model.dart';
+import 'package:qmhb/pages/details/quiz/quiz_details_dialog.dart';
 import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/services/navigation_service.dart';
+import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
@@ -89,13 +92,33 @@ class QuizListItemWithSelect extends StatelessWidget {
     @required this.onTap,
   }) : super(key: key);
 
+  void _showNestedItems(context) {
+    QuizService service = Provider.of<QuizService>(context, listen: false);
+    String token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return QuizDetailsDialog(
+          quiz: quiz,
+          future: service.getQuiz(
+            id: quiz.id,
+            token: token,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return QuizListItemShell(
-      quiz: quiz,
-      action: AddItemIntoItemButton(
-        contains: containsItem,
-        onTap: onTap,
+    return InkWell(
+      onTap: () => _showNestedItems(context),
+      child: QuizListItemShell(
+        quiz: quiz,
+        action: AddItemIntoItemButton(
+          contains: containsItem,
+          onTap: onTap,
+        ),
       ),
     );
   }

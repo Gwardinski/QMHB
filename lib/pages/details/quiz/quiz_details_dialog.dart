@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/shared/widgets/button_primary.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 
-class RoundDetailsDialog extends StatelessWidget {
-  final RoundModel round;
-  final Future<RoundModel> future;
+class QuizDetailsDialog extends StatelessWidget {
+  final QuizModel quiz;
+  final Future<QuizModel> future;
 
-  RoundDetailsDialog({
-    @required this.round,
+  QuizDetailsDialog({
+    @required this.quiz,
     @required this.future,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Round Questions"),
+      title: Text("Quiz Rounds"),
       contentPadding: EdgeInsets.all(0),
       content: FutureBuilder(
-        initialData: round,
+        initialData: quiz,
         future: future,
         builder: (context, snapshot) {
           return Container(
@@ -28,10 +28,10 @@ class RoundDetailsDialog extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: snapshot.data.questionModels.length,
+                    itemCount: snapshot.data.roundModels.length,
                     itemBuilder: (context, index) {
-                      return QuestionListItemInRoundDialog(
-                        question: snapshot.data.questionModels[index],
+                      return RoundListItemShell(
+                        round: snapshot.data.roundModels[index],
                       );
                     },
                   ),

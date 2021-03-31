@@ -230,7 +230,7 @@ class _QuestionListItemInRoundDialogState extends State<QuestionListItemInRoundD
             onTap: _updateRevealAnswer,
           ),
           QuestionListItemDetails(
-            revealAnswer: false,
+            revealAnswer: revealAnswer,
             question: widget.question,
           ),
           Container(width: 8),

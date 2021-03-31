@@ -9,7 +9,6 @@ import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_background_image.dart';
 import 'package:qmhb/shared/widgets/list_item/list_item_details.dart';
-import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
 class RoundListItemShell extends StatelessWidget {
