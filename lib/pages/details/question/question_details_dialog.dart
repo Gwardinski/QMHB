@@ -25,9 +25,7 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
   final PageController _controller = PageController(initialPage: 0);
 
   void _updateRevealAnswer() {
-    setState(() {
-      _revealAnswer = true;
-    });
+    setState(() => _revealAnswer = true);
   }
 
   @override
@@ -37,15 +35,11 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
       actions: [
         TextButton(
           child: Text('Close'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
           child: Text('Details'),
-          onPressed: () {
-            _controller.jumpToPage(1);
-          },
+          onPressed: () => _controller.jumpToPage(1),
         ),
       ],
       content: Container(
@@ -87,9 +81,7 @@ class _QuestionDetailsState extends State<QuestionDetailsDialog> {
                       )
                     : ButtonText(
                         text: 'Reveal Answer',
-                        onTap: () {
-                          _updateRevealAnswer();
-                        },
+                        onTap: () => _updateRevealAnswer(),
                         type: ButtonTextType.PRIMARY,
                       ),
               ],

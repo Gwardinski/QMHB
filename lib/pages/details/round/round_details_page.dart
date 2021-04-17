@@ -11,6 +11,7 @@ import 'package:qmhb/pages/details/widgets/details_header.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/highlights/summarys/summary_header.dart';
+import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
@@ -93,25 +94,27 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
             SummaryRowHeader(
               headerTitle: "Questions",
             ),
-            _round.questions.length > 0
-                ? ListView.separated(
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                      );
-                    },
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: _round.questionModels?.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      QuestionModel question = _round.questionModels[index];
-                      return QuestionListItemWithAction(
-                        question: question,
-                      );
-                    },
-                  )
-                : DetailsListEmpty(text: "This Round has no Questions"),
+            PageWrapper(
+              child: _round.questions.length > 0
+                  ? ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                        );
+                      },
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _round.questionModels?.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        QuestionModel question = _round.questionModels[index];
+                        return QuestionListItemWithAction(
+                          question: question,
+                        );
+                      },
+                    )
+                  : DetailsListEmpty(text: "This Round has no Questions"),
+            )
           ],
         ),
       ),

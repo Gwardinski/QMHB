@@ -7,14 +7,14 @@ import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/list_item/list_item.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item_action.dart';
 
-class RoundListItem extends StatelessWidget {
+class RoundGridItem extends StatelessWidget {
   final RoundModel round;
   final Widget action;
 
-  RoundListItem({
+  RoundGridItem({
     Key key,
     this.round,
     this.action,
@@ -22,25 +22,28 @@ class RoundListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListItem(
+    return GridItem(
+      type: GridItemType.ROUND,
       title: round.title,
       description: round.description,
       imageUrl: round.imageUrl,
       points: round.totalPoints,
       number: round.questions.length,
-      infoTitle1: " Questions",
-      infoTitle2: " Pts",
       action: action,
     );
   }
 }
 
-class RoundListItemWithAction extends StatelessWidget {
+class RoundGridItemWithAction extends StatelessWidget {
   final RoundModel round;
+  final Function onDragStarted;
+  final Function onDragEnd;
 
-  RoundListItemWithAction({
+  RoundGridItemWithAction({
     Key key,
     @required this.round,
+    @required this.onDragStarted,
+    @required this.onDragEnd,
   }) : super(key: key);
 
   void _navigateToDetails(context) {
@@ -55,22 +58,37 @@ class RoundListItemWithAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => _navigateToDetails(context),
-      child: RoundListItem(
-        round: round,
-        action: RoundListItemAction(
+      child: Draggable(
+        onDragStarted: onDragStarted,
+        onDragEnd: onDragEnd,
+        dragAnchor: DragAnchor.pointer,
+        data: round,
+        feedback: Material(
+          child: Container(
+            height: 64,
+            width: 128,
+            child: Center(
+              child: Text(round.title),
+            ),
+          ),
+        ),
+        child: RoundGridItem(
           round: round,
+          action: RoundListItemAction(
+            round: round,
+          ),
         ),
       ),
     );
   }
 }
 
-class RoundListItemWithSelect extends StatelessWidget {
+class RoundGridItemWithSelect extends StatelessWidget {
   final RoundModel round;
   final Function containsItem;
   final Function onTap;
 
-  RoundListItemWithSelect({
+  RoundGridItemWithSelect({
     Key key,
     @required this.round,
     @required this.containsItem,
@@ -98,7 +116,7 @@ class RoundListItemWithSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => _showNestedItems(context),
-      child: RoundListItem(
+      child: RoundGridItem(
         round: round,
         action: AddItemIntoItemButton(
           contains: containsItem,

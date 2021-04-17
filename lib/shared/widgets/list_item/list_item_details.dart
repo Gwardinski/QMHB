@@ -12,8 +12,6 @@ class ListItemDetails extends StatelessWidget {
     @required this.info1Value,
     @required this.info2Title,
     @required this.info2Value,
-    @required this.info3Title,
-    @required this.info3Value,
   }) : super(key: key);
 
   final String title;
@@ -22,13 +20,11 @@ class ListItemDetails extends StatelessWidget {
   final String info1Value;
   final String info2Title;
   final String info2Value;
-  final String info3Title;
-  final String info3Value;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,8 +40,6 @@ class ListItemDetails extends StatelessWidget {
             info1Value: info1Value,
             info2Title: info2Title,
             info2Value: info2Value,
-            info3Title: info3Title,
-            info3Value: info3Value,
           ),
         ],
       ),

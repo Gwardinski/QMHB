@@ -7,14 +7,14 @@ import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/shared/widgets/list_item/list_item.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item_action.dart';
 
-class QuizListItem extends StatelessWidget {
+class QuizGridItem extends StatelessWidget {
   final QuizModel quiz;
   final Widget action;
 
-  QuizListItem({
+  QuizGridItem({
     Key key,
     this.quiz,
     this.action,
@@ -22,23 +22,22 @@ class QuizListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListItem(
+    return GridItem(
+      type: GridItemType.ROUND,
       title: quiz.title,
       description: quiz.description,
       imageUrl: quiz.imageUrl,
       points: quiz.totalPoints,
       number: quiz.rounds.length,
-      infoTitle1: " Rounds",
-      infoTitle2: " Pts",
       action: action,
     );
   }
 }
 
-class QuizListItemWithAction extends StatelessWidget {
+class QuizGridItemWithAction extends StatelessWidget {
   final QuizModel quiz;
 
-  QuizListItemWithAction({
+  QuizGridItemWithAction({
     Key key,
     @required this.quiz,
   }) : super(key: key);
@@ -55,7 +54,7 @@ class QuizListItemWithAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => _navigateToDetails(context),
-      child: QuizListItem(
+      child: QuizGridItem(
         quiz: quiz,
         action: QuizListItemAction(
           quiz: quiz,
@@ -65,12 +64,12 @@ class QuizListItemWithAction extends StatelessWidget {
   }
 }
 
-class QuizListItemWithSelect extends StatelessWidget {
+class QuizGridItemWithSelect extends StatelessWidget {
   final QuizModel quiz;
   final Function containsItem;
   final Function onTap;
 
-  QuizListItemWithSelect({
+  QuizGridItemWithSelect({
     Key key,
     @required this.quiz,
     @required this.containsItem,
@@ -98,7 +97,7 @@ class QuizListItemWithSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => _showNestedItems(context),
-      child: QuizListItem(
+      child: QuizGridItem(
         quiz: quiz,
         action: AddItemIntoItemButton(
           contains: containsItem,

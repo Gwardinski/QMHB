@@ -192,7 +192,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -204,16 +204,16 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
             AppBarButton(
               highlight: true,
               onTap: _closeEditor,
-              title: "Close${useLandscape ? ' Editor' : ''}",
+              title: "Close${isLandscape ? ' Editor' : ''}",
               leftIcon: Icons.arrow_back,
             ),
             Text(
-              _isNewQuiz ? "Create${useLandscape ? ' New Quiz' : ''}" : "Edit Quiz",
+              _isNewQuiz ? "Create${isLandscape ? ' New Quiz' : ''}" : "Edit Quiz",
             ),
             AppBarButton(
               highlight: true,
               onTap: _onSave,
-              title: "Save${useLandscape ? ' Changes' : ''}",
+              title: "Save${isLandscape ? ' Changes' : ''}",
               rightIcon: Icons.save,
             ),
           ],
@@ -229,7 +229,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
           children: [
             PageView(
               controller: _controller,
-              physics: (useLandscape || _isNewQuiz)
+              physics: (isLandscape || _isNewQuiz)
                   ? NeverScrollableScrollPhysics()
                   : AlwaysScrollableScrollPhysics(),
               children: [

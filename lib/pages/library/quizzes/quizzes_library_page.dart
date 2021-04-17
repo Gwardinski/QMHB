@@ -10,6 +10,8 @@ import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/page_wrapper.dart';
+import 'package:qmhb/shared/widgets/quiz_grid_item/quiz_grid_item.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -62,6 +64,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape = getIt<AppSize>().isLarge ?? false;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -74,30 +77,48 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Toolbar(
-                  onUpdateSearchString: (s) => print(s),
-                  noOfResults: _quizzes.length,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _quizzes.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      return QuizListItemWithAction(
-                        quiz: _quizzes[index],
-                      );
-                    },
+      body: PageWrapper(
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Toolbar(
+                    onUpdateSearchString: (s) => print(s),
+                    noOfResults: _quizzes.length,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: isLandscape
+                        ? GridView.builder(
+                            itemCount: _quizzes.length ?? 0,
+                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 180,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                            padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                            itemBuilder: (BuildContext context, int index) {
+                              return QuizGridItemWithAction(
+                                quiz: _quizzes[index],
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            itemCount: _quizzes.length ?? 0,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return QuizListItemWithAction(
+                                quiz: _quizzes[index],
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -17,7 +17,7 @@ class AppBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Container(
       height: 64,
       child: MaterialButton(
@@ -29,7 +29,7 @@ class AppBarButton extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Icon(leftIcon),
                   )
-                : Container(width: useLandscape ? 32 : 0),
+                : Container(width: isLandscape ? 32 : 0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
@@ -46,7 +46,7 @@ class AppBarButton extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Icon(rightIcon),
                   )
-                : Container(width: useLandscape ? 32 : 0),
+                : Container(width: isLandscape ? 32 : 0),
           ],
         ),
       ),

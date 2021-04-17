@@ -11,6 +11,8 @@ import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/page_wrapper.dart';
+import 'package:qmhb/shared/widgets/round_grid_item/round_grid_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -22,12 +24,13 @@ class RoundsLibraryPage extends StatefulWidget {
 }
 
 class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
-  final canDrag = getIt<AppSize>().isLarge;
   RoundService _roundService;
   RefreshService _refreshService;
   RoundModel _selectedRound;
   List<RoundModel> _rounds = [];
   StreamSubscription _subscription;
+  int _gridSize = 1;
+  double _gridAspect = 1.0;
 
   void _setSelectedRound(RoundModel round) => setState(() => _selectedRound = round);
 
@@ -66,7 +69,7 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = getIt<AppSize>().isLarge ?? false;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -79,37 +82,51 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          canDrag ? QuizzesLibrarySidebar(selectedRound: _selectedRound) : Container(),
-          Expanded(
-            child: Column(
-              children: [
-                Toolbar(
-                  onUpdateSearchString: (s) => print(s),
-                  noOfResults: _rounds.length,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _rounds.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      return useLandscape
-                          ? DraggableRoundListItemWithAction(
-                              round: _rounds[index],
-                              onDragStarted: () => _setSelectedRound(_rounds[index]),
-                              onDragEnd: (val) => _setSelectedRound(null),
-                            )
-                          : RoundListItemWithAction(
-                              round: _rounds[index],
-                            );
-                    },
+      body: PageWrapper(
+        child: Row(
+          children: [
+            isLandscape ? QuizzesLibrarySidebar(selectedRound: _selectedRound) : Container(),
+            Expanded(
+              child: Column(
+                children: [
+                  Toolbar(
+                    onUpdateSearchString: (s) => print(s),
+                    noOfResults: _rounds.length,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: isLandscape
+                        ? GridView.builder(
+                            itemCount: _rounds.length ?? 0,
+                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 180,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                            padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                            itemBuilder: (BuildContext context, int index) {
+                              return RoundGridItemWithAction(
+                                round: _rounds[index],
+                                onDragStarted: () => _setSelectedRound(_rounds[index]),
+                                onDragEnd: (val) => _setSelectedRound(null),
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            itemCount: _rounds.length ?? 0,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return RoundListItemWithAction(
+                                round: _rounds[index],
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

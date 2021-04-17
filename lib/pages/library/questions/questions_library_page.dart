@@ -11,6 +11,7 @@ import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -65,7 +66,7 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,38 +79,40 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
           ),
         ],
       ),
-      body: Row(
-        children: [
-          canDrag ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
-          Expanded(
-            child: Column(
-              children: [
-                Toolbar(
-                  onUpdateSearchString: (s) => print(s),
-                  noOfResults: _questions.length,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _questions.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      return useLandscape
-                          ? DraggableQuestionListItem(
-                              question: _questions[index],
-                              onDragStarted: () => _setSelectedQuestion(_questions[index]),
-                              onDragEnd: (val) => _setSelectedQuestion(null),
-                            )
-                          : QuestionListItemWithAction(
-                              question: _questions[index],
-                            );
-                      ;
-                    },
+      body: PageWrapper(
+        child: Row(
+          children: [
+            canDrag ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
+            Expanded(
+              child: Column(
+                children: [
+                  Toolbar(
+                    onUpdateSearchString: (s) => print(s),
+                    noOfResults: _questions.length,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _questions.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return isLandscape
+                            ? DraggableQuestionListItem(
+                                question: _questions[index],
+                                onDragStarted: () => _setSelectedQuestion(_questions[index]),
+                                onDragEnd: (val) => _setSelectedQuestion(null),
+                              )
+                            : QuestionListItemWithAction(
+                                question: _questions[index],
+                              );
+                        ;
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

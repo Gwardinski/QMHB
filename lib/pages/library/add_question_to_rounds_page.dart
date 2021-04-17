@@ -88,11 +88,11 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
 
   // TODO - make header text collapse when scroll on list
   Widget build(BuildContext context) {
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(useLandscape ? "Add Question to Rounds" : "Add to..."),
+        title: Text(isLandscape ? "Add Question to Rounds" : "Add to..."),
         actions: [
           AppBarButton(
             title: "New",

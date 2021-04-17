@@ -30,7 +30,7 @@ class QuizDetailsDialog extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: snapshot.data.roundModels.length,
                     itemBuilder: (context, index) {
-                      return RoundListItemShell(
+                      return RoundListItem(
                         round: snapshot.data.roundModels[index],
                       );
                     },

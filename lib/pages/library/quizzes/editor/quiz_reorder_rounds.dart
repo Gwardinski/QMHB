@@ -40,7 +40,7 @@ class _QuizReorderRoundsState extends State<QuizReorderRounds> with AutomaticKee
             onReorder: reorder,
             children: widget.quiz.roundModels
                 .map(
-                  (round) => RoundListItemShell(
+                  (round) => RoundListItem(
                     key: Key(round.id.toString()),
                     round: round,
                   ),

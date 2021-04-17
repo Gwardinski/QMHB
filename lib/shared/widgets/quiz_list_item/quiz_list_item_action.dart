@@ -33,8 +33,8 @@ class _QuizListItemActionState extends State<QuizListItemAction> {
             await onMenuSelect(result);
           },
           child: Container(
-            width: 64,
-            height: 64,
+            width: 48,
+            height: 48,
             child: Icon(Icons.more_vert),
           ),
           itemBuilder: (BuildContext context) => <PopupMenuEntry<QuizOptions>>[

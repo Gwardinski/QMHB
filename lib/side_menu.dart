@@ -15,75 +15,77 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationService = Provider.of<NavigationService>(context);
-    return Container(
-      width: 200,
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(
-            width: 1.0,
+    return SafeArea(
+      child: Container(
+        width: 200,
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              width: 1.0,
+            ),
           ),
+          color: Colors.black26,
         ),
-        color: Colors.black26,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: 56,
-            child: Center(
-              child: Text(
-                "QuizFlow",
-                style: TextStyle(
-                  fontSize: 24,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              height: 56,
+              child: Center(
+                child: Text(
+                  "QuizFlow",
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
                 ),
               ),
             ),
-          ),
-          MainNavigationButton(
-            title: "Library",
-            icon: Icons.home,
-            isSelected: navigationService.isCurrent(LibraryPage),
-            onPressed: () {
-              navigationService.push(LibraryPage());
-            },
-          ),
-          MainNavigationButton(
-            title: "Explore",
-            icon: Icons.search,
-            isSelected: navigationService.isCurrent(ExplorePage),
-            onPressed: () {
-              navigationService.push(ExplorePage());
-            },
-          ),
-          Divider(),
-          SubNavigationButton(
-            title: "Quizzes",
-            onPressed: () {},
-          ),
-          SubNavigationButton(
-            title: "Rounds",
-            onPressed: () {},
-          ),
-          SubNavigationButton(
-            title: "Questions",
-            onPressed: () {},
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                MainNavigationButton(
-                  title: "Settings",
-                  icon: Icons.settings,
-                  isSelected: navigationService.isCurrent(ExplorePage),
-                  onPressed: () {
-                    navigationService.push(ExplorePage());
-                  },
-                ),
-              ],
+            MainNavigationButton(
+              title: "Library",
+              icon: Icons.home,
+              isSelected: navigationService.isCurrent(LibraryPage),
+              onPressed: () {
+                navigationService.push(LibraryPage());
+              },
             ),
-          ),
-        ],
+            MainNavigationButton(
+              title: "Explore",
+              icon: Icons.search,
+              isSelected: navigationService.isCurrent(ExplorePage),
+              onPressed: () {
+                navigationService.push(ExplorePage());
+              },
+            ),
+            Divider(),
+            SubNavigationButton(
+              title: "Quizzes",
+              onPressed: () {},
+            ),
+            SubNavigationButton(
+              title: "Rounds",
+              onPressed: () {},
+            ),
+            SubNavigationButton(
+              title: "Questions",
+              onPressed: () {},
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  MainNavigationButton(
+                    title: "Settings",
+                    icon: Icons.settings,
+                    isSelected: navigationService.isCurrent(ExplorePage),
+                    onPressed: () {
+                      navigationService.push(ExplorePage());
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

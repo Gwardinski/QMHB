@@ -15,35 +15,40 @@ class QuestionListItemRevealButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: 64,
       height: 64,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+      child: Center(
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Icon(
-                  type == "MUSIC"
-                      ? Icons.music_note
-                      : type == "PICTURE"
-                          ? Icons.image
-                          : Icons.remove_red_eye,
-                  size: 24,
-                  color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
-                ),
+          width: 48,
+          height: 48,
+          child: FlatButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-            ],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Icon(
+                      type == "MUSIC"
+                          ? Icons.music_note
+                          : type == "PICTURE"
+                              ? Icons.image
+                              : Icons.remove_red_eye,
+                      size: 24,
+                      color: revealAnswer ? Theme.of(context).accentColor : Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            onPressed: onTap,
           ),
         ),
-        onPressed: onTap,
       ),
     );
   }

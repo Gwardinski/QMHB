@@ -28,10 +28,10 @@ class _RoundDetailsEditorState extends State<RoundDetailsEditor>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(useLandscape ? 64 : 16),
+        padding: EdgeInsets.all(isLandscape ? 64 : 16),
         child: Form(
           key: widget.formkey,
           child: Column(

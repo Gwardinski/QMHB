@@ -88,14 +88,14 @@ class _RoundSelectQuestionsState extends State<RoundSelectQuestions>
 
   Widget build(BuildContext context) {
     super.build(context);
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Column(
       children: [
         Toolbar(
           noOfResults: _questions.length,
           onUpdateSearchString: (val) => print(val),
           primaryAction: _createNewQuestionInRound,
-          primaryText: useLandscape ? "Create New Round" : "New",
+          primaryText: isLandscape ? "Create New Round" : "New",
         ),
         Expanded(
           child: _questions.length > 0

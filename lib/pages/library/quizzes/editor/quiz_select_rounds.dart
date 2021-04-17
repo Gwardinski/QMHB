@@ -88,14 +88,14 @@ class _QuizSelectRoundsState extends State<QuizSelectRounds> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    bool useLandscape = MediaQuery.of(context).size.width > 800.0;
+    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Column(
       children: [
         Toolbar(
           noOfResults: _rounds.length,
           onUpdateSearchString: (val) => print(val),
           primaryAction: _createNewRoundInQuiz,
-          primaryText: useLandscape ? "Create New Round" : "New",
+          primaryText: isLandscape ? "Create New Round" : "New",
         ),
         Expanded(
           child: _rounds.length > 0

@@ -92,7 +92,7 @@ class _QuizReorderRoundsPageState extends State<QuizReorderRoundsPage> {
             child: ReorderableListView(
               children: _quizModel.roundModels
                   .map(
-                    (round) => RoundListItemShell(
+                    (round) => RoundListItem(
                       key: Key(round.id.toString()),
                       round: round,
                     ),
