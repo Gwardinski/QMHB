@@ -29,8 +29,6 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
   String _token;
   QuizService _quizService;
   RefreshService _refreshService;
-  List<QuizModel> _quizzes = [];
-  StreamSubscription _subscription;
 
   @override
   void initState() {
@@ -38,24 +36,6 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _quizService = Provider.of<QuizService>(context, listen: false);
     _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.quizListener.listen((event) {
-      _getQuizzes();
-    });
-    _refreshService.quizRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  _getQuizzes() async {
-    final quizzes = await _quizService.getUserQuizzes(token: _token);
-    setState(() {
-      _quizzes = quizzes;
-    });
   }
 
   void _createNewQuizwithRound() {
@@ -114,26 +94,41 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
                 line3:
                     "Changes will be saved automatically.\nAny Quizzes you have published will not appear here. Published Quizzes cannot be edited.",
               ),
-              Toolbar(
-                noOfResults: _quizzes.length,
-                onUpdateSearchString: (val) {
-                  print(val);
+              StreamBuilder<bool>(
+                stream: _refreshService.quizListener,
+                builder: (context, s) {
+                  return FutureBuilder<List<QuizModel>>(
+                    future: _quizService.getUserQuizzes(
+                      token: Provider.of<UserDataStateModel>(context, listen: false).token,
+                    ),
+                    builder: (context, snapshot) {
+                      return Column(
+                        children: [
+                          Toolbar(
+                            onUpdateSearchString: (val) {
+                              print(val);
+                            },
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data.length ?? 0,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int index) {
+                                return QuizListItemWithSelect(
+                                  quiz: snapshot.data[index],
+                                  containsItem: () => _containsRound(snapshot.data[index]),
+                                  onTap: () {
+                                    _updateQuiz(snapshot.data[index]);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _quizzes.length ?? 0,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    return QuizListItemWithSelect(
-                      quiz: _quizzes[index],
-                      containsItem: () => _containsRound(_quizzes[index]),
-                      onTap: () {
-                        _updateQuiz(_quizzes[index]);
-                      },
-                    );
-                  },
-                ),
               ),
             ],
           ),

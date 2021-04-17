@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -10,61 +8,14 @@ import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 
-class RoundsLibrarySidebar extends StatefulWidget {
+class RoundsLibrarySidebar extends StatelessWidget {
   final QuestionModel selectedQuestion;
 
   RoundsLibrarySidebar({
     @required this.selectedQuestion,
   });
-
-  @override
-  _RoundsLibrarySidebarState createState() => _RoundsLibrarySidebarState();
-}
-
-class _RoundsLibrarySidebarState extends State<RoundsLibrarySidebar> {
-  String _token;
-  RoundService _roundService;
-  RefreshService _refreshService;
-  List<RoundModel> _rounds = [];
-  StreamSubscription _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    _roundService = Provider.of<RoundService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.roundListener.listen((event) {
-      _getRounds();
-    });
-    _refreshService.roundRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  void _getRounds() async {
-    final rounds = await _roundService.getUserRounds(token: _token);
-    setState(() {
-      _rounds = rounds;
-    });
-  }
-
-  void _openNewRoundForm({QuestionModel initialQuestion}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return RoundCreateDialog(
-          initialQuestion: initialQuestion,
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +32,46 @@ class _RoundsLibrarySidebarState extends State<RoundsLibrarySidebar> {
       ),
       child: Column(
         children: [
-          widget.selectedQuestion != null
+          selectedQuestion != null
               ? RoundsLibrarySidebarNewRound(
-                  onCreateNewRound: _openNewRoundForm,
+                  onCreateNewRound: (initialQuestion) {
+                    return showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return RoundCreateDialog(
+                          initialQuestion: initialQuestion,
+                        );
+                      },
+                    );
+                  },
                 )
               : Container(
                   height: 64,
                 ),
           RoundsLibrarySidebarHeader(),
           Expanded(
-            child: ListView.builder(
-              itemCount: _rounds.length ?? 0,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return RoundsLibrarySidebarItem(
-                  round: _rounds[index],
-                  selectedQuestion: widget.selectedQuestion,
+            child: StreamBuilder<bool>(
+              stream: Provider.of<RefreshService>(context).roundListener,
+              builder: (context, s) {
+                return FutureBuilder<List<RoundModel>>(
+                  future: Provider.of<RoundService>(context).getUserRounds(
+                    token: Provider.of<UserDataStateModel>(context, listen: false).token,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return ErrorMessage(message: "An error occured loading your Rounds");
+                    }
+                    return ListView.builder(
+                      itemCount: snapshot.data?.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RoundsLibrarySidebarItem(
+                          round: snapshot.data[index],
+                          selectedQuestion: selectedQuestion,
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),

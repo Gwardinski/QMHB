@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
@@ -10,61 +8,14 @@ import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 
-class QuizzesLibrarySidebar extends StatefulWidget {
+class QuizzesLibrarySidebar extends StatelessWidget {
   final RoundModel selectedRound;
 
   QuizzesLibrarySidebar({
     this.selectedRound,
   });
-
-  @override
-  _QuizzesLibrarySidebarState createState() => _QuizzesLibrarySidebarState();
-}
-
-class _QuizzesLibrarySidebarState extends State<QuizzesLibrarySidebar> {
-  String _token;
-  QuizService _quizService;
-  RefreshService _refreshService;
-  List<QuizModel> _quizzes = [];
-  StreamSubscription _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    _quizService = Provider.of<QuizService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.quizListener.listen((event) {
-      _getQuizzes();
-    });
-    _refreshService.quizRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  void _getQuizzes() async {
-    final quizzes = await _quizService.getUserQuizzes(token: _token);
-    setState(() {
-      _quizzes = quizzes;
-    });
-  }
-
-  void _openNewQuizForm({RoundModel initialRound}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return QuizCreateDialog(
-          initialRound: initialRound,
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +32,46 @@ class _QuizzesLibrarySidebarState extends State<QuizzesLibrarySidebar> {
       ),
       child: Column(
         children: [
-          widget.selectedRound != null
+          selectedRound != null
               ? QuizzesLibrarySidebarNewQuiz(
-                  onCreateNewQuiz: _openNewQuizForm,
+                  onCreateNewQuiz: (initialRound) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return QuizCreateDialog(
+                          initialRound: initialRound,
+                        );
+                      },
+                    );
+                  },
                 )
               : Container(
                   height: 64,
                 ),
           QuizzesLibrarySidebarHeader(),
           Expanded(
-            child: ListView.builder(
-              itemCount: _quizzes.length ?? 0,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, int index) {
-                return QuizzesLibrarySidebarItem(
-                  quiz: _quizzes[index],
-                  selectedRound: widget.selectedRound,
+            child: StreamBuilder<bool>(
+              stream: Provider.of<RefreshService>(context, listen: false).quizListener,
+              builder: (context, s) {
+                return FutureBuilder<List<QuizModel>>(
+                  future: Provider.of<QuizService>(context).getUserQuizzes(
+                    token: Provider.of<UserDataStateModel>(context, listen: false).token,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return ErrorMessage(message: "An error occured loading your Quizzes");
+                    }
+                    return ListView.builder(
+                      itemCount: snapshot.data?.length ?? 0,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return QuizzesLibrarySidebarItem(
+                          quiz: snapshot.data[index],
+                          selectedRound: selectedRound,
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),

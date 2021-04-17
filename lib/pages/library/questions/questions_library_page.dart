@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
@@ -11,6 +9,7 @@ import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/question_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
@@ -24,39 +23,9 @@ class QuestionsLibraryPage extends StatefulWidget {
 
 class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
   final canDrag = getIt<AppSize>().isLarge;
-  QuestionService _questionService;
-  RefreshService _refreshService;
   QuestionModel _selectedQuestion;
-  List<QuestionModel> _questions = [];
-  StreamSubscription _subscription;
 
   void _setSelectedQuestion(QuestionModel question) => setState(() => _selectedQuestion = question);
-
-  @override
-  void initState() {
-    super.initState();
-    _questionService = Provider.of<QuestionService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.questionListener.listen((event) {
-      _getQuestions();
-    });
-    _refreshService.questionRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  _getQuestions() async {
-    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    final questions = await _questionService.getUserQuestions(token: token);
-    setState(() {
-      _questions = questions;
-    });
-  }
 
   void _createQuestion() async {
     Provider.of<NavigationService>(context, listen: false).push(
@@ -72,39 +41,68 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
         elevation: 0,
         title: Text("Your Questions"),
         actions: [
-          AppBarButton(
-            title: "New",
-            leftIcon: Icons.add,
-            onTap: _createQuestion,
-          ),
+          isLandscape
+              ? Container()
+              : AppBarButton(
+                  title: "New",
+                  leftIcon: Icons.add,
+                  onTap: _createQuestion,
+                ),
         ],
       ),
       body: PageWrapper(
         child: Row(
           children: [
-            canDrag ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
+            isLandscape ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
             Expanded(
               child: Column(
                 children: [
                   Toolbar(
                     onUpdateSearchString: (s) => print(s),
-                    noOfResults: _questions.length,
+                    secondaryText: isLandscape ? "New Question" : null,
+                    secondaryAction: isLandscape ? _createQuestion : null,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: _questions.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        return isLandscape
-                            ? DraggableQuestionListItem(
-                                question: _questions[index],
-                                onDragStarted: () => _setSelectedQuestion(_questions[index]),
-                                onDragEnd: (val) => _setSelectedQuestion(null),
-                              )
-                            : QuestionListItemWithAction(
-                                question: _questions[index],
+                    child: StreamBuilder<bool>(
+                      stream: Provider.of<RefreshService>(context, listen: false).roundListener,
+                      builder: (context, streamSnapshot) {
+                        return FutureBuilder<List<QuestionModel>>(
+                          future: Provider.of<QuestionService>(context).getUserQuestions(
+                            limit: 8,
+                            orderBy: 'lastUpdated',
+                            token: Provider.of<UserDataStateModel>(context).token,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return ErrorMessage(
+                                message: "An error occured loading your Questions",
                               );
-                        ;
+                            }
+                            return Column(
+                              children: [
+                                SearchDetails(number: snapshot.data?.length ?? 0),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: snapshot.data?.length ?? 0,
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return isLandscape
+                                          ? DraggableQuestionListItem(
+                                              question: snapshot.data[index],
+                                              onDragStarted: () =>
+                                                  _setSelectedQuestion(snapshot.data[index]),
+                                              onDragEnd: (val) => _setSelectedQuestion(null),
+                                            )
+                                          : QuestionListItemWithAction(
+                                              question: snapshot.data[index],
+                                            );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ),

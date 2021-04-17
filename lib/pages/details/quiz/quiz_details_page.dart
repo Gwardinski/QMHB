@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -30,36 +28,12 @@ class QuizDetailsPage extends StatefulWidget {
 }
 
 class _QuizDetailsPageState extends State<QuizDetailsPage> {
-  QuizService _quizService;
-  RefreshService _refreshService;
   QuizModel _quiz;
-  StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
     _quiz = widget.initialValue;
-    _quizService = Provider.of<QuizService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.quizListener.listen((event) {
-      _getQuiz();
-    });
-    _refreshService.quizRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  _getQuiz() async {
-    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    final quiz = await _quizService.getQuiz(token: token, id: _quiz.id);
-    setState(() {
-      _quiz = quiz;
-    });
   }
 
   @override
@@ -74,66 +48,86 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DetailsHeader(
-              type: "Quiz",
-              title: _quiz.title,
-              description: _quiz.description,
-              info1Title: "Rounds",
-              info2Title: "Points",
-              info3Title: "Created",
-              info1Value: _quiz.rounds.length.toString(),
-              info2Value: _quiz.totalPoints.toString(),
-              info3Value: DateFormat('d-MM-yy').format(_quiz.createdAt),
-              imageUrl: _quiz.imageUrl,
+      body: StreamBuilder<bool>(
+        stream: Provider.of<RefreshService>(context).quizListener,
+        builder: (context, s) {
+          return FutureBuilder<QuizModel>(
+            initialData: _quiz,
+            future: Provider.of<QuizService>(context).getQuiz(
+              id: _quiz.id,
+              token: Provider.of<UserDataStateModel>(context, listen: false).token,
             ),
-            Divider(),
-            SummaryRowHeader(
-              headerTitle: "Rounds",
-            ),
-            PageWrapper(
-              child: _quiz.rounds.length > 0
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: _quiz.roundModels?.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        RoundModel round = _quiz.roundModels[index];
-                        return Column(
-                          children: [
-                            RoundListItemWithAction(
-                              round: round,
-                            ),
-                            FutureBuilder<RoundModel>(
-                              initialData: round,
-                              future: Provider.of<RoundService>(context).getRound(
-                                id: round.id,
-                                token: Provider.of<UserDataStateModel>(context).token,
-                              ),
-                              builder: (context, snapshot) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: snapshot.data.questionModels.length,
-                                  itemBuilder: (context, index) {
-                                    return QuestionListItemWithAction(
-                                      question: snapshot.data.questionModels[index],
-                                    );
-                                  },
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("An error occured loading this Quiz"),
+                );
+              }
+              _quiz = snapshot.data;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DetailsHeader(
+                      type: "Quiz",
+                      title: snapshot.data.title,
+                      description: snapshot.data.description,
+                      info1Title: "Rounds",
+                      info2Title: "Points",
+                      info3Title: "Created",
+                      info1Value: snapshot.data.rounds.length.toString(),
+                      info2Value: snapshot.data.totalPoints.toString(),
+                      info3Value: DateFormat('d-MM-yy').format(snapshot.data.createdAt),
+                      imageUrl: snapshot.data.imageUrl,
+                    ),
+                    Divider(),
+                    SummaryRowHeader(
+                      headerTitle: "Rounds",
+                    ),
+                    PageWrapper(
+                      child: snapshot.data.rounds.length > 0
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data.roundModels?.length ?? 0,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int index) {
+                                RoundModel round = snapshot.data.roundModels[index];
+                                return Column(
+                                  children: [
+                                    RoundListItemWithAction(
+                                      round: round,
+                                    ),
+                                    FutureBuilder<RoundModel>(
+                                      initialData: round,
+                                      future: Provider.of<RoundService>(context).getRound(
+                                        id: round.id,
+                                        token: Provider.of<UserDataStateModel>(context).token,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: snapshot.data.questionModels.length,
+                                          itemBuilder: (context, index) {
+                                            return QuestionListItemWithAction(
+                                              question: snapshot.data.questionModels[index],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 );
                               },
-                            ),
-                          ],
-                        );
-                      },
+                            )
+                          : DetailsListEmpty(text: "This Quiz has no Rounds"),
                     )
-                  : DetailsListEmpty(text: "This Quiz has no Rounds"),
-            )
-          ],
-        ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

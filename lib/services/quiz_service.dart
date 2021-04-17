@@ -67,7 +67,7 @@ class QuizService extends ChangeNotifier {
 
   Future<QuizModel> getQuiz({
     @required int id,
-    String token,
+    @required String token,
   }) async {
     try {
       ServiceResponse res = await httpService.get(

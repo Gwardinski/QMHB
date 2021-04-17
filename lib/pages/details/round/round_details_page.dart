@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -28,39 +26,12 @@ class RoundDetailsPage extends StatefulWidget {
 }
 
 class _RoundDetailsPageState extends State<RoundDetailsPage> {
-  RoundService _roundService;
-  RefreshService _refreshService;
   RoundModel _round;
-  StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
     _round = widget.initialValue;
-    _roundService = Provider.of<RoundService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.roundListener.listen((event) {
-      _getRound();
-    });
-    _refreshService.roundRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  _getRound() async {
-    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
-    final round = await _roundService.getRound(
-      token: token,
-      id: _round.id,
-    );
-    setState(() {
-      _round = round;
-    });
   }
 
   @override
@@ -75,48 +46,68 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DetailsHeader(
-              type: "Round",
-              title: _round.title,
-              description: _round.description,
-              info1Title: "Questions",
-              info2Title: "Points",
-              info3Title: "Created",
-              info1Value: _round.questions.length.toString(),
-              info2Value: _round.totalPoints.toString(),
-              info3Value: DateFormat('d-MM-yy').format(_round.createdAt),
-              imageUrl: _round.imageUrl,
+      body: StreamBuilder<bool>(
+        stream: Provider.of<RefreshService>(context).roundListener,
+        builder: (context, s) {
+          return FutureBuilder<RoundModel>(
+            initialData: _round,
+            future: Provider.of<RoundService>(context).getRound(
+              id: _round.id,
+              token: Provider.of<UserDataStateModel>(context, listen: false).token,
             ),
-            Divider(),
-            SummaryRowHeader(
-              headerTitle: "Questions",
-            ),
-            PageWrapper(
-              child: _round.questions.length > 0
-                  ? ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                        );
-                      },
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _round.questionModels?.length ?? 0,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        QuestionModel question = _round.questionModels[index];
-                        return QuestionListItemWithAction(
-                          question: question,
-                        );
-                      },
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("An error occured loading this Round"),
+                );
+              }
+              _round = snapshot.data;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DetailsHeader(
+                      type: "Round",
+                      title: _round.title,
+                      description: _round.description,
+                      info1Title: "Questions",
+                      info2Title: "Points",
+                      info3Title: "Created",
+                      info1Value: _round.questions.length.toString(),
+                      info2Value: _round.totalPoints.toString(),
+                      info3Value: DateFormat('d-MM-yy').format(_round.createdAt),
+                      imageUrl: _round.imageUrl,
+                    ),
+                    Divider(),
+                    SummaryRowHeader(
+                      headerTitle: "Questions",
+                    ),
+                    PageWrapper(
+                      child: _round.questions.length > 0
+                          ? ListView.separated(
+                              separatorBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                );
+                              },
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _round.questionModels?.length ?? 0,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int index) {
+                                QuestionModel question = _round.questionModels[index];
+                                return QuestionListItemWithAction(
+                                  question: question,
+                                );
+                              },
+                            )
+                          : DetailsListEmpty(text: "This Round has no Questions"),
                     )
-                  : DetailsListEmpty(text: "This Round has no Questions"),
-            )
-          ],
-        ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

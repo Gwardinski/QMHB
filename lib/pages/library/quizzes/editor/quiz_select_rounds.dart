@@ -92,7 +92,6 @@ class _QuizSelectRoundsState extends State<QuizSelectRounds> with AutomaticKeepA
     return Column(
       children: [
         Toolbar(
-          noOfResults: _rounds.length,
           onUpdateSearchString: (val) => print(val),
           primaryAction: _createNewRoundInQuiz,
           primaryText: isLandscape ? "Create New Round" : "New",

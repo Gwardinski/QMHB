@@ -92,7 +92,6 @@ class _RoundSelectQuestionsState extends State<RoundSelectQuestions>
     return Column(
       children: [
         Toolbar(
-          noOfResults: _questions.length,
           onUpdateSearchString: (val) => print(val),
           primaryAction: _createNewQuestionInRound,
           primaryText: isLandscape ? "Create New Round" : "New",

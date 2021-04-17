@@ -6,11 +6,11 @@ import 'package:qmhb/pages/library/widgets/recent_quizzes_row.dart';
 import 'package:qmhb/pages/library/widgets/recent_rounds_row.dart';
 import 'package:qmhb/shared/widgets/account_page_button.dart';
 import 'package:qmhb/shared/widgets/large_signin_prompt.dart';
+import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 class LibraryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('build library');
     bool isAuthenticated = Provider.of<UserDataStateModel>(context).isAuthenticated;
     return Scaffold(
       appBar: AppBar(
@@ -20,17 +20,19 @@ class LibraryPage extends StatelessWidget {
           AccountPageButton(),
         ],
       ),
-      body: isAuthenticated
-          ? SingleChildScrollView(
-              child: Column(
-                children: [
-                  RecentQuizzesRow(),
-                  RecentRoundsRow(),
-                  RecentQuestionsRow(),
-                ],
-              ),
-            )
-          : LargeSignInPrompt(),
+      body: PageWrapper(
+        child: isAuthenticated
+            ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    RecentQuizzesRow(),
+                    RecentRoundsRow(),
+                    RecentQuestionsRow(),
+                  ],
+                ),
+              )
+            : LargeSignInPrompt(),
+      ),
     );
   }
 }

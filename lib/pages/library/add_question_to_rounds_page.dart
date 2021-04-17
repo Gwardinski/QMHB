@@ -29,8 +29,6 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
   String _token;
   RoundService _roundService;
   RefreshService _refreshService;
-  List<RoundModel> _rounds = [];
-  StreamSubscription _subscription;
 
   @override
   void initState() {
@@ -38,24 +36,6 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
     _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _roundService = Provider.of<RoundService>(context, listen: false);
     _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _subscription?.cancel();
-    _subscription = _refreshService.roundListener.listen((event) {
-      _getRounds();
-    });
-    _refreshService.roundRefresh();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _subscription?.cancel();
-  }
-
-  _getRounds() async {
-    final rounds = await _roundService.getUserRounds(token: _token);
-    setState(() {
-      _rounds = rounds;
-    });
   }
 
   void _createNewRoundwithQuestion() {
@@ -114,25 +94,45 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
                 line3:
                     "Changes will be saved automatically.\nAny Rounds you have published will not appear here. Published Rounds cannot be edited.",
               ),
-              Toolbar(
-                noOfResults: _rounds.length,
-                onUpdateSearchString: (val) {
-                  print(val);
+              StreamBuilder<bool>(
+                stream: _refreshService.roundListener,
+                builder: (context, s) {
+                  return FutureBuilder<List<RoundModel>>(
+                    future: _roundService.getUserRounds(
+                      token: Provider.of<UserDataStateModel>(context, listen: false).token,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("An error occured loading your Rounds"),
+                        );
+                      }
+                      return Column(
+                        children: [
+                          Toolbar(
+                            onUpdateSearchString: (val) {
+                              print(val);
+                            },
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data.length ?? 0,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int index) {
+                                return RoundListItemWithSelect(
+                                  round: snapshot.data[index],
+                                  onTap: () => _updateRound(snapshot.data[index]),
+                                  containsItem: () => _containsQuestion(snapshot.data[index]),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _rounds.length ?? 0,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RoundListItemWithSelect(
-                      round: _rounds[index],
-                      onTap: () => _updateRound(_rounds[index]),
-                      containsItem: () => _containsQuestion(_rounds[index]),
-                    );
-                  },
-                ),
-              ),
+              )
             ],
           ),
         ],
