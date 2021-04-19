@@ -36,6 +36,8 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Your Quizzes"),
         actions: [
           isLandscape
@@ -53,8 +55,8 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
             children: [
               Toolbar(
                 onUpdateSearchString: (s) => print(s),
-                secondaryText: isLandscape ? "New Quiz" : null,
-                secondaryAction: isLandscape ? _createQuiz : null,
+                primaryText: isLandscape ? "New Quiz" : null,
+                primaryAction: isLandscape ? _createQuiz : null,
               ),
               Expanded(
                 child: StreamBuilder<bool>(
@@ -80,7 +82,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                                   ? GridView.builder(
                                       itemCount: snapshot.data?.length ?? 0,
                                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 180,
+                                        maxCrossAxisExtent: 160,
                                         childAspectRatio: 1,
                                         crossAxisSpacing: 16,
                                         mainAxisSpacing: 16,

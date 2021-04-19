@@ -39,6 +39,8 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Your Questions"),
         actions: [
           isLandscape
@@ -59,8 +61,8 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
                 children: [
                   Toolbar(
                     onUpdateSearchString: (s) => print(s),
-                    secondaryText: isLandscape ? "New Question" : null,
-                    secondaryAction: isLandscape ? _createQuestion : null,
+                    primaryText: isLandscape ? "New Question" : null,
+                    primaryAction: isLandscape ? _createQuestion : null,
                   ),
                   Expanded(
                     child: StreamBuilder<bool>(

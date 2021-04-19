@@ -5,6 +5,7 @@ import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/quiz/quiz_details_page.dart';
 import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
+import 'package:qmhb/pages/library/widgets/library_side_bar_header.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
@@ -45,10 +46,15 @@ class QuizzesLibrarySidebar extends StatelessWidget {
                     );
                   },
                 )
-              : Container(
-                  height: 64,
+              : LibarySidebarHeader(
+                  title: "Your Quizzes",
+                  header1: "Title",
+                  tooltip1: "Quiz Title",
+                  header2: "Rds",
+                  tooltip2: "No of Rounds",
+                  header3: "Pts",
+                  tooltip3: "Total Points",
                 ),
-          QuizzesLibrarySidebarHeader(),
           Expanded(
             child: StreamBuilder<bool>(
               stream: Provider.of<RefreshService>(context, listen: false).quizListener,
@@ -120,46 +126,6 @@ class QuizzesLibrarySidebarNewQuiz extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class QuizzesLibrarySidebarHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              "Quiz title",
-              style: TextStyle(fontSize: 10),
-            ),
-          ),
-          Container(
-            width: 32,
-            child: Tooltip(
-              message: "Number of Rounds",
-              child: Text(
-                "Rs",
-                style: TextStyle(fontSize: 10),
-              ),
-            ),
-          ),
-          Container(
-            width: 16,
-            child: Tooltip(
-              message: "Number of Points",
-              child: Text(
-                "Pts",
-                style: TextStyle(fontSize: 10),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

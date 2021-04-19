@@ -10,7 +10,7 @@ class SummaryRowFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: getIt<AppSize>().rSpacingSm),
+      padding: EdgeInsets.only(top: getIt<AppSize>().rSpacingMd),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(

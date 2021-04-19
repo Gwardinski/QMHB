@@ -10,11 +10,13 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 160,
-      width: double.infinity,
-      child: Center(
-        child: Text(message),
+    return Center(
+      child: Container(
+        height: 160,
+        width: double.infinity,
+        child: Center(
+          child: Text(message),
+        ),
       ),
     );
   }

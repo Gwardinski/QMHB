@@ -16,8 +16,8 @@ class RoundGridItem extends StatelessWidget {
 
   RoundGridItem({
     Key key,
-    this.round,
-    this.action,
+    @required this.round,
+    @required this.action,
   }) : super(key: key);
 
   @override
@@ -34,12 +34,12 @@ class RoundGridItem extends StatelessWidget {
   }
 }
 
-class RoundGridItemWithAction extends StatelessWidget {
+class RoundGridItemDraggableWithAction extends StatelessWidget {
   final RoundModel round;
   final Function onDragStarted;
   final Function onDragEnd;
 
-  RoundGridItemWithAction({
+  RoundGridItemDraggableWithAction({
     Key key,
     @required this.round,
     @required this.onDragStarted,
@@ -77,6 +77,36 @@ class RoundGridItemWithAction extends StatelessWidget {
           action: RoundListItemAction(
             round: round,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class RoundGridItemWithAction extends StatelessWidget {
+  final RoundModel round;
+
+  RoundGridItemWithAction({
+    Key key,
+    @required this.round,
+  }) : super(key: key);
+
+  void _navigateToDetails(context) {
+    Provider.of<NavigationService>(context, listen: false).push(
+      RoundDetailsPage(
+        initialValue: round,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _navigateToDetails(context),
+      child: RoundGridItem(
+        round: round,
+        action: RoundListItemAction(
+          round: round,
         ),
       ),
     );

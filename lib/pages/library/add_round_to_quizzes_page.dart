@@ -72,6 +72,8 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text(isLandscape ? "Add Round to Quizzes" : "Add to..."),
         actions: [
           AppBarButton(

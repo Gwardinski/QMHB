@@ -72,6 +72,8 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text(isLandscape ? "Add Question to Rounds" : "Add to..."),
         actions: [
           AppBarButton(

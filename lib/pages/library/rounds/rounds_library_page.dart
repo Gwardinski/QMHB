@@ -40,6 +40,8 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Your Rounds"),
         actions: [
           isLandscape
@@ -60,8 +62,8 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                 children: [
                   Toolbar(
                     onUpdateSearchString: (s) => print(s),
-                    secondaryText: isLandscape ? "New Round" : null,
-                    secondaryAction: isLandscape ? _createRound : null,
+                    primaryText: isLandscape ? "New Round" : null,
+                    primaryAction: isLandscape ? _createRound : null,
                   ),
                   Expanded(
                     child: StreamBuilder<bool>(
@@ -87,14 +89,14 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                                       ? GridView.builder(
                                           itemCount: snapshot.data?.length ?? 0,
                                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 180,
+                                            maxCrossAxisExtent: 160,
                                             childAspectRatio: 1,
                                             crossAxisSpacing: 16,
                                             mainAxisSpacing: 16,
                                           ),
                                           padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                                           itemBuilder: (BuildContext context, int index) {
-                                            return RoundGridItemWithAction(
+                                            return RoundGridItemDraggableWithAction(
                                               round: snapshot.data[index],
                                               onDragStarted: () =>
                                                   _setSelectedRound(snapshot.data[index]),

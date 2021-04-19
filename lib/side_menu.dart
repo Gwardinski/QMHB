@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/explore_page/explore_page.dart';
 import 'package:qmhb/pages/library/library_page.dart';
+import 'package:qmhb/pages/library/questions/questions_library_page.dart';
+import 'package:qmhb/pages/library/quizzes/quizzes_library_page.dart';
+import 'package:qmhb/pages/library/rounds/rounds_library_page.dart';
 import 'package:qmhb/services/navigation_service.dart';
 
 import 'get_it.dart';
@@ -56,18 +59,24 @@ class SideMenu extends StatelessWidget {
                 navigationService.push(ExplorePage());
               },
             ),
+            MainNavigationButton(
+              title: "Play",
+              icon: Icons.play_arrow_outlined,
+              isSelected: navigationService.isCurrent(LibraryPage),
+              onPressed: () {},
+            ),
             Divider(),
             SubNavigationButton(
-              title: "Quizzes",
-              onPressed: () {},
+              title: "Your Quizzes",
+              onPressed: () => navigationService.push(QuizzesLibraryPage()),
             ),
             SubNavigationButton(
-              title: "Rounds",
-              onPressed: () {},
+              title: "Your Rounds",
+              onPressed: () => navigationService.push(RoundsLibraryPage()),
             ),
             SubNavigationButton(
-              title: "Questions",
-              onPressed: () {},
+              title: "Your Questions",
+              onPressed: () => navigationService.push(QuestionsLibraryPage()),
             ),
             Expanded(
               child: Column(
@@ -159,7 +168,7 @@ class SubNavigationButton extends StatelessWidget {
           onPressed();
         },
         child: Padding(
-          padding: EdgeInsets.fromLTRB(24, 8, 8, 8),
+          padding: EdgeInsets.fromLTRB(24, 16, 8, 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

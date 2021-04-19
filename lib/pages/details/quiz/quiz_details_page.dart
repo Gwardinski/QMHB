@@ -41,6 +41,8 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Quiz Details"),
         actions: [
           QuizListItemAction(

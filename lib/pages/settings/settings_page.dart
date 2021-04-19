@@ -6,6 +6,8 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Settings"),
       ),
       body: SingleChildScrollView(

@@ -203,6 +203,8 @@ class _RoundEditorPageState extends State<RoundEditorPage> {
       appBar: AppBar(
         titleSpacing: 0,
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

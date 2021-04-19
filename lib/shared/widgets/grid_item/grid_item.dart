@@ -37,43 +37,46 @@ class _GridItemState extends State<GridItem> {
   @override
   Widget build(BuildContext context) {
     final borderRadius = Radius.circular(getIt<AppSize>().borderRadius);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(borderRadius),
-        border: Border.all(color: Theme.of(context).accentColor),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          alignment: Alignment.center,
-          matchTextDirection: true,
-          repeat: ImageRepeat.noRepeat,
-          image: NetworkImage(widget.imageUrl),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(borderRadius),
+          border: Border.all(color: Theme.of(context).accentColor),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+            matchTextDirection: true,
+            repeat: ImageRepeat.noRepeat,
+            image: NetworkImage(widget.imageUrl),
+          ),
         ),
-      ),
-      child: MouseRegion(
-        onEnter: (m) => setState(() => isHover = true),
-        onExit: (m) => setState(() => isHover = false),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: isHover == true
-                  ? GridItemDescription(
-                      borderRadius: borderRadius,
-                      description: widget.description,
-                    )
-                  : GridItemTitle(
-                      borderRadius: borderRadius,
-                      title: widget.title,
-                      number: widget.number,
-                      points: widget.points,
-                      type: widget.type,
-                    ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: widget.action != null ? widget.action : Container(),
-            ),
-          ],
+        child: MouseRegion(
+          onEnter: (m) => setState(() => isHover = false),
+          onExit: (m) => setState(() => isHover = false),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: isHover == true
+                    ? GridItemDescription(
+                        borderRadius: borderRadius,
+                        description: widget.description,
+                      )
+                    : GridItemTitle(
+                        borderRadius: borderRadius,
+                        title: widget.title,
+                        number: widget.number,
+                        points: widget.points,
+                        type: widget.type,
+                      ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: widget.action != null ? widget.action : Container(),
+              ),
+            ],
+          ),
         ),
       ),
     );

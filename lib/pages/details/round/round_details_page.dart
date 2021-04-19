@@ -39,6 +39,8 @@ class _RoundDetailsPageState extends State<RoundDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         title: Text("Round Details"),
         actions: [
           RoundListItemAction(

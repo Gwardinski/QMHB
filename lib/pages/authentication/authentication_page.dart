@@ -18,6 +18,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
           title: Text(activeTab == 0 ? "Sign In" : "Register"),
         ),
         body: Center(

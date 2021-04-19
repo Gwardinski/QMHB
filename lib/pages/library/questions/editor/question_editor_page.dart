@@ -199,6 +199,8 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
       appBar: AppBar(
         titleSpacing: 0,
         elevation: 0,
+        centerTitle: false,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
