@@ -5,6 +5,7 @@ class Toolbar extends StatelessWidget {
   const Toolbar({
     Key key,
     @required this.onUpdateSearchString,
+    this.initialValue,
     this.primaryText,
     this.primaryAction,
     this.secondaryText,
@@ -12,6 +13,7 @@ class Toolbar extends StatelessWidget {
   }) : super(key: key);
 
   final Function onUpdateSearchString;
+  final String initialValue;
   final String primaryText;
   final Function primaryAction;
   final String secondaryText;
@@ -36,7 +38,8 @@ class Toolbar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: initialValue,
                     decoration: InputDecoration(
                       icon: Icon(Icons.search),
                       hintText: 'Search...',

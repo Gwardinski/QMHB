@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/pages/library/quizzes/editor/quiz_editor_page.dart';
-import 'package:qmhb/services/navigation_service.dart';
-import 'package:qmhb/services/quiz_service.dart';
+import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
-import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
-import 'package:qmhb/shared/widgets/quiz_grid_item/quiz_grid_item.dart';
-import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
+import 'package:qmhb/shared/widgets/round_grid_item/round_grid_item.dart';
+import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
-import '../../../get_it.dart';
+import '../../get_it.dart';
 
-class QuizzesLibraryPage extends StatefulWidget {
-  @override
-  _QuizzesLibraryPageState createState() => _QuizzesLibraryPageState();
-}
-
-class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
+class RoundPage extends StatelessWidget {
   final canDrag = getIt<AppSize>().isLarge;
 
-  void _createQuiz() async {
-    Provider.of<NavigationService>(context, listen: false).push(
-      QuizEditorPage(),
-    );
-  }
+  final List<RoundModel> initialData;
+  final String searchString;
+  final String selectedCategory;
+  final String sortBy;
+
+  RoundPage({
+    @required this.initialData,
+    @required this.searchString,
+    @required this.selectedCategory,
+    @required this.sortBy,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +36,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
         elevation: 0,
         centerTitle: false,
         backgroundColor: Colors.transparent,
-        title: Text("Your Quizzes"),
-        actions: [
-          isLandscape
-              ? Container()
-              : AppBarButton(
-                  title: "New",
-                  leftIcon: Icons.add,
-                  onTap: _createQuiz,
-                ),
-        ],
+        title: Text("Rounds"),
       ),
       body: PageWrapper(
         child: Expanded(
@@ -55,23 +44,25 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
             children: [
               Toolbar(
                 onUpdateSearchString: (s) => print(s),
-                primaryText: isLandscape ? "New Quiz" : null,
-                primaryAction: isLandscape ? _createQuiz : null,
+                initialValue: searchString,
               ),
               Expanded(
                 child: StreamBuilder<bool>(
-                  stream: Provider.of<RefreshService>(context, listen: false).quizListener,
+                  stream: Provider.of<RefreshService>(context, listen: false).roundListener,
                   builder: (context, streamSnapshot) {
-                    return FutureBuilder<List<QuizModel>>(
-                      future: Provider.of<QuizService>(context).getUserQuizzes(
-                        limit: 8,
-                        sortBy: 'lastUpdated',
+                    return FutureBuilder<List<RoundModel>>(
+                      initialData: initialData,
+                      future: Provider.of<RoundService>(context).getAllRounds(
+                        limit: 30,
+                        selectedCategory: selectedCategory,
+                        searchString: searchString,
+                        sortBy: sortBy,
                         token: Provider.of<UserDataStateModel>(context).token,
                       ),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return ErrorMessage(
-                            message: "An error occured loading your Quizzes",
+                            message: "An error occured loading Rounds",
                           );
                         }
                         return Column(
@@ -89,8 +80,8 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                                       ),
                                       padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                                       itemBuilder: (BuildContext context, int index) {
-                                        return QuizGridItemWithAction(
-                                          quiz: snapshot.data[index],
+                                        return RoundGridItemWithAction(
+                                          round: snapshot.data[index],
                                         );
                                       },
                                     )
@@ -98,8 +89,8 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                                       itemCount: snapshot.data.length ?? 0,
                                       scrollDirection: Axis.vertical,
                                       itemBuilder: (BuildContext context, int index) {
-                                        return QuizListItemWithAction(
-                                          quiz: snapshot.data[index],
+                                        return RoundListItemWithAction(
+                                          round: snapshot.data[index],
                                         );
                                       },
                                     ),

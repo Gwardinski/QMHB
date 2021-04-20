@@ -3,32 +3,28 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/pages/library/quizzes/editor/quiz_editor_page.dart';
-import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
-import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/quiz_grid_item/quiz_grid_item.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
-import '../../../get_it.dart';
+import '../../get_it.dart';
 
-class QuizzesLibraryPage extends StatefulWidget {
-  @override
-  _QuizzesLibraryPageState createState() => _QuizzesLibraryPageState();
-}
+class QuizPage extends StatelessWidget {
+  final List<QuizModel> initialData;
+  final String searchString;
+  final String selectedCategory;
+  final String sortBy;
 
-class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
-  final canDrag = getIt<AppSize>().isLarge;
-
-  void _createQuiz() async {
-    Provider.of<NavigationService>(context, listen: false).push(
-      QuizEditorPage(),
-    );
-  }
+  QuizPage({
+    @required this.initialData,
+    @required this.searchString,
+    @required this.selectedCategory,
+    @required this.sortBy,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +34,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
         elevation: 0,
         centerTitle: false,
         backgroundColor: Colors.transparent,
-        title: Text("Your Quizzes"),
-        actions: [
-          isLandscape
-              ? Container()
-              : AppBarButton(
-                  title: "New",
-                  leftIcon: Icons.add,
-                  onTap: _createQuiz,
-                ),
-        ],
+        title: Text("Quizzes"),
       ),
       body: PageWrapper(
         child: Expanded(
@@ -55,23 +42,25 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
             children: [
               Toolbar(
                 onUpdateSearchString: (s) => print(s),
-                primaryText: isLandscape ? "New Quiz" : null,
-                primaryAction: isLandscape ? _createQuiz : null,
+                initialValue: searchString,
               ),
               Expanded(
                 child: StreamBuilder<bool>(
                   stream: Provider.of<RefreshService>(context, listen: false).quizListener,
                   builder: (context, streamSnapshot) {
                     return FutureBuilder<List<QuizModel>>(
-                      future: Provider.of<QuizService>(context).getUserQuizzes(
-                        limit: 8,
-                        sortBy: 'lastUpdated',
+                      initialData: initialData,
+                      future: Provider.of<QuizService>(context).getAllQuizzes(
+                        limit: 30,
+                        selectedCategory: selectedCategory,
+                        searchString: searchString,
+                        sortBy: sortBy,
                         token: Provider.of<UserDataStateModel>(context).token,
                       ),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return ErrorMessage(
-                            message: "An error occured loading your Quizzes",
+                            message: "An error occured loading Quizzes",
                           );
                         }
                         return Column(

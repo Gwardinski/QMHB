@@ -4,6 +4,7 @@ import 'package:qmhb/get_it.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/home/home_page.dart';
+import 'package:qmhb/services/explore_service.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/question_service.dart';
@@ -92,6 +93,11 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<QuizService>(
           create: (BuildContext context) => QuizService(
+            httpService: httpService,
+          ),
+        ),
+        Provider<ExploreService>(
+          create: (BuildContext context) => ExploreService(
             httpService: httpService,
           ),
         ),

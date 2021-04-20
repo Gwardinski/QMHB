@@ -30,7 +30,7 @@ class QuestionColumn extends StatelessWidget {
           headerTitleButtonFunction: () {
             _navigate(context);
           },
-          primaryHeaderButtonText: 'See All',
+          primaryHeaderButtonText: 'View All',
           primaryHeaderButtonFunction: () {
             _navigate(context);
           },

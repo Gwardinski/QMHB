@@ -19,7 +19,7 @@ class QuestionService {
   Future<List<QuestionModel>> getUserQuestions({
     @required String token,
     int limit,
-    String orderBy,
+    String sortBy,
   }) async {
     try {
       final res = await httpService.get(
@@ -46,7 +46,7 @@ class QuestionService {
   Future<List<QuestionModel>> getAllQuestions({
     String token,
     int limit,
-    String orderBy,
+    String sortBy,
   }) async {
     try {
       final res = await httpService.get(

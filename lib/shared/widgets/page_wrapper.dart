@@ -12,6 +12,7 @@ class PageWrapper extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
           child: Container(

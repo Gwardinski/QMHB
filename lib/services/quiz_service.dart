@@ -18,7 +18,7 @@ class QuizService extends ChangeNotifier {
   Future<List<QuizModel>> getUserQuizzes({
     @required String token,
     int limit,
-    String orderBy,
+    String sortBy,
   }) async {
     try {
       ServiceResponse res = await httpService.get(
@@ -43,7 +43,9 @@ class QuizService extends ChangeNotifier {
   Future<List<QuizModel>> getAllQuizzes({
     String token,
     int limit,
-    String orderBy,
+    String searchString,
+    String selectedCategory,
+    String sortBy,
   }) async {
     try {
       ServiceResponse res = await httpService.get(

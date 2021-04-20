@@ -71,7 +71,7 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
                         return FutureBuilder<List<QuestionModel>>(
                           future: Provider.of<QuestionService>(context).getUserQuestions(
                             limit: 8,
-                            orderBy: 'lastUpdated',
+                            sortBy: 'lastUpdated',
                             token: Provider.of<UserDataStateModel>(context).token,
                           ),
                           builder: (context, snapshot) {

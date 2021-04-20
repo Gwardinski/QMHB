@@ -18,7 +18,7 @@ class RoundService {
   Future<List<RoundModel>> getUserRounds({
     @required String token,
     int limit,
-    String orderBy,
+    String sortBy,
   }) async {
     try {
       final res = await httpService.get(
@@ -44,7 +44,9 @@ class RoundService {
   Future<List<RoundModel>> getAllRounds({
     String token,
     int limit,
-    String orderBy,
+    String sortBy,
+    String selectedCategory,
+    String searchString,
   }) async {
     try {
       final res = await httpService.get(

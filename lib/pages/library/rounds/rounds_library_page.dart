@@ -72,7 +72,7 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                         return FutureBuilder<List<RoundModel>>(
                           future: Provider.of<RoundService>(context).getUserRounds(
                             limit: 8,
-                            orderBy: 'lastUpdated',
+                            sortBy: 'lastUpdated',
                             token: Provider.of<UserDataStateModel>(context).token,
                           ),
                           builder: (context, snapshot) {

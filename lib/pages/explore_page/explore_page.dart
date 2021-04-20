@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/quiz_service.dart';
-import 'package:qmhb/services/round_service.dart';
-import 'package:qmhb/shared/widgets/app_bar_button.dart';
-import 'package:qmhb/shared/widgets/highlights/quiz_row.dart';
-import 'package:qmhb/shared/widgets/highlights/round_row.dart';
+import 'package:qmhb/models/featured_quizzes_model.dart';
+import 'package:qmhb/models/featured_rounds_model.dart';
+import 'package:qmhb/pages/explore_page/feature_items_page.dart';
+import 'package:qmhb/pages/explore_page/quiz_page.dart';
+import 'package:qmhb/pages/explore_page/round_page.dart';
+import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -25,6 +25,28 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() {
       activeTab = i;
     });
+  }
+
+  _onNavigateToQuizzes(FeaturedQuizzes featured) {
+    Provider.of<NavigationService>(context, listen: false).push(
+      QuizPage(
+        initialData: featured.quizModels,
+        searchString: featured.searchString,
+        selectedCategory: featured.selectedCategory,
+        sortBy: featured.sortBy,
+      ),
+    );
+  }
+
+  _onNavigateToRounds(FeaturedRounds featured) {
+    Provider.of<NavigationService>(context, listen: false).push(
+      RoundPage(
+        initialData: featured.roundModels,
+        searchString: featured.searchString,
+        selectedCategory: featured.selectedCategory,
+        sortBy: featured.sortBy,
+      ),
+    );
   }
 
   @override
@@ -67,60 +89,9 @@ class _ExplorePageState extends State<ExplorePage> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          QuizRow(
-                            future: Provider.of<QuizService>(context).getUserQuizzes(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          QuizRow(
-                            future: Provider.of<QuizService>(context).getUserQuizzes(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          QuizRow(
-                            future: Provider.of<QuizService>(context).getUserQuizzes(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          RoundRow(
-                            future: Provider.of<RoundService>(context).getUserRounds(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          RoundRow(
-                            future: Provider.of<RoundService>(context).getUserRounds(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          RoundRow(
-                            future: Provider.of<RoundService>(context).getUserRounds(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                          RoundRow(
-                            future: Provider.of<RoundService>(context).getUserRounds(
-                              limit: 8,
-                              orderBy: 'lastUpdated',
-                              token: Provider.of<UserDataStateModel>(context).token,
-                            ),
-                          ),
-                        ],
-                      ),
+                    FeaturedItemsPage(
+                      onNavigateToRounds: _onNavigateToRounds,
+                      onNavigateToQuizzes: _onNavigateToQuizzes,
                     ),
                     Container(
                       color: Colors.pink,
