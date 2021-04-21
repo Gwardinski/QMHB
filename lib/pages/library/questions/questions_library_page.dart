@@ -61,8 +61,9 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
                 children: [
                   Toolbar(
                     onUpdateSearchString: (s) => print(s),
-                    primaryText: isLandscape ? "New Question" : null,
-                    primaryAction: isLandscape ? _createQuestion : null,
+                    primaryText: isLandscape ? "Filters" : null,
+                    leftIcon: Icons.sort,
+                    primaryAction: () {},
                   ),
                   Expanded(
                     child: StreamBuilder<bool>(

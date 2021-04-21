@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
-import 'package:qmhb/services/question_service.dart';
+import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/highlights/question_column.dart';
 import 'package:qmhb/shared/widgets/highlights/quiz_row.dart';
 import 'package:qmhb/services/refresh_service.dart';
@@ -19,6 +19,7 @@ class LibraryPage extends StatelessWidget {
         elevation: 0,
         title: Text('Library'),
         centerTitle: false,
+        leading: AppBarBackButton(),
         actions: [
           AccountPageButton(),
         ],
@@ -72,13 +73,7 @@ class RecentQuestions extends StatelessWidget {
     return StreamBuilder<bool>(
       stream: Provider.of<RefreshService>(context).questionListener,
       builder: (context, snapshot) {
-        return QuestionColumn(
-          future: Provider.of<QuestionService>(context).getUserQuestions(
-            limit: 8,
-            sortBy: 'lastUpdated',
-            token: Provider.of<UserDataStateModel>(context).token,
-          ),
-        );
+        return LibraryQuestionColumn();
       },
     );
   }

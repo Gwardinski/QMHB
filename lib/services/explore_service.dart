@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/featured_questions_model.dart';
 import 'package:qmhb/models/featured_quizzes_model.dart';
 import 'package:qmhb/models/featured_rounds_model.dart';
 import 'package:qmhb/services/http_service.dart';
@@ -47,6 +48,30 @@ class ExploreService {
         headers: _getHeaders(token),
       );
       return FeaturedRounds.fromJson(res.data);
+    } on Http400Exception {
+      print('BAD REQUEST');
+      throw Exception();
+    } on Http403Exception {
+      print('FORBIDDEN');
+      throw Exception();
+    } on Http404Exception {
+      print('NOT FOUND');
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<FeaturedQuestions> getFeaturedQuestions({
+    String token,
+    String featNo,
+  }) async {
+    try {
+      ServiceResponse res = await httpService.get(
+        Uri.http(baseUrl, 'api/featured/$featNo/'),
+        headers: _getHeaders(token),
+      );
+      return FeaturedQuestions.fromJson(res.data);
     } on Http400Exception {
       print('BAD REQUEST');
       throw Exception();

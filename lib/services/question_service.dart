@@ -47,6 +47,8 @@ class QuestionService {
     String token,
     int limit,
     String sortBy,
+    String selectedCategory,
+    String searchString,
   }) async {
     try {
       final res = await httpService.get(

@@ -29,7 +29,6 @@ class LibraryRoundRow extends StatelessWidget {
       builder: (context, snapshot) {
         return RoundRow(
           title: 'Your Rounds',
-          description: 'Recently updated',
           onNavigate: () => Provider.of<NavigationService>(context, listen: false).push(
             RoundsLibraryPage(),
           ),
@@ -62,7 +61,7 @@ class FeaturedRoundRow extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         return RoundRow(
-          title: snapshot.data?.title ?? 'Rounds',
+          title: snapshot.data?.title ?? 'Featured Rounds',
           description: snapshot.data?.description ?? 'Featured Rounds',
           onNavigate: () => onNavigate(data: snapshot.data),
           isLoading: snapshot.connectionState == ConnectionState.waiting,
@@ -87,7 +86,7 @@ class RoundRow extends StatelessWidget {
   const RoundRow({
     Key key,
     @required this.title,
-    @required this.description,
+    this.description,
     @required this.onNavigate,
     @required this.isLoading,
     @required this.hasError,
@@ -103,8 +102,9 @@ class RoundRow extends StatelessWidget {
         children: [
           SummaryRowHeader(
             headerTitle: title,
+            headerDescription: description,
             headerTitleButtonFunction: onNavigate,
-            primaryHeaderButtonText: 'See All',
+            primaryHeaderButtonText: 'View All',
             primaryHeaderButtonFunction: onNavigate,
           ),
           Container(

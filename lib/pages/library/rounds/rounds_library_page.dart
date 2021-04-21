@@ -10,6 +10,7 @@ import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/round_grid_item/round_grid_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
@@ -23,7 +24,6 @@ class RoundsLibraryPage extends StatefulWidget {
 }
 
 class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
-  final canDrag = getIt<AppSize>().isLarge;
   RoundModel _selectedRound;
 
   void _setSelectedRound(RoundModel round) => setState(() => _selectedRound = round);
@@ -62,8 +62,9 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                 children: [
                   Toolbar(
                     onUpdateSearchString: (s) => print(s),
-                    primaryText: isLandscape ? "New Round" : null,
-                    primaryAction: isLandscape ? _createRound : null,
+                    primaryText: isLandscape ? "Filters" : null,
+                    leftIcon: Icons.sort,
+                    primaryAction: () {},
                   ),
                   Expanded(
                     child: StreamBuilder<bool>(
@@ -87,7 +88,7 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                                 Expanded(
                                   child: isLandscape
                                       ? GridView.builder(
-                                          itemCount: snapshot.data?.length ?? 0,
+                                          itemCount: (snapshot.data?.length ?? 0) + 1,
                                           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                                             maxCrossAxisExtent: 160,
                                             childAspectRatio: 1,
@@ -96,10 +97,17 @@ class _RoundsLibraryPageState extends State<RoundsLibraryPage> {
                                           ),
                                           padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                                           itemBuilder: (BuildContext context, int index) {
+                                            if (index == 0) {
+                                              return GridItemNew(
+                                                title: "New Round",
+                                                description: "",
+                                                onTap: _createRound,
+                                              );
+                                            }
                                             return RoundGridItemDraggableWithAction(
-                                              round: snapshot.data[index],
+                                              round: snapshot.data[index - 1],
                                               onDragStarted: () =>
-                                                  _setSelectedRound(snapshot.data[index]),
+                                                  _setSelectedRound(snapshot.data[index - 1]),
                                               onDragEnd: (val) => _setSelectedRound(null),
                                             );
                                           },

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/shared/widgets/button_text.dart';
+
+import '../../../../get_it.dart';
 
 class SummaryRowHeader extends StatelessWidget {
   final String headerTitle;
+  final String headerDescription;
   final Function headerTitleButtonFunction;
   final String primaryHeaderButtonText;
   final Function primaryHeaderButtonFunction;
-  final String secondaryHeaderButtonText;
-  final Function secondaryHeaderButtonFunction;
 
   const SummaryRowHeader({
     Key key,
     @required this.headerTitle,
+    this.headerDescription,
     this.headerTitleButtonFunction,
     this.primaryHeaderButtonText,
     this.primaryHeaderButtonFunction,
-    this.secondaryHeaderButtonText,
-    this.secondaryHeaderButtonFunction,
   }) : super(key: key);
 
   @override
@@ -27,30 +28,66 @@ class SummaryRowHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          ButtonText(
-            text: headerTitle,
+          SummaryTitle(
+            title: headerTitle,
+            description: headerDescription,
             onTap: headerTitleButtonFunction,
-            type: ButtonTextType.PRIMARY,
           ),
           primaryHeaderButtonText != null
-              ? Row(
-                  children: [
-                    ButtonText(
-                      text: primaryHeaderButtonText,
-                      onTap: primaryHeaderButtonFunction,
-                      type: ButtonTextType.SECONDARY,
-                    ),
-                    (secondaryHeaderButtonText != null && secondaryHeaderButtonFunction != null)
-                        ? ButtonText(
-                            text: secondaryHeaderButtonText,
-                            onTap: secondaryHeaderButtonFunction,
-                            type: ButtonTextType.SECONDARY,
-                          )
-                        : Container()
-                  ],
+              ? ButtonText(
+                  text: primaryHeaderButtonText,
+                  onTap: primaryHeaderButtonFunction,
+                  type: ButtonTextType.SECONDARY,
                 )
               : Container(),
         ],
+      ),
+    );
+  }
+}
+
+class SummaryTitle extends StatelessWidget {
+  final String title;
+  final String description;
+  final Function onTap;
+
+  const SummaryTitle({
+    Key key,
+    @required this.title,
+    @required this.onTap,
+    this.description,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: getIt<AppSize>().rSpacingMd),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            description != null
+                ? Container(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

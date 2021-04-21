@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/button_secondary.dart';
 
 class Toolbar extends StatelessWidget {
@@ -7,6 +8,7 @@ class Toolbar extends StatelessWidget {
     @required this.onUpdateSearchString,
     this.initialValue,
     this.primaryText,
+    this.leftIcon,
     this.primaryAction,
     this.secondaryText,
     this.secondaryAction,
@@ -15,6 +17,7 @@ class Toolbar extends StatelessWidget {
   final Function onUpdateSearchString;
   final String initialValue;
   final String primaryText;
+  final IconData leftIcon;
   final Function primaryAction;
   final String secondaryText;
   final Function secondaryAction;
@@ -23,12 +26,11 @@ class Toolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        primaryText != null
-            ? ButtonSecondary(
-                title: primaryText,
-                onTap: primaryAction,
-              )
-            : Container(),
+        AppBarButton(
+          title: primaryText,
+          onTap: primaryAction,
+          leftIcon: leftIcon,
+        ),
         Expanded(
           child: Container(
             height: 64,
@@ -74,8 +76,9 @@ class SearchDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 32,
-      padding: EdgeInsets.symmetric(horizontal: (55)),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text("$number results"),
         ],

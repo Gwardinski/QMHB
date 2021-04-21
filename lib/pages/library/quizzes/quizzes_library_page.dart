@@ -13,6 +13,7 @@ import 'package:qmhb/shared/widgets/page_wrapper.dart';
 import 'package:qmhb/shared/widgets/quiz_grid_item/quiz_grid_item.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
 
 import '../../../get_it.dart';
 
@@ -55,8 +56,9 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
             children: [
               Toolbar(
                 onUpdateSearchString: (s) => print(s),
-                primaryText: isLandscape ? "New Quiz" : null,
-                primaryAction: isLandscape ? _createQuiz : null,
+                primaryText: isLandscape ? "Filters" : null,
+                leftIcon: Icons.sort,
+                primaryAction: () {},
               ),
               Expanded(
                 child: StreamBuilder<bool>(
@@ -80,7 +82,7 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                             Expanded(
                               child: isLandscape
                                   ? GridView.builder(
-                                      itemCount: snapshot.data?.length ?? 0,
+                                      itemCount: (snapshot.data?.length ?? 0) + 1,
                                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                                         maxCrossAxisExtent: 160,
                                         childAspectRatio: 1,
@@ -89,13 +91,20 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                                       ),
                                       padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                                       itemBuilder: (BuildContext context, int index) {
+                                        if (index == 0) {
+                                          return GridItemNew(
+                                            title: "New Quiz",
+                                            description: "",
+                                            onTap: _createQuiz,
+                                          );
+                                        }
                                         return QuizGridItemWithAction(
-                                          quiz: snapshot.data[index],
+                                          quiz: snapshot.data[index - 1],
                                         );
                                       },
                                     )
                                   : ListView.builder(
-                                      itemCount: snapshot.data.length ?? 0,
+                                      itemCount: snapshot.data?.length ?? 0,
                                       scrollDirection: Axis.vertical,
                                       itemBuilder: (BuildContext context, int index) {
                                         return QuizListItemWithAction(

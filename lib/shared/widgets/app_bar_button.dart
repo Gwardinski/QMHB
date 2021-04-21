@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qmhb/services/navigation_service.dart';
 
 class AppBarButton extends StatelessWidget {
   final String title;
@@ -17,7 +19,6 @@ class AppBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return Container(
       height: 64,
       child: MaterialButton(
@@ -29,11 +30,11 @@ class AppBarButton extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Icon(leftIcon),
                   )
-                : Container(width: isLandscape ? 32 : 0),
+                : Container(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: title != null ? 8.0 : 0),
               child: Text(
-                title,
+                title ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color:
@@ -46,10 +47,28 @@ class AppBarButton extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Icon(rightIcon),
                   )
-                : Container(width: isLandscape ? 32 : 0),
+                : Container(),
           ],
         ),
       ),
     );
+  }
+}
+
+class AppBarBackButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    NavigationService navigationService = Provider.of(context);
+    return navigationService.isRoot()
+        ? Container()
+        : Container(
+            height: 64,
+            child: MaterialButton(
+              onPressed: () => navigationService.pop(),
+              child: Center(
+                child: Icon(Icons.arrow_back_ios),
+              ),
+            ),
+          );
   }
 }

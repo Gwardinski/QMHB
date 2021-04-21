@@ -201,3 +201,35 @@ class GridItemDescription extends StatelessWidget {
     );
   }
 }
+
+class GridItemNew extends StatelessWidget {
+  final String title;
+  final String description;
+  final Function onTap;
+
+  GridItemNew({
+    @required this.title,
+    @required this.description,
+    @required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = Radius.circular(getIt<AppSize>().borderRadius);
+    return InkWell(
+      onTap: onTap,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(borderRadius),
+            border: Border.all(color: Theme.of(context).accentColor),
+          ),
+          child: Center(
+            child: Text(title),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
+import 'package:qmhb/models/featured_questions_model.dart';
 import 'package:qmhb/models/featured_quizzes_model.dart';
 import 'package:qmhb/models/featured_rounds_model.dart';
+import 'package:qmhb/models/question_model.dart';
+import 'package:qmhb/models/quiz_model.dart';
+import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/pages/explore_page/feature_items_page.dart';
+import 'package:qmhb/pages/explore_page/question_page.dart';
 import 'package:qmhb/pages/explore_page/quiz_page.dart';
 import 'package:qmhb/pages/explore_page/round_page.dart';
-import 'package:qmhb/services/navigation_service.dart';
+import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -20,6 +24,18 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   int activeTab = 0;
+  List<QuizModel> initialDataQuiz;
+  List<RoundModel> initialDataRound;
+  List<QuestionModel> initialDataQuestion;
+  String searchStringRound;
+  String searchStringQuestion;
+  String searchStringQuiz;
+  String selectedCategoryRound;
+  String selectedCategoryQuestion;
+  String selectedCategoryQuiz;
+  String sortByRound;
+  String sortByQuestion;
+  String sortByQuiz;
 
   _setTab(i) {
     setState(() {
@@ -28,25 +44,33 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   _onNavigateToQuizzes(FeaturedQuizzes featured) {
-    Provider.of<NavigationService>(context, listen: false).push(
-      QuizPage(
-        initialData: featured.quizModels,
-        searchString: featured.searchString,
-        selectedCategory: featured.selectedCategory,
-        sortBy: featured.sortBy,
-      ),
-    );
+    setState(() {
+      initialDataQuiz = featured.quizModels;
+      searchStringQuiz = featured.searchString;
+      sortByQuiz = featured.sortBy;
+      selectedCategoryQuiz = featured.selectedCategory;
+      activeTab = 1;
+    });
   }
 
   _onNavigateToRounds(FeaturedRounds featured) {
-    Provider.of<NavigationService>(context, listen: false).push(
-      RoundPage(
-        initialData: featured.roundModels,
-        searchString: featured.searchString,
-        selectedCategory: featured.selectedCategory,
-        sortBy: featured.sortBy,
-      ),
-    );
+    setState(() {
+      initialDataRound = featured.roundModels;
+      searchStringRound = featured.searchString;
+      sortByRound = featured.sortBy;
+      selectedCategoryRound = featured.selectedCategory;
+      activeTab = 2;
+    });
+  }
+
+  _onNavigateToQuestions(FeaturedQuestions featured) {
+    setState(() {
+      initialDataQuestion = featured.questionModels;
+      searchStringQuestion = featured.searchString;
+      sortByQuestion = featured.sortBy;
+      selectedCategoryQuestion = featured.selectedCategory;
+      activeTab = 3;
+    });
   }
 
   @override
@@ -59,6 +83,7 @@ class _ExplorePageState extends State<ExplorePage> {
           centerTitle: false,
           backgroundColor: Colors.transparent,
           title: Text('Explore'),
+          leading: AppBarBackButton(),
           actions: [
             Row(
               children: [
@@ -90,17 +115,27 @@ class _ExplorePageState extends State<ExplorePage> {
                 child: TabBarView(
                   children: [
                     FeaturedItemsPage(
-                      onNavigateToRounds: _onNavigateToRounds,
                       onNavigateToQuizzes: _onNavigateToQuizzes,
+                      onNavigateToRounds: _onNavigateToRounds,
+                      onNavigateToQuestions: _onNavigateToQuestions,
                     ),
-                    Container(
-                      color: Colors.pink,
+                    QuizPage(
+                      initialData: initialDataQuiz,
+                      searchString: searchStringQuiz,
+                      selectedCategory: selectedCategoryQuiz,
+                      sortBy: sortByQuiz,
                     ),
-                    Container(
-                      color: Colors.green,
+                    RoundPage(
+                      initialData: initialDataRound,
+                      searchString: searchStringRound,
+                      selectedCategory: selectedCategoryRound,
+                      sortBy: sortByRound,
                     ),
-                    Container(
-                      color: Colors.yellow,
+                    QuestionPage(
+                      initialData: initialDataQuestion,
+                      searchString: searchStringQuestion,
+                      selectedCategory: selectedCategoryQuestion,
+                      sortBy: sortByQuestion,
                     ),
                   ],
                 ),

@@ -29,7 +29,6 @@ class LibraryQuizRow extends StatelessWidget {
       builder: (context, snapshot) {
         return QuizRow(
           title: 'Your Quizzes',
-          description: 'Recently updated',
           onNavigate: () => Provider.of<NavigationService>(context, listen: false).push(
             QuizzesLibraryPage(),
           ),
@@ -62,7 +61,7 @@ class FeaturedQuizRow extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         return QuizRow(
-          title: snapshot.data?.title ?? 'Quizzes',
+          title: snapshot.data?.title ?? 'Featured Quizzes',
           description: snapshot.data?.description ?? 'Featured Quizzes',
           onNavigate: () => onNavigate(data: snapshot.data),
           isLoading: snapshot.connectionState == ConnectionState.waiting,
@@ -87,7 +86,7 @@ class QuizRow extends StatelessWidget {
   const QuizRow({
     Key key,
     @required this.title,
-    @required this.description,
+    this.description,
     @required this.onNavigate,
     @required this.isLoading,
     @required this.hasError,
@@ -103,8 +102,9 @@ class QuizRow extends StatelessWidget {
         children: [
           SummaryRowHeader(
             headerTitle: title,
+            headerDescription: description,
             headerTitleButtonFunction: onNavigate,
-            primaryHeaderButtonText: 'See All',
+            primaryHeaderButtonText: 'View All',
             primaryHeaderButtonFunction: onNavigate,
           ),
           Container(
