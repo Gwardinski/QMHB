@@ -87,7 +87,12 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
                     ),
                     PageWrapper(
                       child: snapshot.data.rounds.length > 0
-                          ? ListView.builder(
+                          ? ListView.separated(
+                              separatorBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 16),
+                                );
+                              },
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data.roundModels?.length ?? 0,

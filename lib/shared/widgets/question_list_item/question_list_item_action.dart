@@ -5,7 +5,7 @@ import 'package:qmhb/pages/library/questions/editor/question_editor_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/services/navigation_service.dart';
 
-enum QuestionOptions { save, edit, delete, details, addToRound, publish }
+enum QuestionOptions { save, edit, delete, details, addToRound }
 
 class QuestionListItemAction extends StatefulWidget {
   const QuestionListItemAction({
@@ -97,8 +97,6 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
         return _deleteQuestion();
       case QuestionOptions.save:
         return _saveQuestion();
-      case QuestionOptions.publish:
-        return _publishQuestion();
       default:
         print("Unknown Question Action");
     }
@@ -133,9 +131,5 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
 
   _saveQuestion() {
     print("Save Question");
-  }
-
-  _publishQuestion() {
-    print("Publish Question");
   }
 }

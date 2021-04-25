@@ -6,6 +6,7 @@ import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/details/round/round_details_page.dart';
 import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/pages/library/widgets/library_side_bar_header.dart';
+import 'package:qmhb/pages/library/widgets/library_side_bar_item.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
@@ -54,6 +55,7 @@ class RoundsLibrarySidebar extends StatelessWidget {
                   tooltip2: "No of Questions",
                   header3: "Pts",
                   tooltip3: "Total Points",
+                  edgePadding: false,
                 ),
           Expanded(
             child: StreamBuilder<bool>(
@@ -162,7 +164,12 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
       onWillAccept: (question) => !round.questions.contains(question.id),
       onAccept: (question) => onAcceptNewQuestion(context, question),
       builder: (context, canditates, rejects) {
-        return InkWell(
+        return LibrarySideBarItem(
+          lowlight: selectedQuestion != null,
+          highlight: selectedQuestion != null && round.questions.contains(selectedQuestion?.id),
+          title: round.title,
+          val1: round.questions.length.toString(),
+          val2: round.totalPoints.toString(),
           onTap: () {
             Provider.of<NavigationService>(context, listen: false).push(
               RoundDetailsPage(
@@ -170,64 +177,6 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
               ),
             );
           },
-          child: Container(
-            height: 64,
-            padding: EdgeInsets.all(16),
-            child: Center(
-              child: Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        round.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: selectedQuestion == null
-                              ? Theme.of(context).appBarTheme.color
-                              : round.questions.contains(selectedQuestion?.id)
-                                  ? Colors.grey
-                                  : Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 32,
-                          child: Text(
-                            round.questions.length.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 16,
-                          child: Text(
-                            round.totalPoints.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
         );
       },
     );

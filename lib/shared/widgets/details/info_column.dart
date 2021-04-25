@@ -18,7 +18,6 @@ class InfoColumn extends StatelessWidget {
       padding: EdgeInsets.only(right: padding ? 32 : 0),
       child: Column(
         children: [
-          Text(title),
           Text(
             value,
             style: TextStyle(
@@ -26,6 +25,7 @@ class InfoColumn extends StatelessWidget {
               color: Theme.of(context).accentColor,
             ),
           ),
+          Text(title),
         ],
       ),
     );

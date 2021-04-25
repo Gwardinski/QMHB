@@ -115,6 +115,9 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
                             onUpdateSearchString: (val) {
                               print(val);
                             },
+                            onUpdateFilter: () {},
+                            onUpdateSort: () {},
+                            results: snapshot.data?.length?.toString() ?? 'loading',
                           ),
                           Expanded(
                             child: ListView.builder(

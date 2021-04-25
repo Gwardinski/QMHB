@@ -13,7 +13,7 @@ class EditorNavButton extends StatelessWidget {
     @required this.onTap,
     @required this.highlight,
     @required this.disable,
-    this.width = 200,
+    this.width = 140,
     this.height = 64,
   });
 

@@ -1,15 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/models/round_model.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/questions/editor/question_details_editor.dart';
-import 'package:qmhb/services/navigation_service.dart';
-import 'package:qmhb/services/question_service.dart';
-import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
 import 'package:qmhb/shared/widgets/editor_layout.dart';
 import 'package:qmhb/shared/widgets/editor_nav_button.dart';
@@ -18,8 +13,14 @@ import '../../../../get_it.dart';
 class QuestionEditorPage extends StatefulWidget {
   final QuestionModel question;
   final RoundModel parentRound;
+  final questionService;
+  final refreshService;
+  final token;
 
   QuestionEditorPage({
+    @required this.questionService,
+    @required this.refreshService,
+    @required this.token,
     this.question,
     this.parentRound,
   });
@@ -35,10 +36,6 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   String _savedQuestion;
   bool _isNewQuestion = true;
   bool _isLoading = false;
-  QuestionService _questionService;
-  NavigationService _navigationService;
-  RefreshService _refreshService;
-  String _token;
 
   _setQuestion(QuestionModel question) => setState(() => _question = question);
   _setSavedQuestion() => setState(() => _savedQuestion = json.encode(_question));
@@ -47,10 +44,6 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   @override
   void initState() {
     super.initState();
-    _questionService = Provider.of<QuestionService>(context, listen: false);
-    _navigationService = Provider.of<NavigationService>(context, listen: false);
-    _refreshService = Provider.of<RefreshService>(context, listen: false);
-    _token = Provider.of<UserDataStateModel>(context, listen: false).token;
     _initPageViewController();
     _initQuestionModel();
   }
@@ -89,8 +82,8 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   Future<void> _getQuestion() async {
     _setIsLoading(true);
     try {
-      final question = await _questionService.getQuestion(
-        token: _token,
+      final question = await widget.questionService.getQuestion(
+        token: widget.token,
         id: _question.id,
       );
       _setQuestion(question);
@@ -114,11 +107,11 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   Future<void> _createQuestion() async {
     _setIsLoading(true);
     try {
-      await _questionService.createQuestion(
+      await widget.questionService.createQuestion(
         question: _question,
-        token: _token,
+        token: widget.token,
       );
-      _refreshService.roundAndQuestionRefresh();
+      widget.refreshService.roundAndQuestionRefresh();
       _showSnackbar('Question Saved Successfully!');
       setState(() => _isNewQuestion = false);
     } catch (e) {
@@ -132,11 +125,11 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   Future<void> _editQuestion() async {
     _setIsLoading(true);
     try {
-      await _questionService.editQuestion(
+      await widget.questionService.editQuestion(
         question: _question,
-        token: _token,
+        token: widget.token,
       );
-      _refreshService.roundAndQuestionRefresh();
+      widget.refreshService.roundAndQuestionRefresh();
       _showSnackbar('Question Saved Successfully!');
     } catch (e) {
       print(e.toString());
@@ -160,7 +153,7 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
     if (_savedQuestion != current) {
       _showAlert();
     } else {
-      _navigationService.pop();
+      Navigator.of(context).pop();
     }
   }
 
@@ -175,7 +168,8 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
             TextButton(
               child: Text('Close Without Saving'),
               onPressed: () {
-                _navigationService.pop();
+                // double pop is intentional
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
             ),
@@ -195,81 +189,84 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
   Widget build(BuildContext context) {
     bool useLargeLayout = MediaQuery.of(context).size.width > 800.0;
     getIt<AppSize>().updateSize(useLargeLayout);
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        elevation: 0,
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            AppBarButton(
-              highlight: true,
-              onTap: _closeEditor,
-              title: widget.parentRound != null
-                  ? useLargeLayout
-                      ? 'Back to Round Editor'
-                      : 'Round'
-                  : useLargeLayout
-                      ? 'Close Editor'
-                      : 'Close',
-              leftIcon: Icons.arrow_back,
-            ),
-            Text(
-              _isNewQuestion
-                  ? useLargeLayout
-                      ? "Create New Question"
-                      : "Create"
-                  : useLargeLayout
-                      ? "Edit Question"
-                      : "Edit",
-            ),
-            AppBarButton(
-              highlight: true,
-              onTap: _onSave,
-              title: useLargeLayout ? "Save Changed" : "Save",
-              rightIcon: Icons.save,
-            ),
-          ],
+    return Dialog(
+      insetPadding: EdgeInsets.all(200),
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 0,
+          elevation: 0,
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              AppBarButton(
+                highlight: true,
+                onTap: _closeEditor,
+                title: widget.parentRound != null
+                    ? useLargeLayout
+                        ? 'Back to Round Editor'
+                        : 'Round'
+                    : useLargeLayout
+                        ? 'Close Editor'
+                        : 'Close',
+                leftIcon: Icons.arrow_back,
+              ),
+              Text(
+                _isNewQuestion
+                    ? useLargeLayout
+                        ? "Create New Question"
+                        : "Create"
+                    : useLargeLayout
+                        ? "Edit Question"
+                        : "Edit",
+              ),
+              AppBarButton(
+                highlight: true,
+                onTap: _onSave,
+                title: useLargeLayout ? "Save Changes" : "Save",
+                rightIcon: Icons.save,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: EditorLayout(
-        isLoading: _isLoading,
-        topMenu: QuestionEditorTopMenu(
-          currentPage: _currentPage,
-          controller: _controller,
-        ),
-        pageView: Stack(
-          children: [
-            PageView(
-              controller: _controller,
-              physics: (useLargeLayout || _isNewQuestion)
-                  ? NeverScrollableScrollPhysics()
-                  : AlwaysScrollableScrollPhysics(),
-              children: [
-                QuestionDetailsEditor(
-                  question: _question,
-                  isNewQuestion: _isNewQuestion,
-                  onQuestionUpdate: _setQuestion,
-                  formkey: _formKeyQuestionEditor,
-                ),
-                // TODO
-                Container(
-                  child: Center(
-                    child: Text("TODO - Image / Spotify Page"),
+        body: EditorLayout(
+          isLoading: _isLoading,
+          topMenu: QuestionEditorTopMenu(
+            currentPage: _currentPage,
+            controller: _controller,
+          ),
+          pageView: Stack(
+            children: [
+              PageView(
+                controller: _controller,
+                physics: (useLargeLayout || _isNewQuestion)
+                    ? NeverScrollableScrollPhysics()
+                    : AlwaysScrollableScrollPhysics(),
+                children: [
+                  QuestionDetailsEditor(
+                    question: _question,
+                    isNewQuestion: _isNewQuestion,
+                    onQuestionUpdate: _setQuestion,
+                    formkey: _formKeyQuestionEditor,
                   ),
-                ),
-                // TODO
-                Container(
-                  child: Center(
-                    child: Text("TODO - Publish Page"),
+                  // TODO
+                  Container(
+                    child: Center(
+                      child: Text("TODO - Image / Spotify Page"),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  // TODO
+                  Container(
+                    child: Center(
+                      child: Text("TODO - Publish Page"),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -292,9 +289,9 @@ class QuestionEditorTopMenu extends StatelessWidget {
       height: 40,
       width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
+          Flexible(
             child: EditorNavButton(
               title: "Details",
               onTap: () => controller.jumpToPage(0),
@@ -303,7 +300,7 @@ class QuestionEditorTopMenu extends StatelessWidget {
               width: 120,
             ),
           ),
-          Expanded(
+          Flexible(
             child: EditorNavButton(
               title: "Attachments",
               onTap: () => controller.jumpToPage(1),
@@ -312,7 +309,7 @@ class QuestionEditorTopMenu extends StatelessWidget {
               width: 120,
             ),
           ),
-          Expanded(
+          Flexible(
             child: EditorNavButton(
               title: "Publish",
               onTap: () => controller.jumpToPage(2),

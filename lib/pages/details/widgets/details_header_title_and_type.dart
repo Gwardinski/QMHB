@@ -30,7 +30,7 @@ class DetailsHeaderTypeAndTitle extends StatelessWidget {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 36,
                 ),
               ),
             ),

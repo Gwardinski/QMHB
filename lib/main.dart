@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
             httpService: httpService,
           ),
         ),
-        ChangeNotifierProvider<QuizService>(
+        Provider<QuizService>(
           create: (BuildContext context) => QuizService(
             httpService: httpService,
           ),

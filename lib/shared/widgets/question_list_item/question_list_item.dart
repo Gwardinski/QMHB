@@ -3,6 +3,7 @@ import 'package:qmhb/models/question_model.dart';
 import 'package:qmhb/pages/details/question/question_details_dialog.dart';
 import 'package:qmhb/pages/library/widgets/add_item_into_item_button.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_action.dart';
+import 'package:qmhb/shared/widgets/question_list_item/question_list_item_favourite.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_reveal_button.dart';
 import 'package:qmhb/shared/widgets/question_list_item/question_list_item_details.dart';
 
@@ -56,6 +57,10 @@ class _QuestionListItemWithActionState extends State<QuestionListItemWithAction>
             QuestionListItemDetails(
               revealAnswer: revealAnswer,
               question: widget.question,
+            ),
+            QuestionListItemFavourite(
+              question: widget.question,
+              disable: false,
             ),
             QuestionListItemAction(
               question: widget.question,
@@ -133,19 +138,19 @@ class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect>
   }
 }
 
-class QuestionListItemShell extends StatefulWidget {
+class QuestionListItemReorder extends StatefulWidget {
   final QuestionModel question;
 
-  QuestionListItemShell({
+  QuestionListItemReorder({
     Key key,
     @required this.question,
   }) : super(key: key);
 
   @override
-  _QuestionListItemShellState createState() => _QuestionListItemShellState();
+  _QuestionListItemReorderState createState() => _QuestionListItemReorderState();
 }
 
-class _QuestionListItemShellState extends State<QuestionListItemShell> {
+class _QuestionListItemReorderState extends State<QuestionListItemReorder> {
   bool revealAnswer = false;
 
   void _updateRevealAnswer() {

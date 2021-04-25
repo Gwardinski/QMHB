@@ -41,72 +41,67 @@ class _RoundPageState extends State<RoundPage> {
       children: [
         isLandscape ? QuizzesLibrarySidebar(selectedRound: _selectedRound) : Container(),
         Expanded(
-          child: Column(
-            children: [
-              Toolbar(
-                onUpdateSearchString: (s) => print(s),
-                initialValue: widget.searchString,
-              ),
-              Expanded(
-                child: StreamBuilder<bool>(
-                  stream: Provider.of<RefreshService>(context, listen: false).roundListener,
-                  builder: (context, streamSnapshot) {
-                    return FutureBuilder<List<RoundModel>>(
-                      initialData: widget.initialData,
-                      future: Provider.of<RoundService>(context).getAllRounds(
-                        limit: 30,
-                        selectedCategory: widget.selectedCategory,
-                        searchString: widget.searchString,
-                        sortBy: widget.sortBy,
-                        token: Provider.of<UserDataStateModel>(context).token,
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return ErrorMessage(
-                            message: "An error occured loading Rounds",
-                          );
-                        }
-                        return Column(
-                          children: [
-                            SearchDetails(number: snapshot.data?.length ?? 0),
-                            Expanded(
-                              child: isLandscape
-                                  ? GridView.builder(
-                                      itemCount: snapshot.data?.length ?? 0,
-                                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 160,
-                                        childAspectRatio: 1,
-                                        crossAxisSpacing: 16,
-                                        mainAxisSpacing: 16,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return RoundGridItemDraggableWithAction(
-                                          round: snapshot.data[index],
-                                          onDragStarted: () =>
-                                              _setSelectedRound(snapshot.data[index]),
-                                          onDragEnd: (val) => _setSelectedRound(null),
-                                        );
-                                      },
-                                    )
-                                  : ListView.builder(
-                                      itemCount: snapshot.data.length ?? 0,
-                                      scrollDirection: Axis.vertical,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return RoundListItemWithAction(
-                                          round: snapshot.data[index],
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+          child: StreamBuilder<bool>(
+            stream: Provider.of<RefreshService>(context, listen: false).roundListener,
+            builder: (context, streamSnapshot) {
+              return FutureBuilder<List<RoundModel>>(
+                initialData: widget.initialData,
+                future: Provider.of<RoundService>(context).getAllRounds(
+                  limit: 30,
+                  selectedCategory: widget.selectedCategory,
+                  searchString: widget.searchString,
+                  sortBy: widget.sortBy,
+                  token: Provider.of<UserDataStateModel>(context).token,
                 ),
-              ),
-            ],
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return ErrorMessage(
+                      message: "An error occured loading Rounds",
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Toolbar(
+                        initialString: widget.searchString,
+                        onUpdateSearchString: (s) => print(s),
+                        onUpdateFilter: () {},
+                        onUpdateSort: () {},
+                        results: snapshot.data?.length?.toString() ?? 'loading',
+                      ),
+                      Expanded(
+                        child: isLandscape
+                            ? GridView.builder(
+                                itemCount: snapshot.data?.length ?? 0,
+                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 160,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                                padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return RoundGridItemDraggableWithAction(
+                                    round: snapshot.data[index],
+                                    onDragStarted: () => _setSelectedRound(snapshot.data[index]),
+                                    onDragEnd: (val) => _setSelectedRound(null),
+                                  );
+                                },
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data.length ?? 0,
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return RoundListItemWithAction(
+                                    round: snapshot.data[index],
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ),
       ],

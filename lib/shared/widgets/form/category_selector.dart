@@ -26,6 +26,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(maxWidth: 800),
       height: 80,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

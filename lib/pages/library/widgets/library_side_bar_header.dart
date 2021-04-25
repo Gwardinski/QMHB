@@ -8,15 +8,17 @@ class LibarySidebarHeader extends StatelessWidget {
   final tooltip1;
   final tooltip2;
   final tooltip3;
+  final edgePadding;
 
   LibarySidebarHeader({
     @required this.title,
     @required this.header1,
     @required this.header2,
-    @required this.header3,
+    this.header3,
     @required this.tooltip1,
     @required this.tooltip2,
-    @required this.tooltip3,
+    this.tooltip3,
+    @required this.edgePadding,
   });
   @override
   Widget build(BuildContext context) {
@@ -64,15 +66,20 @@ class LibarySidebarHeader extends StatelessWidget {
                     ),
                   ),
                 ),
+                header3 != null
+                    ? Container(
+                        width: 16,
+                        child: Tooltip(
+                          message: tooltip3,
+                          child: Text(
+                            header3,
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 Container(
-                  width: 16,
-                  child: Tooltip(
-                    message: tooltip3,
-                    child: Text(
-                      header3,
-                      style: TextStyle(fontSize: 10),
-                    ),
-                  ),
+                  width: edgePadding == true ? 32 : 0,
                 ),
               ],
             ),

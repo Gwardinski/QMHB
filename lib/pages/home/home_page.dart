@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmhb/bottom_menu.dart';
 import 'package:qmhb/models/state_models/app_size.dart';
-import 'package:qmhb/pages/explore_page/explore_page.dart';
 import 'package:qmhb/pages/library/library_page.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/side_menu.dart';

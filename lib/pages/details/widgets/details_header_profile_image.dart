@@ -15,14 +15,14 @@ class DetailsHeaderProfileImage extends StatelessWidget {
     return imageUrl != null
         ? Container(
             height: 200,
-            margin: EdgeInsets.only(right: 16),
+            margin: EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 128,
-                  width: 128,
+                  height: 140,
+                  width: 140,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(getIt<AppSize>().borderRadius),

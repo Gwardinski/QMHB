@@ -48,6 +48,16 @@ class UserDataStateModel extends ChangeNotifier {
     }
   }
 
+  void toggleFavouriteQuestion(int id) {
+    user.savedQuestions.contains(id) ? user.savedQuestions.remove(id) : user.savedQuestions.add(id);
+    notifyListeners();
+  }
+
+  void removeQuestion(int id) {
+    user.savedQuestions.remove(id);
+    notifyListeners();
+  }
+
   void removeCurrentUser() {
     localStorageService.deleteFromDisk(userKey);
     _userModel = null;

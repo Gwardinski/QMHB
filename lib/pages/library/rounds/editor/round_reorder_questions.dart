@@ -41,7 +41,7 @@ class _RoundReorderQuestionsState extends State<RoundReorderQuestions>
             onReorder: reorder,
             children: widget.round.questionModels
                 .map(
-                  (question) => QuestionListItemShell(
+                  (question) => QuestionListItemReorder(
                     key: Key(question.id.toString()),
                     question: question,
                   ),

@@ -28,6 +28,7 @@ class FormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(maxWidth: 800),
       padding: EdgeInsets.only(bottom: noPadding ? 0 : getIt<AppSize>().rSpacingMd),
       child: TextFormField(
         initialValue: initialValue,

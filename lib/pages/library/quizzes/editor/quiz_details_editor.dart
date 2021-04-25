@@ -30,10 +30,12 @@ class _QuizDetailsEditorState extends State<QuizDetailsEditor> with AutomaticKee
     bool isLandscape = MediaQuery.of(context).size.width > 800.0;
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(isLandscape ? 64 : 16),
+        padding: EdgeInsets.all(isLandscape ? 32 : 16),
         child: Form(
           key: widget.formkey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               FormInput(
                 initialValue: widget.quiz.title,

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/models/state_models/user_data_state_model.dart';
 import 'package:qmhb/pages/library/quizzes/editor/quiz_select_rounds.dart';
-import 'package:qmhb/pages/library/quizzes/editor/quiz_reorder_rounds.dart';
 import 'package:qmhb/pages/library/quizzes/editor/quiz_details_editor.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
@@ -223,7 +222,7 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
       ),
       body: EditorLayout(
         isLoading: _isLoading,
-        topMenu: EditorMenuTop(
+        topMenu: EditorMenu(
           currentPage: _currentPage,
           controller: _controller,
         ),
@@ -245,14 +244,9 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
                   onUpdateRounds: _setQuiz,
                   quiz: _quiz,
                 ),
-                QuizReorderRounds(
-                  onReorder: _setQuiz,
-                  quiz: _quiz,
-                ),
-                // TODO
                 Container(
                   child: Center(
-                    child: Text("TODO - Publish Page"),
+                    child: Text("Publish Page"),
                   ),
                 ),
               ],
@@ -264,11 +258,11 @@ class _QuizEditorPageState extends State<QuizEditorPage> {
   }
 }
 
-class EditorMenuTop extends StatelessWidget {
+class EditorMenu extends StatelessWidget {
   final controller;
   final currentPage;
 
-  const EditorMenuTop({
+  const EditorMenu({
     Key key,
     @required this.controller,
     @required this.currentPage,
@@ -280,38 +274,33 @@ class EditorMenuTop extends StatelessWidget {
       height: 40,
       width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
+          Flexible(
             child: EditorNavButton(
               title: "Details",
               onTap: () => controller.jumpToPage(0),
               highlight: currentPage == 0,
               disable: false,
+              width: 120,
             ),
           ),
-          Expanded(
+          Flexible(
             child: EditorNavButton(
               title: "Rounds",
               onTap: () => controller.jumpToPage(1),
               highlight: currentPage == 1,
               disable: false,
+              width: 120,
             ),
           ),
-          Expanded(
+          Flexible(
             child: EditorNavButton(
-              title: "Order",
+              title: "Publish",
               onTap: () => controller.jumpToPage(2),
               highlight: currentPage == 2,
               disable: false,
-            ),
-          ),
-          Expanded(
-            child: EditorNavButton(
-              title: "Publish",
-              onTap: () => controller.jumpToPage(3),
-              highlight: currentPage == 3,
-              disable: false,
+              width: 120,
             ),
           ),
         ],

@@ -37,61 +37,54 @@ class _QuestionPageState extends State<QuestionPage> {
     return Row(
       children: [
         isLandscape ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
-        Expanded(
-          child: Column(
-            children: [
-              Toolbar(
-                onUpdateSearchString: (s) => print(s),
-                initialValue: widget.searchString,
+        StreamBuilder<bool>(
+          stream: Provider.of<RefreshService>(context, listen: false).roundListener,
+          builder: (context, streamSnapshot) {
+            return FutureBuilder<List<QuestionModel>>(
+              future: Provider.of<QuestionService>(context).getAllQuestions(
+                limit: 30,
+                selectedCategory: widget.selectedCategory,
+                searchString: widget.searchString,
+                sortBy: widget.sortBy,
+                token: Provider.of<UserDataStateModel>(context).token,
               ),
-              Expanded(
-                child: StreamBuilder<bool>(
-                  stream: Provider.of<RefreshService>(context, listen: false).roundListener,
-                  builder: (context, streamSnapshot) {
-                    return FutureBuilder<List<QuestionModel>>(
-                      future: Provider.of<QuestionService>(context).getAllQuestions(
-                        limit: 30,
-                        selectedCategory: widget.selectedCategory,
-                        searchString: widget.searchString,
-                        sortBy: widget.sortBy,
-                        token: Provider.of<UserDataStateModel>(context).token,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return ErrorMessage(
+                    message: "An error occured loading your Questions",
+                  );
+                }
+                return Column(
+                  children: [
+                    Toolbar(
+                      initialString: widget.searchString,
+                      onUpdateSearchString: (s) => print(s),
+                      onUpdateFilter: () {},
+                      onUpdateSort: () {},
+                      results: snapshot.data?.length?.toString() ?? 'loading',
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data?.length ?? 0,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (BuildContext context, int index) {
+                          return isLandscape
+                              ? DraggableQuestionListItem(
+                                  question: snapshot.data[index],
+                                  onDragStarted: () => _setSelectedQuestion(snapshot.data[index]),
+                                  onDragEnd: (val) => _setSelectedQuestion(null),
+                                )
+                              : QuestionListItemWithAction(
+                                  question: snapshot.data[index],
+                                );
+                        },
                       ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return ErrorMessage(
-                            message: "An error occured loading your Questions",
-                          );
-                        }
-                        return Column(
-                          children: [
-                            SearchDetails(number: snapshot.data?.length ?? 0),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: snapshot.data?.length ?? 0,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return isLandscape
-                                      ? DraggableQuestionListItem(
-                                          question: snapshot.data[index],
-                                          onDragStarted: () =>
-                                              _setSelectedQuestion(snapshot.data[index]),
-                                          onDragEnd: (val) => _setSelectedQuestion(null),
-                                        )
-                                      : QuestionListItemWithAction(
-                                          question: snapshot.data[index],
-                                        );
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ],
     );

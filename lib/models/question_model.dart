@@ -1,6 +1,5 @@
 import 'package:qmhb/models/category_model.dart';
 import 'package:qmhb/models/round_model.dart';
-import 'package:qmhb/models/user_model.dart';
 
 enum QuestionType {
   STANDARD,
@@ -23,7 +22,7 @@ class QuestionModel {
   // relational
   List<int> rounds;
   List<RoundModel> roundModels;
-  UserModel user;
+  int uid;
 
   QuestionModel({
     this.id,
@@ -49,6 +48,7 @@ class QuestionModel {
     this.difficulty = json['difficulty'];
     this.points = json['points'].toDouble();
     this.isPublished = json['isPublished'];
+    this.uid = json['user'];
   }
 
   static List<QuestionModel> listFromJson(List<dynamic> rawQuestions) {

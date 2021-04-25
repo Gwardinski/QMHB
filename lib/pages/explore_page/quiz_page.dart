@@ -28,69 +28,65 @@ class QuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLandscape = getIt<AppSize>().isLarge ?? false;
-    return Column(
-      children: [
-        Toolbar(
-          onUpdateSearchString: (s) => print(s),
-          initialValue: searchString,
-        ),
-        Expanded(
-          child: StreamBuilder<bool>(
-            stream: Provider.of<RefreshService>(context, listen: false).quizListener,
-            builder: (context, streamSnapshot) {
-              return FutureBuilder<List<QuizModel>>(
-                initialData: initialData,
-                future: Provider.of<QuizService>(context).getAllQuizzes(
-                  limit: 30,
-                  selectedCategory: selectedCategory,
-                  searchString: searchString,
-                  sortBy: sortBy,
-                  token: Provider.of<UserDataStateModel>(context).token,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorMessage(
-                      message: "An error occured loading Quizzes",
-                    );
-                  }
-                  return Column(
-                    children: [
-                      SearchDetails(number: snapshot.data?.length ?? 0),
-                      Expanded(
-                        child: isLandscape
-                            ? GridView.builder(
-                                itemCount: snapshot.data?.length ?? 0,
-                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 160,
-                                  childAspectRatio: 1,
-                                  crossAxisSpacing: 16,
-                                  mainAxisSpacing: 16,
-                                ),
-                                padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return QuizGridItemWithAction(
-                                    quiz: snapshot.data[index],
-                                  );
-                                },
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data.length ?? 0,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return QuizListItemWithAction(
-                                    quiz: snapshot.data[index],
-                                  );
-                                },
-                              ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+    return StreamBuilder<bool>(
+      stream: Provider.of<RefreshService>(context, listen: false).quizListener,
+      builder: (context, streamSnapshot) {
+        return FutureBuilder<List<QuizModel>>(
+          initialData: initialData,
+          future: Provider.of<QuizService>(context).getAllQuizzes(
+            limit: 30,
+            selectedCategory: selectedCategory,
+            searchString: searchString,
+            sortBy: sortBy,
+            token: Provider.of<UserDataStateModel>(context).token,
           ),
-        ),
-      ],
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return ErrorMessage(
+                message: "An error occured loading Quizzes",
+              );
+            }
+            return Column(
+              children: [
+                Toolbar(
+                  initialString: searchString,
+                  onUpdateSearchString: (s) => print(s),
+                  onUpdateFilter: () {},
+                  onUpdateSort: () {},
+                  results: snapshot.data?.length?.toString() ?? 'loading',
+                ),
+                Expanded(
+                  child: isLandscape
+                      ? GridView.builder(
+                          itemCount: snapshot.data?.length ?? 0,
+                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 160,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
+                          padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                          itemBuilder: (BuildContext context, int index) {
+                            return QuizGridItemWithAction(
+                              quiz: snapshot.data[index],
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: snapshot.data.length ?? 0,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (BuildContext context, int index) {
+                            return QuizListItemWithAction(
+                              quiz: snapshot.data[index],
+                            );
+                          },
+                        ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

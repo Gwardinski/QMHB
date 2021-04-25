@@ -10,8 +10,8 @@ class AppBarButton extends StatelessWidget {
   final bool highlight;
 
   AppBarButton({
-    @required this.title,
     @required this.onTap,
+    this.title,
     this.leftIcon,
     this.rightIcon,
     this.highlight = false,
@@ -31,17 +31,20 @@ class AppBarButton extends StatelessWidget {
                     child: Icon(leftIcon),
                   )
                 : Container(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: title != null ? 8.0 : 0),
-              child: Text(
-                title ?? '',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color:
-                      highlight ? Theme.of(context).accentColor : Theme.of(context).cardTheme.color,
-                ),
-              ),
-            ),
+            title != null
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: title != null ? 8.0 : 0),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: highlight
+                            ? Theme.of(context).accentColor
+                            : Theme.of(context).cardTheme.color,
+                      ),
+                    ),
+                  )
+                : Container(),
             rightIcon != null
                 ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),

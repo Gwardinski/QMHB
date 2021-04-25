@@ -5,7 +5,7 @@ import 'package:qmhb/models/quiz_model.dart';
 import 'package:qmhb/services/http_service.dart';
 import 'package:qmhb/shared/exceptions/exceptions.dart';
 
-class QuizService extends ChangeNotifier {
+class QuizService {
   // final baseUrl = "https://quizflow.azurewebsites.net";
   final baseUrl = "localhost:8000";
 
