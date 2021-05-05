@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class PageWrapper extends StatelessWidget {
+class AppWrapper extends StatelessWidget {
   final Widget child;
 
-  PageWrapper({
+  AppWrapper({
     @required this.child,
   });
 
@@ -17,23 +17,28 @@ class PageWrapper extends StatelessWidget {
         Flexible(
           child: Container(
             constraints: BoxConstraints(
-              maxWidth: 1800,
+              maxWidth: 2200,
             ),
             child: child,
           ),
         ),
-        width > 2000
-            ? Row(
-                children: [
-                  Container(
-                    color: Colors.pink,
-                    child: Container(
-                      width: 200,
-                      color: Colors.grey,
-                      child: Text("Ad Space"),
-                    ),
+        width > 2200
+            ? Flexible(
+                child: Scaffold(
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          color: Colors.grey,
+                          child: Center(
+                            child: Text("Ad Space"),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               )
             : Container(),
       ],

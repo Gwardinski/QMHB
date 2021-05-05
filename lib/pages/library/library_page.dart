@@ -8,7 +8,6 @@ import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/shared/widgets/account_page_button.dart';
 import 'package:qmhb/shared/widgets/highlights/round_row.dart';
 import 'package:qmhb/shared/widgets/large_signin_prompt.dart';
-import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 class LibraryPage extends StatelessWidget {
   @override
@@ -25,20 +24,18 @@ class LibraryPage extends StatelessWidget {
         ],
         backgroundColor: Colors.transparent,
       ),
-      body: PageWrapper(
-        child: isAuthenticated
-            ? SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    RecentQuizzes(),
-                    RecentRounds(),
-                    RecentQuestions(),
-                  ],
-                ),
-              )
-            : LargeSignInPrompt(),
-      ),
+      body: isAuthenticated
+          ? SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  RecentQuizzes(),
+                  RecentRounds(),
+                  RecentQuestions(),
+                ],
+              ),
+            )
+          : LargeSignInPrompt(),
     );
   }
 }

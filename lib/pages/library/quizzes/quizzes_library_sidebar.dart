@@ -22,7 +22,7 @@ class QuizzesLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 240,
       decoration: BoxDecoration(
         color: Colors.black12,
         border: Border(
@@ -167,7 +167,7 @@ class QuizzesLibrarySidebarItem extends StatelessWidget {
         return LibrarySideBarItem(
           title: quiz.title,
           lowlight: selectedRound != null,
-          highlight: selectedRound != null && quiz.rounds.contains(selectedRound?.id),
+          highlight: selectedRound != null && !quiz.rounds.contains(selectedRound?.id),
           val1: quiz.rounds.length.toString(),
           val2: quiz.totalPoints.toString(),
           onTap: () {

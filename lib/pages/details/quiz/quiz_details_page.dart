@@ -85,50 +85,48 @@ class _QuizDetailsPageState extends State<QuizDetailsPage> {
                     SummaryRowHeader(
                       headerTitle: "Rounds",
                     ),
-                    PageWrapper(
-                      child: snapshot.data.rounds.length > 0
-                          ? ListView.separated(
-                              separatorBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 16),
-                                );
-                              },
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.roundModels?.length ?? 0,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (BuildContext context, int index) {
-                                RoundModel round = snapshot.data.roundModels[index];
-                                return Column(
-                                  children: [
-                                    RoundListItemWithAction(
-                                      round: round,
+                    snapshot.data.rounds.length > 0
+                        ? ListView.separated(
+                            separatorBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                              );
+                            },
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data.roundModels?.length ?? 0,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              RoundModel round = snapshot.data.roundModels[index];
+                              return Column(
+                                children: [
+                                  RoundListItemWithAction(
+                                    round: round,
+                                  ),
+                                  FutureBuilder<RoundModel>(
+                                    initialData: round,
+                                    future: Provider.of<RoundService>(context).getRound(
+                                      id: round.id,
+                                      token: Provider.of<UserDataStateModel>(context).token,
                                     ),
-                                    FutureBuilder<RoundModel>(
-                                      initialData: round,
-                                      future: Provider.of<RoundService>(context).getRound(
-                                        id: round.id,
-                                        token: Provider.of<UserDataStateModel>(context).token,
-                                      ),
-                                      builder: (context, snapshot) {
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data.questionModels.length,
-                                          itemBuilder: (context, index) {
-                                            return QuestionListItemWithAction(
-                                              question: snapshot.data.questionModels[index],
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            )
-                          : DetailsListEmpty(text: "This Quiz has no Rounds"),
-                    )
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: snapshot.data.questionModels.length,
+                                        itemBuilder: (context, index) {
+                                          return QuestionListItemWithAction(
+                                            question: snapshot.data.questionModels[index],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        : DetailsListEmpty(text: "This Quiz has no Rounds"),
                   ],
                 ),
               );

@@ -111,7 +111,6 @@ class _QuizAddModalState extends State<QuizCreateDialog> {
                   initialValue: _quiz.title,
                   validate: validateForm,
                   labelText: "Quiz Name",
-                  noPadding: true,
                   onChanged: (val) {
                     setState(() {
                       _quiz.title = val;

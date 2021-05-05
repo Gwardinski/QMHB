@@ -257,12 +257,6 @@ class _QuestionEditorState extends State<QuestionEditorPage> {
                       child: Text("TODO - Image / Spotify Page"),
                     ),
                   ),
-                  // TODO
-                  Container(
-                    child: Center(
-                      child: Text("TODO - Publish Page"),
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -289,7 +283,8 @@ class QuestionEditorTopMenu extends StatelessWidget {
       height: 40,
       width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             child: EditorNavButton(
@@ -305,15 +300,6 @@ class QuestionEditorTopMenu extends StatelessWidget {
               title: "Attachments",
               onTap: () => controller.jumpToPage(1),
               highlight: currentPage == 1,
-              disable: false,
-              width: 120,
-            ),
-          ),
-          Flexible(
-            child: EditorNavButton(
-              title: "Publish",
-              onTap: () => controller.jumpToPage(2),
-              highlight: currentPage == 2,
               disable: false,
               width: 120,
             ),

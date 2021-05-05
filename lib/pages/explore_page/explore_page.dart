@@ -11,7 +11,6 @@ import 'package:qmhb/pages/explore_page/question_page.dart';
 import 'package:qmhb/pages/explore_page/quiz_page.dart';
 import 'package:qmhb/pages/explore_page/round_page.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
-import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({
@@ -108,40 +107,38 @@ class _ExplorePageState extends State<ExplorePage> {
             ),
           ],
         ),
-        body: PageWrapper(
-          child: Column(
-            children: [
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    FeaturedItemsPage(
-                      onNavigateToQuizzes: _onNavigateToQuizzes,
-                      onNavigateToRounds: _onNavigateToRounds,
-                      onNavigateToQuestions: _onNavigateToQuestions,
-                    ),
-                    QuizPage(
-                      initialData: initialDataQuiz,
-                      searchString: searchStringQuiz,
-                      selectedCategory: selectedCategoryQuiz,
-                      sortBy: sortByQuiz,
-                    ),
-                    RoundPage(
-                      initialData: initialDataRound,
-                      searchString: searchStringRound,
-                      selectedCategory: selectedCategoryRound,
-                      sortBy: sortByRound,
-                    ),
-                    QuestionPage(
-                      initialData: initialDataQuestion,
-                      searchString: searchStringQuestion,
-                      selectedCategory: selectedCategoryQuestion,
-                      sortBy: sortByQuestion,
-                    ),
-                  ],
-                ),
+        body: Column(
+          children: [
+            Expanded(
+              child: TabBarView(
+                children: [
+                  FeaturedItemsPage(
+                    onNavigateToQuizzes: _onNavigateToQuizzes,
+                    onNavigateToRounds: _onNavigateToRounds,
+                    onNavigateToQuestions: _onNavigateToQuestions,
+                  ),
+                  QuizPage(
+                    initialData: initialDataQuiz,
+                    searchString: searchStringQuiz,
+                    selectedCategory: selectedCategoryQuiz,
+                    sortBy: sortByQuiz,
+                  ),
+                  RoundPage(
+                    initialData: initialDataRound,
+                    searchString: searchStringRound,
+                    selectedCategory: selectedCategoryRound,
+                    sortBy: sortByRound,
+                  ),
+                  QuestionPage(
+                    initialData: initialDataQuestion,
+                    searchString: searchStringQuestion,
+                    selectedCategory: selectedCategoryQuestion,
+                    sortBy: sortByQuestion,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

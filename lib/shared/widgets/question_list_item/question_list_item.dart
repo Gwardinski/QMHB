@@ -60,7 +60,7 @@ class _QuestionListItemWithActionState extends State<QuestionListItemWithAction>
             ),
             QuestionListItemFavourite(
               question: widget.question,
-              disable: false,
+              isDisabled: false,
             ),
             QuestionListItemAction(
               question: widget.question,
@@ -127,6 +127,11 @@ class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect>
               revealAnswer: revealAnswer,
               question: widget.question,
             ),
+            QuestionListItemFavourite(
+              question: widget.question,
+              isDisabled: true,
+            ),
+            // TODO move logi into widget. Seperate UI to be reusable
             AddItemIntoItemButton(
               contains: widget.containsItem,
               onTap: widget.onTap,
@@ -138,19 +143,25 @@ class _QuestionListItemWithSelectState extends State<QuestionListItemWithSelect>
   }
 }
 
-class QuestionListItemReorder extends StatefulWidget {
+class QuestionListItemWithSelectAndReorder extends StatefulWidget {
   final QuestionModel question;
+  final Function containsItem;
+  final Function onTap;
 
-  QuestionListItemReorder({
+  QuestionListItemWithSelectAndReorder({
     Key key,
     @required this.question,
+    @required this.containsItem,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
-  _QuestionListItemReorderState createState() => _QuestionListItemReorderState();
+  _QuestionListItemWithSelectAndReorderState createState() =>
+      _QuestionListItemWithSelectAndReorderState();
 }
 
-class _QuestionListItemReorderState extends State<QuestionListItemReorder> {
+class _QuestionListItemWithSelectAndReorderState
+    extends State<QuestionListItemWithSelectAndReorder> {
   bool revealAnswer = false;
 
   void _updateRevealAnswer() {
@@ -176,6 +187,7 @@ class _QuestionListItemReorderState extends State<QuestionListItemReorder> {
       onTap: _viewQuestionDetails,
       child: Container(
         height: 64,
+        padding: EdgeInsets.only(right: 32),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,9 +201,10 @@ class _QuestionListItemReorderState extends State<QuestionListItemReorder> {
               revealAnswer: false,
               question: widget.question,
             ),
-            Container(
-              width: 64,
-              height: 64,
+            // TODO move logi into widget. Seperate UI to be reusable
+            AddItemIntoItemButton(
+              contains: widget.containsItem,
+              onTap: widget.onTap,
             ),
           ],
         ),

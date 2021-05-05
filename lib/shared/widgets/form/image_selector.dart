@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:qmhb/shared/widgets/button_primary.dart';
 import 'package:qmhb/shared/widgets/image_switcher.dart';
 
 class ImageSelector extends StatelessWidget {
@@ -20,44 +19,48 @@ class ImageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: selectImage,
-            child: Container(
-              width: 120,
-              height: 120,
-              child: ImageSwitcher(
-                fileImage: fileImage,
-                networkImage: networkImage,
-                showNoImageText: true,
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: selectImage,
+          child: Container(
+            width: 240,
+            height: 240,
+            child: ImageSwitcher(
+              fileImage: fileImage,
+              networkImage: networkImage,
+              showNoImageText: true,
+            ),
+          ),
+        ),
+        Container(
+          height: 44,
+          width: 240,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                child: Container(
+                  width: 120,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Center(child: Text("Select")),
+                ),
+                onTap: selectImage,
+                // ImageCapture()
               ),
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(right: 16)),
-          Expanded(
-            child: Column(
-              children: [
-                ButtonPrimary(
-                  text: "Select Image",
-                  fullWidth: true,
-                  onPressed: selectImage,
-                  type: ButtonPrimaryType.OUTLINE,
+              InkWell(
+                child: Container(
+                  width: 120,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Center(child: Text("Remove")),
                 ),
-                Padding(padding: EdgeInsets.only(bottom: 16)),
-                ButtonPrimary(
-                  text: "Remove Image",
-                  fullWidth: true,
-                  onPressed: removeImage,
-                  type: ButtonPrimaryType.OUTLINE,
-                ),
-              ],
-            ),
+                onTap: selectImage,
+                // ImageCapture()
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

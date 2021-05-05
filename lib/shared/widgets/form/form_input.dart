@@ -11,25 +11,26 @@ class FormInput extends StatelessWidget {
   final obscureText;
   final disabled;
   final keyboardType;
-  final noPadding;
 
-  const FormInput(
-      {Key key,
-      this.initialValue,
-      @required this.onChanged,
-      @required this.validate,
-      @required this.labelText,
-      this.obscureText = false,
-      this.disabled = false,
-      this.keyboardType,
-      this.noPadding = false})
-      : super(key: key);
+  const FormInput({
+    Key key,
+    this.initialValue,
+    @required this.onChanged,
+    @required this.validate,
+    @required this.labelText,
+    this.obscureText = false,
+    this.disabled = false,
+    this.keyboardType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 800),
-      padding: EdgeInsets.only(bottom: noPadding ? 0 : getIt<AppSize>().rSpacingMd),
+      constraints: BoxConstraints(
+        minHeight: 80,
+        maxWidth: 700,
+        minWidth: 200,
+      ),
       child: TextFormField(
         initialValue: initialValue,
         enabled: disabled != true,
@@ -62,6 +63,7 @@ class FormInput extends StatelessWidget {
           ),
           errorStyle: TextStyle(
             fontSize: 12.0,
+            height: 1,
           ),
         ),
       ),

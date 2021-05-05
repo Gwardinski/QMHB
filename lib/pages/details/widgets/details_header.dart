@@ -3,7 +3,6 @@ import 'package:qmhb/models/state_models/app_size.dart';
 import 'package:qmhb/pages/details/widgets/details_header_banner_image.dart';
 import 'package:qmhb/pages/details/widgets/details_header_image_and_title.dart';
 import 'package:qmhb/shared/widgets/details/info_column.dart';
-import 'package:qmhb/shared/widgets/page_wrapper.dart';
 
 import '../../../get_it.dart';
 
@@ -41,58 +40,56 @@ class DetailsHeader extends StatelessWidget {
         Stack(
           children: [
             DetailsHeaderBannerImage(imageUrl: imageUrl),
-            PageWrapper(
-              child: Column(
-                children: [
-                  DetailsHeaderImageAndTitle(
-                    type: type,
-                    title: title,
-                    imageUrl: imageUrl,
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 64)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: InfoColumn(
-                          title: info1Title,
-                          value: info1Value,
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: InfoColumn(
-                          title: info2Title,
-                          value: info2Value,
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: InfoColumn(
-                          title: info3Title,
-                          value: info3Value,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      32,
-                      description != null ? getIt<AppSize>().spacingLg : getIt<AppSize>().spacingSm,
-                      32,
-                      description != null ? 24 : 0,
-                    ),
-                    child: Text(
-                      description ?? '',
-                      style: TextStyle(
-                        fontSize: 16,
+            Column(
+              children: [
+                DetailsHeaderImageAndTitle(
+                  type: type,
+                  title: title,
+                  imageUrl: imageUrl,
+                ),
+                Padding(padding: EdgeInsets.only(top: 64)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: InfoColumn(
+                        title: info1Title,
+                        value: info1Value,
                       ),
                     ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: InfoColumn(
+                        title: info2Title,
+                        value: info2Value,
+                      ),
+                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: InfoColumn(
+                        title: info3Title,
+                        value: info3Value,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    32,
+                    description != null ? getIt<AppSize>().spacingLg : getIt<AppSize>().spacingSm,
+                    32,
+                    description != null ? 24 : 0,
                   ),
-                ],
-              ),
-            )
+                  child: Text(
+                    description ?? '',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ],

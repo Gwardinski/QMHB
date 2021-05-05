@@ -108,3 +108,56 @@ class RoundListItemWithSelect extends StatelessWidget {
     );
   }
 }
+
+class RoundListItemWithSelectAndReorder extends StatelessWidget {
+  final RoundModel round;
+  final Function containsItem;
+  final Function onTap;
+
+  RoundListItemWithSelectAndReorder({
+    Key key,
+    @required this.round,
+    @required this.containsItem,
+    @required this.onTap,
+  }) : super(key: key);
+
+  void _showNestedItems(context) {
+    RoundService service = Provider.of<RoundService>(context, listen: false);
+    String token = Provider.of<UserDataStateModel>(context, listen: false).token;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return RoundDetailsDialog(
+          round: round,
+          future: service.getRound(
+            id: round.id,
+            token: token,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _showNestedItems(context),
+      child: Row(
+        children: [
+          Flexible(
+            child: RoundListItem(
+              round: round,
+              action: AddItemIntoItemButton(
+                contains: containsItem,
+                onTap: onTap,
+              ),
+            ),
+          ),
+          Container(
+            width: 32,
+          )
+        ],
+      ),
+    );
+  }
+}

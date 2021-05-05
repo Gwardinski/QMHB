@@ -131,13 +131,13 @@ class GridItemTitle extends StatelessWidget {
                   Text(
                     number.toString(),
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
                     type == GridItemType.ROUND ? " Questions" : " Rounds",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -147,13 +147,13 @@ class GridItemTitle extends StatelessWidget {
                   Text(
                     points.toString(),
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
                     " Pts",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ],

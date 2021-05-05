@@ -76,4 +76,60 @@ class UserService {
   void signOut() {
     this.userDataStateModel.removeCurrentUser();
   }
+
+  Future<void> toggleFavouriteQuestion({int id, String token}) async {
+    try {
+      await httpService.post(
+        Uri.http(baseUrl, '/api/users/questions/$id'),
+        headers: _getHeaders(token),
+      );
+    } on Http400Exception {
+      throw BadRequestException();
+    } on Http409Exception {
+      throw ConflictException();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<void> toggleFavouriteRound({int id, String token}) async {
+    try {
+      await httpService.post(
+        Uri.http(baseUrl, '/api/users/rounds/$id'),
+        headers: _getHeaders(token),
+      );
+    } on Http400Exception {
+      throw BadRequestException();
+    } on Http409Exception {
+      throw ConflictException();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<void> toggleFavouriteQuiz({int id, String token}) async {
+    try {
+      await httpService.post(
+        Uri.http(baseUrl, '/api/users/quizzes/$id'),
+        headers: _getHeaders(token),
+      );
+    } on Http400Exception {
+      throw BadRequestException();
+    } on Http409Exception {
+      throw ConflictException();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Map<String, String> _getHeaders(token) {
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    if (token != null) {
+      headers.putIfAbsent('Authorization', () => 'Bearer $token');
+    }
+    return headers;
+  }
 }

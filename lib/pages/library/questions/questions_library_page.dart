@@ -59,71 +59,69 @@ class _QuestionsLibraryPageState extends State<QuestionsLibraryPage> {
                 ),
         ],
       ),
-      body: PageWrapper(
-        child: Row(
-          children: [
-            isLandscape ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
-            Expanded(
-              child: StreamBuilder<bool>(
-                stream: Provider.of<RefreshService>(context, listen: false).roundListener,
-                builder: (context, streamSnapshot) {
-                  return FutureBuilder<List<QuestionModel>>(
-                    future: Provider.of<QuestionService>(context).getUserQuestions(
-                      limit: 8,
-                      sortBy: 'lastUpdated',
-                      token: Provider.of<UserDataStateModel>(context).token,
-                    ),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return ErrorMessage(
-                          message: "An error occured loading your Questions",
-                        );
-                      }
-                      return Column(
-                        children: [
-                          Toolbar(
-                            onUpdateSearchString: (s) => print(s),
-                            onUpdateFilter: () {},
-                            onUpdateSort: () {},
-                            results: snapshot.data?.length?.toString() ?? 'loading',
-                          ),
-                          Expanded(
-                            child: isLandscape
-                                ? ListView.builder(
-                                    itemCount: (snapshot.data?.length ?? 0) + 1,
-                                    scrollDirection: Axis.vertical,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (index == 0) {
-                                        return NewQuestionListItem();
-                                      }
-                                      return DraggableQuestionListItem(
-                                        question: snapshot.data[index - 1],
-                                        onDragStarted: () => _setSelectedQuestion(
-                                          snapshot.data[index - 1],
-                                        ),
-                                        onDragEnd: (val) => _setSelectedQuestion(null),
-                                      );
-                                    },
-                                  )
-                                : ListView.builder(
-                                    itemCount: snapshot.data?.length ?? 0,
-                                    scrollDirection: Axis.vertical,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return QuestionListItemWithAction(
-                                        question: snapshot.data[index],
-                                      );
-                                    },
-                                  ),
-                          ),
-                        ],
+      body: Row(
+        children: [
+          isLandscape ? RoundsLibrarySidebar(selectedQuestion: _selectedQuestion) : Container(),
+          Expanded(
+            child: StreamBuilder<bool>(
+              stream: Provider.of<RefreshService>(context, listen: false).roundListener,
+              builder: (context, streamSnapshot) {
+                return FutureBuilder<List<QuestionModel>>(
+                  future: Provider.of<QuestionService>(context).getUserQuestions(
+                    limit: 8,
+                    sortBy: 'lastUpdated',
+                    token: Provider.of<UserDataStateModel>(context).token,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return ErrorMessage(
+                        message: "An error occured loading your Questions",
                       );
-                    },
-                  );
-                },
-              ),
+                    }
+                    return Column(
+                      children: [
+                        Toolbar(
+                          onUpdateSearchString: (s) => print(s),
+                          onUpdateFilter: () {},
+                          onUpdateSort: () {},
+                          results: snapshot.data?.length?.toString() ?? 'loading',
+                        ),
+                        Expanded(
+                          child: isLandscape
+                              ? ListView.builder(
+                                  itemCount: (snapshot.data?.length ?? 0) + 1,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    if (index == 0) {
+                                      return NewQuestionListItem();
+                                    }
+                                    return DraggableQuestionListItem(
+                                      question: snapshot.data[index - 1],
+                                      onDragStarted: () => _setSelectedQuestion(
+                                        snapshot.data[index - 1],
+                                      ),
+                                      onDragEnd: (val) => _setSelectedQuestion(null),
+                                    );
+                                  },
+                                )
+                              : ListView.builder(
+                                  itemCount: snapshot.data?.length ?? 0,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return QuestionListItemWithAction(
+                                      question: snapshot.data[index],
+                                    );
+                                  },
+                                ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

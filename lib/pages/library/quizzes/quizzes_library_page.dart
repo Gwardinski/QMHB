@@ -50,72 +50,68 @@ class _QuizzesLibraryPageState extends State<QuizzesLibraryPage> {
                 ),
         ],
       ),
-      body: PageWrapper(
-        child: Expanded(
-          child: StreamBuilder<bool>(
-            stream: Provider.of<RefreshService>(context, listen: false).quizListener,
-            builder: (context, streamSnapshot) {
-              return FutureBuilder<List<QuizModel>>(
-                future: Provider.of<QuizService>(context).getUserQuizzes(
-                  limit: 8,
-                  sortBy: 'lastUpdated',
-                  token: Provider.of<UserDataStateModel>(context).token,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorMessage(
-                      message: "An error occured loading your Quizzes",
-                    );
-                  }
-                  return Column(
-                    children: [
-                      Toolbar(
-                        onUpdateSearchString: (s) => print(s),
-                        onUpdateFilter: () {},
-                        onUpdateSort: () {},
-                        results: snapshot.data?.length?.toString() ?? 'loading',
-                      ),
-                      Expanded(
-                        child: isLandscape
-                            ? GridView.builder(
-                                itemCount: (snapshot.data?.length ?? 0) + 1,
-                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 160,
-                                  childAspectRatio: 1,
-                                  crossAxisSpacing: 16,
-                                  mainAxisSpacing: 16,
-                                ),
-                                padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (index == 0) {
-                                    return GridItemNew(
-                                      title: "New Quiz",
-                                      description: "",
-                                      onTap: _createQuiz,
-                                    );
-                                  }
-                                  return QuizGridItemWithAction(
-                                    quiz: snapshot.data[index - 1],
-                                  );
-                                },
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data?.length ?? 0,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return QuizListItemWithAction(
-                                    quiz: snapshot.data[index],
-                                  );
-                                },
-                              ),
-                      ),
-                    ],
-                  );
-                },
+      body: StreamBuilder<bool>(
+        stream: Provider.of<RefreshService>(context, listen: false).quizListener,
+        builder: (context, streamSnapshot) {
+          return FutureBuilder<List<QuizModel>>(
+            future: Provider.of<QuizService>(context).getUserQuizzes(
+              limit: 8,
+              sortBy: 'lastUpdated',
+              token: Provider.of<UserDataStateModel>(context).token,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return ErrorMessage(
+                  message: "An error occured loading your Quizzes",
+                );
+              }
+              return Column(
+                children: [
+                  Toolbar(
+                    onUpdateSearchString: (s) => print(s),
+                    onUpdateFilter: () {},
+                    onUpdateSort: () {},
+                    results: snapshot.data?.length?.toString() ?? 'loading',
+                  ),
+                  Flexible(
+                    child: isLandscape
+                        ? GridView.builder(
+                            itemCount: (snapshot.data?.length ?? 0) + 1,
+                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 160,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                            padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index == 0) {
+                                return GridItemNew(
+                                  title: "New Quiz",
+                                  description: "",
+                                  onTap: _createQuiz,
+                                );
+                              }
+                              return QuizGridItemWithAction(
+                                quiz: snapshot.data[index - 1],
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            itemCount: snapshot.data?.length ?? 0,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return QuizListItemWithAction(
+                                quiz: snapshot.data[index],
+                              );
+                            },
+                          ),
+                  ),
+                ],
               );
             },
-          ),
-        ),
+          );
+        },
       ),
     );
   }

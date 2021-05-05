@@ -71,14 +71,6 @@ class _QuestionListItemActionState extends State<QuestionListItemAction> {
                     ],
                   ),
                 ),
-                // PopupMenuItem<QuestionOptions>(
-                //   value: QuestionOptions.save,
-                //   child: Text("Save To Collection"),
-                // ),
-                // PopupMenuItem<QuestionOptions>(
-                //   value: QuestionOptions.publish,
-                //   child: Text("Publish"),
-                // ),
               ],
             ),
           ),

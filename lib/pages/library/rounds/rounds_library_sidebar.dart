@@ -10,6 +10,7 @@ import 'package:qmhb/pages/library/widgets/library_side_bar_item.dart';
 import 'package:qmhb/services/navigation_service.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
+import 'package:qmhb/services/user_service.dart';
 import 'package:qmhb/shared/widgets/error_message.dart';
 
 class RoundsLibrarySidebar extends StatelessWidget {
@@ -22,7 +23,7 @@ class RoundsLibrarySidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 240,
       decoration: BoxDecoration(
         color: Colors.black12,
         border: Border(
@@ -141,21 +142,40 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
   final RoundModel round;
   final QuestionModel selectedQuestion;
 
-  onAcceptNewQuestion(context, question) async {
-    final token = Provider.of<UserDataStateModel>(context, listen: false).token;
+  onAcceptNewQuestion(context, QuestionModel question) async {
+    UserDataStateModel userDataStateModel = Provider.of<UserDataStateModel>(context, listen: false);
+    final token = userDataStateModel.token;
+    final userService = Provider.of<UserService>(context, listen: false);
     final roundService = Provider.of<RoundService>(context, listen: false);
     final refreshService = Provider.of<RefreshService>(context, listen: false);
     try {
+      bool favourited = false;
       final updatedRound = round;
       updatedRound.questions.add(selectedQuestion.id);
+      if ((question.uid != userDataStateModel.user.id) &&
+          !userDataStateModel.user.savedQuestions.contains(question.id)) {
+        userDataStateModel.toggleFavouriteQuestion(question.id);
+        await userService.toggleFavouriteQuestion(id: question.id, token: token);
+        favourited = true;
+      }
       await roundService.editRound(
         round: updatedRound,
         token: token,
       );
-      refreshService.roundRefresh();
+      _showSnackbar(context, favourited);
+      favourited ? refreshService.roundRefresh() : refreshService.roundAndQuestionRefresh();
     } catch (e) {
       print(e);
     }
+  }
+
+  void _showSnackbar(context, bool favourited) {
+    final snackBar = SnackBar(
+      content: Text("Question${favourited ? ' favourited and ' : ' '}added to ${round.title}"),
+      duration: Duration(seconds: 2),
+      backgroundColor: Theme.of(context).accentColor,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -166,7 +186,7 @@ class RoundsLibrarySidebarItem extends StatelessWidget {
       builder: (context, canditates, rejects) {
         return LibrarySideBarItem(
           lowlight: selectedQuestion != null,
-          highlight: selectedQuestion != null && round.questions.contains(selectedQuestion?.id),
+          highlight: selectedQuestion != null && !round.questions.contains(selectedQuestion?.id),
           title: round.title,
           val1: round.questions.length.toString(),
           val2: round.totalPoints.toString(),

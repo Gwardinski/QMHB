@@ -54,9 +54,10 @@ class Toolbar extends StatelessWidget {
             ),
             Container(
               height: 32,
+              width: 200,
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text("$results results"),
                 ],

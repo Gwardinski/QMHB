@@ -111,7 +111,6 @@ class _RoundAddModalState extends State<RoundCreateDialog> {
                   initialValue: _round.title,
                   validate: validateForm,
                   labelText: "Round Name",
-                  noPadding: true,
                   onChanged: (val) {
                     setState(() {
                       _round.title = val;

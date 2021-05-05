@@ -11,6 +11,8 @@ import 'package:qmhb/pages/library/quizzes/quiz_create_dialog.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/quiz_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
+import 'package:qmhb/shared/widgets/quiz_grid_item/quiz_grid_item.dart';
 import 'package:qmhb/shared/widgets/quiz_list_item/quiz_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -76,11 +78,13 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
         backgroundColor: Colors.transparent,
         title: Text(isLandscape ? "Add Round to Quizzes" : "Add to..."),
         actions: [
-          AppBarButton(
-            title: "New",
-            leftIcon: Icons.add,
-            onTap: _createNewQuizwithRound,
-          ),
+          isLandscape
+              ? Container()
+              : AppBarButton(
+                  title: "New",
+                  leftIcon: Icons.add,
+                  onTap: _createNewQuizwithRound,
+                ),
         ],
       ),
       body: Stack(
@@ -93,47 +97,70 @@ class _AddRoundToQuizzesPageState extends State<AddRoundToQuizzesPage> {
               DetailsHeaderBannerText(
                 line1: '"${widget.selectedRound.title}"',
                 line2: "Select the Quizzes that this Round should be added to.",
-                line3:
-                    "Changes will be saved automatically.\nAny Quizzes you have published will not appear here. Published Quizzes cannot be edited.",
+                line3: "Changes will be saved automatically.",
               ),
-              StreamBuilder<bool>(
-                stream: _refreshService.quizListener,
-                builder: (context, s) {
-                  return FutureBuilder<List<QuizModel>>(
-                    future: _quizService.getUserQuizzes(
-                      token: Provider.of<UserDataStateModel>(context, listen: false).token,
-                    ),
-                    builder: (context, snapshot) {
-                      return Column(
-                        children: [
-                          Toolbar(
-                            onUpdateSearchString: (val) {
-                              print(val);
-                            },
-                            onUpdateFilter: () {},
-                            onUpdateSort: () {},
-                            results: snapshot.data?.length?.toString() ?? 'loading',
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: snapshot.data.length ?? 0,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (BuildContext context, int index) {
-                                return QuizListItemWithSelect(
-                                  quiz: snapshot.data[index],
-                                  containsItem: () => _containsRound(snapshot.data[index]),
-                                  onTap: () {
-                                    _updateQuiz(snapshot.data[index]);
-                                  },
-                                );
-                              },
+              Expanded(
+                child: StreamBuilder<bool>(
+                  stream: _refreshService.quizListener,
+                  builder: (context, s) {
+                    return FutureBuilder<List<QuizModel>>(
+                      future: _quizService.getUserQuizzes(
+                        token: Provider.of<UserDataStateModel>(context).token,
+                      ),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Toolbar(
+                              onUpdateSearchString: (val) => print(val),
+                              onUpdateFilter: () {},
+                              onUpdateSort: () {},
+                              results: snapshot.data?.length?.toString() ?? 'loading',
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                            Expanded(
+                              child: isLandscape
+                                  ? GridView.builder(
+                                      itemCount: (snapshot.data?.length ?? 0) + 1,
+                                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                        maxCrossAxisExtent: 160,
+                                        childAspectRatio: 1,
+                                        crossAxisSpacing: 16,
+                                        mainAxisSpacing: 16,
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                                      itemBuilder: (BuildContext context, int index) {
+                                        if (index == 0) {
+                                          return GridItemNew(
+                                            title: "Add to New Quiz",
+                                            description: "",
+                                            onTap: _createNewQuizwithRound,
+                                          );
+                                        }
+                                        return QuizGridItemWithSelect(
+                                          quiz: snapshot.data[index - 1],
+                                          containsItem: () =>
+                                              _containsRound(snapshot.data[index - 1]),
+                                          onTap: () => _updateQuiz(snapshot.data[index - 1]),
+                                        );
+                                      },
+                                    )
+                                  : ListView.builder(
+                                      itemCount: snapshot.data?.length ?? 0,
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return QuizListItemWithSelect(
+                                          quiz: snapshot.data[index],
+                                          containsItem: () => _containsRound(snapshot.data[index]),
+                                          onTap: () => _updateQuiz(snapshot.data[index]),
+                                        );
+                                      },
+                                    ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),

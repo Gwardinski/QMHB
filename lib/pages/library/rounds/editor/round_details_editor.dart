@@ -1,66 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:qmhb/models/round_model.dart';
+import 'package:qmhb/pages/library/widgets/editor_header.dart';
 import 'package:qmhb/shared/functions/validation.dart';
 import 'package:qmhb/shared/widgets/form/form_input.dart';
+import 'package:qmhb/shared/widgets/form/image_selector.dart';
 
-class RoundDetailsEditor extends StatefulWidget {
+class RoundDetailsEditor extends StatelessWidget {
   final RoundModel round;
-  final bool isNewRound;
   final Function(RoundModel) onRoundUpdate;
   final GlobalKey<FormState> formkey;
 
   RoundDetailsEditor({
     @required this.round,
-    @required this.isNewRound,
     @required this.onRoundUpdate,
     @required this.formkey,
   });
 
   @override
-  _RoundDetailsEditorState createState() => _RoundDetailsEditorState();
-}
-
-class _RoundDetailsEditorState extends State<RoundDetailsEditor>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-    bool isLandscape = MediaQuery.of(context).size.width > 800.0;
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(isLandscape ? 32 : 16),
-        child: Form(
-          key: widget.formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              FormInput(
-                initialValue: widget.round.title,
-                validate: validateForm,
-                labelText: "Title",
-                onChanged: (val) {
-                  widget.round.title = val;
-                  widget.onRoundUpdate(widget.round);
-                },
-              ),
-              FormInput(
-                initialValue: widget.round.description,
-                validate: validateForm,
-                keyboardType: TextInputType.multiline,
-                labelText: "Description",
-                onChanged: (val) {
-                  widget.round.description = val;
-                  widget.onRoundUpdate(widget.round);
-                },
-              ),
-            ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        EditorHeader(
+          title: "Round Details",
+        ),
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: formkey,
+            child: Wrap(
+              children: <Widget>[
+                Column(
+                  children: [
+                    ImageSelector(
+                      fileImage: null,
+                      networkImage: round.imageUrl,
+                      selectImage: () {},
+                      removeImage: () {},
+                    )
+                  ],
+                ),
+                Padding(padding: EdgeInsets.only(left: 32)),
+                Column(
+                  children: [
+                    FormInput(
+                      initialValue: round.title,
+                      validate: validateForm,
+                      labelText: "Title",
+                      onChanged: (val) {
+                        round.title = val;
+                        onRoundUpdate(round);
+                      },
+                    ),
+                    FormInput(
+                      initialValue: round.description,
+                      validate: validateForm,
+                      keyboardType: TextInputType.multiline,
+                      labelText: "Description",
+                      onChanged: (val) {
+                        round.description = val;
+                        onRoundUpdate(round);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

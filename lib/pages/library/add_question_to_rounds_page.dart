@@ -11,6 +11,8 @@ import 'package:qmhb/pages/library/rounds/round_create_dialog.dart';
 import 'package:qmhb/services/refresh_service.dart';
 import 'package:qmhb/services/round_service.dart';
 import 'package:qmhb/shared/widgets/app_bar_button.dart';
+import 'package:qmhb/shared/widgets/grid_item/grid_item.dart';
+import 'package:qmhb/shared/widgets/round_grid_item/round_grid_item.dart';
 import 'package:qmhb/shared/widgets/round_list_item/round_list_item.dart';
 import 'package:qmhb/shared/widgets/toolbar.dart';
 
@@ -76,11 +78,13 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
         backgroundColor: Colors.transparent,
         title: Text(isLandscape ? "Add Question to Rounds" : "Add to..."),
         actions: [
-          AppBarButton(
-            title: "New",
-            leftIcon: Icons.add,
-            onTap: _createNewRoundwithQuestion,
-          ),
+          isLandscape
+              ? Container()
+              : AppBarButton(
+                  title: "New",
+                  leftIcon: Icons.add,
+                  onTap: _createNewRoundwithQuestion,
+                ),
         ],
       ),
       body: Stack(
@@ -93,50 +97,76 @@ class _AddQuestionToRoundsPageState extends State<AddQuestionToRoundsPage> {
               DetailsHeaderBannerText(
                 line1: '"${widget.selectedQuestion.question}"',
                 line2: "Select the Rounds that this Question should be added to.",
-                line3:
-                    "Changes will be saved automatically.\nAny Rounds you have published will not appear here. Published Rounds cannot be edited.",
+                line3: "Changes will be saved automatically.",
               ),
-              StreamBuilder<bool>(
-                stream: _refreshService.roundListener,
-                builder: (context, s) {
-                  return FutureBuilder<List<RoundModel>>(
-                    future: _roundService.getUserRounds(
-                      token: Provider.of<UserDataStateModel>(context, listen: false).token,
-                    ),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text("An error occured loading your Rounds"),
-                        );
-                      }
-                      return Column(
-                        children: [
-                          Toolbar(
-                            onUpdateSearchString: (val) {
-                              print(val);
-                            },
-                            onUpdateFilter: () {},
-                            onUpdateSort: () {},
-                            results: snapshot.data?.length?.toString() ?? 'loading',
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: snapshot.data.length ?? 0,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (BuildContext context, int index) {
-                                return RoundListItemWithSelect(
-                                  round: snapshot.data[index],
-                                  onTap: () => _updateRound(snapshot.data[index]),
-                                  containsItem: () => _containsQuestion(snapshot.data[index]),
-                                );
-                              },
+              Expanded(
+                child: StreamBuilder<bool>(
+                  stream: _refreshService.roundListener,
+                  builder: (context, s) {
+                    return FutureBuilder<List<RoundModel>>(
+                      future: _roundService.getUserRounds(
+                        token: Provider.of<UserDataStateModel>(context).token,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text("An error occured loading your Rounds"),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            Toolbar(
+                              onUpdateSearchString: (val) => print(val),
+                              onUpdateFilter: () {},
+                              onUpdateSort: () {},
+                              results: snapshot.data?.length?.toString() ?? 'loading',
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                            Expanded(
+                              child: isLandscape
+                                  ? GridView.builder(
+                                      itemCount: (snapshot.data?.length ?? 0) + 1,
+                                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                        maxCrossAxisExtent: 160,
+                                        childAspectRatio: 1,
+                                        crossAxisSpacing: 16,
+                                        mainAxisSpacing: 16,
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                                      itemBuilder: (BuildContext context, int index) {
+                                        if (index == 0) {
+                                          return GridItemNew(
+                                            title: "Add to New Round",
+                                            description: "",
+                                            onTap: _createNewRoundwithQuestion,
+                                          );
+                                        }
+                                        return RoundGridItemWithSelect(
+                                          round: snapshot.data[index - 1],
+                                          onTap: () => _updateRound(snapshot.data[index - 1]),
+                                          containsItem: () =>
+                                              _containsQuestion(snapshot.data[index - 1]),
+                                        );
+                                      },
+                                    )
+                                  : ListView.builder(
+                                      itemCount: snapshot.data.length ?? 0,
+                                      scrollDirection: Axis.vertical,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return RoundListItemWithSelect(
+                                          round: snapshot.data[index],
+                                          onTap: () => _updateRound(snapshot.data[index]),
+                                          containsItem: () =>
+                                              _containsQuestion(snapshot.data[index]),
+                                        );
+                                      },
+                                    ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               )
             ],
           ),

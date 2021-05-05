@@ -34,18 +34,21 @@ class LibrarySideBarItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: !lowlight && !highlight
-                          ? Theme.of(context).appBarTheme.color
-                          : highlight
-                              ? Theme.of(context).accentColor
-                              : Colors.grey,
+                  child: Container(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: !lowlight && !highlight
+                            ? Theme.of(context).appBarTheme.color
+                            : highlight
+                                ? Theme.of(context).accentColor
+                                : Colors.grey,
+                      ),
                     ),
                   ),
                 ),
